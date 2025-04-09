@@ -15,7 +15,9 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "empleado")
-public class Empleado extends Persona {
+public class
+
+Empleado extends Persona {
 
     @Column(name = "telefono_movil")
     private String telefonoMovil;
