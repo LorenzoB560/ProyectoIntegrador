@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.proyectointegrador.entity.auxiliar.DireccionPostal;
 import org.grupob.proyectointegrador.entity.auxiliar.Periodo;
+import org.grupob.proyectointegrador.entity.auxiliar.Persona;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,14 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "empleado")
-@DiscriminatorValue("EMPLEADO")
+
 public class Administrador extends Persona {
 
     @Column(name = "telefono_movil")
     private String telefonoMovil;
 
-    @Embedded
-    private DireccionPostal direccion;
 
     @Embedded
     private Periodo periodo;
