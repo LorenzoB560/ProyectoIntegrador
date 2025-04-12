@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.proyectointegrador.entity.auxiliar.DireccionPostal;
+import org.grupob.proyectointegrador.entity.auxiliar.Persona;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,23 +15,19 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "empleado")
-@DiscriminatorValue("EMPLEADO")
-public class Empleado extends Persona {
+public class
+
+Empleado extends Persona {
 
     @Column(name = "telefono_movil")
     private String telefonoMovil;
 
-    @Embedded
-    private DireccionPostal direccion;
-
+    //REAJUSTAR PARA QUE SEA UN PERIODO (POSIBLEMENTE SE AJUSTE A REQUISITO)
     @Column(name = "fecha_contratacion", nullable = false)
     private LocalDate fechaContratacion;
 
     @Column(name = "fecha_cese")
     private LocalDate fechaCese;
-
-
-
 
     // Relación empleado-jefe
     @ManyToOne

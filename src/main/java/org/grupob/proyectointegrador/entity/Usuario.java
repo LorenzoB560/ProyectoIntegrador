@@ -36,6 +36,4 @@ public class Usuario {
             foreignKey = @ForeignKey(name = "FK_usuario_empleado_id_empleado"))
     private Empleado empleado;
 
-    @Column(name = "Ultimo_Acceso")
-    private LocalDate UltimaAcceso;
 }
