@@ -7,44 +7,34 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-@Entity
-@Table(name = "nomina")
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table()
 public class Nomina {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "Mes", nullable = false)
-    private YearMonth mes;
+    private Integer mes;
+    private Integer annio;
+    private BigDecimal totalLiquido;
 
-    @Column(name = "Año", nullable = false)
-    private Integer year;
-
-
-    // Add explicit year column
-    @Column(name = "anio", nullable = false)
-    private Integer anio;
-
-
-
-    @Column(name = "liquido", nullable = false)
-    private BigDecimal liquido;
-
+    @OneToMany
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_nomina_linea_id"))
+    private Set<LineaNomina> lineaNominas = new HashSet<>();
     @ManyToOne
-    @JoinColumn(name = "id_empleado", nullable = false,
-            foreignKey = @ForeignKey(name = "FK_nomina_empleado_id_empleado"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
     private Empleado empleado;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LineaNomina> lineas = new ArrayList<>();
-
+    public Nomina(Integer mes, Integer annio){
+        setMes(mes);
+        setAnnio(annio);
+    }
 
 
 }

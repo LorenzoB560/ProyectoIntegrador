@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.empapp.entity.maestras.Genero;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -25,8 +26,11 @@ public class Persona {
     @Column(name="fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_persona_genero_id"))
     private Genero genero;
 
+    //probablemente esto cambie
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "tipo", column = @Column(name = "tipo_via")),

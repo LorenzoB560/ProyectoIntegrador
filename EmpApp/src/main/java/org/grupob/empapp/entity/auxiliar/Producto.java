@@ -1,4 +1,4 @@
-package org.grupob.empapp.entity;
+package org.grupob.empapp.entity.auxiliar;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
