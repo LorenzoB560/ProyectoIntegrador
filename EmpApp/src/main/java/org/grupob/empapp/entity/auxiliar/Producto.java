@@ -7,25 +7,24 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@MappedSuperclass
-@DiscriminatorColumn(name = "tipo_producto")
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Producto {
+@MappedSuperclass
+public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(nullable = false)
     private String nombre;
 
-
-
-    @Column(name = "Precio", nullable = false)
+    @Column(nullable = false)
     private Double precio;
 
 
-    @Column(name = "Descripcion", nullable = false)
-    private String Descripcion;
+    @Column(nullable = false)
+    private String descripcion;
 }
+

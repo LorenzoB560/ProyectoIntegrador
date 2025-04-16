@@ -14,10 +14,12 @@ public class MotivoBloqueo {
     @Id
     private Long id;
     private String motivo;
-    private Integer tiempo;
 
-    public MotivoBloqueo(String motivo, Integer minutosBloqueo) {
+    // ajustable segun pruebas, en minutos
+    private Integer minutos;
+
+    public MotivoBloqueo(String motivo, Integer minutos) {
         setMotivo(motivo);
-        setTiempo(minutosBloqueo);
+        setMinutos(minutos);
     }
 }

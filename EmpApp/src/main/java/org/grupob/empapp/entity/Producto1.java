@@ -10,10 +10,9 @@ import org.grupob.empapp.entity.auxiliar.Producto;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "producto")
-@DiscriminatorValue("PRODUCTO")
 public class Producto1 extends Producto {
 
-    private Integer edad;
+    private String autor;
+    private String editorial;
 
 }

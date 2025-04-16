@@ -12,10 +12,8 @@ import org.grupob.empapp.entity.auxiliar.Producto;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "producto")
-@DiscriminatorValue("PRODUCTO")
 public class Producto3 extends Producto {
 
-    private Double precio;
+    private String material;
 
 }

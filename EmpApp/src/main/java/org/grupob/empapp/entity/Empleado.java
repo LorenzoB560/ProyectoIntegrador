@@ -58,16 +58,20 @@ public class Empleado extends Persona {
     @Column(table = "informacion_economica")
     private BigDecimal comision;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "numero_cuenta", column = @Column(table = "informacion_economica", name = "numero_cuenta")),
-            @AttributeOverride(name = "entidad", column = @Column(table = "informacion_economica", name = "entidad")),
-    })
-    private CuentaBancaria cuentaCorriente;
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "numero_cuenta", column = @Column(table = "informacion_economica", name = "numero_cuenta")),
+//            @AttributeOverride(name = "entidad", column = @Column(table = "informacion_economica", name = "entidad")),
+//    })
+//    private CuentaBancaria cuentaCorriente;
 
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nomina> listaNominas;
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB") //nos aseguramos quepueda almacenar un tamaño grande de archivo
+    private byte[] foto; // Para almacenar la imagen en la base de datos
 
 //    @Column(name = "fecha_eliminacion")
 //    private LocalDate fechaEliminacion;
