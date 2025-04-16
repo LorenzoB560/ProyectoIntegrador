@@ -2,22 +2,30 @@ package org.grupob.empapp.entity.auxiliar;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Embeddable
 public class CuentaBancaria {
-    @Column(name = "numero_cuenta", nullable = false)
-    private LocalDate numcuenta;
+    @Column(name = "numero_cuenta")
+    private String numCuenta;
 
-    @Column(name = "Entidad_Bancaria", nullable = false)
+    @Column(name = "entidad_bancaria")
     private String entidadBancaria;
+
+    protected CuentaBancaria() {
+    }
+
+    private CuentaBancaria(String numCuenta, String entidadBancaria) {
+        this.numCuenta = numCuenta;
+        this.entidadBancaria = entidadBancaria;
+    }
+
+    public static CuentaBancaria of(String numCuenta, String entidadBancaria) {
+        return new CuentaBancaria(numCuenta, entidadBancaria);
+    }
 
 
 }
