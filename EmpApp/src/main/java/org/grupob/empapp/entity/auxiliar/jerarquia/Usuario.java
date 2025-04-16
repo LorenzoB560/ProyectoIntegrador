@@ -1,4 +1,4 @@
-package org.grupob.empapp.entity.auxiliar;
+package org.grupob.empapp.entity.auxiliar.jerarquia;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,20 +11,23 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 @MappedSuperclass
-public class Producto {
+public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)
-    private String nombre;
+    private String correo;
 
     @Column(nullable = false)
-    private Double precio;
+    private String clave;
 
 
-    @Column(nullable = false)
-    private String descripcion;
+    public Usuario(String correo, String clave) {
+        setCorreo(correo);
+        setClave(clave);
+    }
 }
 

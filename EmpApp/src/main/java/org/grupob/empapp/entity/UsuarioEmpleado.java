@@ -4,16 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.auxiliar.Usuario;
+import org.grupob.empapp.entity.auxiliar.jerarquia.Usuario;
 import org.grupob.empapp.entity.maestras.MotivoBloqueo;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name="usuario_empleado", uniqueConstraints = {
+        @UniqueConstraint(name = "UQ_usuario_empleado_correo", columnNames = "correo"),
+        @UniqueConstraint(name = "UQ_usuario_empleado", columnNames = "id_empleado")})
 public class UsuarioEmpleado extends Usuario {
 
     @OneToOne
@@ -39,5 +41,7 @@ public class UsuarioEmpleado extends Usuario {
 
     public UsuarioEmpleado(String email, String clave) {
         super(email, clave);
+        setActivo(true);
+        setIntentosSesionFallidos(0);
     }
 }
