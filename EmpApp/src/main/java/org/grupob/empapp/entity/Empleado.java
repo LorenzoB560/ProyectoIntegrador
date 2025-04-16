@@ -4,13 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.auxiliar.CuentaBancaria;
 import org.grupob.empapp.entity.auxiliar.Periodo;
-import org.grupob.empapp.entity.auxiliar.Persona;
-import org.grupob.empapp.entity.auxiliar.Usuario;
+import org.grupob.empapp.entity.auxiliar.jerarquia.Persona;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 @Data

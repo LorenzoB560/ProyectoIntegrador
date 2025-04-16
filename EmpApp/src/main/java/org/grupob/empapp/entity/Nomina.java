@@ -17,7 +17,7 @@ import java.util.*;
 @Table()
 public class Nomina {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private Integer mes;
