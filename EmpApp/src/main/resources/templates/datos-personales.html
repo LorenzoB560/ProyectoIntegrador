@@ -30,47 +30,31 @@
 
       <fieldset>
         <legend>Datos personales</legend>
-        <label for="nombre">Nombre</label>
-
-
+        <label for="nombre" th:text="#{registro.nombre}"></label>
           <input type="text" name="nombre" id="nombre"
                  th:value="${datos.getNombre() != null ? datos.getNombre() : ''}">
-        <label for="apellido">Apellido</label>
+        <label for="apellido" th:text="#{registro.apellido}"></label>
         <input type="text" name="apellido" id="apellido"
                th:value="${datos.getApellido() != null ? datos.getApellido() : ''}">
 
-        <label for="fechaNacimiento">Fecha de nacimiento</label>
+        <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
         <input type="text" name="fechaNacimiento" id="fechaNacimiento"
                th:value="${datos.getFechaNacimiento() != null ? datos.getFechaNacimiento() : ''}"></input> <br>
 
           <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
 
-          <!--
-          <span>Género</span>
-          <div class="genero-group">
-              <div class="genero-container" th:each="genero: ${listaGeneros}">
-                  <input type="radio" name="generoSeleccionado"
-                         th:checked="${genero == datos.getGeneroSeleccionado()}"
-                         th:value="${genero}" th:id="${genero}" />
-                  <label th:for="${genero}" th:text="${genero}"></label>
-              </div>
+
+          <label th:text="#{registro.genero}"></label>
+
+          <div th:each="genero : ${listaGeneros}">
+              <input type="radio" name="idGeneroSeleccionado"
+                     th:value="${genero.id}"
+                     th:id="${'genero' + genero.id}" />
+              <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label>
           </div>
 
-
-          <label for="nacionalidadSeleccionada">Nacionalidad</label>
-          <select name="nacionalidadSeleccionada" id="nacionalidadSeleccionada" multiple>
-              <option th:each="nacionalidad: ${listaNacionalidades}"
-                      th:value="${nacionalidad}"
-                      th:text="${nacionalidad}"
-                      th:selected="${datos.getNacionalidadSeleccionada() != null
-                       and datos.getNacionalidadSeleccionada().contains(nacionalidad)}"
-              ></option>
-          </select>
-
-          <div th:each="error : ${#fields.errors('nacionalidadSeleccionada')}" th:text="${error}" class="error"></div>
-
-          <input id="archivo" type="file" name="archivo" />
-           -->
+          <label th:text="#{registro.imagen}"></label> <br>
+          <input type="file" name="imagen" accept="image/*"/>
           <button type="submit">Grabar información e ir al paso 2 - Datos de contacto</button>
       </fieldset>
 
