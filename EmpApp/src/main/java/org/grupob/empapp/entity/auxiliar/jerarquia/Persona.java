@@ -1,8 +1,10 @@
-package org.grupob.empapp.entity.auxiliar;
+package org.grupob.empapp.entity.auxiliar.jerarquia;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.empapp.entity.auxiliar.DireccionPostal;
+import org.grupob.empapp.entity.maestras.Genero;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -13,9 +15,8 @@ import java.util.UUID;
 
 @MappedSuperclass
 public class Persona {
-
     @Id
-    @GeneratedValue(strategy= GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String nombre;
@@ -25,8 +26,11 @@ public class Persona {
     @Column(name="fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_persona_genero_id"))
     private Genero genero;
 
+    //probablemente esto cambie
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "tipo", column = @Column(name = "tipo_via")),
