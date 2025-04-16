@@ -3,12 +3,11 @@ package org.grupob.empapp.component;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.entity.maestras.Idioma;
 import org.grupob.empapp.entity.maestras.MotivoBloqueo;
-import org.grupob.empapp.repository.GeneroRepository;
-import org.grupob.empapp.repository.IdiomaRepository;
-import org.grupob.empapp.repository.MotivoBloqueoRepository;
+import org.grupob.empapp.repository.maestras.GeneroRepository;
+import org.grupob.empapp.repository.maestras.IdiomaRepository;
+import org.grupob.empapp.repository.maestras.MotivoBloqueoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
 public class CargaDatosMaestros implements CommandLineRunner {
@@ -34,8 +33,8 @@ public class CargaDatosMaestros implements CommandLineRunner {
             generoRepo.save(new Genero(3L, "Otro"));
         }
         if (idiomaRepo.count() == 0) {
-            idiomaRepo.save(new Idioma(1L, "ES", "Español"));
-            idiomaRepo.save(new Idioma(2L, "EN", "Inglés"));
+            idiomaRepo.save(new Idioma(1L, "es", "Español"));
+            idiomaRepo.save(new Idioma(2L, "en", "Inglés"));
         }
         if (motivoRepo.count() == 0) {
             motivoRepo.save(new MotivoBloqueo(1L, "Intentos fallidos", 15));
