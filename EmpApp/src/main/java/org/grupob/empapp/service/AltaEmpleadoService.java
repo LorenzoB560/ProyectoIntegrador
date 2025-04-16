@@ -5,7 +5,7 @@ import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.entity.Empleado;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.EmpleadoRepository;
-import org.grupob.empapp.repository.GeneroRepository;
+import org.grupob.empapp.repository.maestras.GeneroRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
