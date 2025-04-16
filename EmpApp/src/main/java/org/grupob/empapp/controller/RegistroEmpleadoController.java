@@ -6,7 +6,8 @@ import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.EmpleadoRepository;
-import org.grupob.empapp.repository.GeneroRepository;
+
+import org.grupob.empapp.repository.maestras.GeneroRepository;
 import org.grupob.empapp.service.AltaEmpleadoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

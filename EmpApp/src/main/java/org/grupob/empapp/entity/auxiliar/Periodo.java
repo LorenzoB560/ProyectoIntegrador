@@ -2,37 +2,37 @@ package org.grupob.empapp.entity.auxiliar;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Embeddable
 public class Periodo {
-    @Column(name = "fecha_inicio", nullable = false)
+    @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
 
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
-    // Constructores, getters y setters
+    protected Periodo(){}
 
-
-    public boolean coincideCon(Periodo otroPeriodo) {
-        if (this.fechaFin == null && otroPeriodo.fechaFin == null) {
-            return true;
-        }
-        if (this.fechaFin == null) {
-            return this.fechaInicio.isBefore(otroPeriodo.fechaFin) || this.fechaInicio.isEqual(otroPeriodo.fechaFin);
-        }
-        if (otroPeriodo.fechaFin == null) {
-            return otroPeriodo.fechaInicio.isBefore(this.fechaFin) || otroPeriodo.fechaInicio.isEqual(this.fechaFin);
-        }
-        return (this.fechaInicio.isBefore(otroPeriodo.fechaFin) || this.fechaInicio.isEqual(otroPeriodo.fechaFin)) &&
-                (otroPeriodo.fechaInicio.isBefore(this.fechaFin) || otroPeriodo.fechaInicio.isEqual(this.fechaFin));
+    private Periodo(LocalDate fechaInicio, LocalDate fechaFin){
+        this.fechaInicio=fechaInicio;
+        this.fechaFin=fechaFin;
     }
+
+    public static Periodo of(LocalDate fechaInicio, LocalDate fechaFin){
+        return new Periodo(fechaInicio, fechaFin);
+    }
+
+    public static Periodo from(LocalDate fechaInicio){
+        return new Periodo(fechaInicio, LocalDate.now());
+    }
+
+
 }

@@ -23,7 +23,7 @@ import java.util.UUID;
 })
 public class Departamento {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String nombre;
