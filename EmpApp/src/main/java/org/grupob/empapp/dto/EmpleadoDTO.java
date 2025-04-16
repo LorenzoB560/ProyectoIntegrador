@@ -13,10 +13,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmpleadoDTO {
+
     private UUID id;
     private String nombre;
     private String apellido;
-    private String dni;
+    private LocalDate fechaNacimiento;
+
+    // La base de datos no tiene DNI, por lo tanto lo comento
+    //private String dni;
 
     //Añadida validación personalizada para que el email sea válido.
     @EmailValidado
