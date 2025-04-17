@@ -1,5 +1,6 @@
 package org.grupob.adminapp.service;
 
+import org.grupob.adminapp.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.entity.Administrador;
 import org.grupob.adminapp.repository.AdministradorRepository;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,13 @@ public class AdministradorServiceImp implements AdministradorService {
         throw new RuntimeException("No existe un usuario con ese correo");
     }
 
-    public Boolean comprobarCredenciales(Administrador admin) {
-        Optional<Administrador> optionalAdmin = adminRepo.findByCorreo(admin.getCorreo());
+    public Boolean comprobarCredenciales(LoginAdministradorDTO adminDTO) {
+        Optional<Administrador> optionalAdmin = adminRepo.findByCorreo(adminDTO.getCorreo());
         if (optionalAdmin.isEmpty()) {
             return false; // //TODO Cambiar luego por la excepcion correspondiente
         }
-        return admin.getClave().equals(optionalAdmin.get().getClave());
+
+        return adminDTO.getClave().equals(optionalAdmin.get().getClave());
     }
 
    /* public String devolverClavePorCorreo(String correo) {

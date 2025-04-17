@@ -1,0 +1,89 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+/* Contenedor del formulario */
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px;
+}
+
+/* Estilo del título */
+h2 {
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+/* Campos de entrada */
+input[type="password"],
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+
+/* Mensaje de error */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Checkbox de mostrar contraseña */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    justify-content: start;
+    margin: 10px 0;
+}
+
+.checkbox-container input {
+    margin-right: 5px;
+}
+
+/* Enlaces */
+.links {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.links a {
+    text-decoration: none;
+    color: #1a73e8;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+/* Botón de envío */
+.button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button:hover {
+    background: #135abe;
+}

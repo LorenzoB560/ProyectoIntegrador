@@ -12,5 +12,4 @@ public interface AdministradorRepository extends JpaRepository<Administrador, UU
 
     Boolean existsByCorreo(String correo);
 
-    Boolean existsAdministradorBy
 }
