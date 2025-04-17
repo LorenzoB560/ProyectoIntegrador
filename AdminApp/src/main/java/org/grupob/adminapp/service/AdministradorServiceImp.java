@@ -47,11 +47,7 @@ public class AdministradorServiceImp implements AdministradorService {
     }
 
 
-    /* public String devolverClavePorCorreo(String correo) {
-        return devuelveAdministradorPorCorreo(correo).getClave();
-    }
-
-    public Boolean comprobarClave(String correo, String clave) {
+   /* public Boolean comprobarClave(String correo, String clave) {
         return null;
     }
 

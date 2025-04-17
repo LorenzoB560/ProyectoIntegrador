@@ -6,8 +6,9 @@
 </head>
 <body th:object="${loginAdminDTO}">
 <h1>Bienvenido <span th:text="*{correo}"></span></h1>
+<p>Has accedido a tu área personal.</p>
 
 <p>Veces Autenticado <span th:text="*{numeroAccesos}"></span></p>
-<p>Veces Autenticado <span th:text="${contadorSesion}"></span></p>
+<a th:href="@{/adminapp/desconectar}">Desconectar</a>
 </body>
 </html>

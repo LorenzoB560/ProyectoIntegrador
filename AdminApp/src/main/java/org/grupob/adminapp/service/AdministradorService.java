@@ -9,7 +9,7 @@ public interface AdministradorService {
     Boolean comprobarCredenciales(LoginAdministradorDTO adminDTO);
     Administrador aumentarNumAccesos(Administrador admin);
 
-    /* Boolean comprobarCorreo(String correo);
-    String devolverClavePorCorreo(String correo);
+//    String devolverClavePorCorreo(String correo);
+   /* Boolean comprobarCorreo(String correo);
     Boolean comprobarClave(String correo, String clave);*/
 }

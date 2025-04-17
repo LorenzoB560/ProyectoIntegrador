@@ -11,30 +11,40 @@ function mostrarOcultarClave() {
 }
 
 $(document).ready(function() {
-    // Cuando se hace clic en el enlace "¿Recordar contraseña?"
-    $("#recordarContraseña").click(function(event) {
-        event.preventDefault(); // Evita que el enlace redirija
+    // Se ejecuta cuando el DOM está completamente cargado
 
-        // Obtén el valor del <h2> que contiene el nombre del usuario
-        var usuario = $("#nombreUsuario").text().trim();
-        // alert(usuario);
-        if (usuario) {
-            // Realiza la llamada AJAX
+    $("#recordarContraseña").click(function(event) {
+        // Captura el clic sobre el botón o enlace "¿Recordar contraseña?"
+
+        event.preventDefault();
+        // Evita que el enlace haga su comportamiento por defecto (redirigir o recargar)
+
+        var correo = $("#correo").val().trim();
+        // Obtiene el valor del input con ID "correo", eliminando espacios en blanco
+
+        if (correo) {
+            // Si se ha introducido un correo...
+
             $.ajax({
-                url: "/devuelve-clave",
-                type: "GET",
-                data: { usuario: usuario },
-                success: function(contraseña) {
-                    // Muestra la contraseña en un alert
-                    alert("La contraseña de " + usuario + " es: " + contraseña);
+                url: "/adminapp/devuelve-clave", // Endpoint que expone la contraseña
+                type: "GET",                     // Método HTTP
+                data: { correo: correo },        // Parámetro que se envía al backend
+                success: function(clave) {
+                    // Función que se ejecuta si la petición se completa correctamente
+
+                    alert("La contraseña de " + correo + " es: " + clave);
+                    // Muestra la contraseña recibida
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("Error en la llamada AJAX:", textStatus, errorThrown); // Depuración
+                    // Función que se ejecuta si ocurre un error en la llamada AJAX
+                    console.error("Error en la llamada AJAX:", textStatus, errorThrown);
                     alert("Error al obtener la contraseña.");
                 }
             });
+
         } else {
-            alert("Por favor, selecciona un usuario.");
+            // Si el campo correo está vacío...
+            alert("Por favor, introduce tu correo para poder recuperar la contraseña.");
         }
     });
 });
