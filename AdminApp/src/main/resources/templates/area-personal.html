@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>Área Personal</title>
 </head>
-<body>
-<h1>Bienvenido <span th:text="${usuario}"></span></h1>
+<body th:object="${loginAdminDTO}">
+<h1>Bienvenido <span th:text="*{correo}"></span></h1>
 
+<p>Veces Autenticado <span th:text="*{numeroAccesos}"></span></p>
+<p>Veces Autenticado <span th:text="${contadorSesion}"></span></p>
 </body>
 </html>

@@ -7,6 +7,7 @@ public interface AdministradorService {
 
     Administrador devuelveAdministradorPorCorreo(String correo);
     Boolean comprobarCredenciales(LoginAdministradorDTO adminDTO);
+    Administrador aumentarNumAccesos(Administrador admin);
 
     /* Boolean comprobarCorreo(String correo);
     String devolverClavePorCorreo(String correo);

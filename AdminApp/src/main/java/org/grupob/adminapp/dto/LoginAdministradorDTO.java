@@ -7,11 +7,15 @@ import lombok.NoArgsConstructor;
 import org.grupob.adminapp.validation.email.EmailValidado;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 //@Validated
 public class LoginAdministradorDTO {
+
+    private UUID id;
 
     @NotBlank
     @EmailValidado
@@ -19,4 +23,6 @@ public class LoginAdministradorDTO {
 
     @NotBlank
     private String clave;
+
+    private Integer numeroAccesos;
 }

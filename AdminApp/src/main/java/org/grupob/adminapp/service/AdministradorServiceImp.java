@@ -25,15 +25,29 @@ public class AdministradorServiceImp implements AdministradorService {
     }
 
     public Boolean comprobarCredenciales(LoginAdministradorDTO adminDTO) {
-        Optional<Administrador> optionalAdmin = adminRepo.findByCorreo(adminDTO.getCorreo());
-        if (optionalAdmin.isEmpty()) {
+        Optional<Administrador> adminOpt = adminRepo.findByCorreo(adminDTO.getCorreo());
+
+        if (adminOpt.isEmpty()) {
             return false; // //TODO Cambiar luego por la excepcion correspondiente
         }
 
-        return adminDTO.getClave().equals(optionalAdmin.get().getClave());
+        return adminDTO.getClave().equals(adminOpt.get().getClave());
     }
 
-   /* public String devolverClavePorCorreo(String correo) {
+    public Administrador aumentarNumAccesos(Administrador admin) {
+        Optional<Administrador> adminOpt = adminRepo.findByCorreo(admin.getCorreo());
+
+        if (adminOpt.isPresent()) {
+            Administrador adminBD = adminOpt.get();
+            adminBD.setNumeroAccesos(adminBD.getNumeroAccesos() + 1);
+            return adminRepo.save(adminBD);
+        }
+
+        throw new RuntimeException("No existe un usuario con ese correo");
+    }
+
+
+    /* public String devolverClavePorCorreo(String correo) {
         return devuelveAdministradorPorCorreo(correo).getClave();
     }
 
