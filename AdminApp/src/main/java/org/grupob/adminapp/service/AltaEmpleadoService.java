@@ -1,11 +1,11 @@
 package org.grupob.adminapp.service;
 
-import org.grupob.empapp.converter.EmpleadoConverter;
-import org.grupob.empapp.dto.AltaEmpleadoDTO;
-import org.grupob.empapp.entity.Empleado;
-import org.grupob.empapp.entity.maestras.Genero;
-import org.grupob.empapp.repository.EmpleadoRepository;
-import org.grupob.empapp.repository.maestras.GeneroRepository;
+import org.grupob.adminapp.converter.EmpleadoConverter;
+import org.grupob.adminapp.dto.AltaEmpleadoDTO;
+import org.grupob.adminapp.entity.Empleado;
+import org.grupob.adminapp.entity.maestras.Genero;
+import org.grupob.adminapp.repository.EmpleadoRepository;
+import org.grupob.adminapp.repository.maestras.GeneroRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -5,8 +5,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.validation.contrasena.ContrasenaCoincide;
-import org.grupob.empapp.validation.email.EmailValidado;
+import org.grupob.adminapp.validation.contrasena.ContrasenaCoincide;
+import org.grupob.adminapp.validation.email.EmailValidado;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

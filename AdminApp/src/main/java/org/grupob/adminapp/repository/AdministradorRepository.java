@@ -1,6 +1,6 @@
 package org.grupob.adminapp.repository;
 
-import org.grupob.empapp.entity.Administrador;
+import org.grupob.adminapp.entity.Administrador;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

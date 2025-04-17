@@ -1,8 +1,8 @@
 package org.grupob.adminapp.validation.contrasena;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.grupob.empapp.dto.UsuarioDTO;
-import org.grupob.empapp.validation.contrasena.ContrasenaCoincide;
+import org.grupob.adminapp.dto.UsuarioDTO;
+import org.grupob.adminapp.validation.contrasena.ContrasenaCoincide;
 
 public class ContrasenaCoincideValidator implements ConstraintValidator<ContrasenaCoincide, Object> {
 

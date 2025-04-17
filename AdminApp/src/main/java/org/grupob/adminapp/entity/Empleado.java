@@ -1,11 +1,12 @@
 package org.grupob.adminapp.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.Departamento;
-import org.grupob.empapp.entity.auxiliar.Periodo;
-import org.grupob.empapp.entity.auxiliar.jerarquia.Persona;
+import org.grupob.adminapp.entity.Departamento;
+import org.grupob.adminapp.entity.auxiliar.Periodo;
+import org.grupob.adminapp.entity.auxiliar.jerarquia.Persona;
 
 import java.math.BigDecimal;
 import java.util.Set;

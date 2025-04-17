@@ -1,9 +1,9 @@
 package org.grupob.adminapp.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.Empleado;
 
 import java.math.BigDecimal;
 import java.util.HashSet;

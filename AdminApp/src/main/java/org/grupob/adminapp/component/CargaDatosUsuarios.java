@@ -1,9 +1,9 @@
 package org.grupob.adminapp.component;
 
-import org.grupob.empapp.entity.Administrador;
-import org.grupob.empapp.entity.UsuarioEmpleado;
-import org.grupob.empapp.repository.AdministradorRepository;
-import org.grupob.empapp.repository.UsuarioEmpleadoRepository;
+import org.grupob.adminapp.entity.Administrador;
+import org.grupob.adminapp.entity.UsuarioEmpleado;
+import org.grupob.adminapp.repository.AdministradorRepository;
+import org.grupob.adminapp.repository.UsuarioEmpleadoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

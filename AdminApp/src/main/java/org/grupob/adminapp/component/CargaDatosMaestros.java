@@ -1,11 +1,11 @@
 package org.grupob.adminapp.component;
 
-import org.grupob.empapp.entity.maestras.Genero;
-import org.grupob.empapp.entity.maestras.Idioma;
-import org.grupob.empapp.entity.maestras.MotivoBloqueo;
-import org.grupob.empapp.repository.maestras.GeneroRepository;
-import org.grupob.empapp.repository.maestras.IdiomaRepository;
-import org.grupob.empapp.repository.maestras.MotivoBloqueoRepository;
+import org.grupob.adminapp.entity.maestras.Genero;
+import org.grupob.adminapp.entity.maestras.Idioma;
+import org.grupob.adminapp.entity.maestras.MotivoBloqueo;
+import org.grupob.adminapp.repository.maestras.GeneroRepository;
+import org.grupob.adminapp.repository.maestras.IdiomaRepository;
+import org.grupob.adminapp.repository.maestras.MotivoBloqueoRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

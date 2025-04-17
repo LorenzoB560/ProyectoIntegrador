@@ -1,9 +1,11 @@
 package org.grupob.adminapp.entity.auxiliar.jerarquia;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.auxiliar.DireccionPostal;
-import org.grupob.empapp.entity.maestras.Genero;
+import org.grupob.adminapp.entity.auxiliar.DireccionPostal;
+import org.grupob.adminapp.entity.maestras.Genero;
 
 import java.time.LocalDate;
 import java.util.UUID;

@@ -1,11 +1,11 @@
 package org.grupob.adminapp.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.Empleado;
-import org.grupob.empapp.entity.auxiliar.jerarquia.Usuario;
-import org.grupob.empapp.entity.maestras.MotivoBloqueo;
+import org.grupob.adminapp.entity.auxiliar.jerarquia.Usuario;
+import org.grupob.adminapp.entity.maestras.MotivoBloqueo;
 
 import java.time.LocalDateTime;
 

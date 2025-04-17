@@ -3,8 +3,8 @@ package org.grupob.adminapp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.auxiliar.jerarquia.Usuario;
-import org.grupob.empapp.validation.email.EmailValidado;
+import org.grupob.adminapp.entity.auxiliar.jerarquia.Usuario;
+import org.grupob.adminapp.validation.email.EmailValidado;
 
 import java.time.LocalDate;
 import java.util.UUID;

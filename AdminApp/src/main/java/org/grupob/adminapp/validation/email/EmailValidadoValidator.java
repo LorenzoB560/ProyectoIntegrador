@@ -3,7 +3,6 @@ package org.grupob.adminapp.validation.email;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.grupob.empapp.validation.email.EmailValidado;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

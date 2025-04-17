@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.auxiliar.jerarquia.Producto;
+import org.grupob.adminapp.entity.auxiliar.jerarquia.Producto;
 
 @Data
 @AllArgsConstructor
