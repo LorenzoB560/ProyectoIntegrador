@@ -3,6 +3,7 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
+import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.entity.Departamento;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.DepartamentoRepository;
@@ -102,6 +103,11 @@ public class RegistroEmpleadoController {
             sesion.setAttribute("datos", datosFormulario);
         }
 
+        // Asegurarse de que la dirección esté inicializada
+        if(datosFormulario.getDireccion() == null) {
+            datosFormulario.setDireccion(new DireccionPostalDTO());
+        }
+
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
@@ -125,6 +131,11 @@ public class RegistroEmpleadoController {
 
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Asegurarse de que la dirección no sea nula en los datos del formulario
+        if (datosFormulario.getDireccion() == null) {
+            datosFormulario.setDireccion(new DireccionPostalDTO());
+        }
         if (datosAnteriores != null) {
             actualizarDatos(datosFormulario, datosAnteriores);
         }
@@ -152,7 +163,7 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-datos-laborales")
     public String guardarDatosLaborales(
-            @Validated(AltaEmpleadoDTO.GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(AltaEmpleadoDTO.GrupoLaboral.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -193,7 +204,7 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-foto-perfil")
     public String guardarFotoPerfil(
-            @Validated(AltaEmpleadoDTO.GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(AltaEmpleadoDTO.GrupoFotoPerfil.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,
@@ -232,7 +243,9 @@ public class RegistroEmpleadoController {
             datosFormulario = new AltaEmpleadoDTO();
             sesion.setAttribute("datos", datosFormulario);
         }
-
+        if(datosFormulario.getDireccion() == null) {
+            datosFormulario.setDireccion(new DireccionPostalDTO());
+        }
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
@@ -267,32 +280,47 @@ public class RegistroEmpleadoController {
             return; // No hay nada anterior que recuperar
         }
 
-        // Actualizar los campos nuevos solo si están vacíos o nulos
-        // DATOS PERSONALES
+        // ** DATOS PERSONALES **
         datosNuevos.setNombre(datosNuevos.getNombre() != null ? datosNuevos.getNombre() : datosAnteriores.getNombre());
         datosNuevos.setApellido(datosNuevos.getApellido() != null ? datosNuevos.getApellido() : datosAnteriores.getApellido());
         datosNuevos.setFechaNacimiento(datosNuevos.getFechaNacimiento() != null ? datosNuevos.getFechaNacimiento() : datosAnteriores.getFechaNacimiento());
         datosNuevos.setIdGeneroSeleccionado(datosNuevos.getIdGeneroSeleccionado() != null ? datosNuevos.getIdGeneroSeleccionado() : datosAnteriores.getIdGeneroSeleccionado());
 
-        //DATOS DIRECCIÓN
-        datosNuevos.setTipoVia(datosNuevos.getTipoVia() != null ? datosNuevos.getTipoVia() : datosAnteriores.getTipoVia());
-        datosNuevos.setVia(datosNuevos.getVia() != null ? datosNuevos.getVia() : datosAnteriores.getVia());
-        datosNuevos.setNumero(datosNuevos.getNumero() != null ? datosNuevos.getNumero() : datosAnteriores.getNumero());
-        datosNuevos.setPiso(datosNuevos.getPiso() != null ? datosNuevos.getPiso() : datosAnteriores.getPiso());
-        datosNuevos.setPuerta(datosNuevos.getPuerta() != null ? datosNuevos.getPuerta() : datosAnteriores.getPuerta());
-        datosNuevos.setCodigoPostal(datosNuevos.getCodigoPostal() != null ? datosNuevos.getCodigoPostal() : datosAnteriores.getCodigoPostal());
-        datosNuevos.setLocalidad(datosNuevos.getLocalidad() != null ? datosNuevos.getLocalidad() : datosAnteriores.getLocalidad());
-        datosNuevos.setRegion(datosNuevos.getRegion() != null ? datosNuevos.getRegion() : datosAnteriores.getRegion());
-        datosNuevos.setPais(datosNuevos.getPais() != null ? datosNuevos.getPais() : datosAnteriores.getPais());
+        // ** DATOS DIRECCIÓN **
+        // Asegurar que el objeto dirección no sea nulo
+        if (datosNuevos.getDireccion() == null) {
+            // Si el anterior tiene dirección, lo copiamos completamente
+            if (datosAnteriores.getDireccion() != null) {
+                datosNuevos.setDireccion(datosAnteriores.getDireccion());
+            } else {
+                // Si ninguno tiene dirección, creamos uno nuevo
+                datosNuevos.setDireccion(new DireccionPostalDTO());
+            }
+        } else if (datosAnteriores.getDireccion() != null) {
+            // Si ambos tienen dirección, completamos campos nulos con datos anteriores
+            DireccionPostalDTO nuevaDir = datosNuevos.getDireccion();
+            DireccionPostalDTO anteriorDir = datosAnteriores.getDireccion();
 
-        //DATOS LABORALES
+            nuevaDir.setTipoVia(nuevaDir.getTipoVia() != null ? nuevaDir.getTipoVia() : anteriorDir.getTipoVia());
+            nuevaDir.setVia(nuevaDir.getVia() != null ? nuevaDir.getVia() : anteriorDir.getVia());
+            nuevaDir.setNumero(nuevaDir.getNumero() != null ? nuevaDir.getNumero() : anteriorDir.getNumero());
+            nuevaDir.setPiso(nuevaDir.getPiso() != null ? nuevaDir.getPiso() : anteriorDir.getPiso());
+            nuevaDir.setPuerta(nuevaDir.getPuerta() != null ? nuevaDir.getPuerta() : anteriorDir.getPuerta());
+            nuevaDir.setCodigoPostal(nuevaDir.getCodigoPostal() != null ? nuevaDir.getCodigoPostal() : anteriorDir.getCodigoPostal());
+            nuevaDir.setLocalidad(nuevaDir.getLocalidad() != null ? nuevaDir.getLocalidad() : anteriorDir.getLocalidad());
+            nuevaDir.setRegion(nuevaDir.getRegion() != null ? nuevaDir.getRegion() : anteriorDir.getRegion());
+            nuevaDir.setPais(nuevaDir.getPais() != null ? nuevaDir.getPais() : anteriorDir.getPais());
+        }
 
-        datosNuevos.setIdDepartamentoSeleccionado(datosNuevos.getIdDepartamentoSeleccionado() != null ?
-                datosNuevos.getIdDepartamentoSeleccionado() : datosAnteriores.getIdDepartamentoSeleccionado());
+        // ** DATOS LABORALES **
+        datosNuevos.setIdDepartamentoSeleccionado(
+                datosNuevos.getIdDepartamentoSeleccionado() != null ?
+                        datosNuevos.getIdDepartamentoSeleccionado() :
+                        datosAnteriores.getIdDepartamentoSeleccionado());
 
-        //FOTO DE PERFIL
-
+        // ** FOTO DE PERFIL **
         datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
     }
+
 
 }

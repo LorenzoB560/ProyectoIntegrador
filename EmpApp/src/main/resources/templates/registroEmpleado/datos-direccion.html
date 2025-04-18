@@ -22,7 +22,7 @@
 </a>
 -->
 
-<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
+<h2 th:if="${mensajeNOK != null}" th:text="${mensajeNOK}" class="error"></h2>
 
 <form action="/guardar-datos-direccion" method="POST" th:object="${datos}">
 
@@ -30,48 +30,38 @@
     <legend th:text="#{registro.direccionPostal}"></legend>
     <label for="tipoVia" th:text="#{registro.tipoVia}"></label>
 
-    <select id="tipoVia" name="tipoVia">
+    <select id="tipoVia" th:field="*{direccion.tipoVia}">
       <option value="" th:text="#{registro.tipoVia.mensaje}"></option>
       <option th:each="tipoVia: ${listaVias}"
               th:value="${tipoVia}"
-              th:text="#{'registro.tipoVia.' + ${tipoVia}}"
-              th:selected="${datos.getDireccion().getTipoVia() != null
-                       and datos.getDireccion().getTipoVia().contains(tipoVia)}"></option>
+              th:text="#{'registro.tipoVia.' + ${tipoVia}}"></option>
     </select>
 
     <label for="via" th:text="#{registro.via}"></label>
-    <input type="text" name="via" id="via"
-           th:value="${datos.getDireccion().getVia() != null ? datos.getDireccion().getVia() : ''}">
+    <input type="text" th:field="*{direccion.via}" id="via">
 
     <label for="numero" th:text="#{registro.numero}"></label>
-    <input type="text" name="numero" id="numero"
-           th:value="${datos.getDireccion().getNumero() != null ? datos.getDireccion().getNumero() : ''}">
+    <input type="text" th:field="*{direccion.numero}" id="numero">
     <br> <br>
 
     <label for="piso" th:text="#{registro.piso}"></label>
-    <input type="text" name="piso" id="piso"
-           th:value="${datos.getDireccion().getPiso() != null ? datos.getDireccion().getPiso() : ''}">
+    <input type="text" th:field="*{direccion.piso}" id="piso">
 
     <label for="puerta" th:text="#{registro.puerta}"></label>
-    <input type="text" name="puerta" id="puerta"
-           th:value="${datos.getDireccion().getPuerta() != null ? datos.getDireccion().getPuerta() : ''}">
+    <input type="text" th:field="*{direccion.puerta}" id="puerta">
 
     <label for="codigoPostal" th:text="#{registro.codigoPostal}"></label>
-    <input type="text" name="codigoPostal" id="codigoPostal"
-           th:value="${datos.getDireccion().getCodigoPostal() != null ? datos.getDireccion().getCodigoPostal() : ''}">
+    <input type="text" th:field="*{direccion.codigoPostal}" id="codigoPostal">
     <br> <br>
 
     <label for="localidad" th:text="#{registro.localidad}"></label>
-    <input type="text" name="localidad" id="localidad"
-           th:value="${datos.getDireccion().getLocalidad() != null ? datos.getDireccion().getLocalidad() : ''}">
+    <input type="text" th:field="*{direccion.localidad}" id="localidad">
 
     <label for="region" th:text="#{registro.region}"></label>
-    <input type="text" name="region" id="region"
-           th:value="${datos.getDireccion().getRegion() != null ? datos.getDireccion().getRegion() : ''}">
+    <input type="text" th:field="*{direccion.region}" id="region">
 
     <label for="pais" th:text="#{registro.pais}"></label>
-    <input type="text" name="pais" id="pais"
-           th:value="${datos.getDireccion().getPais() != null ? datos.getDireccion().getPais() : ''}">
+    <input type="text" th:field="*{direccion.pais}" id="pais">
   </fieldset>
 
   <button type="submit" th:text="#{registro.datosDireccion.submit}"></button>
