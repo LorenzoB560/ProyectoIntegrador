@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <title>Área Personal</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="icon" href="data:;base64,=">
+  <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
 </head>
-<body>
-<h1>Bienvenido <span th:text="${usuario}"></span></h1>
+<<body th:object="${dto}">
+<h1>Bienvenido <span th:text="*{correo}"></span></h1>
 <p>Has accedido a tu área personal.</p>
-<p>Te has conectado <span th:text="${contador}"></span> veces.</p>
-<p>Navegador: <span th:text="${navegador}"></span></p>
-<a th:href="@{/desconectar}">Desconectar</a>
+
+<p>Veces Autenticado <span th:text="*{numeroAccesos}"></span></p>
+<a th:href="@{/empapp/login/logout}">Desconectar</a>
 </body>
 </html>

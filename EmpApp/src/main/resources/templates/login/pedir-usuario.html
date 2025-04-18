@@ -1,49 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Usuario</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="icon" href="data:;base64,=">
-    <script>
-
-    </script>
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
 </head>
 <body>
 <div class="container">
     <h2>Iniciar sesión</h2>
-    <form th:action="@{/validar-usuario}" method="POST">
-        <!-- Si no hay usuarios autenticados, mostrar un input de texto -->
-        <div th:if="${usuariosAutenticados == null}">
-            <input type="text" name="usuario" placeholder="Correo electrónico o teléfono" th:value="${usuario}">
+    <form th:action="@{/empapp/procesar-usuario}" method="post" th:object="${dto}">
+        <!-- Si hay historial, mostrar select, si no, input -->
+        <div th:if="${historial == null or #maps.isEmpty(historial)}">
+            <input type="text" th:field="*{correo}" placeholder="Correo electrónico" required>
         </div>
-
-        <!-- Si hay usuarios autenticados, mostrar un select con las claves -->
-        <div th:unless="${usuariosAutenticados == null}">
-            <select name="usuario" id="usuariosCookie">
+        <div th:if="${historial != null and !#maps.isEmpty(historial)}">
+            <label for="correoSelect">Selecciona un usuario:</label>
+            <select id="correoSelect" th:field="*{correo}">
                 <option value="" disabled selected>Selecciona un usuario</option>
-                <option th:each="entry : ${usuariosAutenticados}"
+                <option th:each="entry : ${historial}"
                         th:value="${entry.key}"
-                        th:text="${entry.key}">
-                </option>
+                        th:text="${entry.key + ' (' + entry.value + ' accesos)'}"></option>
             </select>
-            <input type="hidden" id="otroUsuario" name="usuario" placeholder="Correo electrónico o teléfono" disabled
-                   th:value="${usuario}">
+            <div>
+                <a href="#" onclick="alternarEntradaUsuario();return false;"><b>Introducir nuevo usuario</b></a>
+            </div>
+            <input type="text" th:field="*{correo}" id="nuevoCorreo" placeholder="Nuevo correo" style="display:none;">
         </div>
-
-        <!-- Mensaje de error -->
-        <div class="error" th:if="${error}" th:text="'El usuario ' + ${usuario} + ' no existe en el sistema'"></div>
-
-        <!-- Enlaces adicionales -->
-        <div class="links">
-            <a href="javascript:void(0);" onclick="cambiarPeticion()"><b>Introducir nuevo usuario</b></a>
-        </div>
-
-        <!-- Botón de envío -->
+        <div class="error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
         <button type="submit" class="button">Siguiente</button>
     </form>
 </div>
-</body>
 <script th:src="@{/js/funciones.js}"></script>
+</body>
 </html>

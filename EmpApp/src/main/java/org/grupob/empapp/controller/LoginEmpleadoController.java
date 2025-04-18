@@ -3,111 +3,100 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("empapp")
 public class LoginEmpleadoController {
 
-    private final UsuarioEmpleadoServiceImp usuarioEmpleadoServicio;
-    private final CookieService gestionCookies;
 
-    public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioEmpleadoServicio, CookieService gestionCookies) {
-        this.usuarioEmpleadoServicio = usuarioEmpleadoServicio;
-        this.gestionCookies = gestionCookies;
+
+    private final UsuarioEmpleadoServiceImp usuarioService;
+    private final CookieService cookieService;
+
+    public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioService,
+                          CookieService cookieService) {
+        this.usuarioService = usuarioService;
+        this.cookieService = cookieService;
     }
 
+    @GetMapping("/login")
+    public String mostrarLogin(Model model, HttpServletRequest request,
+                               @CookieValue(name = "usuario", required = false) String usuariosCookie) {
+        // Obtener historial de logins desde cookies
 
-    // Primera ventana: se solicita el correo
-    @GetMapping
-    public String mostrarVentanaCorreo() {
-        return "login/pedircorreo";
+        String historialCookie =(CookieService.cookieValida(usuariosCookie))
+                ? CookieService.deserializar(usuariosCookie).toString() : null;
+
+//        String historialCookie = CookieService.obtenerValorCookie(request, "historialLogins");
+        model.addAttribute("historial", CookieService.deserializar(historialCookie));
+        model.addAttribute("dto", new LoginUsuarioEmpleadoDTO());
+        return "login/pedir-usuario";
     }
 
-    @PostMapping("/correo")
-    public String procesarCorreo(@RequestParam("correo") String correo,
-                                 HttpServletResponse response,
-                                 Model model) {
-        try {
-            // Validar existencia de usuario y guardar correo en cookie
-            LoginUsuarioEmpleadoDTO dto = new LoginUsuarioEmpleadoDTO();
-            dto.setCorreo(correo);
-
-            LoginUsuarioEmpleadoDTO resultado = usuarioEmpleadoServicio.login(dto); // lanza excepción si no existe
-
-            // Si no hay excepción, el correo existe. Guardamos en cookie.
-            GestionCookies.guardarCorreoEnCookie(response, correo);
-            return "redirect:/login/clave";
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            return "login/ventana-correo";
-        }
-    }
-
-    // Segunda ventana: se solicita la clave
-    @GetMapping("/clave")
-    public String mostrarVentanaClave(HttpServletRequest request, Model model) {
-        String correo = GestionCookies.obtenerCorreoDeCookie(request);
-
-        if (correo == null) {
-            return "redirect:/login";
-        }
-
-        model.addAttribute("correo", correo);
-        return "login/ventana-clave";
-    }
-
-    @PostMapping("/clave")
-    public String procesarClave(@RequestParam("clave") String clave,
-                                HttpServletRequest request,
+    @PostMapping("/procesar-usuario")
+    public String procesarEmail(@ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
+                                BindingResult result,
                                 HttpServletResponse response,
-                                Model model) {
-        String correo = GestionCookies.obtenerCorreoDeCookie(request);
+                                HttpSession session) {
 
-        if (correo == null) {
-            return "redirect:/login";
+        try {
+            LoginUsuarioEmpleadoDTO usuario = usuarioService.validarEmail(dto.getCorreo(), response);
+            session.setAttribute("usuarioTemp", usuario);
+            return "redirect:/empapp/clave";
+        } catch (RuntimeException e) {
+            result.rejectValue("correo", "error.email", e.getMessage());
+            return "login/pedir-usuario";
         }
-
-        LoginUsuarioEmpleadoDTO dto = new LoginUsuarioEmpleadoDTO();
-        dto.setCorreo(correo);
-        dto.setClave(clave);
-
-        LoginUsuarioEmpleadoDTO resultado = usuarioEmpleadoServicio.login(dto);
-
-        if (resultado.isBloqueado()) {
-            model.addAttribute("bloqueado", true);
-            model.addAttribute("motivoBloqueo", resultado.getMotivoBloqueo());
-            model.addAttribute("mensajeBloqueo", resultado.getMensajeBloqueo());
-            return "login/ventana-clave";
-        }
-
-        // Login exitoso
-        GestionCookies.borrarCookieCorreo(response);
-        model.addAttribute("usuario", resultado);
-        return "login/ventana-personal";
     }
-    // Endpoint para desconectar
-    @GetMapping("/desconectar")
-    public String desconectarUsuario(HttpServletResponse response) {
-        // Elimina la cookie "estado"
-        Cookie estadoCookie = new Cookie("estado", "");
-        estadoCookie.setPath("/");
-        estadoCookie.setMaxAge(0);
-        response.addCookie(estadoCookie);
 
-        // Elimina la cookie "ultimoUsuario"
-        Cookie ultimoUsuarioCookie = new Cookie("ultimoUsuario", "");
-        ultimoUsuarioCookie.setPath("/");
-        ultimoUsuarioCookie.setMaxAge(0);
-        response.addCookie(ultimoUsuarioCookie);
+    @GetMapping("/clave")
+    public String mostrarContrasena(HttpSession session, Model model) {
+        LoginUsuarioEmpleadoDTO usuario = (LoginUsuarioEmpleadoDTO) session.getAttribute("usuarioTemp");
+        if(usuario == null) return "redirect:/empapp/login";
 
-        // Redirige al inicio
-        return "redirect:/correo";
+        model.addAttribute("dto", new LoginUsuarioEmpleadoDTO());
+        return "login/pedir-clave";
+    }
+
+    @PostMapping("/procesar-clave")
+    public String procesarContrasena(@ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
+                                     BindingResult result,
+                                     HttpSession session,
+                                     HttpServletResponse response) {
+
+        LoginUsuarioEmpleadoDTO usuario = (LoginUsuarioEmpleadoDTO) session.getAttribute("usuarioTemp");
+        dto.setCorreo(usuario.getCorreo());
+
+        try {
+            LoginUsuarioEmpleadoDTO usuarioAutenticado = usuarioService.validarCredenciales(dto, response);
+            session.removeAttribute("usuarioTemp");
+            return "redirect:/empapp/area-personal";
+        } catch (RuntimeException e) {
+            result.reject("error.contrasena", e.getMessage());
+            return "login/pedir-clave";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String cerrarSesion(HttpServletResponse response,
+                               @CookieValue(name = "sesionActiva") String usuarioId) {
+        cookieService.cerrarSesion(response, usuarioId);
+        return "redirect:/empapp/login";
+    }
+
+    @GetMapping("/area-personal")
+    public String mostrarDashboard(Model model, HttpServletRequest request) {
+        String usuario= CookieService.obtenerValorCookie(request, "sesionActiva");
+        // Lógica para obtener datos del usuario y mostrarlos
+        return "area-personal";
     }
 
 
@@ -116,5 +105,8 @@ public class LoginEmpleadoController {
     public String devuelveClave(@RequestParam(required = false) String usuario) {
         return null;
     }
-
 }
+
+
+
+

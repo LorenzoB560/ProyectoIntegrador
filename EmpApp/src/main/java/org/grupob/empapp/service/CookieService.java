@@ -3,29 +3,37 @@ package org.grupob.empapp.service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.grupob.empapp.entity.UsuarioEmpleado;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class CookieService {
+
     /**
-     * Valida que la cookie tenga el formato esperado: "nombre!numero/nombre!numero".
-     * No puede haber doble separador, valores vacíos, ni símbolos mal colocados.
+     * Valida el formato de una cookie según las reglas de negocio.
+     * Formato válido: "usuario!contador[/usuario!contador]*"
+     * @param cookieValue Valor de la cookie a validar
+     * @return true si el formato es correcto, false en caso contrario
      */
     public static boolean cookieValida(String cookieValue) {
         if (cookieValue == null || cookieValue.isEmpty()) return false;
 
-        // Expresión regular para validar estructura esperada.
+        // Expresión regular que verifica:
+        // - No permite dobles separadores (// o !!)
+        // - No permite terminaciones con !
+        // - Formato usuario!numero repetido
         String regex = "^(?!.*//)(?!.*!!)(?!.*!$)(?!^!)([a-zA-Z0-9]+!\\d+)(/[a-zA-Z0-9]+!\\d+)*$";
         return cookieValue.matches(regex);
     }
 
     /**
-     * Convierte la cadena serializada de la cookie a un Map donde:
-     * clave = nombre del usuario, valor = número de accesos.
-     * Si la cookie es inválida, devuelve un mapa vacío.
+     * Convierte el valor de la cookie en un mapa de usuarios con sus contadores
+     * @param cookieValue Valor de la cookie a deserializar
+     * @return Mapa de <Usuario, Contador> o mapa vacío si es inválido
      */
     public static Map<String, Integer> deserializar(String cookieValue) {
         if (!cookieValida(cookieValue)) return new HashMap<>();
@@ -39,15 +47,16 @@ public class CookieService {
     }
 
     /**
-     * Convierte un Map de accesos por usuario a la cadena serializada para guardar en cookie.
-     * Ejemplo: {"ana"=2, "juan"=4} => "ana!2/juan!4"
+     * Serializa un mapa de usuarios a formato de cadena para cookies
+     * @param usuarios Mapa con usuarios y contadores
+     * @return Cadena en formato "usuario!contador[/usuario!contador]*"
      */
     public static String serializar(Map<String, Integer> usuarios) {
         StringBuilder valor = new StringBuilder();
         boolean primero = true;
 
         for (Map.Entry<String, Integer> entry : usuarios.entrySet()) {
-            if (!primero) valor.append("/"); // añadir separador entre pares
+            if (!primero) valor.append("/");
             valor.append(entry.getKey()).append("!").append(entry.getValue());
             primero = false;
         }
@@ -55,8 +64,11 @@ public class CookieService {
     }
 
     /**
-     * Aumenta el contador de accesos del usuario actual y genera la nueva cadena serializada.
-     * Si el usuario no está presente, se añade con un valor inicial de 1.
+     * Actualiza el contador de accesos para un usuario específico
+     * @param usuarios Mapa actual de usuarios
+     * @param valor Valor actual de la cookie
+     * @param usuarioActual Usuario a actualizar
+     * @return Nuevo valor serializado para la cookie
      */
     public static String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
         if (valor != null && valor.contains(usuarioActual)) {
@@ -69,28 +81,32 @@ public class CookieService {
     }
 
     /**
-     * Crea y añade una nueva cookie al response.
+     * Crea una nueva cookie con configuración de seguridad básica
      */
     public static void crearCookie(HttpServletResponse response, String nombre, String valor, int duracionSegundos) {
         Cookie cookie = new Cookie(nombre, valor);
-        cookie.setPath("/"); // hace que esté disponible en toda la app
-        cookie.setMaxAge(duracionSegundos); // duración de la cookie
+        cookie.setPath("/"); // Accesible en toda la aplicación
+        cookie.setMaxAge(duracionSegundos); // Duración en segundos
         response.addCookie(cookie);
     }
 
     /**
-     * Elimina una cookie del navegador del usuario, asignándole una duración 0.
+     * Elimina una cookie del cliente
+     * @param response Objeto HttpServletResponse
+     * @param nombre Nombre de la cookie a eliminar
      */
     public static void eliminarCookie(HttpServletResponse response, String nombre) {
         Cookie cookie = new Cookie(nombre, "");
         cookie.setPath("/");
-        cookie.setMaxAge(0); // al poner 0, el navegador la borra
+        cookie.setMaxAge(0); // Tiempo de vida cero para eliminación
         response.addCookie(cookie);
     }
 
     /**
-     * Recupera el valor de una cookie concreta desde el request.
-     * Devuelve null si no se encuentra la cookie con ese nombre.
+     * Obtiene el valor de una cookie específica
+     * @param request Objeto HttpServletRequest
+     * @param nombre Nombre de la cookie a buscar
+     * @return Valor de la cookie o null si no existe
      */
     public static String obtenerValorCookie(HttpServletRequest request, String nombre) {
         if (request.getCookies() == null) return null;
@@ -101,5 +117,45 @@ public class CookieService {
             }
         }
         return null;
+    }
+
+    /**
+     * Actualiza el historial de logins exitosos en cookies
+     */
+    public void actualizarCookieHistorial(HttpServletResponse response, String email) {
+        String valorActual = obtenerValorCookie(null, "historialLogins");
+        Map<String, Integer> usuarios = deserializar(valorActual);
+        String nuevoValor = actualizar(usuarios, valorActual, email);
+        crearCookie(response, "historialLogins", nuevoValor, 604800); // 7 días
+    }
+
+    /**
+     * Crea la cookie de sesión activa
+     */
+    public void crearCookieSesion(HttpServletResponse response, String correo) {
+        crearCookie(response, "sesionActiva", correo, 1800); // 30 minutos
+    }
+
+
+    /**
+     * Maneja el proceso de cierre de sesión
+     */
+    public void cerrarSesion(HttpServletResponse response, String correo) {
+        eliminarCookie(response, "sesionActiva");
+        actualizarCookieCierreSesion(response, correo);
+    }
+
+    /**
+     * Actualiza el contador de logins al cerrar sesión
+     */
+    private void actualizarCookieCierreSesion(HttpServletResponse response, String correo) {
+        String valorActual = obtenerValorCookie(null, "historialLogins");
+        Map<String, Integer> usuarios = deserializar(valorActual);
+
+        if (usuarios.containsKey(correo)) {
+            usuarios.put(correo, usuarios.get(correo) - 1);
+            String nuevoValor = serializar(usuarios);
+            crearCookie(response, "historialLogins", nuevoValor, 604800);
+        }
     }
 }
