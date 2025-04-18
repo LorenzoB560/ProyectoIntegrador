@@ -3,8 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Datos laborales</title>
+    <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-<p>Hola</p>
+
+<!--
+<a href="/datos-personales" id="datos-personales">
+<img src="/img/Number-1-icon.png" alt="Paso 1">
+</a>
+<a href="/datos-profesionales" id="datos-profesionales">
+<img src="/img/Number-2-icon.png" alt="Paso 2">
+</a>
+<a href="/datos-bancarios" id="datos-bancarios">
+<img src="/img/Number-3-icon.png" alt="Paso 3">
+</a>
+<a href="/resumen" id="resumen">
+<img src="/img/checkered-flag-icon.png" alt="Paso 4">
+</a>
+-->
+
+<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
+
+<form action="/guardar-datos-laborales" method="POST" th:object="${datos}">
+
+
+
+    <fieldset>
+        <legend th:text="#{registro.datosLaborales}"></legend>
+        <label for="departamento" th:text="#{registro.departamento}"></label>
+
+        <select id="departamento" name="idDepartamentoSeleccionado">
+            <option value="" th:text="#{registro.departamento.mensaje}"></option>
+            <option th:each="dept: ${listaDepartamentos}"
+                    th:value="${dept.codigo}"
+                    th:text="${dept.getNombre()}"
+                    th:selected="${datos.getIdDepartamentoSeleccionado() != null
+                       and datos.getIdDepartamentoSeleccionado().contains(dept)}"></option>
+        </select>
+
+
+    </fieldset>
+
+    <button type="submit" th:text="#{registro.datosDireccion.submit}"></button>
+</form>
 </body>
 </html>

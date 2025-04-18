@@ -3,7 +3,9 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
+import org.grupob.empapp.entity.Departamento;
 import org.grupob.empapp.entity.maestras.Genero;
+import org.grupob.empapp.repository.DepartamentoRepository;
 import org.grupob.empapp.repository.EmpleadoRepository;
 
 import org.grupob.empapp.repository.maestras.GeneroRepository;
@@ -23,12 +25,14 @@ public class RegistroEmpleadoController {
     private final GeneroRepository generoRepository;
     private final AltaEmpleadoService altaEmpleadoService;
     private final EmpleadoRepository empleadoRepository;
+    private final DepartamentoRepository departamentoRepository;
     private final EmpleadoConverter empleadoConverter;
 
-    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoService altaEmpleadoService, EmpleadoRepository empleadoRepository, EmpleadoConverter empleadoConverter) {
+    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoService altaEmpleadoService, EmpleadoRepository empleadoRepository, DepartamentoRepository departamentoRepository, EmpleadoConverter empleadoConverter) {
         this.generoRepository = generoRepository;
         this.altaEmpleadoService = altaEmpleadoService;
         this.empleadoRepository = empleadoRepository;
+        this.departamentoRepository = departamentoRepository;
         this.empleadoConverter = empleadoConverter;
     }
 
@@ -37,8 +41,10 @@ public class RegistroEmpleadoController {
     public void adicionColecciones(Model modelo) {
         List<Genero> listaGeneros = generoRepository.findAll();
         List<String> listaVias = List.of("Calle", "Avenida");
+        List<Departamento> listaDepartamentos = departamentoRepository.findAll();
         modelo.addAttribute("listaGeneros", listaGeneros);
         modelo.addAttribute("listaVias", listaVias);
+        modelo.addAttribute("listaDepartamentos", listaDepartamentos);
     }
 
     @GetMapping("/datos-personales")
@@ -144,6 +150,35 @@ public class RegistroEmpleadoController {
         model.addAttribute("datos", datosFormulario);
 
         return "datos-laborales";
+    }
+    @PostMapping("/guardar-datos-laborales")
+    public String guardarDatosLaborales(
+            @Validated(AltaEmpleadoDTO.GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            BindingResult bindingResult,
+            HttpSession sesion,
+            Model model) {
+
+        // Si hay errores, volver a la misma página
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("datos", datosFormulario);
+            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            return "datos-laborales";
+        }
+
+
+
+        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        if (datosAnteriores != null) {
+            actualizarDatos(datosFormulario, datosAnteriores);
+        }
+
+        System.err.println(datosFormulario);
+        sesion.setAttribute("datos", datosFormulario);
+        return "redirect:/foto-perfil";
+    }
+    @GetMapping("/foto-perfil")
+    public String fotoPerfil(){
+        return "foto-perfil";
     }
 
 

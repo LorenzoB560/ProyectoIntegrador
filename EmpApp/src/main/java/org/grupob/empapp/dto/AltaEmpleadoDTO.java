@@ -35,4 +35,8 @@ public class AltaEmpleadoDTO {
     private String region;
     private String pais;
 
+    // ** PASO 3 - DATOS LABORALES **
+    public interface GrupoLaboral{}
+
+    private String idDepartamentoSeleccionado;
 }
