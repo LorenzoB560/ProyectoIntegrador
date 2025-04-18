@@ -67,7 +67,6 @@ public class RegistroEmpleadoController {
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
             @Validated(AltaEmpleadoDTO.GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
-            @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -177,10 +176,64 @@ public class RegistroEmpleadoController {
         return "redirect:/foto-perfil";
     }
     @GetMapping("/foto-perfil")
-    public String fotoPerfil(){
+    public String fotoPerfil(HttpSession sesion, Model model) {
+        //Obtengo la sesión de personales
+        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Si no existe, creo el objeto de datos formulario y su sesión respectivamente.
+        if(datosFormulario == null) {
+            datosFormulario = new AltaEmpleadoDTO();
+            sesion.setAttribute("datos", datosFormulario);
+        }
+
+        //Lo añado al modelo
+        model.addAttribute("datos", datosFormulario);
+
         return "foto-perfil";
     }
+    @PostMapping("/guardar-foto-perfil")
+    public String guardarFotoPerfil(
+            @Validated(AltaEmpleadoDTO.GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @RequestParam MultipartFile imagen,
+            BindingResult bindingResult,
+            HttpSession sesion,
+            Model model) {
 
+        // Si hay errores, volver a la misma página
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("datos", datosFormulario);
+            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            return "foto-perfil";
+        }
+
+
+
+        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        if (datosAnteriores != null) {
+            actualizarDatos(datosFormulario, datosAnteriores);
+        }
+
+        altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
+        System.err.println(datosFormulario);
+        sesion.setAttribute("datos", datosFormulario);
+        return "redirect:/resumen";
+    }
+    @GetMapping("/resumen")
+    public String resumen(HttpSession sesion, Model model) {
+        //Obtengo la sesión de personales
+        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Si no existe, creo el objeto de datos formulario y su sesión respectivamente.
+        if(datosFormulario == null) {
+            datosFormulario = new AltaEmpleadoDTO();
+            sesion.setAttribute("datos", datosFormulario);
+        }
+
+        //Lo añado al modelo
+        model.addAttribute("datos", datosFormulario);
+
+        return "resumen";
+    }
 
     private void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
         if (datosNuevos == null) {
@@ -208,6 +261,15 @@ public class RegistroEmpleadoController {
         datosNuevos.setLocalidad(datosNuevos.getLocalidad() != null ? datosNuevos.getLocalidad() : datosAnteriores.getLocalidad());
         datosNuevos.setRegion(datosNuevos.getRegion() != null ? datosNuevos.getRegion() : datosAnteriores.getRegion());
         datosNuevos.setPais(datosNuevos.getPais() != null ? datosNuevos.getPais() : datosAnteriores.getPais());
+
+        //DATOS LABORALES
+
+        datosNuevos.setIdDepartamentoSeleccionado(datosNuevos.getIdDepartamentoSeleccionado() != null ?
+                datosNuevos.getIdDepartamentoSeleccionado() : datosAnteriores.getIdDepartamentoSeleccionado());
+
+        //FOTO DE PERFIL
+
+        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
     }
 
 }

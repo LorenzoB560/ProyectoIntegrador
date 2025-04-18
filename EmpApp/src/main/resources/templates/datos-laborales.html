@@ -35,7 +35,7 @@
         <select id="departamento" name="idDepartamentoSeleccionado">
             <option value="" th:text="#{registro.departamento.mensaje}"></option>
             <option th:each="dept: ${listaDepartamentos}"
-                    th:value="${dept.codigo}"
+                    th:value="${dept.id}"
                     th:text="${dept.getNombre()}"
                     th:selected="${datos.getIdDepartamentoSeleccionado() != null
                        and datos.getIdDepartamentoSeleccionado().contains(dept)}"></option>
@@ -44,7 +44,7 @@
 
     </fieldset>
 
-    <button type="submit" th:text="#{registro.datosDireccion.submit}"></button>
+    <button type="submit" th:text="#{registro.datosLaborales.submit}"></button>
 </form>
 </body>
 </html>

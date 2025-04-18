@@ -53,8 +53,6 @@
               <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label>
           </div>
 
-          <label th:text="#{registro.imagen}"></label> <br>
-          <input type="file" name="imagen" accept="image/*"/>
           <button type="submit" th:text="#{registro.datosPersonales.submit}"></button>
       </fieldset>
 

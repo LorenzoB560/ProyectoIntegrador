@@ -38,5 +38,5 @@ public class AltaEmpleadoDTO {
     // ** PASO 3 - DATOS LABORALES **
     public interface GrupoLaboral{}
 
-    private String idDepartamentoSeleccionado;
+    private UUID idDepartamentoSeleccionado;
 }
