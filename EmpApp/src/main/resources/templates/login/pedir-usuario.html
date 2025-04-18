@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="data:;base64,=">
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>Iniciar sesión</h2>
+    <form th:action="@{/validar-usuario}" method="POST">
+        <!-- Si no hay usuarios autenticados, mostrar un input de texto -->
+        <div th:if="${usuariosAutenticados == null}">
+            <input type="text" name="usuario" placeholder="Correo electrónico o teléfono" th:value="${usuario}">
+        </div>
+
+        <!-- Si hay usuarios autenticados, mostrar un select con las claves -->
+        <div th:unless="${usuariosAutenticados == null}">
+            <select name="usuario" id="usuariosCookie">
+                <option value="" disabled selected>Selecciona un usuario</option>
+                <option th:each="entry : ${usuariosAutenticados}"
+                        th:value="${entry.key}"
+                        th:text="${entry.key}">
+                </option>
+            </select>
+            <input type="hidden" id="otroUsuario" name="usuario" placeholder="Correo electrónico o teléfono" disabled
+                   th:value="${usuario}">
+        </div>
+
+        <!-- Mensaje de error -->
+        <div class="error" th:if="${error}" th:text="'El usuario ' + ${usuario} + ' no existe en el sistema'"></div>
+
+        <!-- Enlaces adicionales -->
+        <div class="links">
+            <a href="javascript:void(0);" onclick="cambiarPeticion()"><b>Introducir nuevo usuario</b></a>
+        </div>
+
+        <!-- Botón de envío -->
+        <button type="submit" class="button">Siguiente</button>
+    </form>
+</div>
+</body>
+<script th:src="@{/js/funciones.js}"></script>
+</html>

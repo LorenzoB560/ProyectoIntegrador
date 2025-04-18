@@ -25,8 +25,7 @@ public class UsuarioEmpleado extends Usuario {
 
     @Column(name = "ultima_conexion")
     private LocalDateTime ultimaConexion;
-    @Column(name = "num_accesos")
-    private Integer numeroAccesos;
+
 
     private Boolean activo;
 
