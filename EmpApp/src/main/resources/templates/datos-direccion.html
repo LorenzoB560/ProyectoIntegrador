@@ -34,44 +34,49 @@
 
     <select id="tipoVia" name="tipoVia">
       <option value="" th:text="#{registro.tipoVia.mensaje}"></option>
-      <option th:each="via: ${listaVias}"
-              th:value="${via}"
-              th:text="${via}"
+      <option th:each="tipoVia: ${listaVias}"
+              th:value="${tipoVia}"
+              th:text="#{'registro.tipoVia.' + ${tipoVia}}"
               th:selected="${datos.getTipoVia() != null
-                       and datos.getTipoVia().contains(via)}"></option>
+                       and datos.getTipoVia().contains(tipoVia)}"></option>
     </select>
 
-    <label for="via" th:text="#{registro.apellido}"></label>
-    <input type="text" name="apellido" id="apellido"
-           th:value="${datos.getApellido() != null ? datos.getApellido() : ''}">
+    <label for="via" th:text="#{registro.via}"></label>
+    <input type="text" name="via" id="via"
+           th:value="${datos.getVia() != null ? datos.getVia() : ''}">
 
-    <!--
+    <label for="numero" th:text="#{registro.numero}"></label>
+    <input type="text" name="numero" id="numero"
+           th:value="${datos.getNumero() != null ? datos.getNumero() : ''}">
+     <br> <br>
 
-    <label for="apellido" th:text="#{registro.apellido}"></label>
-    <input type="text" name="apellido" id="apellido"
-           th:value="${datos.getApellido() != null ? datos.getApellido() : ''}">
+    <label for="piso" th:text="#{registro.piso}"></label>
+    <input type="text" name="piso" id="piso"
+           th:value="${datos.getPiso() != null ? datos.getPiso() : ''}">
 
-    <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
-    <input type="text" name="fechaNacimiento" id="fechaNacimiento"
-           th:value="${datos.getFechaNacimiento() != null ? datos.getFechaNacimiento() : ''}"></input> <br>
+    <label for="puerta" th:text="#{registro.puerta}"></label>
+    <input type="text" name="puerta" id="puerta"
+           th:value="${datos.getPuerta() != null ? datos.getPuerta() : ''}">
 
-    <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
+    <label for="codigoPostal" th:text="#{registro.codigoPostal}"></label>
+    <input type="text" name="codigoPostal" id="codigoPostal"
+           th:value="${datos.getCodigoPostal() != null ? datos.getCodigoPostal() : ''}">
+    <br> <br>
 
+    <label for="localidad" th:text="#{registro.localidad}"></label>
+    <input type="text" name="localidad" id="localidad"
+           th:value="${datos.getLocalidad() != null ? datos.getLocalidad() : ''}">
 
-    <label th:text="#{registro.genero}"></label>
+    <label for="region" th:text="#{registro.region}"></label>
+    <input type="text" name="region" id="region"
+           th:value="${datos.getRegion() != null ? datos.getRegion() : ''}">
 
-    <div th:each="genero : ${listaGeneros}">
-      <input type="radio" name="idGeneroSeleccionado"
-             th:value="${genero.id}"
-             th:id="${'genero' + genero.id}" />
-      <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label>
-    </div>
-
-    <label th:text="#{registro.imagen}"></label> <br>
-    <input type="file" name="imagen" accept="image/*"/>
-    <button type="submit">Grabar información e ir al paso 2 - Datos de contacto</button>
-  -->
+    <label for="pais" th:text="#{registro.pais}"></label>
+    <input type="text" name="pais" id="pais"
+           th:value="${datos.getRegion() != null ? datos.getRegion() : ''}">
   </fieldset>
+
+  <button type="submit" th:text="#{registro.datosDireccion.submit}">
 </form>
 </body>
 </html>

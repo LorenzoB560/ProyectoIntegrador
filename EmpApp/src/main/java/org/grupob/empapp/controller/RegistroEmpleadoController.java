@@ -126,8 +126,26 @@ public class RegistroEmpleadoController {
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/informacion-laboral";
+        return "redirect:/datos-laborales";
     }
+    @GetMapping("/datos-laborales")
+    public String datosLaborales(HttpSession sesion, Model model){
+
+        //Obtengo la sesión de personales
+        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Si no existe, creo el objeto de datos formulario y su sesión respectivamente.
+        if(datosFormulario == null) {
+            datosFormulario = new AltaEmpleadoDTO();
+            sesion.setAttribute("datos", datosFormulario);
+        }
+
+        //Lo añado al modelo
+        model.addAttribute("datos", datosFormulario);
+
+        return "datos-laborales";
+    }
+
 
     private void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
         if (datosNuevos == null) {
@@ -139,10 +157,22 @@ public class RegistroEmpleadoController {
         }
 
         // Actualizar los campos nuevos solo si están vacíos o nulos
+        // DATOS PERSONALES
         datosNuevos.setNombre(datosNuevos.getNombre() != null ? datosNuevos.getNombre() : datosAnteriores.getNombre());
         datosNuevos.setApellido(datosNuevos.getApellido() != null ? datosNuevos.getApellido() : datosAnteriores.getApellido());
         datosNuevos.setFechaNacimiento(datosNuevos.getFechaNacimiento() != null ? datosNuevos.getFechaNacimiento() : datosAnteriores.getFechaNacimiento());
         datosNuevos.setIdGeneroSeleccionado(datosNuevos.getIdGeneroSeleccionado() != null ? datosNuevos.getIdGeneroSeleccionado() : datosAnteriores.getIdGeneroSeleccionado());
+
+        //DATOS DIRECCIÓN
+        datosNuevos.setTipoVia(datosNuevos.getTipoVia() != null ? datosNuevos.getTipoVia() : datosAnteriores.getTipoVia());
+        datosNuevos.setVia(datosNuevos.getVia() != null ? datosNuevos.getVia() : datosAnteriores.getVia());
+        datosNuevos.setNumero(datosNuevos.getNumero() != null ? datosNuevos.getNumero() : datosAnteriores.getNumero());
+        datosNuevos.setPiso(datosNuevos.getPiso() != null ? datosNuevos.getPiso() : datosAnteriores.getPiso());
+        datosNuevos.setPuerta(datosNuevos.getPuerta() != null ? datosNuevos.getPuerta() : datosAnteriores.getPuerta());
+        datosNuevos.setCodigoPostal(datosNuevos.getCodigoPostal() != null ? datosNuevos.getCodigoPostal() : datosAnteriores.getCodigoPostal());
+        datosNuevos.setLocalidad(datosNuevos.getLocalidad() != null ? datosNuevos.getLocalidad() : datosAnteriores.getLocalidad());
+        datosNuevos.setRegion(datosNuevos.getRegion() != null ? datosNuevos.getRegion() : datosAnteriores.getRegion());
+        datosNuevos.setPais(datosNuevos.getPais() != null ? datosNuevos.getPais() : datosAnteriores.getPais());
     }
 
 }
