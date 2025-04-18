@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resumen</title>
+    <link rel="stylesheet" href="/css/estilos.css"></link>
+    <script src="/js/mensajeAlertas.js"></script>
+</head>
+<body id="body-resumen">
+
+<!--
+<a href="/datos-personales" id="datos-personales">
+    <img src="/img/Number-1-icon.png" alt="Paso 1">
+</a>
+<a href="/datos-profesionales" id="datos-profesionales">
+    <img src="/img/Number-2-icon.png" alt="Paso 2"></img>
+</a>
+<a href="/datos-bancarios" id="datos-bancarios">
+    <img src="/img/Number-3-icon.png" alt="Paso 3"></img>
+</a>
+<a href="/resumen" id="resumen">
+    <img src="/img/checkered-flag-icon.png" alt="Paso 4"></img>
+</a>
+-->
+<form action="/guardar-empleado" method="POST">
+    <!-- DATOS PERSONALES -->
+    <fieldset>
+        <legend><strong th:text="#{registro.datosPersonales}"></strong></legend>
+
+        <p>
+            <strong th:text="#{registro.nombre}"></strong>:
+            <span th:text="${datos.nombre != null ? datos.nombre : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.apellido}"></strong>:
+            <span th:text="${datos.apellido != null ? datos.apellido : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.genero}"></strong>:
+            <span th:each="g : ${listaGeneros}"
+                  th:text="${g.getId() == datos.getIdGeneroSeleccionado() ? g.getGenero() : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.fechaNacimiento}"></strong>:
+            <span th:text="${datos.fechaNacimiento != null ? datos.fechaNacimiento : ''}"></span>
+        </p>
+    </fieldset>
+
+    <!-- DIRECCIÓN POSTAL -->
+    <fieldset>
+        <legend><strong th:text="#{registro.direccionPostal}"></strong></legend>
+
+        <p>
+            <strong th:text="#{registro.tipoVia}"></strong>:
+            <span th:if="${datos.tipoVia == 'Calle'}" th:text="#{registro.tipoVia.Calle}"></span>
+            <span th:if="${datos.tipoVia == 'Avenida'}" th:text="#{registro.tipoVia.Avenida}"></span>
+            <span th:if="${datos.tipoVia == null}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.via}"></strong>:
+            <span th:text="${datos.via != null ? datos.via : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.numero}"></strong>:
+            <span th:text="${datos.numero != null ? datos.numero : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.piso}"></strong>:
+            <span th:text="${datos.piso != null ? datos.piso : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.puerta}"></strong>:
+            <span th:text="${datos.puerta != null ? datos.puerta : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.codigoPostal}"></strong>:
+            <span th:text="${datos.codigoPostal != null ? datos.codigoPostal : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.localidad}"></strong>:
+            <span th:text="${datos.localidad != null ? datos.localidad : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.region}"></strong>:
+            <span th:text="${datos.region != null ? datos.region : ''}"></span>
+        </p>
+
+        <p>
+            <strong th:text="#{registro.pais}"></strong>:
+            <span th:text="${datos.pais != null ? datos.pais : ''}"></span>
+        </p>
+    </fieldset>
+
+    <!-- DATOS LABORALES -->
+    <fieldset>
+        <legend><strong th:text="#{registro.datosLaborales}"></strong></legend>
+
+        <p>
+            <strong th:text="#{registro.departamento}"></strong>:
+            <span th:each="departamento : ${listaDepartamentos}"
+                  th:text="${departamento.getId() == datos.getIdDepartamentoSeleccionado() ? departamento.getNombre() : ''}"></span>
+        </p>
+    </fieldset>
+
+    <!-- FOTO DE PERFIL -->
+    <fieldset>
+        <legend><strong th:text="#{registro.imagen}"></strong></legend>
+
+        <span th:text="${datos.getFoto()}"></span>
+
+    </fieldset>
+    <a href="/volver-principio" id="volverAlPrincipio" th:text="#{registro.volver}"></a>
+    <button type="submit" id="guardarEmpleado" th:text="#{registro.guardar}"></button>
+</form>
+
+
+</body>
+</html>

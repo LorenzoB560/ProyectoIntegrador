@@ -38,7 +38,7 @@
                     th:value="${dept.id}"
                     th:text="${dept.getNombre()}"
                     th:selected="${datos.getIdDepartamentoSeleccionado() != null
-                       and datos.getIdDepartamentoSeleccionado().contains(dept)}"></option>
+                       and datos.getIdDepartamentoSeleccionado() == dept}"></option>
         </select>
 
 

@@ -3,6 +3,8 @@ package org.grupob.empapp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
+import org.grupob.empapp.entity.auxiliar.DireccionPostal;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -20,23 +22,18 @@ public class AltaEmpleadoDTO {
     private String apellido;
     private LocalDate fechaNacimiento;
     private Long idGeneroSeleccionado;
-    private byte[] foto; // Para almacenar la imagen en la base de datos
 
     // ** PASO 2 - DATOS DIRECCION **
     public interface GrupoDireccion{}
 
-    private String tipoVia;
-    private String via;
-    private String numero;
-    private String piso;
-    private String puerta;
-    private String codigoPostal;
-    private String localidad;
-    private String region;
-    private String pais;
+    private DireccionPostalDTO direccion;
 
     // ** PASO 3 - DATOS LABORALES **
     public interface GrupoLaboral{}
 
     private UUID idDepartamentoSeleccionado;
+
+    public interface GrupoFotoPerfil{}
+    // ** PASO 4 - FOTO DE PERFIL **
+    private byte[] foto; // Para almacenar la imagen en la base de datos
 }

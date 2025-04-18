@@ -26,8 +26,6 @@
 
 <form action="/guardar-datos-direccion" method="POST" th:object="${datos}">
 
-
-
   <fieldset>
     <legend th:text="#{registro.direccionPostal}"></legend>
     <label for="tipoVia" th:text="#{registro.tipoVia}"></label>
@@ -37,43 +35,43 @@
       <option th:each="tipoVia: ${listaVias}"
               th:value="${tipoVia}"
               th:text="#{'registro.tipoVia.' + ${tipoVia}}"
-              th:selected="${datos.getTipoVia() != null
-                       and datos.getTipoVia().contains(tipoVia)}"></option>
+              th:selected="${datos.getDireccion().getTipoVia() != null
+                       and datos.getDireccion().getTipoVia().contains(tipoVia)}"></option>
     </select>
 
     <label for="via" th:text="#{registro.via}"></label>
     <input type="text" name="via" id="via"
-           th:value="${datos.getVia() != null ? datos.getVia() : ''}">
+           th:value="${datos.getDireccion().getVia() != null ? datos.getDireccion().getVia() : ''}">
 
     <label for="numero" th:text="#{registro.numero}"></label>
     <input type="text" name="numero" id="numero"
-           th:value="${datos.getNumero() != null ? datos.getNumero() : ''}">
-     <br> <br>
+           th:value="${datos.getDireccion().getNumero() != null ? datos.getDireccion().getNumero() : ''}">
+    <br> <br>
 
     <label for="piso" th:text="#{registro.piso}"></label>
     <input type="text" name="piso" id="piso"
-           th:value="${datos.getPiso() != null ? datos.getPiso() : ''}">
+           th:value="${datos.getDireccion().getPiso() != null ? datos.getDireccion().getPiso() : ''}">
 
     <label for="puerta" th:text="#{registro.puerta}"></label>
     <input type="text" name="puerta" id="puerta"
-           th:value="${datos.getPuerta() != null ? datos.getPuerta() : ''}">
+           th:value="${datos.getDireccion().getPuerta() != null ? datos.getDireccion().getPuerta() : ''}">
 
     <label for="codigoPostal" th:text="#{registro.codigoPostal}"></label>
     <input type="text" name="codigoPostal" id="codigoPostal"
-           th:value="${datos.getCodigoPostal() != null ? datos.getCodigoPostal() : ''}">
+           th:value="${datos.getDireccion().getCodigoPostal() != null ? datos.getDireccion().getCodigoPostal() : ''}">
     <br> <br>
 
     <label for="localidad" th:text="#{registro.localidad}"></label>
     <input type="text" name="localidad" id="localidad"
-           th:value="${datos.getLocalidad() != null ? datos.getLocalidad() : ''}">
+           th:value="${datos.getDireccion().getLocalidad() != null ? datos.getDireccion().getLocalidad() : ''}">
 
     <label for="region" th:text="#{registro.region}"></label>
     <input type="text" name="region" id="region"
-           th:value="${datos.getRegion() != null ? datos.getRegion() : ''}">
+           th:value="${datos.getDireccion().getRegion() != null ? datos.getDireccion().getRegion() : ''}">
 
     <label for="pais" th:text="#{registro.pais}"></label>
     <input type="text" name="pais" id="pais"
-           th:value="${datos.getRegion() != null ? datos.getRegion() : ''}">
+           th:value="${datos.getDireccion().getPais() != null ? datos.getDireccion().getPais() : ''}">
   </fieldset>
 
   <button type="submit" th:text="#{registro.datosDireccion.submit}"></button>

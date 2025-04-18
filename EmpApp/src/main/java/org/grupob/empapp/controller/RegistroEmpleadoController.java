@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -62,7 +63,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "datos-personales";
+        return "registroEmpleado/datos-personales";
     }
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
@@ -75,9 +76,8 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "datos-personales";
+            return "registroEmpleado/datos-personales";
         }
-
 
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -105,7 +105,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "datos-direccion";
+        return "registroEmpleado/datos-direccion";
     }
 
     @PostMapping("/guardar-datos-direccion")
@@ -119,7 +119,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "datos-direccion";
+            return "registroEmpleado/datos-direccion";
         }
 
 
@@ -148,7 +148,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "datos-laborales";
+        return "registroEmpleado/datos-laborales";
     }
     @PostMapping("/guardar-datos-laborales")
     public String guardarDatosLaborales(
@@ -161,7 +161,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "datos-laborales";
+            return "registroEmpleado/datos-laborales";
         }
 
 
@@ -189,7 +189,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "foto-perfil";
+        return "registroEmpleado/foto-perfil";
     }
     @PostMapping("/guardar-foto-perfil")
     public String guardarFotoPerfil(
@@ -203,17 +203,21 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "foto-perfil";
+            return "registroEmpleado/foto-perfil";
         }
 
 
-
+        try {
+            datosFormulario.setFoto(imagen.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
             actualizarDatos(datosFormulario, datosAnteriores);
         }
 
-        altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
+
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
         return "redirect:/resumen";
@@ -232,8 +236,27 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "resumen";
+        return "registroEmpleado/resumen";
     }
+    @PostMapping("/guardar-empleado")
+    public String guardarEmpleado(HttpSession sesion) {
+
+        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        System.err.println(datosFormulario);
+        altaEmpleadoService.guardarEmpleado(datosFormulario);
+        return "redirect:/usuario-insertado";
+    }
+    @GetMapping("/usuario-insertado")
+    public String usuarioInsertado(){
+        return "registroEmpleado/usuario-insertado";
+    }
+
+    @GetMapping("/volver-principio")
+    public String volverPrincipio(HttpSession sesion) {
+        sesion.invalidate();
+        return "redirect:/datos-personales";
+    }
+
 
     private void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
         if (datosNuevos == null) {
