@@ -1,0 +1,21 @@
+a img{
+    width: 50px;
+    height: auto;
+    opacity: 0.5;
+}
+#body-personales a img,
+#body-direccion a img,
+#body-laborales a img,
+#body-foto a img,
+#body-resumen a img {
+    opacity: 0.5; /* Reafirmamos la opacidad por defecto */
+}
+
+
+#body-personales #datos-personales img,
+#body-direccion #datos-direccion img,
+#body-laborales #datos-laborales img,
+#body-foto #foto-perfil img,
+#body-resumen #resumen img {
+    opacity: 1;
+}
