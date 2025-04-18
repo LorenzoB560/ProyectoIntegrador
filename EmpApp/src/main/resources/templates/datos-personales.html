@@ -29,7 +29,7 @@
 
 
       <fieldset>
-        <legend>Datos personales</legend>
+        <legend th:text="#{registro.datosPersonales}"></legend>
         <label for="nombre" th:text="#{registro.nombre}"></label>
           <input type="text" name="nombre" id="nombre"
                  th:value="${datos.getNombre() != null ? datos.getNombre() : ''}">

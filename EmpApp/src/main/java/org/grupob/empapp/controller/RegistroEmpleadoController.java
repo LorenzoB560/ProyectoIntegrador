@@ -1,6 +1,5 @@
 package org.grupob.empapp.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
@@ -35,9 +34,11 @@ public class RegistroEmpleadoController {
 
 
     @ModelAttribute //Cargo las colecciones una vez para añadirlas al modelo
-    public void adicionColecciones(Model modelo, HttpServletRequest request) {
+    public void adicionColecciones(Model modelo) {
         List<Genero> listaGeneros = generoRepository.findAll();
+        List<String> listaVias = List.of("Calle", "Avenida");
         modelo.addAttribute("listaGeneros", listaGeneros);
+        modelo.addAttribute("listaVias", listaVias);
     }
 
     @GetMapping("/datos-personales")
@@ -79,14 +80,53 @@ public class RegistroEmpleadoController {
             actualizarDatos(datosFormulario, datosAnteriores);
         }
 
-        altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
+        //altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/datos-contacto";
+        return "redirect:/datos-direccion";
     }
-    @GetMapping("/datos-contacto")
-    public String datosContacto() {
-        return "datos-contacto";
+    @GetMapping("/datos-direccion")
+    public String datosDireccion(HttpSession sesion, Model model) {
+
+        //Obtengo la sesión de personales
+        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Si no existe, creo el objeto de datos formulario y su sesión respectivamente.
+        if(datosFormulario == null) {
+            datosFormulario = new AltaEmpleadoDTO();
+            sesion.setAttribute("datos", datosFormulario);
+        }
+
+        //Lo añado al modelo
+        model.addAttribute("datos", datosFormulario);
+
+        return "datos-direccion";
+    }
+
+    @PostMapping("/guardar-datos-direccion")
+    public String guardarDatosDireccion(
+            @Validated(AltaEmpleadoDTO.GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            BindingResult bindingResult,
+            HttpSession sesion,
+            Model model) {
+
+        // Si hay errores, volver a la misma página
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("datos", datosFormulario);
+            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            return "datos-direccion";
+        }
+
+
+
+        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        if (datosAnteriores != null) {
+            actualizarDatos(datosFormulario, datosAnteriores);
+        }
+
+        System.err.println(datosFormulario);
+        sesion.setAttribute("datos", datosFormulario);
+        return "redirect:/informacion-laboral";
     }
 
     private void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
