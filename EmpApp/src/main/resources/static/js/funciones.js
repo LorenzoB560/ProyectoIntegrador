@@ -71,7 +71,7 @@ $(document).ready(function() {
             // Si se ha introducido un correo...
 
             $.ajax({
-                url: "/adminapp/devuelve-clave", // Endpoint que expone la contraseña
+                url: "/emppapp/devuelve-clave", // Endpoint que expone la contraseña
                 type: "GET",                     // Método HTTP
                 data: { correo: correo },        // Parámetro que se envía al backend
                 success: function(clave) {

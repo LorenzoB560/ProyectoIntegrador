@@ -44,15 +44,15 @@ public class UsuarioEmpleadoServiceImp {
     /**
      * Valida la existencia del usuario y su estado de bloqueo
      * @param email Correo electrónico del usuario
-     * @param response Objeto para gestión de cookies
      * @return DTO con datos básicos del usuario
      * @throws RuntimeException Si el usuario no existe o está bloqueado
      */
-    public LoginUsuarioEmpleadoDTO validarEmail(String email, HttpServletResponse response) {
-        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByCorreo(email);
+    public Boolean validarEmail(String correo) {
+        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByCorreo(correo);
 
         if (usuarioOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no registrado");
+//            throw new RuntimeException("Usuario no registrado");
+        return false;
         }
 
         UsuarioEmpleado usuario = usuarioOpt.get();
@@ -63,30 +63,31 @@ public class UsuarioEmpleadoServiceImp {
             throw new RuntimeException("Cuenta bloqueada hasta: " + usuario.getFechaDesbloqueo());
         }
 
-        cookieService.actualizarCookieHistorial(response, email);
-        return loginUsuarioEmpConvert.convertirADTO(usuario);
+        /*cookieService.actualizarCookieHistorial(response, email);
+        return loginUsuarioEmpConvert.convertirADTO(usuario);*/
+        return true;
     }
 
     /**
      * Valida las credenciales completas del usuario
      * @param dto Objeto con credenciales (email y contraseña)
-     * @param response Objeto para gestión de cookies
      * @return DTO con datos completos del usuario
      * @throws RuntimeException Si las credenciales son inválidas
      */
-    public LoginUsuarioEmpleadoDTO validarCredenciales(LoginUsuarioEmpleadoDTO dto, HttpServletResponse response) {
-        UsuarioEmpleado usuario = usuarioEmpRepo.findByCorreo(dto.getCorreo())
+    public Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto) {
+        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByCorreo(dto.getCorreo())
                 .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
 
-        if (!usuario.getClave().equals(dto.getClave())) {
-            manejarIntentoFallido(usuario);
-            throw new RuntimeException("Contraseña incorrecta");
+        if (!usuarioEmp.getClave().equals(dto.getClave())) {
+            manejarIntentoFallido(usuarioEmp);
+//            throw new RuntimeException("Contraseña incorrecta");
+            return false;
         }
 
-        actualizarEstadisticasAcceso(usuario);
-        cookieService.crearCookieSesion(response, usuario.getCorreo().toString());
-
-        return loginUsuarioEmpConvert.convertirADTO(usuario);
+//        actualizarEstadisticasAcceso(usuario);
+//        cookieService.crearCookieSesion(response, usuario.getCorreo().toString());
+        actualizarEstadisticasAcceso(usuarioEmp);
+        return true;
     }
 
     /**

@@ -3,10 +3,8 @@ package org.grupob.empapp.service;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.grupob.empapp.entity.UsuarioEmpleado;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,14 +17,14 @@ public class CookieService {
      * @param cookieValue Valor de la cookie a validar
      * @return true si el formato es correcto, false en caso contrario
      */
-    public static boolean cookieValida(String cookieValue) {
+    public static boolean validar(String cookieValue) {
         if (cookieValue == null || cookieValue.isEmpty()) return false;
 
         // Expresión regular que verifica:
         // - No permite dobles separadores (// o !!)
         // - No permite terminaciones con !
         // - Formato usuario!numero repetido
-        String regex = "^(?!.*//)(?!.*!!)(?!.*!$)(?!^!)([a-zA-Z0-9]+!\\d+)(/[a-zA-Z0-9]+!\\d+)*$";
+        String regex = "^(?!.*//)(?!.*!!)(?!.*!$)(?!^!)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}!\\d+)(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}!\\d+)*$";
         return cookieValue.matches(regex);
     }
 
@@ -36,7 +34,7 @@ public class CookieService {
      * @return Mapa de <Usuario, Contador> o mapa vacío si es inválido
      */
     public static Map<String, Integer> deserializar(String cookieValue) {
-        if (!cookieValida(cookieValue)) return new HashMap<>();
+        if (!validar(cookieValue)) return new HashMap<>();
 
         Map<String, Integer> usuarios = new HashMap<>();
         for (String par : cookieValue.split("/")) {
@@ -140,22 +138,8 @@ public class CookieService {
     /**
      * Maneja el proceso de cierre de sesión
      */
-    public void cerrarSesion(HttpServletResponse response, String correo) {
-        eliminarCookie(response, "sesionActiva");
-        actualizarCookieCierreSesion(response, correo);
+    public void cerrarSesion(HttpServletResponse response, String nombre) {
+        eliminarCookie(response, nombre);
     }
 
-    /**
-     * Actualiza el contador de logins al cerrar sesión
-     */
-    private void actualizarCookieCierreSesion(HttpServletResponse response, String correo) {
-        String valorActual = obtenerValorCookie(null, "historialLogins");
-        Map<String, Integer> usuarios = deserializar(valorActual);
-
-        if (usuarios.containsKey(correo)) {
-            usuarios.put(correo, usuarios.get(correo) - 1);
-            String nuevoValor = serializar(usuarios);
-            crearCookie(response, "historialLogins", nuevoValor, 604800);
-        }
-    }
 }
