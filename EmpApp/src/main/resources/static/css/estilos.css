@@ -19,3 +19,8 @@ a img{
 #body-resumen #resumen img {
     opacity: 1;
 }
+
+.error{
+    color: red;
+    font-weight: bold;
+}

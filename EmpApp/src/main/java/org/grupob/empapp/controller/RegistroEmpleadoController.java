@@ -4,6 +4,10 @@ import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoDireccion;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoFotoPerfil;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoLaboral;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
 import org.grupob.empapp.entity.Departamento;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.DepartamentoRepository;
@@ -26,18 +30,13 @@ public class RegistroEmpleadoController {
 
     private final GeneroRepository generoRepository;
     private final AltaEmpleadoService altaEmpleadoService;
-    private final EmpleadoRepository empleadoRepository;
     private final DepartamentoRepository departamentoRepository;
-    private final EmpleadoConverter empleadoConverter;
 
-    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoService altaEmpleadoService, EmpleadoRepository empleadoRepository, DepartamentoRepository departamentoRepository, EmpleadoConverter empleadoConverter) {
+    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoService altaEmpleadoService, DepartamentoRepository departamentoRepository) {
         this.generoRepository = generoRepository;
         this.altaEmpleadoService = altaEmpleadoService;
-        this.empleadoRepository = empleadoRepository;
         this.departamentoRepository = departamentoRepository;
-        this.empleadoConverter = empleadoConverter;
     }
-
 
     @ModelAttribute //Cargo las colecciones una vez para añadirlas al modelo
     public void adicionColecciones(Model modelo) {
@@ -68,7 +67,7 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
-            @Validated(AltaEmpleadoDTO.GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -77,6 +76,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            System.err.println(bindingResult.toString());
             return "registroEmpleado/datos-personales";
         }
 
@@ -116,7 +116,7 @@ public class RegistroEmpleadoController {
 
     @PostMapping("/guardar-datos-direccion")
     public String guardarDatosDireccion(
-            @Validated(AltaEmpleadoDTO.GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -163,7 +163,7 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-datos-laborales")
     public String guardarDatosLaborales(
-            @Validated(AltaEmpleadoDTO.GrupoLaboral.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(GrupoLaboral.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -204,7 +204,7 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-foto-perfil")
     public String guardarFotoPerfil(
-            @Validated(AltaEmpleadoDTO.GrupoFotoPerfil.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(GrupoFotoPerfil.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,

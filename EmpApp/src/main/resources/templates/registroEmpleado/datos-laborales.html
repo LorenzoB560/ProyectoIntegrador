@@ -32,18 +32,17 @@
 
     <fieldset>
         <legend th:text="#{registro.datosLaborales}"></legend>
-        <label for="departamento" th:text="#{registro.departamento}"></label>
 
-        <select id="departamento" name="idDepartamentoSeleccionado">
+        <!-- Seleccionar departamento
+        <label for="departamento" th:text="#{registro.departamento}"></label>
+        <select id="departamento" th:field="*{idDepartamentoSeleccionado}">
             <option value="" th:text="#{registro.departamento.mensaje}"></option>
             <option th:each="dept: ${listaDepartamentos}"
                     th:value="${dept.id}"
-                    th:text="${dept.getNombre()}"
-                    th:selected="${datos.getIdDepartamentoSeleccionado() != null
-                       and datos.getIdDepartamentoSeleccionado() == dept}"></option>
+                    th:text="${dept.getNombre()}"></option>
         </select>
-
-
+        <div th:each="error: ${#fields.errors('idDepartamentoSeleccionado')}" th:text="${error}" class="error"></div>
+        -->
     </fieldset>
 
     <button type="submit" th:text="#{registro.datosLaborales.submit}"></button>

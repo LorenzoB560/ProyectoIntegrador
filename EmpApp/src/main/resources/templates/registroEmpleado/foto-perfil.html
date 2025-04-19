@@ -24,12 +24,13 @@
   <img src="/img/Resumen.png" alt="Resumen">
 </a>
 
-<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
+<h2 th:text="*{mensajeNOK}" class="error"></h2>
 
 <form action="/guardar-foto-perfil" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
 
   <label th:text="#{registro.imagen}"></label> <br>
   <input type="file" name="imagen" accept="image/*"/>
+
   <button type="submit" th:text="#{registro.fotoPerfil.submit}"></button>
   <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
 </form>
