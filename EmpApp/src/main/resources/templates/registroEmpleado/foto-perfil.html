@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Foto de perfil</title>
   <link rel="stylesheet" href="/css/estilos.css">
+  <script src="/js/modificarCampos.js"></script>
 </head>
 <body id="body-foto">
 
@@ -25,12 +26,12 @@
 
 <!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
 
-<form action="/guardar-foto-perfil" method="POST" th:object="${datos}" enctype="multipart/form-data">
+<form action="/guardar-foto-perfil" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
 
   <label th:text="#{registro.imagen}"></label> <br>
   <input type="file" name="imagen" accept="image/*"/>
   <button type="submit" th:text="#{registro.fotoPerfil.submit}"></button>
-
+  <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
 </form>
 </body>
 </html>

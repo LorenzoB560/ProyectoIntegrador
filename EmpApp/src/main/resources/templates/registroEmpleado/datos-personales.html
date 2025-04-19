@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Datos personales</title>
     <link rel="stylesheet" href="/css/estilos.css">
+    <script src="/js/modificarCampos.js"></script>
 </head>
   <body id="body-personales">
 
@@ -27,7 +28,7 @@
 
       <h2 th:text="*{mensajeNOK}" class="error"></h2>
 
-      <form action="/guardar-datos-personales" method="POST" th:object="${datos}" enctype="multipart/form-data">
+      <form action="/guardar-datos-personales" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
 
 
 
@@ -57,7 +58,14 @@
               <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label>
           </div>
 
+          <input type="button" id="deseleccionarRadios" name="deseleccionarRadios"
+                 th:value="#{registro.deseleccionar}"
+                 onclick="deseleccionaRadios('idGeneroSeleccionado');" />
+          <br> <br>
+
+
           <button type="submit" th:text="#{registro.datosPersonales.submit}"></button>
+          <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
       </fieldset>
 
     </form>

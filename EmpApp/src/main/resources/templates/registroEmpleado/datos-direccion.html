@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Dirección postal</title>
   <link rel="stylesheet" href="/css/estilos.css">
+  <script src="/js/modificarCampos.js"></script>
 </head>
 <body id="body-direccion">
 
@@ -25,7 +26,7 @@
 
 <h2 th:if="${mensajeNOK != null}" th:text="${mensajeNOK}" class="error"></h2>
 
-<form action="/guardar-datos-direccion" method="POST" th:object="${datos}">
+<form action="/guardar-datos-direccion" method="POST" th:object="${datos}" id="formulario">
 
   <fieldset>
     <legend th:text="#{registro.direccionPostal}"></legend>
@@ -66,6 +67,7 @@
   </fieldset>
 
   <button type="submit" th:text="#{registro.datosDireccion.submit}"></button>
+  <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
 </form>
 </body>
 </html>
