@@ -2,6 +2,7 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
@@ -17,10 +18,8 @@ import java.util.Map;
 @RequestMapping("empapp")
 public class LoginEmpleadoController {
 
-
     private final UsuarioEmpleadoServiceImp usuarioService;
     private final CookieService cookieService;
-
 
     public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioService,
                                    CookieService cookieService) {
@@ -36,16 +35,15 @@ public class LoginEmpleadoController {
         Map<String, Integer> usuariosAutenticados = (CookieService.validar(usuariosCookie))
                 ? CookieService.deserializar(usuariosCookie) : null;
         String estado = CookieService.obtenerValorCookie(request, "estado");
-        String ultimoUsuario = CookieService.obtenerValorCookie(request, "ultimoUsuario");
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
 
         if (ultimoUsuario == null || (usuariosAutenticados != null && !usuariosAutenticados.containsKey(ultimoUsuario))) {
             CookieService.crearCookie(respuesta, "estado", "login", (7 * 24 * 60 * 60));
-            CookieService.crearCookie(respuesta, "ultimoUsuario", "", (7 * 24 * 60 * 60));
-
 
             modelo.addAttribute("usuariosAutenticados", usuariosAutenticados);
             return "login/pedir-usuario";
         }
+
         // Redirigir al paso correcto
         switch (estado) {
             case "/clave":
@@ -64,6 +62,7 @@ public class LoginEmpleadoController {
 
     @PostMapping("/procesar-usuario")
     public String procesarEmail(Model modelo,
+                                HttpServletRequest request,
                                 HttpServletResponse respuesta,
                                 @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                 BindingResult result) {
@@ -71,28 +70,30 @@ public class LoginEmpleadoController {
             modelo.addAttribute("ErrorCredenciales", "Usuario incorrecto");
             return "login/pedir-usuario";
         }
-        CookieService.crearCookie(respuesta, "ultimoUsuario", dto.getCorreo(), (7 * 24 * 60 * 60));
+
+        // Guardar el correo en la sesión
+        request.getSession().setAttribute("ultimoUsuario", dto.getCorreo());
+
+        // Seguimos usando cookie para estado
         CookieService.crearCookie(respuesta, "estado", "/clave", (7 * 24 * 60 * 60));
-        return "redirect:/empapp/clave"; // Redirige a la vista de clave
+
+        return "redirect:/empapp/clave";
     }
 
     @GetMapping("/clave")
     public String mostrarContrasena(Model modelo,
                                     HttpServletRequest request,
                                     @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
-                                    @CookieValue(name = "estado", required = false) String estado,
-                                    @CookieValue(name = "ultimoUsuario", required = false) String ultimoUsuario) {
+                                    @CookieValue(name = "estado", required = false) String estado) {
 
-        // Verificar si el estado es válido
         if (estado == null || !estado.equals("/clave")) {
-            return "redirect:/empapp/login"; // Redirigir si no está en el flujo correcto
+            return "redirect:/empapp/login";
         }
 
-       /* // Verificar que ultimoUsuario sea válido
-        if (ultimoUsuario == null || !usuarioService.validarEmail(dto.getCorreo())) {
-            return "redirect:/empapp/login"; // Redirigir si el usuario no es válido
-        }*/
-
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+        if (ultimoUsuario == null || !usuarioService.validarEmail(ultimoUsuario)) {
+            return "redirect:/empapp/login";
+        }
 
         modelo.addAttribute("correo", ultimoUsuario);
         return "login/pedir-clave";
@@ -100,42 +101,36 @@ public class LoginEmpleadoController {
 
     @PostMapping("/procesar-clave")
     public String procesarContrasena(Model modelo,
+                                     HttpServletRequest request,
                                      HttpServletResponse response,
                                      @CookieValue(name = "usuario", required = false) String valor,
-                                     @CookieValue(name = "ultimoUsuario", required = false) String ultimoUsuario,
                                      @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                      BindingResult result) {
 
-        // Verificar que ultimoUsuario sea válido
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+
         if (ultimoUsuario == null || !usuarioService.validarEmail(ultimoUsuario)) {
-            modelo.addAttribute("correo", ultimoUsuario);
-            return "redirect:/empapp/login"; // Redirigir si el usuario no es válido
+            return "redirect:/empapp/login";
         }
 
-        // Verificar si la clave es correcta
         if (!usuarioService.validarCredenciales(new LoginUsuarioEmpleadoDTO(ultimoUsuario, dto.getClave()))) {
             modelo.addAttribute("correo", ultimoUsuario);
             modelo.addAttribute("error", "Contraseña incorrecta. Vuelva a intentarlo.");
             return "login/pedir-clave";
         }
 
-        // Verificar si la cookie "usuario" tiene datos válidos
         if (!CookieService.validar(valor)) {
-            valor = ""; // Evita valores inválidos
+            valor = "";
         }
 
-        // Deserializar usuarios
         Map<String, Integer> usuarios = CookieService.deserializar(valor);
-        if (usuarios == null) {
-            usuarios = new HashMap<>();
-        }
+        if (usuarios == null) usuarios = new HashMap<>();
 
-        // Actualizar la cookie de usuarios autenticados
         String valorActualizado = CookieService.actualizar(usuarios, valor, ultimoUsuario);
         int contador = usuarios.getOrDefault(ultimoUsuario, 1);
 
         CookieService.crearCookie(response, "usuario", valorActualizado, (7 * 24 * 60 * 60));
-
+        CookieService.crearCookie(response, "estado", "/area-personal", (7 * 24 * 60 * 60)); // corregido también aquí
 
         modelo.addAttribute("correo", ultimoUsuario);
         modelo.addAttribute("contador", contador);
@@ -145,40 +140,37 @@ public class LoginEmpleadoController {
 
     @GetMapping("/area-personal")
     public String mostrarAreaPersonal(Model modelo,
+                                      HttpServletRequest request,
                                       HttpServletResponse response,
                                       @CookieValue(name = "estado", required = false) String estado,
-                                      @CookieValue(name = "ultimoUsuario", required = false) String ultimoUsuario,
-                                      @CookieValue(name = "usuario", required = false) String usuariosCookie){
-        // Verificar si el estado es válido
-        if (estado == null || !estado.equals("/clave")) {
-            return "redirect:/empapp/login"; // Redirigir si no está en el flujo correcto
+                                      @CookieValue(name = "usuario", required = false) String usuariosCookie) {
+
+        if (estado == null || !estado.equals("/area-personal")) {
+            return "redirect:/empapp/login";
         }
 
-        // Verificar que ultimoUsuario sea válido
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         if (ultimoUsuario == null || !usuarioService.validarEmail(ultimoUsuario)) {
-            return "redirect:/empapp/login"; // Redirigir si el usuario no es válido
+            return "redirect:/empapp/login";
         }
-
 
         Map<String, Integer> usuariosAutenticados = (CookieService.validar(usuariosCookie))
                 ? CookieService.deserializar(usuariosCookie) : null;
 
-        // Obtener el contador del usuario actual
         int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
 
-        // Pasar los valores a la vista
         modelo.addAttribute("correo", ultimoUsuario);
         modelo.addAttribute("contador", contador);
         modelo.addAttribute("dto", contador);
-
-        CookieService.crearCookie(response, "estado", "/area-perosnal", (7 * 24 * 60 * 60));
-
+        request.getSession().setAttribute("usuarioLogeado", ultimoUsuario);
         return "area-personal";
     }
 
-    @GetMapping("/logout")
-    public String cerrarSesion(HttpServletResponse response) {
-        cookieService.cerrarSesion(response, "ultimoUsuario");
+    @GetMapping("/desconectar")
+    public String cerrarSesion(HttpServletResponse response,
+                               HttpSession sesion) {
+        sesion.removeAttribute("ultimoUsuario");
+        sesion.removeAttribute("usuarioLogeado");
         return "redirect:/empapp/login";
     }
 
@@ -188,7 +180,3 @@ public class LoginEmpleadoController {
         return null;
     }
 }
-
-
-
-

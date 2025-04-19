@@ -11,10 +11,16 @@ function mostrarOcultarClave() {
 }
 
 function cambiarPeticion() {
-    document.getElementById("usuariosCookie").style.display = "none"; // Oculta el select
-    let inputUsuario = document.getElementById("otroUsuario");
-    inputUsuario.type = "text"; // Lo cambia a campo visible
-    inputUsuario.removeAttribute("disabled"); // Habilita el input
+    // Eliminar el select y mostrar el input
+    const select = document.getElementById('usuariosCookie');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'correo';
+    input.placeholder = 'Correo electrónico';
+    input.required = true;
+
+    // Reemplazar el select por el nuevo input
+    select.parentNode.replaceChild(input, select);
 }
 
 function alternarEntradaUsuario() {
