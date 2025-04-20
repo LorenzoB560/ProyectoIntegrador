@@ -176,7 +176,7 @@ public class LoginEmpleadoController {
 
     @GetMapping("/devuelve-clave")
     @ResponseBody
-    public String devuelveClave(@RequestParam(required = false) String usuario) {
-        return null;
+    public String devuelveClave(@RequestParam(required = false) String correo) {
+        return usuarioService.devuelveUsuarioEmpPorCorreo(correo).getClave();
     }
 }

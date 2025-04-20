@@ -70,19 +70,18 @@ $(document).ready(function() {
         event.preventDefault();
         // Evita que el enlace haga su comportamiento por defecto (redirigir o recargar)
 
-        var correo = $("#correo").val().trim();
+        const correo = $("#correo").text().trim();
         // Obtiene el valor del input con ID "correo", eliminando espacios en blanco
 
         if (correo) {
             // Si se ha introducido un correo...
 
             $.ajax({
-                url: "/emppapp/devuelve-clave", // Endpoint que expone la contraseña
+                url: "/empapp/devuelve-clave", // Endpoint que expone la contraseña
                 type: "GET",                     // Método HTTP
                 data: { correo: correo },        // Parámetro que se envía al backend
                 success: function(clave) {
                     // Función que se ejecuta si la petición se completa correctamente
-
                     alert("La contraseña de " + correo + " es: " + clave);
                     // Muestra la contraseña recibida
                 },

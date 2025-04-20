@@ -41,9 +41,19 @@ public class UsuarioEmpleadoServiceImp {
         this.cookieService = cookieService;
     }
 
+    public UsuarioEmpleado devuelveUsuarioEmpPorCorreo(String correo){
+        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByCorreo(correo);
+
+        if (usuarioOpt.isPresent()) {
+//            throw new RuntimeException("Usuario no registrado");
+            return usuarioOpt.get();
+        }
+        throw new RuntimeException("Usuario no registrado");
+    }
+
     /**
      * Valida la existencia del usuario y su estado de bloqueo
-     * @param email Correo electrónico del usuario
+     * @param correo Correo electrónico del usuario
      * @return DTO con datos básicos del usuario
      * @throws RuntimeException Si el usuario no existe o está bloqueado
      */

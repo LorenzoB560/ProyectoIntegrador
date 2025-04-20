@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Introduce tu contraseña</title>
     <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" href="data:;base64,=">
 </head>
 <body>
 <div class="container">
     <h2 th:text="${correo}">Usuario</h2>
     <form th:action="@{/empapp/procesar-clave}" method="post" th:object="${dto}">
-<!--        <input type="hidden" th:field="*{correo}">-->
-<!--        <input type="password" id="usuario" name="usuario" th:value="${correo}" hidden>-->
+        <span id="correo" th:text="${correo}" style="display:none;"></span>
         <input type="password" id="clave" name="clave" placeholder="Contraseña">
         <div class="error" th:if="${error}" th:text="${error}"></div>
 
