@@ -24,10 +24,14 @@ public class Usuario {
     @Column(nullable = false)
     private String clave;
 
+    @Column(name = "num_accesos")
+    private Integer numeroAccesos;
+
 
     public Usuario(String correo, String clave) {
         setCorreo(correo);
         setClave(clave);
+        setNumeroAccesos(0);
     }
 }
 
