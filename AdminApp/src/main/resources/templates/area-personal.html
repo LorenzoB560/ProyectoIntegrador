@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Área Personal</title>
+</head>
+<body th:object="${loginAdminDTO}">
+<h1>Bienvenido <span th:text="*{correo}"></span></h1>
+<p>Has accedido a tu área personal.</p>
+
+<p>Veces Autenticado <span th:text="*{numeroAccesos}"></span></p>
+<a th:href="@{/adminapp/desconectar}">Desconectar</a>
+</body>
+</html>

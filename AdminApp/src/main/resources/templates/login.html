@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adminapp-Login</title>
+    <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="data:;base64,=">
+</head>
+<body>
+<div class="container">
+    <h2>Iniciar sesión</h2>
+    <form th:action="@{/adminapp/login}" method="POST" th:object="${loginAdminDTO}">
+        <div class="error" th:if="${ErrorCredenciales}">
+            <span th:text="${ErrorCredenciales}"></span>
+        </div>
+
+        <input type="text" th:field="*{correo}" placeholder="Introduce tu correo"/>
+
+        <div th:each="error : ${#fields.errors('correo')}" class="error">
+            <span th:text="${error}"></span>
+        </div>
+
+        <input type="password" id="clave" name="clave" placeholder="Contraseña">
+        <div th:each="error : ${#fields.errors('clave')}" class="error">
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="mostrarClave" onclick="mostrarOcultarClave()">
+            <label for="mostrarClave">Mostrar contraseña</label>
+        </div>
+        <div class="links">
+            <a href="#" id="recordarContraseña">¿Has olvidado tu contraseña?</a><br>
+        </div>
+
+        <!-- Botón de envío -->
+        <button type="submit" class="button">Siguiente</button>
+    </form>
+</div>
+</body>
+<script th:src="@{/js/funciones.js}"></script>
+</html>
