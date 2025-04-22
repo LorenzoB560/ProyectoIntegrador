@@ -7,9 +7,6 @@ import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.EmpleadoRepository;
 import org.grupob.empapp.repository.maestras.GeneroRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Service
 public class AltaEmpleadoService {
@@ -24,16 +21,10 @@ public class AltaEmpleadoService {
         this.empleadoConverter = empleadoConverter;
     }
 
-    public Empleado guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO, MultipartFile archivo){
+    public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO){
         Empleado empleado = empleadoConverter.convertirAEntidad(altaEmpleadoDTO);
-        try {
-            empleado.setFoto(archivo.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("ID de género recibido: " + altaEmpleadoDTO.getIdGeneroSeleccionado());
-        Genero genero = generoRepository.findById(altaEmpleadoDTO.getIdGeneroSeleccionado()).orElseThrow();
-        empleado.setGenero(genero);
-        return empleadoRepository.save(empleado);
+        empleado.setGenero(generoRepository.findById(altaEmpleadoDTO.getIdGeneroSeleccionado()).orElseThrow());
+        System.err.println(empleado);
+        empleadoRepository.save(empleado);
     }
 }

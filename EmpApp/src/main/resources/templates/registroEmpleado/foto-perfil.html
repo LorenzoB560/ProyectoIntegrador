@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Foto de perfil</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+  <script src="/js/modificarCampos.js"></script>
+</head>
+<body id="body-foto">
+
+<a href="/datos-personales" id="datos-personales">
+  <img src="/img/Paso1.png" alt="Paso 1">
+</a>
+<a href="/datos-direccion" id="datos-direccion">
+  <img src="/img/Paso2.png" alt="Paso 2">
+</a>
+<a href="/datos-laborales" id="datos-laborales">
+  <img src="/img/Paso3.png" alt="Paso 3">
+</a>
+<a href="/foto-perfil" id="foto-perfil">
+  <img src="/img/Paso4.png" alt="Paso 4">
+</a>
+<a href="/resumen" id="resumen">
+  <img src="/img/Resumen.png" alt="Resumen">
+</a>
+
+<h2 th:text="*{mensajeNOK}" class="error"></h2>
+
+<form action="/guardar-foto-perfil" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
+
+  <label th:text="#{registro.imagen}"></label> <br>
+  <input type="file" name="imagen" accept="image/*"/>
+
+  <button type="submit" th:text="#{registro.fotoPerfil.submit}"></button>
+  <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
+</form>
+</body>
+</html>
