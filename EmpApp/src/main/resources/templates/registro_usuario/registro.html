@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de usuario</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+<h2>Registro de usuario:</h2>
+
+
+<!-- Introducir correo -->
+<form action="/guardar-login" method="POST" th:object="${usuario}">
+
+  <label for="usuario">Usuario:</label>
+  <input type="text" th:field="*{usuario}" id="usuario" name="usuario" placeholder="Usuario">
+  <button type="submit">Continuar</button>
+
+  <!-- Mensaje de error -->
+  <div th:if="${errorCorreo}" style="color: red;">
+    <p th:text="${errorCorreo}"></p>
+  </div>
+
+
+</form>
+
+
+
+
+</body>
+</html>
