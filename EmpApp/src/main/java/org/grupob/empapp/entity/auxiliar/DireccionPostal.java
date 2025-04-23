@@ -21,7 +21,10 @@ public class DireccionPostal {
     private String numero;
 
     @Column(name = "piso")
-    private String piso;
+    private String portal;
+
+    @Column(name = "planta")
+    private String planta;
 
     @Column(name = "puerta")
     private String puerta;
@@ -35,8 +38,6 @@ public class DireccionPostal {
     @Column(name = "region")
     private String region;
 
-    @Column(name = "pais")
-    private String pais;
 
     // Constructores, getters y setters
 }
