@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.empapp.entity.auxiliar.CuentaBancaria;
 import org.grupob.empapp.entity.auxiliar.Periodo;
+import org.grupob.empapp.entity.auxiliar.TarjetaCredito;
 import org.grupob.empapp.entity.auxiliar.jerarquia.Persona;
+import org.grupob.empapp.entity.maestras.TipoTarjetaCredito;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -20,10 +23,20 @@ import java.util.*;
 //        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
 @SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"),
-        foreignKey = @ForeignKey(name = "FK_empelado_informacion_economica_id"))
+        uniqueConstraints = @UniqueConstraint(name = "UK_empleado_id_emp", columnNames = "id_emp"))
 public class Empleado extends Persona {
 
 //    private String dni;
+
+    private String comentarios;
+
+    @ManyToMany
+    @JoinTable(
+            name = "empleado_especialidad",
+            joinColumns = @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_empleado_especialidad_empleado_id")),
+            inverseJoinColumns = @JoinColumn(name = "id_especialidad", foreignKey = @ForeignKey(name = "FK_empleado_especialidad_especialidad_id"))
+    )
+    private Set<Especialidad> especialidades;
 
     @ManyToOne
     @JoinColumn(name = "id_jefe", foreignKey = @ForeignKey(name = "FK_empleado_empleado_id"))
@@ -55,16 +68,32 @@ public class Empleado extends Persona {
     @Column(table = "informacion_economica")
     private BigDecimal comision;
 
-//    @Embedded
-//    @AttributeOverrides({
-//            @AttributeOverride(name = "numero_cuenta", column = @Column(table = "informacion_economica", name = "numero_cuenta")),
-//            @AttributeOverride(name = "entidad", column = @Column(table = "informacion_economica", name = "entidad")),
-//    })
-//    private CuentaBancaria cuentaCorriente;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "IBAN", column = @Column(name = "IBAN", table = "informacion_economica"))
+    })
+    private CuentaBancaria cuentaCorriente;
 
+    @ManyToOne
+    @JoinColumn(name = "id_entidad_bancaria", foreignKey = @ForeignKey(name = "FK_empleado_entidad_bancaria_id"), table = "informacion_economica")
+    private EntidadBancaria entidadBancaria;
+
+
+    @ManyToOne
+    @JoinColumn(name = "id_tipo_tarjeta", foreignKey = @ForeignKey(name = "FK_empleado_tipo_tarjeta_id"), table = "informacion_economica")
+    private TipoTarjetaCredito tipoTarjetaCredito;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nomina> listaNominas;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "numero", column = @Column(name = "numero", table = "informacion_economica")),
+            @AttributeOverride(name = "mesCaducidad", column = @Column(name = "mes_caducidad", table = "informacion_economica")),
+            @AttributeOverride(name = "anioCaducidad", column = @Column(name = "anio_caducidad", table = "informacion_economica")),
+            @AttributeOverride(name = "CVC", column = @Column(name = "CVC", table = "informacion_economica"))
+    })
+    private TarjetaCredito tarjetaCredito;
 
     @Lob
     @Column(columnDefinition = "LONGBLOB") //nos aseguramos quepueda almacenar un tamaño grande de archivo

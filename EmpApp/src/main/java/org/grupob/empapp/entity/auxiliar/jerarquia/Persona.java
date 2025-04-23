@@ -23,8 +23,18 @@ public class Persona {
 
     private String apellido;
 
+    //TODO crear entidad tipo documento
+    private String tipoDocumento;
+
+    private String documento;
+
+
     @Column(name="fecha_nacimiento")
     private LocalDate fechaNacimiento;
+
+    private Integer edad;
+
+    private String paisNacimiento;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_persona_genero_id"))
