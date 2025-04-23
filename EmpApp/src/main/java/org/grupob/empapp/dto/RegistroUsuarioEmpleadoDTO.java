@@ -17,9 +17,11 @@ public class RegistroUsuarioEmpleadoDTO {
 
     @NotBlank
     @EmailValidado
-    private String correo;
+    private String usuario;
 
     private String clave;
+
+    private String confirmarClave;
 
     private Integer numeroAccesos;
 
@@ -33,8 +35,8 @@ public class RegistroUsuarioEmpleadoDTO {
 
     private Integer intentosSesionFallidos;
 
-    public RegistroUsuarioEmpleadoDTO(String correo, String clave){
-        this.correo=correo;
-        this.clave=clave;
-    }
+//    public RegistroUsuarioEmpleadoDTO(String correo, String clave){
+//        this.correo=correo;
+//        this.clave=clave;
+//    }
 }

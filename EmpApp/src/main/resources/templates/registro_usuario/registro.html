@@ -4,22 +4,34 @@
   <meta charset="UTF-8">
   <title>Registro de usuario</title>
   <link rel="stylesheet" href="/css/estilos.css">
+  <script src="/js/modificarCampos.js"></script>
 </head>
 <body>
 <h2>Registro de usuario:</h2>
 
 
 <!-- Introducir correo -->
-<form action="/guardar-login" method="POST" th:object="${usuario}">
+<form action="/guardar-login" method="POST" th:object="${datos}" id="formulario">
 
-  <label for="usuario">Usuario:</label>
-  <input type="text" th:field="*{usuario}" id="usuario" name="usuario" placeholder="Usuario">
-  <button type="submit">Continuar</button>
+<!--  Usuario-->
+  <label for="usuario" th:text="#{registro.usuario}"></label>
+  <input type="text" th:field="*{usuario}" id="usuario" th:placeholder="#{registro.usuario.placeholder}">
+  <br>
+
+<!--  Contraseña-->
+  <label for="contrasena" th:text="#{registro.contrasena}"></label>
+  <input type="text" th:field="*{clave}" id="contrasena">
+
+  <!--  Confirmar ontraseña-->
+  <label for="confirmarContrasena" th:text="#{registro.confirmarContrasena}"></label>
+  <input type="text" th:field="*{confirmarClave}" id="confirmarContrasena">
+
+  <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
+  <button type="reset" th:text="#{registro.reset}"></button>
+  <button type="submit" th:text="#{registro.submit}" onclick="confirmarAccion('¿Estás seguro que quieres crear el usuario?')"></button>
 
   <!-- Mensaje de error -->
-  <div th:if="${errorCorreo}" style="color: red;">
-    <p th:text="${errorCorreo}"></p>
-  </div>
+<!--  <div th:if="${errorCorreo}" style="color: red;"><p th:text="${errorCorreo}"></p></div>-->
 
 
 </form>

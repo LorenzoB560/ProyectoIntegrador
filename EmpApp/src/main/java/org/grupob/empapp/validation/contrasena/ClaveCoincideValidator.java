@@ -3,17 +3,17 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.grupob.empapp.dto.UsuarioDTO;
 
-public class ContrasenaCoincideValidator implements ConstraintValidator<ContrasenaCoincide, Object> {
+public class ClaveCoincideValidator implements ConstraintValidator<ClaveCoincide, Object> {
 
     @Override
-    public void initialize(ContrasenaCoincide constraintAnnotation) {
+    public void initialize(ClaveCoincide constraintAnnotation) {
     }
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
         UsuarioDTO usuario = (UsuarioDTO) obj;
-        boolean isValid = usuario.getContrasena() != null &&
-                usuario.getContrasena().equals(usuario.getConfirmacionContrasena());
+        boolean isValid = usuario.getClave() != null &&
+                usuario.getClave().equals(usuario.getConfirmarClave());
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();

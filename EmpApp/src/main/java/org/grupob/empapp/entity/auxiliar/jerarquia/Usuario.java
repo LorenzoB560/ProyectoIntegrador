@@ -19,7 +19,7 @@ public class Usuario {
     private UUID id;
 
     @Column(nullable = false)
-    private String correo;
+    private String usuario;
 
     @Column(nullable = false)
     private String clave;
@@ -28,8 +28,8 @@ public class Usuario {
     private Integer numeroAccesos;
 
 
-    public Usuario(String correo, String clave) {
-        setCorreo(correo);
+    public Usuario(String usuario, String clave) {
+        setUsuario(usuario);
         setClave(clave);
         setNumeroAccesos(0);
     }
