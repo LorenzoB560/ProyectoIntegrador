@@ -16,41 +16,56 @@ import java.util.UUID;
 
 @Repository
 public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
+    // Buscar empleado por nombre (método de la nueva entidad)
     Empleado getEmpleadoByNombre(String nombre);
 
-    // Método existente
-   /* Optional<Empleado> findEmpleadoByEname(String ename);
+    // Método existente adaptado a la nueva entidad
+    Optional<Empleado> findEmpleadoByNombre(String nombre);
 
-    // Método para búsqueda avanzada con paginación y ordenación
+    // Método para búsqueda avanzada con paginación y ordenación - adaptado a la nueva estructura
     @Query("SELECT e FROM Empleado e LEFT JOIN e.departamento d WHERE " +
-            "(:nombre IS NULL OR LOWER(e.ename) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
-            "(:departamento IS NULL OR LOWER(d.dname) LIKE LOWER(CONCAT('%', :departamento, '%'))) AND " +
-            "(:trabajo IS NULL OR LOWER(e.job) LIKE LOWER(CONCAT('%', :trabajo, '%'))) AND " +
-            "(:fechaLimite IS NULL OR e.hiradate < :fechaLimite) AND " +
-            "(:salarioMin IS NULL OR e.sal >= :salarioMin)")
+            "(:nombre IS NULL OR LOWER(e.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
+            "(:departamento IS NULL OR LOWER(d.nombre) LIKE LOWER(CONCAT('%', :departamento, '%'))) AND " +
+            "(:comentarios IS NULL OR LOWER(e.comentarios) LIKE LOWER(CONCAT('%', :comentarios, '%'))) AND " +
+            "(:fechaLimite IS NULL OR e.periodo.fechaInicio < :fechaLimite) AND " +
+            "(:salarioMin IS NULL OR e.salario >= :salarioMin)")
     Page<Empleado> buscarEmpleadosAvanzadoPaginado(
             @Param("nombre") String nombre,
             @Param("departamento") String departamento,
-            @Param("trabajo") String trabajo,
+            @Param("comentarios") String comentarios,
             @Param("fechaLimite") LocalDate fechaLimite,
             @Param("salarioMin") BigDecimal salarioMin,
             Pageable pageable);
 
-    // Métodos de búsqueda individuales
-    List<Empleado> findByEnameContainingIgnoreCase(String ename);
+    // Métodos de búsqueda individuales - adaptados a la nueva estructura
+    List<Empleado> findByNombreContainingIgnoreCase(String nombre);
 
-    @Query("SELECT e FROM Empleado e JOIN e.departamento d WHERE LOWER(d.dname) LIKE LOWER(CONCAT('%', :dname, '%'))")
-    List<Empleado> findByDepartamentoNombreContaining(@Param("dname") String dname);
+    @Query("SELECT e FROM Empleado e JOIN e.departamento d WHERE LOWER(d.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<Empleado> findByDepartamentoNombreContaining(@Param("nombre") String nombre);
 
-    List<Empleado> findByJobContainingIgnoreCase(String job);
+    List<Empleado> findByComentariosContainingIgnoreCase(String comentarios);
 
-    List<Empleado> findByHiradateBefore(LocalDate fecha);
+    @Query("SELECT e FROM Empleado e WHERE e.periodo.fechaInicio < :fecha")
+    List<Empleado> findByFechaContratacionBefore(LocalDate fecha);
 
-    List<Empleado> findBySalGreaterThanEqual(BigDecimal salarioMinimo);
+    List<Empleado> findBySalarioGreaterThanEqual(BigDecimal salarioMinimo);
+
     // Encontrar subordinados de un jefe
-    List<Empleado> findByJefe_Id(UUID jefeId);*/
+    List<Empleado> findByJefe_Id(UUID jefeId);
 
+    // Encontrar empleados por especialidad
+    @Query("SELECT e FROM Empleado e JOIN e.especialidades esp WHERE esp.id = :especialidadId")
+    List<Empleado> findByEspecialidadId(@Param("especialidadId") UUID especialidadId);
+
+    // Buscar empleados activos
+    List<Empleado> findByActivoTrue();
+
+    // Buscar por entidad bancaria
+    List<Empleado> findByEntidadBancaria_Id(UUID entidadBancariaId);
+
+    // Buscar por rango salarial
+    List<Empleado> findBySalarioBetween(BigDecimal minSalario, BigDecimal maxSalario);
     // Encontrar empleados por etiqueta
- //   @Query("SELECT e FROM Empleado e JOIN e.empleadoEtiquetas ee WHERE ee.etiqueta.id = :etiquetaId")
-  //  List<Empleado> findByEtiquetaId(@Param("etiquetaId") UUID etiquetaId);
+// @Query("SELECT e FROM Empleado e JOIN e.empleadoEtiquetas ee WHERE ee.etiqueta.id = :etiquetaId")
+// List<Empleado> findByEtiquetaId(@Param("etiquetaId") UUID etiquetaId);
 }
