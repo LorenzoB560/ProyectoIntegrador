@@ -47,8 +47,8 @@ public class DepartamentoServiceImp implements DepartamentoService {
         throw new DepartamentoNoEncontradoException("El departamento no existe");
     }
 
-    public Departamento devuleveDepartartamentoPorNombre(String nombre){
-       Optional<Departamento> deptOpc= departamentoRepository.findDepartamentoByNombre(nombre);
+    public Departamento devuleveDepartartamentoPorNombre(String dname){
+       Optional<Departamento> deptOpc= departamentoRepository.findDepartamentoByNombre(dname);
        if(deptOpc.isPresent()){
         System.err.println(deptOpc.get());
         return deptOpc.get();

@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("empleado")
 public class EmpleadoController {
 
-    @GetMapping("lista1")
+    @GetMapping("lista")
     public String listadovista() {
-        return "empleados/listado-vista";
+        return "listados/listado-vista-emp";
     }
     @GetMapping("detalle/{id}")
     public String listadoEmpleadoVista(@PathVariable String id, Model modelo){
 
-        return "empleados/detalle-vista";
+        return "listados/detalle-vista-emp";
     }
 }

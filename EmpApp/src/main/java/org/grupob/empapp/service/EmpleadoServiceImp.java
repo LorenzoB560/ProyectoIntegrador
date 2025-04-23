@@ -161,8 +161,8 @@ public class  EmpleadoServiceImp implements EmpleadoService {
             String sortDir) {
 
         // Validar campo de ordenación (solo permitir ename o sal)
-        if (sortBy == null || (!sortBy.equals("ename") && !sortBy.equals("sal"))) {
-            sortBy = "ename"; // Valor por defecto si no es válido
+        if (sortBy == null || (!sortBy.equals("nombre") && !sortBy.equals("salario"))) {
+            sortBy = "nombre"; // Valor por defecto si no es válido
         }
 
         // Crear objeto Sort

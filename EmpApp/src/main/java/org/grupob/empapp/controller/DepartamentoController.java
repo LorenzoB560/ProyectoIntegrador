@@ -16,7 +16,7 @@ public class DepartamentoController {
     @GetMapping("detalle/{id}")
     public String listadoDepartamentoVista(@PathVariable String id, Model modelo){
 
-        return "departamentos/detalle-vista";
+        return "listados/detalle-vista-dep";
     }
 
 

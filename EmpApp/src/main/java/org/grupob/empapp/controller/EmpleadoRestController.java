@@ -33,7 +33,7 @@ public class EmpleadoRestController {
     public Page<EmpleadoDTO> listarEmpleados(
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String departamento,
-            @RequestParam(required = false) String trabajo,
+            @RequestParam(required = false) String comentario,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate contratadosAntesDe,
             @RequestParam(required = false) BigDecimal salarioMinimo,
             @RequestParam(defaultValue = "0") int page,
@@ -42,7 +42,7 @@ public class EmpleadoRestController {
             @RequestParam(defaultValue = "asc") String sortDir) {
 
         return empleadoService.buscarEmpleadosPaginados(
-                nombre, departamento, trabajo, contratadosAntesDe, salarioMinimo,
+                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
                 page, size, sortBy, sortDir);
     }
 
