@@ -3,27 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Adminapp-Login</title>
-    <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
+    <link rel="stylesheet" href="/css/login-estilos.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" href="data:;base64,=">
 </head>
 <body>
+<body>
 <div class="container">
     <h2>Iniciar sesión</h2>
-    <form th:action="@{/adminapp/login}" method="POST" th:object="${loginAdminDTO}">
-        <div class="error" th:if="${ErrorCredenciales}">
-            <span th:text="${ErrorCredenciales}"></span>
+    <form id="loginForm" method="POST">
+        <div class="error" id="errorCredenciales" style="display: none;">
+            <span id="errorMessage"></span>
         </div>
 
-        <input type="text" th:field="*{correo}" placeholder="Introduce tu correo"/>
+        <input type="text" id="correo" name="correo" placeholder="Introduce tu correo"/>
 
-        <div th:each="error : ${#fields.errors('correo')}" class="error">
-            <span th:text="${error}"></span>
+        <div class="error" id="correoError" style="display: none;">
+            <span id="correoErrorMessage"></span>
         </div>
 
         <input type="password" id="clave" name="clave" placeholder="Contraseña">
-        <div th:each="error : ${#fields.errors('clave')}" class="error">
-            <span th:text="${error}"></span>
+        <div class="error" id="claveError" style="display: none;">
+            <span id="claveErrorMessage"></span>
         </div>
 
         <div class="checkbox-container">

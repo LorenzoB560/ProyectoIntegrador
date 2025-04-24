@@ -1,3 +1,6 @@
+// funciones-admin-login.js
+
+// Mostrar u ocultar la contraseña
 function mostrarOcultarClave() {
     // Obtener los elementos de los campos de contraseña
     var clave = document.getElementById("clave");
@@ -10,41 +13,76 @@ function mostrarOcultarClave() {
     }
 }
 
-$(document).ready(function() {
-    // Se ejecuta cuando el DOM está completamente cargado
-
-    $("#recordarContraseña").click(function(event) {
-        // Captura el clic sobre el botón o enlace "¿Recordar contraseña?"
-
+$(document).ready(function () {
+    // Recuperar contraseña (solo para pruebas, en producción solo por email)
+    $("#recordarContraseña").click(function (event) {
         event.preventDefault();
-        // Evita que el enlace haga su comportamiento por defecto (redirigir o recargar)
+        const correo = $("#correo").val().trim();
 
-        var correo = $("#correo").val().trim();
-        // Obtiene el valor del input con ID "correo", eliminando espacios en blanco
-
-        if (correo) {
-            // Si se ha introducido un correo...
-
-            $.ajax({
-                url: "/adminapp/devuelve-clave", // Endpoint que expone la contraseña
-                type: "GET",                     // Método HTTP
-                data: { correo: correo },        // Parámetro que se envía al backend
-                success: function(clave) {
-                    // Función que se ejecuta si la petición se completa correctamente
-
-                    alert("La contraseña de " + correo + " es: " + clave);
-                    // Muestra la contraseña recibida
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    // Función que se ejecuta si ocurre un error en la llamada AJAX
-                    console.error("Error en la llamada AJAX:", textStatus, errorThrown);
-                    alert("Error al obtener la contraseña.");
-                }
-            });
-
-        } else {
-            // Si el campo correo está vacío...
+        if (!correo) {
             alert("Por favor, introduce tu correo para poder recuperar la contraseña.");
+            return;
         }
+
+        $.ajax({
+            url: "/adminapp/devuelve-clave",
+            type: "GET",
+            data: { correo: correo },
+            success: function (clave) {
+                // En producción, solo se debe enviar por email. Aquí solo para pruebas.
+                alert("La contraseña de " + correo + " es: " + clave);
+            },
+            error: function () {
+                alert("Error al obtener la contraseña.");
+            }
+        });
+    });
+
+    // Envío del formulario de login por AJAX
+    $("#loginForm").submit(function (event) {
+        event.preventDefault();
+
+        // Limpiar mensajes previos
+        $("#errorCredenciales").hide();
+        $("#errorMessage").html("");
+
+        const correo = $("#correo").val().trim();
+        const clave = $("#clave").val();
+
+        // Preparar datos para el backend
+        const loginData = {
+            correo: correo,
+            clave: clave
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/adminapp/login",
+            contentType: "application/json",
+            data: JSON.stringify(loginData),
+            success: function () {
+                // Login exitoso: redirigir al área personal
+                window.location.href = "/adminapp/area-personal";
+            },
+            error: function (xhr) {
+                let response = {};
+                try { response = JSON.parse(xhr.responseText); } catch (e) {}
+
+                // Mensaje de error por defecto
+                let errorMessage = "Ocurrió un error al procesar la solicitud. Intenta nuevamente.";
+
+                // Errores de validación o credenciales
+                if (xhr.status === 400) {
+                    if (response.listaErrores && response.listaErrores.length > 0) {
+                        errorMessage = response.listaErrores.join("<br>");
+                    } else if (response.message) {
+                        errorMessage = response.message;
+                    }
+                }
+
+                $("#errorCredenciales").show();
+                $("#errorMessage").html(errorMessage);
+            }
+        });
     });
 });
