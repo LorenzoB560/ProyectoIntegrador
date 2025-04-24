@@ -11,11 +11,11 @@ import java.lang.annotation.Target;
 
 
 @Documented
-@Constraint(validatedBy = ContrasenaCoincideValidator.class)
+@Constraint(validatedBy = ClaveCoincideValidator.class)
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ContrasenaCoincide {
-    String message() default "Las contraseñas no coinciden";
+public @interface ClaveCoincide {
+    String message() default "{ClaveCoincide.mensaje}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
