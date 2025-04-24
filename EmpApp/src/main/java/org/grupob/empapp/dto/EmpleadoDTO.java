@@ -3,6 +3,7 @@ package org.grupob.empapp.dto; // O el paquete que prefieras para tus DTOs
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.empapp.dto.auxiliar.GeneroDTO;
 
 // Importa otros DTOs necesarios (EspecialidadDto, DepartamentoDto, etc.)
 
@@ -19,11 +20,11 @@ public class EmpleadoDTO {
     // Campos heredados de Persona (o los que quieras exponer)
     private UUID id;
     private String nombre;
-    private String apellido1;
-    private String apellido2;
+    private String apellido;
+    private GeneroDTO genero;
     private LocalDate fechaNacimiento;
     // ... otros campos de Persona que necesites ...
-    private String email;
+    private String correo;
 
     // Campos propios de Empleado
     private String comentarios;

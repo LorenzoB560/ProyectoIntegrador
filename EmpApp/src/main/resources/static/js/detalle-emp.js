@@ -72,7 +72,7 @@ function mostrarDatosEmpleado(empleado) {
     document.getElementById('idEmpleado').textContent = empleado.id;
     document.getElementById('nombreEmpleado').textContent = empleado.nombre || 'No especificado';
 
-    const apellidos = [empleado.apellido1, empleado.apellido2]
+    const apellidos = [empleado.apellido]
         .filter(Boolean)
         .join(' ');
     document.getElementById('apellidoEmpleado').textContent = apellidos || 'No especificado';
@@ -178,7 +178,7 @@ function mostrarDatosEmpleado(empleado) {
 
 // Funciones auxiliares
 function obtenerNombreCompleto(empleado) {
-    const partes = [empleado.nombre, empleado.apellido1, empleado.apellido2]
+    const partes = [empleado.nombre, empleado.apellido]
         .filter(Boolean);
     return partes.join(' ') || 'Sin nombre';
 }

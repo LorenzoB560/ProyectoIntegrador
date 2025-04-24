@@ -204,12 +204,12 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         }
 
         // Validar que no se cree un ciclo (un subordinado no puede ser jefe de su jefe)
-        Empleado currentJefe = jefe.getJefe();
-        while (currentJefe != null) {
-            if (currentJefe.getId().equals(empUuid)) {
+        Empleado jefeActual = jefe.getJefe();
+        while (jefeActual != null) {
+            if (jefeActual.getId().equals(empUuid)) {
                 throw new RuntimeException("No se puede crear un ciclo en la jerarquía");
             }
-            currentJefe = currentJefe.getJefe();
+            jefeActual = jefeActual.getJefe();
         }
 
         empleado.setJefe(jefe);
