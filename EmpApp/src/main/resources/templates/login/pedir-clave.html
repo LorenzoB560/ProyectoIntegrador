@@ -4,26 +4,33 @@
     <meta charset="UTF-8">
     <title>Introduce tu contraseña</title>
     <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="data:;base64,=">
 </head>
 <body>
 <div class="container">
-    <h2 th:text="${session.usuarioTemp.correo}">Usuario</h2>
+    <h2 th:text="${correo}">Usuario</h2>
     <form th:action="@{/empapp/procesar-clave}" method="post" th:object="${dto}">
-        <input type="hidden" th:field="*{correo}" th:value="${session.usuarioTemp.correo}">
-        <input type="password" th:field="*{clave}" id="clave" placeholder="Contraseña" required>
-        <div class="error" th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}"></div>
-        <div class="error" th:if="${#fields.hasErrors('global')}" th:errors="global"></div>
+        <span id="correo" th:text="${correo}" style="display:none;"></span>
+        <input type="password" id="clave" name="clave" placeholder="Contraseña">
+        <div class="error" th:if="${error}" th:text="${error}"></div>
+
         <div class="checkbox-container">
             <input type="checkbox" id="mostrarClave" onclick="mostrarOcultarClave()">
             <label for="mostrarClave">Mostrar contraseña</label>
         </div>
+
         <div class="links">
             <a href="#" id="recordarContraseña">¿Has olvidado tu contraseña?</a><br>
-            <a th:href="@{/empapp/login}"><b>Seleccionar otra cuenta</b></a>
         </div>
+        <div class="links">
+            <a href="/"><b>Seleccionar otra cuenta</b></a>
+        </div>
+
         <button type="submit" class="button">Siguiente</button>
     </form>
 </div>
+</body>
 <script th:src="@{/js/funciones.js}"></script>
 </body>
 </html>

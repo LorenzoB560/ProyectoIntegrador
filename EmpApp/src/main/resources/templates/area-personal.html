@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
   <title>Área Personal</title>
-  <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
+<!--  <link rel="stylesheet" th:href="@{/css/login-estilos.css}">-->
 </head>
 <<body th:object="${dto}">
-<h1>Bienvenido <span th:text="*{correo}"></span></h1>
+<h1>Bienvenido <span th:text="${correo}"></span></h1>
 <p>Has accedido a tu área personal.</p>
 
-<p>Veces Autenticado <span th:text="*{numeroAccesos}"></span></p>
-<a th:href="@{/empapp/login/logout}">Desconectar</a>
+<p>Veces Autenticado <span th:text="${contador}"></span></p>
+<a th:href="@{/empapp/desconectar}">Desconectar</a>
 </body>
 </html>

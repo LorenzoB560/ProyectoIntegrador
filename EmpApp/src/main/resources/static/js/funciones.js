@@ -11,10 +11,16 @@ function mostrarOcultarClave() {
 }
 
 function cambiarPeticion() {
-    document.getElementById("usuariosCookie").style.display = "none"; // Oculta el select
-    let inputUsuario = document.getElementById("otroUsuario");
-    inputUsuario.type = "text"; // Lo cambia a campo visible
-    inputUsuario.removeAttribute("disabled"); // Habilita el input
+    // Eliminar el select y mostrar el input
+    const select = document.getElementById('usuariosCookie');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'correo';
+    input.placeholder = 'Correo electrónico';
+    input.required = true;
+
+    // Reemplazar el select por el nuevo input
+    select.parentNode.replaceChild(input, select);
 }
 
 function alternarEntradaUsuario() {
@@ -64,19 +70,18 @@ $(document).ready(function() {
         event.preventDefault();
         // Evita que el enlace haga su comportamiento por defecto (redirigir o recargar)
 
-        var correo = $("#correo").val().trim();
+        const correo = $("#correo").text().trim();
         // Obtiene el valor del input con ID "correo", eliminando espacios en blanco
 
         if (correo) {
             // Si se ha introducido un correo...
 
             $.ajax({
-                url: "/adminapp/devuelve-clave", // Endpoint que expone la contraseña
+                url: "/empapp/devuelve-clave", // Endpoint que expone la contraseña
                 type: "GET",                     // Método HTTP
                 data: { correo: correo },        // Parámetro que se envía al backend
                 success: function(clave) {
                     // Función que se ejecuta si la petición se completa correctamente
-
                     alert("La contraseña de " + correo + " es: " + clave);
                     // Muestra la contraseña recibida
                 },

@@ -31,8 +31,6 @@ public class LoginUsuarioEmpleadoDTO {
 
     private LocalDateTime ultimaConexion;
 
-    private Boolean bloqueado;
-
     private String motivoBloqueo;
 
     private String mensajeBloqueo;
@@ -40,4 +38,9 @@ public class LoginUsuarioEmpleadoDTO {
     private LocalDateTime fechaDesbloqueo;
 
     private Integer intentosSesionFallidos;
+
+    public LoginUsuarioEmpleadoDTO(String correo, String clave){
+        this.correo=correo;
+        this.clave=clave;
+    }
 }
