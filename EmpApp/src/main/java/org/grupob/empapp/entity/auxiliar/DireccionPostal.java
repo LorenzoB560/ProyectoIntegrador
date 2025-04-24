@@ -14,28 +14,27 @@ public class DireccionPostal {
     @Column(name = "tipo_via")
     private String tipoVia;
 
-    @Column(name = "via")
     private String via;
 
-    @Column(name = "numero")
+
     private String numero;
 
-    @Column(name = "piso")
+
     private String portal;
 
-    @Column(name = "planta")
+
     private String planta;
 
-    @Column(name = "puerta")
+
     private String puerta;
 
-    @Column(name = "localidad")
+
     private String localidad;
 
     @Column(name = "codigo_postal")
     private String codigoPostal;
 
-    @Column(name = "region")
+
     private String region;
 
 

@@ -22,8 +22,7 @@ import java.util.*;
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
 //        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
-@SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"),
-        uniqueConstraints = @UniqueConstraint(name = "UK_empleado_id_emp", columnNames = "id_emp"))
+@SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 public class Empleado extends Persona {
 
 //    private String dni;
