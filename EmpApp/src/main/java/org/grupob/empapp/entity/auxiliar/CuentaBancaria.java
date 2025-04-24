@@ -1,30 +1,28 @@
 package org.grupob.empapp.entity.auxiliar;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.*;
+import org.grupob.empapp.entity.Empleado;
+
+import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @Embeddable
 public class CuentaBancaria {
-    @Column(name = "numero_cuenta")
-    private String numCuenta;
 
-    @Column(name = "entidad_bancaria")
-    private String entidadBancaria;
+    private String IBAN;
 
     protected CuentaBancaria() {
     }
 
-    private CuentaBancaria(String numCuenta, String entidadBancaria) {
-        this.numCuenta = numCuenta;
-        this.entidadBancaria = entidadBancaria;
+    private CuentaBancaria(String IBAN) {
+        this.IBAN = IBAN;
     }
 
-    public static CuentaBancaria of(String numCuenta, String entidadBancaria) {
-        return new CuentaBancaria(numCuenta, entidadBancaria);
+    public static CuentaBancaria of(String IBAN) {
+        return new CuentaBancaria(IBAN);
     }
 
 
