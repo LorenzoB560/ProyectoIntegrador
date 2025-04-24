@@ -1,7 +1,6 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoDireccion;
@@ -11,10 +10,8 @@ import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
 import org.grupob.empapp.entity.Departamento;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.DepartamentoRepository;
-import org.grupob.empapp.repository.EmpleadoRepository;
-
 import org.grupob.empapp.repository.maestras.GeneroRepository;
-import org.grupob.empapp.service.AltaEmpleadoService;
+import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,12 +26,12 @@ import java.util.List;
 public class RegistroEmpleadoController {
 
     private final GeneroRepository generoRepository;
-    private final AltaEmpleadoService altaEmpleadoService;
+    private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;
     private final DepartamentoRepository departamentoRepository;
 
-    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoService altaEmpleadoService, DepartamentoRepository departamentoRepository) {
+    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoServiceImp altaEmpleadoServiceImp, DepartamentoRepository departamentoRepository) {
         this.generoRepository = generoRepository;
-        this.altaEmpleadoService = altaEmpleadoService;
+        this.altaEmpleadoServiceImp = altaEmpleadoServiceImp;
         this.departamentoRepository = departamentoRepository;
     }
 
@@ -63,7 +60,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registroEmpleado/datos-personales";
+        return "registro_empleado/datos-personales";
     }
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
@@ -77,7 +74,7 @@ public class RegistroEmpleadoController {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
             System.err.println(bindingResult.toString());
-            return "registroEmpleado/datos-personales";
+            return "registro_empleado/datos-personales";
         }
 
 
@@ -111,7 +108,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registroEmpleado/datos-direccion";
+        return "registro_empleado/datos-direccion";
     }
 
     @PostMapping("/guardar-datos-direccion")
@@ -125,7 +122,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registroEmpleado/datos-direccion";
+            return "registro_empleado/datos-direccion";
         }
 
 
@@ -159,7 +156,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registroEmpleado/datos-laborales";
+        return "registro_empleado/datos-laborales";
     }
     @PostMapping("/guardar-datos-laborales")
     public String guardarDatosLaborales(
@@ -172,7 +169,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registroEmpleado/datos-laborales";
+            return "registro_empleado/datos-laborales";
         }
 
 
@@ -200,7 +197,7 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registroEmpleado/foto-perfil";
+        return "registro_empleado/foto-perfil";
     }
     @PostMapping("/guardar-foto-perfil")
     public String guardarFotoPerfil(
@@ -214,7 +211,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registroEmpleado/foto-perfil";
+            return "registro_empleado/foto-perfil";
         }
 
 
@@ -249,19 +246,19 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registroEmpleado/resumen";
+        return "registro_empleado/resumen";
     }
     @PostMapping("/guardar-empleado")
     public String guardarEmpleado(HttpSession sesion) {
 
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         System.err.println(datosFormulario);
-        altaEmpleadoService.guardarEmpleado(datosFormulario);
+        altaEmpleadoServiceImp.guardarEmpleado(datosFormulario);
         return "redirect:/usuario-insertado";
     }
     @GetMapping("/usuario-insertado")
     public String usuarioInsertado(){
-        return "registroEmpleado/usuario-insertado";
+        return "registro_empleado/usuario-insertado";
     }
 
     @GetMapping("/volver-principio")

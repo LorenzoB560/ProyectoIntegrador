@@ -7,7 +7,7 @@ import org.grupob.empapp.entity.maestras.MotivoBloqueo;
 import org.grupob.empapp.repository.UsuarioEmpleadoRepository;
 import org.grupob.empapp.repository.maestras.MotivoBloqueoRepository;
 import org.springframework.stereotype.Service;
-import jakarta.servlet.http.HttpServletResponse;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -42,7 +42,7 @@ public class UsuarioEmpleadoServiceImp {
     }
 
     public UsuarioEmpleado devuelveUsuarioEmpPorCorreo(String correo){
-        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByCorreo(correo);
+        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(correo);
 
         if (usuarioOpt.isPresent()) {
 //            throw new RuntimeException("Usuario no registrado");
@@ -58,7 +58,7 @@ public class UsuarioEmpleadoServiceImp {
      * @throws RuntimeException Si el usuario no existe o está bloqueado
      */
     public Boolean validarEmail(String correo) {
-        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByCorreo(correo);
+        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(correo);
 
         if (usuarioOpt.isEmpty()) {
 //            throw new RuntimeException("Usuario no registrado");
@@ -85,7 +85,7 @@ public class UsuarioEmpleadoServiceImp {
      * @throws RuntimeException Si las credenciales son inválidas
      */
     public Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto) {
-        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByCorreo(dto.getCorreo())
+        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getCorreo())
                 .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
 
         if (!usuarioEmp.getClave().equals(dto.getClave())) {
