@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RegistroUsuarioController {
 
-    @GetMapping("/login")
+    @GetMapping("/choclo")
     public String login(Model modelo) {
         RegistroUsuarioEmpleadoDTO datosFormulario = new RegistroUsuarioEmpleadoDTO();
         modelo.addAttribute("datos", datosFormulario);

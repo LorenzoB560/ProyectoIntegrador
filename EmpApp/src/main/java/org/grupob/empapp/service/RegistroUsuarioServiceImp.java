@@ -13,5 +13,5 @@ public class RegistroUsuarioServiceImp {
         this.usuarioRepository = usuarioRepository;
     }
 
-//    public Empleado
+    //public Empleado
 }
