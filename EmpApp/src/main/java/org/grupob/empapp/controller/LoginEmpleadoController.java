@@ -32,13 +32,13 @@ public class LoginEmpleadoController {
                                HttpServletResponse respuesta,
                                @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto) {
-        Map<String, Integer> usuariosAutenticados = (CookieService.validar(usuariosCookie))
-                ? CookieService.deserializar(usuariosCookie) : null;
-        String estado = CookieService.obtenerValorCookie(request, "estado");
+        Map<String, Integer> usuariosAutenticados = (cookieService.validar(usuariosCookie))
+                ? cookieService.deserializar(usuariosCookie) : null;
+        String estado = cookieService.obtenerValorCookie(request, "estado");
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
 
         if (ultimoUsuario == null || (usuariosAutenticados != null && !usuariosAutenticados.containsKey(ultimoUsuario))) {
-            CookieService.crearCookie(respuesta, "estado", "login", (7 * 24 * 60 * 60));
+            cookieService.crearCookie(respuesta, "estado", "login", (7 * 24 * 60 * 60));
 
             modelo.addAttribute("usuariosAutenticados", usuariosAutenticados);
             return "login/pedir-usuario";
@@ -75,7 +75,7 @@ public class LoginEmpleadoController {
         request.getSession().setAttribute("ultimoUsuario", dto.getCorreo());
 
         // Seguimos usando cookie para estado
-        CookieService.crearCookie(respuesta, "estado", "/clave", (7 * 24 * 60 * 60));
+        cookieService.crearCookie(respuesta, "estado", "/clave", (7 * 24 * 60 * 60));
 
         return "redirect:/empapp/clave";
     }
@@ -119,18 +119,18 @@ public class LoginEmpleadoController {
             return "login/pedir-clave";
         }
 
-        if (!CookieService.validar(valor)) {
+        if (!cookieService.validar(valor)) {
             valor = "";
         }
 
-        Map<String, Integer> usuarios = CookieService.deserializar(valor);
+        Map<String, Integer> usuarios = cookieService.deserializar(valor);
         if (usuarios == null) usuarios = new HashMap<>();
 
-        String valorActualizado = CookieService.actualizar(usuarios, valor, ultimoUsuario);
+        String valorActualizado = cookieService.actualizar(usuarios, valor, ultimoUsuario);
         int contador = usuarios.getOrDefault(ultimoUsuario, 1);
 
-        CookieService.crearCookie(response, "usuario", valorActualizado, (7 * 24 * 60 * 60));
-        CookieService.crearCookie(response, "estado", "/area-personal", (7 * 24 * 60 * 60)); // corregido también aquí
+        cookieService.crearCookie(response, "usuario", valorActualizado, (7 * 24 * 60 * 60));
+        cookieService.crearCookie(response, "estado", "/area-personal", (7 * 24 * 60 * 60)); // corregido también aquí
 
         modelo.addAttribute("correo", ultimoUsuario);
         modelo.addAttribute("contador", contador);
@@ -154,8 +154,8 @@ public class LoginEmpleadoController {
             return "redirect:/empapp/login";
         }
 
-        Map<String, Integer> usuariosAutenticados = (CookieService.validar(usuariosCookie))
-                ? CookieService.deserializar(usuariosCookie) : null;
+        Map<String, Integer> usuariosAutenticados = (cookieService.validar(usuariosCookie))
+                ? cookieService.deserializar(usuariosCookie) : null;
 
         int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
 
