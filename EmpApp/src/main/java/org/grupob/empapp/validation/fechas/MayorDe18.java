@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface MayorDe18 {
 
-    String message() default "{MayorDe18.validado}";
+    String message() default "{MayorDe18.mensaje}";
 
     Class<?>[] groups() default { };
 

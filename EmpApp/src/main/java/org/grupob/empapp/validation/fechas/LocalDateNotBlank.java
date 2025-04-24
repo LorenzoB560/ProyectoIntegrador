@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface LocalDateNotBlank {
 
-    String message() default "{LocalDateNotBlank.validado}";
+    String message() default "{LocalDateNotBlank.mensaje}";
 
     Class<?>[] groups() default { };
 

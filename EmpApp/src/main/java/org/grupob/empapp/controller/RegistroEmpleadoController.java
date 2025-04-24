@@ -11,7 +11,7 @@ import org.grupob.empapp.entity.Departamento;
 import org.grupob.empapp.entity.maestras.Genero;
 import org.grupob.empapp.repository.DepartamentoRepository;
 import org.grupob.empapp.repository.maestras.GeneroRepository;
-import org.grupob.empapp.service.AltaEmpleadoService;
+import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,12 +26,12 @@ import java.util.List;
 public class RegistroEmpleadoController {
 
     private final GeneroRepository generoRepository;
-    private final AltaEmpleadoService altaEmpleadoService;
+    private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;
     private final DepartamentoRepository departamentoRepository;
 
-    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoService altaEmpleadoService, DepartamentoRepository departamentoRepository) {
+    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoServiceImp altaEmpleadoServiceImp, DepartamentoRepository departamentoRepository) {
         this.generoRepository = generoRepository;
-        this.altaEmpleadoService = altaEmpleadoService;
+        this.altaEmpleadoServiceImp = altaEmpleadoServiceImp;
         this.departamentoRepository = departamentoRepository;
     }
 
@@ -253,7 +253,7 @@ public class RegistroEmpleadoController {
 
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         System.err.println(datosFormulario);
-        altaEmpleadoService.guardarEmpleado(datosFormulario);
+        altaEmpleadoServiceImp.guardarEmpleado(datosFormulario);
         return "redirect:/usuario-insertado";
     }
     @GetMapping("/usuario-insertado")

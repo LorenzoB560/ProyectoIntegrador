@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.RegistroUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +26,8 @@ public class RegistroUsuarioController {
     }
     @PostMapping("/guardar-login")
     public String guardarLogin(
-            @Validated(GrupoPersonal.class) @ModelAttribute("datos") RegistroUsuarioEmpleadoDTO datosFormulario,
+            //// ES ESTO LO QUE DA ERROR. LOS GRUPOS
+            @Validated(GrupoUsuario.class) @ModelAttribute("datos") RegistroUsuarioEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             Model model) {
 

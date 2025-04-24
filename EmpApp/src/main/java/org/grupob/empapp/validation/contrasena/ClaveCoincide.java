@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ClaveCoincide {
-    String message() default "Las contraseñas no coinciden";
+    String message() default "{ClaveCoincide.mensaje}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

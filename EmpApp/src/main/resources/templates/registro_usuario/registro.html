@@ -10,6 +10,7 @@
 <h2>Registro de usuario:</h2>
 
 
+<h2 th:text="*{mensajeNOK}" class="error"></h2>
 <!-- Introducir correo -->
 <form action="/guardar-login" method="POST" th:object="${datos}" id="formulario">
 
@@ -17,27 +18,31 @@
   <label for="usuario" th:text="#{registro.usuario}"></label>
   <input type="text" th:field="*{usuario}" id="usuario" th:placeholder="#{registro.usuario.placeholder}">
   <br>
+  <div th:each="error : ${#fields.errors('usuario')}" th:text="${error}" class="error"></div>
+
 
 <!--  Contraseña-->
-  <label for="contrasena" th:text="#{registro.contrasena}"></label>
-  <input type="text" th:field="*{clave}" id="contrasena">
+  <label for="clave" th:text="#{registro.clave}"></label>
+  <input type="password" th:field="*{clave}" id="clave">
+  <div th:each="error : ${#fields.errors('clave')}" th:text="${error}" class="error"></div>
 
-  <!--  Confirmar ontraseña-->
-  <label for="confirmarContrasena" th:text="#{registro.confirmarContrasena}"></label>
-  <input type="text" th:field="*{confirmarClave}" id="confirmarContrasena">
+  <!--  Confirmar contraseña-->
+  <label for="confirmarContrasena" th:text="#{registro.confirmarClave}"></label>
+  <input type="password" th:field="*{confirmarClave}" id="confirmarContrasena">
+
+  <!-- Mensaje de error si las contraseñas no coinciden.
+       Se hace de esta manera a diferencia del resto porque esta validación
+       es a nivel de clase, no de campo.-->
+
+  <div th:each="error : ${#fields.errors('confirmarClave')}" th:text="${error}" class="error"></div>
+  <br>
 
   <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
   <button type="reset" th:text="#{registro.reset}"></button>
   <button type="submit" th:text="#{registro.submit}" onclick="confirmarAccion('¿Estás seguro que quieres crear el usuario?')"></button>
 
-  <!-- Mensaje de error -->
-<!--  <div th:if="${errorCorreo}" style="color: red;"><p th:text="${errorCorreo}"></p></div>-->
 
 
 </form>
-
-
-
-
 </body>
 </html>
