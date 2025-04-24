@@ -21,4 +21,9 @@ public class RegistroUsuarioController {
 
         return "registro_usuario/registro";
     }
+
+    @GetMapping("/redirigir-hacia-login")
+    public String redirigirLogin() {
+        return "redirect:/empapp/login";
+    }
 }

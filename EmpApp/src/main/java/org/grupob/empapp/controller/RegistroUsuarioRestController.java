@@ -26,6 +26,7 @@ public class RegistroUsuarioRestController {
     public ResponseEntity<?> guardarLogin(@Validated(GrupoUsuario.class) @RequestBody RegistroUsuarioEmpleadoDTO datosFormulario) {
         System.out.println(datosFormulario);
         registroUsuarioServiceImp.usuarioExiste(datosFormulario);
+        registroUsuarioServiceImp.guardarUsuario(datosFormulario);
         return ResponseEntity.ok(datosFormulario);
     }
 

@@ -8,6 +8,8 @@ import org.grupob.empapp.entity.UsuarioEmpleado;
 import org.grupob.empapp.exception.UsuarioYaExisteException;
 import org.grupob.empapp.repository.UsuarioEmpleadoRepository;
 import org.grupob.empapp.repository.UsuarioRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,10 @@ import java.util.List;
 @Service
 public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
 
-    UsuarioEmpleadoRepository usuarioEmpleadoRepository;
-    RegistroUsuarioEmpleadoConverter registroUsuarioEmpleadoConverter;
+    private final UsuarioEmpleadoRepository usuarioEmpleadoRepository;
+    private final RegistroUsuarioEmpleadoConverter registroUsuarioEmpleadoConverter;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // Para hashear la contraseña
+
 
     public RegistroUsuarioServiceImp(UsuarioEmpleadoRepository usuarioEmpleadoRepository, RegistroUsuarioEmpleadoConverter registroUsuarioEmpleadoConverter) {
         this.usuarioEmpleadoRepository = usuarioEmpleadoRepository;
@@ -24,7 +28,9 @@ public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
     }
 
     public void guardarUsuario(RegistroUsuarioEmpleadoDTO usuario) {
-        UsuarioEmpleado usuarioEmpleado = new UsuarioEmpleado();
+        UsuarioEmpleado usuarioEmpleado = registroUsuarioEmpleadoConverter.convertirAEntidad(usuario);
+        usuarioEmpleado.setClave(passwordEncoder.encode(usuario.getClave())); // Hashear la contraseña con BCrypt
+        usuarioEmpleadoRepository.save(usuarioEmpleado);
     }
 
     public void usuarioExiste(RegistroUsuarioEmpleadoDTO registroUsuarioEmpleadoDTO){
