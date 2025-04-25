@@ -83,9 +83,8 @@ public class LoginEmpleadoController {
     @GetMapping("/clave")
     public String mostrarContrasena(Model modelo,
                                     HttpServletRequest request,
-                                    @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
-                                    @CookieValue(name = "estado", required = false) String estado) {
-
+                                    @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto) {
+        String estado = cookieService.obtenerValorCookie(request, "estado");
         if (estado == null || !estado.equals("/clave")) {
             return "redirect:/empapp/login";
         }
@@ -142,9 +141,9 @@ public class LoginEmpleadoController {
     public String mostrarAreaPersonal(Model modelo,
                                       HttpServletRequest request,
                                       HttpServletResponse response,
-                                      @CookieValue(name = "estado", required = false) String estado,
+//                                      @CookieValue(name = "estado", required = false) String estado,
                                       @CookieValue(name = "usuario", required = false) String usuariosCookie) {
-
+      String estado = cookieService.obtenerValorCookie(request, "estado");
         if (estado == null || !estado.equals("/area-personal")) {
             return "redirect:/empapp/login";
         }

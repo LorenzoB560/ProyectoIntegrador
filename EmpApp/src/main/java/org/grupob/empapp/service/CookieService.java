@@ -92,7 +92,7 @@ public class CookieService {
  */
 public  Map<String, Integer> deserializar(String cookieValue) {
     if (!validar(cookieValue)) return new HashMap<>();
-
+    cookieValue= descifrar(cookieValue);
     Map<String, Integer> usuarios = new HashMap<>();
     for (String par : cookieValue.split("/")) {
         String[] datos = par.split("!");
@@ -128,6 +128,7 @@ public  String serializar(Map<String, Integer> usuarios) {
  * @return Nuevo valor serializado para la cookie
  */
 public  String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
+
     if (valor != null && valor.contains(usuarioActual)) {
         int contador = usuarios.getOrDefault(usuarioActual, 0);
         usuarios.put(usuarioActual, ++contador);
