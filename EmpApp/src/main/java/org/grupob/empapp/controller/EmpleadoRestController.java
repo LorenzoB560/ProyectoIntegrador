@@ -2,8 +2,8 @@ package org.grupob.empapp.controller;
 
 
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.entity.Empleado;
-import org.grupob.empapp.repository.EmpleadoRepository;
+import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.empapp.service.EmpleadoServiceImp;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;

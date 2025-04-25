@@ -1,15 +1,9 @@
 package org.grupob.empapp.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.entity.maestras.MotivoBloqueo;
 import org.grupob.empapp.validation.email.EmailValidado;
 
 import java.time.LocalDateTime;

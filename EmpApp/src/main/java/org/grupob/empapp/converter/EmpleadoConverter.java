@@ -2,7 +2,7 @@ package org.grupob.empapp.converter;
 
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.entity.Empleado;
+import org.grupob.comun.entity.Empleado;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

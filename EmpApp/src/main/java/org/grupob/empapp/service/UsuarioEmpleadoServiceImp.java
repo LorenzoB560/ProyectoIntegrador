@@ -2,10 +2,10 @@ package org.grupob.empapp.service;
 
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.empapp.entity.UsuarioEmpleado;
-import org.grupob.empapp.entity.maestras.MotivoBloqueo;
-import org.grupob.empapp.repository.UsuarioEmpleadoRepository;
-import org.grupob.empapp.repository.maestras.MotivoBloqueoRepository;
+import org.grupob.comun.entity.UsuarioEmpleado;
+import org.grupob.comun.entity.maestras.MotivoBloqueo;
+import org.grupob.comun.repository.UsuarioEmpleadoRepository;
+import org.grupob.comun.repository.maestras.MotivoBloqueoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
