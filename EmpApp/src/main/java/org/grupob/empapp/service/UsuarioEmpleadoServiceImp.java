@@ -2,6 +2,7 @@ package org.grupob.empapp.service;
 
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.exception.ClaveIncorrectaException;
 import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
@@ -81,12 +82,17 @@ public class UsuarioEmpleadoServiceImp {
         UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getUsuario())
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Credenciales inválidas"));
 
+        // Verificar bloqueo temporal
+        if (usuarioEmp.getFechaDesbloqueo() != null &&
+                usuarioEmp.getFechaDesbloqueo().isAfter(LocalDateTime.now())) {
+            throw new CuentaBloqueadaException("Cuenta bloqueada por intentos de sesion fallidos", usuarioEmp.getFechaDesbloqueo());
+        }
+
         if (!usuarioEmp.getClave().equals(dto.getClave())) {
             int intentos = manejarIntentoFallido(usuarioEmp);
             int restantes = INTENTOS_MAXIMOS - intentos;
 
-            throw new CredencialesInvalidasException("Contraseña incorrecta", restantes > 0 ? restantes : 0
-            );
+            throw new ClaveIncorrectaException("Contraseña incorrecta", restantes > 0 ? restantes : 0);
         }
 
         actualizarEstadisticasAcceso(usuarioEmp);
@@ -106,8 +112,8 @@ public class UsuarioEmpleadoServiceImp {
     /**
      * Gestiona los intentos fallidos de autenticación
      */
-    private void manejarIntentoFallido(UsuarioEmpleado usuario) {
-        int intentos = usuario.getIntentosSesionFallidos() + 1;
+    private int manejarIntentoFallido(UsuarioEmpleado usuario) {
+        int intentos = usuario.getIntentosSesionFallidos() +1;
         usuario.setIntentosSesionFallidos(intentos);
 
         if (intentos >= INTENTOS_MAXIMOS) {
@@ -118,5 +124,6 @@ public class UsuarioEmpleadoServiceImp {
             usuario.setFechaDesbloqueo(LocalDateTime.now().plusMinutes(motivo.getMinutos()));
         }
         usuarioEmpRepo.save(usuario);
+        return usuario.getIntentosSesionFallidos();
     }
 }

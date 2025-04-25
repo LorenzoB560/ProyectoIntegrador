@@ -33,6 +33,8 @@
 
         <!-- Mensaje de error -->
         <div class="error" th:if="${ErrorCredenciales}" th:text="${ErrorCredenciales}"></div>
+        <div class="error" th:if="${error}" th:text="${error}"></div>
+        <div class="error" th:if="${errorBloqueo}" th:text="${errorBloqueo}"></div>
 
         <!-- Enlaces adicionales -->
         <div class="links">

@@ -3,7 +3,10 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.exception.ClaveIncorrectaException;
+import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
@@ -11,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,13 +66,24 @@ public class LoginEmpleadoController {
 
     @PostMapping("/procesar-usuario")
     public String procesarUsuario(Model modelo,
-                                HttpServletRequest request,
-                                HttpServletResponse respuesta,
-                                @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
-                                BindingResult result) {
-
-        if (!usuarioService.validarEmail(dto.getUsuario())) {
-            modelo.addAttribute("ErrorCredenciales", "Usuario incorrecto");
+                                  HttpServletRequest request,
+                                  HttpServletResponse respuesta,
+                                  @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
+                                  BindingResult result) {
+        try {
+            if (!usuarioService.validarEmail(dto.getUsuario())) {
+                modelo.addAttribute("ErrorCredenciales", "Usuario incorrecto");
+                return "login/pedir-usuario";
+            }
+        } catch (UsuarioNoEncontradoException e) {
+            modelo.addAttribute("error", e.getMessage());
+            return "login/pedir-usuario";
+        } catch (CuentaBloqueadaException e) {
+            modelo.addAttribute("errorBloqueo",
+                    String.format("%s. Cuenta bloqueada hasta el %s",
+                            e.getMessage(),
+                            e.getFechaDesbloqueo().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                    ));
             return "login/pedir-usuario";
         }
 
@@ -83,8 +98,8 @@ public class LoginEmpleadoController {
 
     @GetMapping("/clave")
     public String mostrarClave(Model modelo,
-                                    HttpServletRequest request,
-                                    @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto) {
+                               HttpServletRequest request,
+                               @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto) {
         String estado = cookieService.obtenerValorCookie(request, "estado");
 
         if (estado == null || !estado.equals("/clave")) {
@@ -101,50 +116,75 @@ public class LoginEmpleadoController {
     }
 
     @PostMapping("/procesar-clave")
-    public String procesarClave(Model modelo,
+    public String procesarContrasena(Model modelo,
                                      HttpServletRequest request,
                                      HttpServletResponse response,
                                      @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                      @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                      BindingResult result) {
-        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
 
-        if (ultimoUsuario == null || !usuarioService.validarEmail(ultimoUsuario)) {
+        // 1. Verificar nulidad del usuario antes de cualquier operación
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+        if (ultimoUsuario == null) {
+            modelo.addAttribute("error", "Sesión expirada o modificación detectada. Vuelva a autenticarse.");
             return "redirect:/empapp/login";
         }
 
-        if (!usuarioService.validarCredenciales(new LoginUsuarioEmpleadoDTO(ultimoUsuario, dto.getClave()))) {
+        try {
+
+            // 2. Validación de credenciales con manejo de excepciones específicas
+            if (!usuarioService.validarCredenciales(new LoginUsuarioEmpleadoDTO(ultimoUsuario, dto.getClave()))) {
+                modelo.addAttribute("correo", ultimoUsuario);
+//                modelo.addAttribute("error", "Error interno de validación");
+                return "login/pedir-clave";
+            }
+
+            // 3. Manejo de cookies (protección contra eliminación maliciosa)
+            Map<String, Integer> usuarios = cookieService.deserializar(usuariosCookie);
+            if (usuarios == null) usuarios = new HashMap<>();
+
+            // 4. Actualización segura del contador
+            String valorActualizado = cookieService.actualizar(usuarios, usuariosCookie, ultimoUsuario);
+            cookieService.crearCookie(response, "usuario", valorActualizado, 604800); // 7 días en segundos
+
+            cookieService.crearCookie(response, "usuario", valorActualizado, (7 * 24 * 60 * 60));
+            cookieService.crearCookie(response, "estado", "/area-personal", (7 * 24 * 60 * 60)); // corregido también aquí
+
+            int contador = usuarios.getOrDefault(ultimoUsuario, 1);
+
             modelo.addAttribute("usuario", ultimoUsuario);
-            modelo.addAttribute("error", "Contraseña incorrecta. Vuelva a intentarlo.");
+            modelo.addAttribute("contador", contador);
+
+            return "redirect:/empapp/area-personal";
+
+        } catch (UsuarioNoEncontradoException e) {
+            // Registro de intento sospechoso
+            request.getSession().invalidate();
+            modelo.addAttribute("error", "Credenciales inválidas. Sesión reiniciada");
+            return "redirect:/empapp/login";
+
+        } catch (CuentaBloqueadaException e) {
+            modelo.addAttribute("usuario", ultimoUsuario);
+            modelo.addAttribute("errorBloqueo",
+                    String.format("%s. Cuenta bloqueada hasta el %s",
+                            e.getMessage(),
+                            e.getFechaDesbloqueo().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                    ));
+            return "login/pedir-usuario";
+
+        } catch (ClaveIncorrectaException e) {
+            modelo.addAttribute("usuario", ultimoUsuario);
+            modelo.addAttribute("error", e.getMessage()+ ", intentos restantes: " +e.getIntentosRestantes());
             return "login/pedir-clave";
         }
-
-        if (!cookieService.validar(usuariosCookie)) {
-            usuariosCookie = "";
-        }
-
-        Map<String, Integer> usuarios = cookieService.deserializar(usuariosCookie);
-        if (usuarios == null) usuarios = new HashMap<>();
-
-
-
-        String valorActualizado = cookieService.actualizar(usuarios, usuariosCookie, ultimoUsuario);
-        cookieService.crearCookie(response, "usuario", valorActualizado, (7 * 24 * 60 * 60));
-        cookieService.crearCookie(response, "estado", "/area-personal", (7 * 24 * 60 * 60)); // corregido también aquí
-
-        int contador = usuarios.getOrDefault(ultimoUsuario, 1);
-
-        modelo.addAttribute("usuario", ultimoUsuario);
-        modelo.addAttribute("contador", contador);
-
-        return "redirect:/empapp/area-personal";
     }
+
 
     @GetMapping("/area-personal")
     public String mostrarAreaPersonal(Model modelo,
                                       HttpServletRequest request,
                                       @CookieValue(name = "usuario", required = false) String usuariosCookie) {
-      String estado = cookieService.obtenerValorCookie(request, "estado");
+        String estado = cookieService.obtenerValorCookie(request, "estado");
 
         if (estado == null || !estado.equals("/area-personal")) {
             return "redirect:/empapp/login";
@@ -160,16 +200,15 @@ public class LoginEmpleadoController {
                 ? cookieService.deserializar(usuariosCookie) : null;
 
 
-
         int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
+        request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
+
+        modelo.addAttribute("dto", request.getSession().getAttribute("usuarioLogeado"));
 
         modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
 //        modelo.addAttribute("dto", contador);
 
-        request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
-
-        modelo.addAttribute("dto", request.getSession().getAttribute("usuarioLogeado"));
         return "login/area-personal";
     }
 
