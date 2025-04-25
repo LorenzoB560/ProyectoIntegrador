@@ -1,17 +1,15 @@
 -- Insertar administradores solo si no existen (esto no puede hacerse condicional en SQL puro, pero Spring los insertará si la tabla está vacía)
 INSERT INTO administrador (id, usuario, clave, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com', 'admin123',0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com', 'admin123', 0);
 INSERT INTO administrador (id, usuario, clave, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2@gmail.com', 'admin123',0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2@gmail.com', 'admin123', 0);
 
 -- Insertar empleados solo si ya hay empleados en la tabla (esto no se puede hacer con lógica SQL condicional directamente)
 -- Por lo tanto, simplemente insertamos siempre. Si quieres controlar esto, tendrías que hacerlo con Java.
-
-INSERT INTO usuario_empleado (id, usuario, clave)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado');
-INSERT INTO usuario_empleado (id, usuario, clave)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', 'empleado');
-
+INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id, fecha_desbloqueo, intentos_sesion_fallidos)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado', 0, NULL, TRUE, NULL, NULL, 0);
+INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id, fecha_desbloqueo, intentos_sesion_fallidos)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', 'empleado', 0, NULL, TRUE, NULL, NULL, 0);
 
 -- Géneros
 INSERT INTO genero (id, genero)
@@ -610,7 +608,7 @@ UPDATE empleado
 SET id_jefe = UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', ''))
 WHERE id_departamento = UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d480', '-', ''))
   AND id != UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', ''))
-AND id != UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', ''));
+  AND id != UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', ''));
 -- Excepto el CEO
 
 -- Empleados de Ventas reportando a Marisol Valenciano

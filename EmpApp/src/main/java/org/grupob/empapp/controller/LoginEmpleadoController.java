@@ -102,10 +102,9 @@ public class LoginEmpleadoController {
     public String procesarContrasena(Model modelo,
                                      HttpServletRequest request,
                                      HttpServletResponse response,
-                                     @CookieValue(name = "usuario", required = false) String valor,
+                                     @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                      @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                      BindingResult result) {
-
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
 
         if (ultimoUsuario == null || !usuarioService.validarEmail(ultimoUsuario)) {
@@ -117,19 +116,26 @@ public class LoginEmpleadoController {
             modelo.addAttribute("error", "Contraseña incorrecta. Vuelva a intentarlo.");
             return "login/pedir-clave";
         }
+        System.err.println(usuariosCookie);
 
-        if (!cookieService.validar(valor)) {
-            valor = "";
+        if (!cookieService.validar(usuariosCookie)) {
+            usuariosCookie = "";
         }
 
-        Map<String, Integer> usuarios = cookieService.deserializar(valor);
+        Map<String, Integer> usuarios = cookieService.deserializar(usuariosCookie);
         if (usuarios == null) usuarios = new HashMap<>();
 
-        String valorActualizado = cookieService.actualizar(usuarios, valor, ultimoUsuario);
-        int contador = usuarios.getOrDefault(ultimoUsuario, 1);
 
+
+        String valorActualizado = cookieService.actualizar(usuarios, usuariosCookie, ultimoUsuario);
+        System.err.println(valorActualizado);
         cookieService.crearCookie(response, "usuario", valorActualizado, (7 * 24 * 60 * 60));
         cookieService.crearCookie(response, "estado", "/area-personal", (7 * 24 * 60 * 60)); // corregido también aquí
+
+        int contador = usuarios.getOrDefault(ultimoUsuario, 1);
+
+        System.err.println(usuarios);
+        System.err.println(ultimoUsuario);
 
         modelo.addAttribute("correo", ultimoUsuario);
         modelo.addAttribute("contador", contador);
@@ -141,7 +147,6 @@ public class LoginEmpleadoController {
     public String mostrarAreaPersonal(Model modelo,
                                       HttpServletRequest request,
                                       HttpServletResponse response,
-//                                      @CookieValue(name = "estado", required = false) String estado,
                                       @CookieValue(name = "usuario", required = false) String usuariosCookie) {
       String estado = cookieService.obtenerValorCookie(request, "estado");
         if (estado == null || !estado.equals("/area-personal")) {
@@ -149,6 +154,7 @@ public class LoginEmpleadoController {
         }
 
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+
         if (ultimoUsuario == null || !usuarioService.validarEmail(ultimoUsuario)) {
             return "redirect:/empapp/login";
         }
@@ -156,13 +162,21 @@ public class LoginEmpleadoController {
         Map<String, Integer> usuariosAutenticados = (cookieService.validar(usuariosCookie))
                 ? cookieService.deserializar(usuariosCookie) : null;
 
+
+
         int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
 
         modelo.addAttribute("correo", ultimoUsuario);
         modelo.addAttribute("contador", contador);
         modelo.addAttribute("dto", contador);
         request.getSession().setAttribute("usuarioLogeado", ultimoUsuario);
-        return "area-personal";
+        return "login/area-personal";
+    }
+
+    @GetMapping("/seleccionar-otra-cuenta")
+    public String seleccionarOtraCuenta(HttpServletResponse response) {
+        cookieService.eliminarCookie(response, "estado"); // o el nombre de tu cookie
+        return "redirect:/empapp/login";
     }
 
     @GetMapping("/desconectar")
