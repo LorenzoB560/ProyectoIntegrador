@@ -2,7 +2,7 @@ package org.grupob.adminapp.service;
 
 import org.grupob.adminapp.converter.AdministradorConverter;
 import org.grupob.adminapp.dto.LoginAdministradorDTO;
-import org.grupob.adminapp.entity.Administrador;
+import org.grupob.comun.entity.Administrador;
 import org.grupob.adminapp.exception.CredencialesInvalidasException;
 import org.grupob.adminapp.exception.UsuarioNoEncontradoException;
 import org.grupob.adminapp.repository.AdministradorRepository;
@@ -20,8 +20,8 @@ public class AdministradorServiceImp implements AdministradorService {
         this.adminConverter = adminConverter;
     }
 
-    public Administrador devuelveAdministradorPorCorreo(String correo) {
-        Optional<Administrador> adminOpt = adminRepo.findByCorreo(correo);
+    public Administrador devuelveAdministradorPorUsuario(String correo) {
+        Optional<Administrador> adminOpt = adminRepo.findAdministradorByUsuario(correo);
 
         if (adminOpt.isPresent()) {
             return adminOpt.get();
@@ -30,7 +30,7 @@ public class AdministradorServiceImp implements AdministradorService {
     }
 
     public LoginAdministradorDTO  comprobarCredenciales(LoginAdministradorDTO adminDTO) {
-        Administrador admin = adminRepo.findByCorreo(adminDTO.getCorreo())
+        Administrador admin = adminRepo.findAdministradorByUsuario(adminDTO.getCorreo())
                 .orElseThrow(() -> new CredencialesInvalidasException("Correo o contraseña incorrectos"));
 
         if (!adminDTO.getClave().equals(admin.getClave())) {

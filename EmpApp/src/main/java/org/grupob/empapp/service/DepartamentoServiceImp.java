@@ -13,11 +13,13 @@ import java.util.*;
 @Service
 public class DepartamentoServiceImp implements DepartamentoService {
 
-    private DepartamentoRepository departamentoRepository;
+//    private DepartamentoRepository departamentoRepository;
+    private final DepartamentoRepository departamentoRepository;
     private final DepartamentoConverter departamentoConverter;
 
     public DepartamentoServiceImp(DepartamentoRepository departamentoRepository, DepartamentoConverter departamentoConverter) {
         this.departamentoRepository = departamentoRepository;
+//        this.departamentoRepository = departamentoRepository;
         this.departamentoConverter = departamentoConverter;
 
     }
