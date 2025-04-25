@@ -2,7 +2,9 @@ package org.grupob.empapp.service;
 
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.comun.entity.UsuarioEmpleado;
+import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
 import org.grupob.comun.repository.UsuarioEmpleadoRepository;
 import org.grupob.comun.repository.maestras.MotivoBloqueoRepository;
@@ -40,10 +42,9 @@ public class UsuarioEmpleadoServiceImp {
         Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(usuario);
 
         if (usuarioOpt.isPresent()) {
-//            throw new RuntimeException("Usuario no registrado");
             return usuarioOpt.get();
         }
-        throw new RuntimeException("Usuario no registrado");
+        throw new UsuarioNoEncontradoException("El usuario no está registrado");
     }
 
     /**
@@ -56,8 +57,7 @@ public class UsuarioEmpleadoServiceImp {
         Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(correo);
 
         if (usuarioOpt.isEmpty()) {
-//            throw new RuntimeException("Usuario no registrado");
-        return false;
+            throw new UsuarioNoEncontradoException("El usuario no está registrado");
         }
 
         UsuarioEmpleado usuario = usuarioOpt.get();
@@ -65,7 +65,7 @@ public class UsuarioEmpleadoServiceImp {
         // Verificar bloqueo temporal
         if (usuario.getFechaDesbloqueo() != null &&
                 usuario.getFechaDesbloqueo().isAfter(LocalDateTime.now())) {
-            throw new RuntimeException("Cuenta bloqueada hasta: " + usuario.getFechaDesbloqueo());
+            throw new CuentaBloqueadaException("Cuenta bloqueada por seguridad", usuario.getFechaDesbloqueo());
         }
 
         return true;
@@ -79,12 +79,14 @@ public class UsuarioEmpleadoServiceImp {
      */
     public Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto) {
         UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getUsuario())
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Credenciales inválidas"));
 
         if (!usuarioEmp.getClave().equals(dto.getClave())) {
-            manejarIntentoFallido(usuarioEmp);
-//            throw new RuntimeException("Contraseña incorrecta");
-            return false;
+            int intentos = manejarIntentoFallido(usuarioEmp);
+            int restantes = INTENTOS_MAXIMOS - intentos;
+
+            throw new CredencialesInvalidasException("Contraseña incorrecta", restantes > 0 ? restantes : 0
+            );
         }
 
         actualizarEstadisticasAcceso(usuarioEmp);
