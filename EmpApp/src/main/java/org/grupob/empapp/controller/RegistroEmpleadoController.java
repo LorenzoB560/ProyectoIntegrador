@@ -215,11 +215,11 @@ public class RegistroEmpleadoController {
         }
 
 
-        try {
-            datosFormulario.setFoto(imagen.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            datosFormulario.setFoto(imagen.getBytes());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
             actualizarDatos(datosFormulario, datosAnteriores);
@@ -316,7 +316,7 @@ public class RegistroEmpleadoController {
                         datosAnteriores.getIdDepartamentoSeleccionado());
 
         // ** FOTO DE PERFIL **
-        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
+//        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
     }
 
 

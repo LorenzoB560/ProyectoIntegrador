@@ -12,6 +12,8 @@ import org.grupob.empapp.dto.grupoValidaciones.GrupoLaboral;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
+import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
+import org.grupob.empapp.validation.edad.EdadNotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -20,25 +22,39 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EdadCoincideConFechaNacimiento(groups = GrupoPersonal.class)
 public class AltaEmpleadoDTO {
 
     private UUID id;
 
     // ** PASO 1 - DATOS PERSONALES **
+
+    @NotNull(groups = GrupoPersonal.class)
     @NotBlank(groups = GrupoPersonal.class)
     private String nombre;
+
+    @NotNull(groups = GrupoPersonal.class)
     @NotBlank(groups = GrupoPersonal.class)
     private String apellido;
+
+//    @NotNull(groups = GrupoPersonal.class)
+//    //TODO FALTAN REALIZAR LAS VALIDACIONES AQUÍ
+//    private byte[] foto; // Para almacenar la imagen en la base de datos
+
+    @NotNull(groups = GrupoPersonal.class)
+    private Long idGeneroSeleccionado;
 
     @NotNull(groups = GrupoPersonal.class)
     @LocalDateNotBlank(groups = GrupoPersonal.class)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Past(message = "{registro.fechaNacimiento.past", groups = GrupoPersonal.class)
+    @Past(message = "{registro.fechaNacimiento.past}", groups = GrupoPersonal.class)
     @MayorDe18(groups = GrupoPersonal.class)
     private LocalDate fechaNacimiento;
 
+
     @NotNull(groups = GrupoPersonal.class)
-    private Long idGeneroSeleccionado;
+    @EdadNotBlank(groups = GrupoPersonal.class)
+    private String edad;
 
     // ** PASO 2 - DATOS DIRECCION **
     @Valid
@@ -49,5 +65,4 @@ public class AltaEmpleadoDTO {
     private UUID idDepartamentoSeleccionado;
 
     // ** PASO 4 - FOTO DE PERFIL **
-    private byte[] foto; // Para almacenar la imagen en la base de datos
 }

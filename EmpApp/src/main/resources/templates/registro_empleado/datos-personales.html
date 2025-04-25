@@ -49,15 +49,6 @@
                th:field="*{apellido}">
         <div th:each="error: ${#fields.errors('apellido')}" th:text="${error}" class="error"></div>
 
-
-        <!-- FECHA NACIMIENTO -->
-        <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
-        <input type="text" id="fechaNacimiento"
-               th:field="*{fechaNacimiento}"> <br>
-
-        <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
-
-
         <!-- GENERO -->
         <label th:text="#{registro.genero}"></label>
         <div th:each="genero : ${listaGeneros}">
@@ -74,10 +65,28 @@
                  onclick="deseleccionaRadios('idGeneroSeleccionado');" />
         <br> <br>
 
+        <!-- FECHA NACIMIENTO -->
+        <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
+        <input type="text" id="fechaNacimiento"
+               th:field="*{fechaNacimiento}"> <br>
+
+        <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
+
+        <!--EDAD-->
+          <label for="edad" th:text="#{registro.edad}"></label>
+          <input type="text" id="edad"
+                 th:field="*{edad}"> <br>
+
+          <div th:each="error : ${#fields.errors('edad')}" th:text="${error}" class="error"></div>
+
+          <div class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+
         <button type="submit" th:text="#{registro.submit}"></button>
         <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
       </fieldset>
 
-    </form>
+
+
+      </form>
   </body>
 </html>

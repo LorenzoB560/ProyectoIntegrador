@@ -19,7 +19,7 @@ VALUES (1, 'Masculino');
 INSERT INTO genero (id, genero)
 VALUES (2, 'Femenino');
 INSERT INTO genero (id, genero)
-VALUES (3, 'No binario');
+VALUES (3, 'Otro');
 
 -- Departamentos
 INSERT INTO departamento (id, nombre, codigo, localidad)
