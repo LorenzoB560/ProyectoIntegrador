@@ -185,9 +185,20 @@ function llenarTabla(datos) {
                         <td>${formatearDepartamento(emp.departamento)}</td>
                         <td>${infoJefe}</td>
                         <td>${especialidades}</td>
-                        <td><span class="${emp.activo ? 'status-active' : 'status-inactive'}">${emp.activo ? 'Activo' : 'Inactivo'}</span></td>
+                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary">Ver</a></td>
                         <td>
-                            <a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary">Ver</a>
+                            <div> 
+                                <a id="btnEditar" href="#" class="btn btn-primary me-2">
+                                    <i class="bi bi-pencil me-1"></i> Editar
+                                </a>
+                                <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
+                                </a>
+                                <a id="btnBloquear" href="#" class="btn btn-primary me-2"> <i class="bi bi-lock-fill me-1"></i> Bloquear
+                                </a>
+                                <a id="btnDesbloquear" href="#" class="btn btn-success"> <i class="bi bi-unlock-fill me-1"></i> Desbloquear
+                                </a>
+                            </div>
+                            
                         </td>
                     `;
             cuerpoTabla.appendChild(fila);

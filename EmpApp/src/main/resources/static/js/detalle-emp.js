@@ -1,3 +1,4 @@
+
 // Variables globales
 let empleadoData = null;
 const urlParams = new URLSearchParams(window.location.search);
@@ -101,9 +102,12 @@ function mostrarDatosEmpleado(empleado) {
         jefeElement.textContent = 'Sin jefe asignado';
     }
 
+    // Cargar subordinados dinámicamente
+    cargarSubordinados(empleado.id);
+
     // Información de subordinados (requeriría otra petición AJAX)
-    document.getElementById('subordinadosEmpleado').innerHTML =
-        '<p class="fst-italic text-muted">Información no disponible</p>';
+    // document.getElementById('subordinadosEmpleado').innerHTML =
+    //     '<p class="fst-italic text-muted">Información no disponible</p>';
 
     // Especialidades
     const especialidadesContainer = document.getElementById('especialidadesEmpleado');
@@ -230,4 +234,62 @@ function mostrarError(mensaje) {
     error.style.display = 'block';
     cargando.style.display = 'none';
     detalleEmpleado.style.display = 'none';
+}
+
+// Añadir esta nueva función al archivo
+function cargarSubordinados(idJefe) {
+    const subordinadosContainer = document.getElementById('subordinadosEmpleado');
+    subordinadosContainer.innerHTML = '<p class="text-muted">Cargando subordinados...</p>';
+
+    fetch(`http://localhost:8080/empleados/${idJefe}/subordinados`)
+        .then(respuesta => {
+            if (!respuesta.ok) {
+                throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
+            }
+            return respuesta.json();
+        })
+        .then(subordinados => {
+            mostrarSubordinados(subordinados, subordinadosContainer);
+        })
+        .catch(err => {
+            subordinadosContainer.innerHTML =
+                `<p class="text-danger">Error al cargar subordinados: ${err.message}</p>`;
+        });
+}
+
+function mostrarSubordinados(subordinados, container) {
+    // Limpiar el contenedor
+    container.innerHTML = '';
+
+    if (!subordinados || subordinados.length === 0) {
+        container.innerHTML = '<p class="text-muted fst-italic">Este empleado no tiene subordinados</p>';
+        return;
+    }
+
+    // Crear lista de subordinados
+    const lista = document.createElement('ul');
+    lista.className = 'list-group';
+
+    subordinados.forEach(subordinado => {
+        const item = document.createElement('li');
+        item.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+        const nombreCompleto = obtenerNombreCompleto(subordinado);
+
+        item.innerHTML = `
+            <div>
+                <a href="/empleado/detalle/${subordinado.id}" class="text-decoration-none">
+                    ${nombreCompleto}
+                </a>
+                <small class="d-block text-muted">${subordinado.departamento?.nombre || 'Sin departamento'}</small>
+            </div>
+            <span class="badge ${subordinado.activo ? 'bg-success' : 'bg-danger'} rounded-pill">
+                ${subordinado.activo ? 'Activo' : 'Inactivo'}
+            </span>
+        `;
+
+        lista.appendChild(item);
+    });
+
+    container.appendChild(lista);
 }
