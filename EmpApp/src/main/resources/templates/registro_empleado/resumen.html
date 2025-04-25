@@ -99,8 +99,8 @@
             </p>
 
             <p>
-                <strong th:text="#{registro.pais}"></strong>:
-                <span th:text="${datos.getDireccion().getPais()}"></span>
+                <strong th:text="#{registro.paisNacimiento}"></strong>:
+                <span th:text="${datos.getPaisNacimiento()}"></span>
             </p>
         </div>
         <div th:if="${datos.getDireccion() == null}">
@@ -120,12 +120,12 @@
         </p>
     </fieldset>
 
-    <!-- FOTO DE PERFIL -->
-    <fieldset>
-        <legend><strong th:text="#{registro.imagen}"></strong></legend>
+<!--    &lt;!&ndash; FOTO DE PERFIL &ndash;&gt;-->
+<!--    <fieldset>-->
+<!--        <legend><strong th:text="#{registro.imagen}"></strong></legend>-->
 
-        <p th:text="${datos.getFoto()}"></p>
-    </fieldset>
+<!--        <p th:text="${datos.getFoto()}"></p>-->
+<!--    </fieldset>-->
     <a href="/volver-principio" id="volverAlPrincipio" th:text="#{registro.volver}"></a>
     <button type="submit" id="guardarEmpleado" th:text="#{registro.guardar}"></button>
 </form>

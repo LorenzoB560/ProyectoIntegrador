@@ -1,11 +1,10 @@
--- Insertar administradores solo si no existen (esto no puede hacerse condicional en SQL puro, pero Spring los insertará si la tabla está vacía)
+-- Administradores
 INSERT INTO administrador (id, usuario, clave, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com', 'admin123',0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com', 'admin123', 0);
 INSERT INTO administrador (id, usuario, clave, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2@gmail.com', 'admin123',0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2@gmail.com', 'admin123', 0);
 
--- Insertar empleados solo si ya hay empleados en la tabla (esto no se puede hacer con lógica SQL condicional directamente)
--- Por lo tanto, simplemente insertamos siempre. Si quieres controlar esto, tendrías que hacerlo con Java.
+-- Usuarios sin claves cifradas
 
 INSERT INTO usuario_empleado (id, usuario, clave)
 VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado');
@@ -20,6 +19,20 @@ INSERT INTO genero (id, genero)
 VALUES (2, 'Femenino');
 INSERT INTO genero (id, genero)
 VALUES (3, 'Otro');
+
+-- Países
+
+INSERT INTO pais (id, pais, prefijo)
+VALUES (1, 'España', '+34');
+INSERT INTO pais (id, pais, prefijo)
+VALUES (2, 'Francia', '+33');
+INSERT INTO pais (id, pais, prefijo)
+VALUES (3, 'Alemania', '+49');
+INSERT INTO pais (id, pais, prefijo)
+VALUES (4, 'Italia', '+39');
+INSERT INTO pais (id, pais, prefijo)
+VALUES (5, 'Rumanía', '+40');
+
 
 -- Departamentos
 INSERT INTO departamento (id, nombre, codigo, localidad)

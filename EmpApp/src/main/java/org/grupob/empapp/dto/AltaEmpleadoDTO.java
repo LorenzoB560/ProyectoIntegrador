@@ -14,6 +14,7 @@ import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
+import org.grupob.empapp.validation.pais.ExistePais;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -56,6 +57,14 @@ public class AltaEmpleadoDTO {
     @EdadNotBlank(groups = GrupoPersonal.class)
     private String edad;
 
+    @NotNull(groups = GrupoPersonal.class)
+    @NotBlank(groups = GrupoPersonal.class)
+    @ExistePais(groups = GrupoPersonal.class)
+    private String paisNacimiento;
+
+    @NotNull(groups = GrupoPersonal.class)
+    @NotBlank(groups = GrupoPersonal.class)
+    private String comentarios;
     // ** PASO 2 - DATOS DIRECCION **
     @Valid
     private DireccionPostalDTO direccion;

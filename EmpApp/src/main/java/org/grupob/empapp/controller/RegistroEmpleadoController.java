@@ -1,6 +1,7 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.entity.maestras.Pais;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoDireccion;
@@ -25,23 +26,23 @@ import java.util.List;
 @Controller
 public class RegistroEmpleadoController {
 
-    private final GeneroRepository generoRepository;
     private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;
-    private final DepartamentoRepository departamentoRepository;
 
-    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoServiceImp altaEmpleadoServiceImp, DepartamentoRepository departamentoRepository) {
-        this.generoRepository = generoRepository;
+    public RegistroEmpleadoController(AltaEmpleadoServiceImp altaEmpleadoServiceImp) {
         this.altaEmpleadoServiceImp = altaEmpleadoServiceImp;
-        this.departamentoRepository = departamentoRepository;
     }
+
 
     @ModelAttribute //Cargo las colecciones una vez para añadirlas al modelo
     public void adicionColecciones(Model modelo) {
-        List<Genero> listaGeneros = generoRepository.findAll();
-        List<String> listaVias = List.of("Calle", "Avenida");
-        List<Departamento> listaDepartamentos = departamentoRepository.findAll();
+        List<Genero> listaGeneros = altaEmpleadoServiceImp.devolverGeneros();
+        List<Pais> listaPaises = altaEmpleadoServiceImp.devolverPaises();
+        List<Departamento> listaDepartamentos = altaEmpleadoServiceImp.devolverDepartamentos();
+
+//        List<String> listaVias = List.of("Calle", "Avenida");
+//        modelo.addAttribute("listaVias", listaVias);
         modelo.addAttribute("listaGeneros", listaGeneros);
-        modelo.addAttribute("listaVias", listaVias);
+        modelo.addAttribute("listaPaises", listaPaises);
         modelo.addAttribute("listaDepartamentos", listaDepartamentos);
     }
 
