@@ -1,7 +1,10 @@
 package org.grupob.adminapp.service;
 
+import org.grupob.adminapp.converter.AdministradorConverter;
 import org.grupob.adminapp.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.entity.Administrador;
+import org.grupob.adminapp.exception.CredencialesInvalidasException;
+import org.grupob.adminapp.exception.UsuarioNoEncontradoException;
 import org.grupob.adminapp.repository.AdministradorRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +13,11 @@ import java.util.Optional;
 @Service
 public class AdministradorServiceImp implements AdministradorService {
     private final AdministradorRepository adminRepo;
+    private final AdministradorConverter adminConverter;
 
-    public AdministradorServiceImp(AdministradorRepository adminRepo) {
+    public AdministradorServiceImp(AdministradorRepository adminRepo, AdministradorConverter adminConverter) {
         this.adminRepo = adminRepo;
+        this.adminConverter = adminConverter;
     }
 
     public Administrador devuelveAdministradorPorCorreo(String correo) {
@@ -21,37 +26,26 @@ public class AdministradorServiceImp implements AdministradorService {
         if (adminOpt.isPresent()) {
             return adminOpt.get();
         }
-        throw new RuntimeException("No existe un usuario con ese correo");
+        throw new UsuarioNoEncontradoException("No existe un usuario con ese correo");
     }
 
-    public Boolean comprobarCredenciales(LoginAdministradorDTO adminDTO) {
-        Optional<Administrador> adminOpt = adminRepo.findByCorreo(adminDTO.getCorreo());
+    public LoginAdministradorDTO  comprobarCredenciales(LoginAdministradorDTO adminDTO) {
+        Administrador admin = adminRepo.findByCorreo(adminDTO.getCorreo())
+                .orElseThrow(() -> new CredencialesInvalidasException("Correo o contraseña incorrectos"));
 
-        if (adminOpt.isEmpty()) {
-            return false; // //TODO Cambiar luego por la excepcion correspondiente
+        if (!adminDTO.getClave().equals(admin.getClave())) {
+            throw new CredencialesInvalidasException("Correo o contraseña incorrectos");
         }
 
-        return adminDTO.getClave().equals(adminOpt.get().getClave());
+        // Aumentamos número de accesos
+        admin = aumentarNumeroAccesos(admin);
+
+        return adminConverter.convertirADTO(admin);
     }
 
-    public Administrador aumentarNumAccesos(Administrador admin) {
-        Optional<Administrador> adminOpt = adminRepo.findByCorreo(admin.getCorreo());
-
-        if (adminOpt.isPresent()) {
-            Administrador adminBD = adminOpt.get();
-            adminBD.setNumeroAccesos(adminBD.getNumeroAccesos() + 1);
-            return adminRepo.save(adminBD);
-        }
-
-        throw new RuntimeException("No existe un usuario con ese correo");
+    public Administrador aumentarNumeroAccesos(Administrador admin) {
+        admin.setNumeroAccesos(admin.getNumeroAccesos() + 1);
+        return adminRepo.save(admin);
     }
 
-
-   /* public Boolean comprobarClave(String correo, String clave) {
-        return null;
-    }
-
-    public Boolean comprobarCorreo(String correo) {
-        return adminRepo.existsByCorreo(correo);
-    }*/
 }
