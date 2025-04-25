@@ -16,12 +16,12 @@
     <form th:action="@{/empapp/procesar-usuario}" method="post" th:object="${dto}">
         <!-- Si no hay usuarios autenticados, mostrar un input de texto -->
         <div th:if="${usuariosAutenticados == null}">
-            <input type="text" th:field="*{correo}" placeholder="Correo electrónico">
+            <input type="text" th:field="*{usuario}" placeholder="Correo electrónico">
         </div>
 
         <!-- Si hay usuarios autenticados, mostrar un select con las claves -->
         <div th:unless="${usuariosAutenticados == null}">
-            <select th:field="*{correo}" id="usuariosCookie">
+            <select th:field="*{usuario}" id="usuariosCookie">
                 <option value="" disabled selected>Selecciona un usuario</option>
                 <option th:each="entry : ${usuariosAutenticados}"
                         th:value="${entry.key}"

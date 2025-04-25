@@ -1,4 +1,4 @@
-package org.grupob.empapp.validation.contrasena;
+package org.grupob.empapp.validation.clave;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

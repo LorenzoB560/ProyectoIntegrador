@@ -17,7 +17,7 @@ public class LoginUsuarioEmpleadoDTO {
 
     @NotBlank
     @EmailValidado
-    private String correo;
+    private String usuario;
 
     private String clave;
 
@@ -33,8 +33,8 @@ public class LoginUsuarioEmpleadoDTO {
 
     private Integer intentosSesionFallidos;
 
-    public LoginUsuarioEmpleadoDTO(String correo, String clave){
-        this.correo=correo;
+    public LoginUsuarioEmpleadoDTO(String usuario, String clave){
+        this.usuario=usuario;
         this.clave=clave;
     }
 }

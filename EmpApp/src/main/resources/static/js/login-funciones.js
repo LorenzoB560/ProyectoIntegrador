@@ -16,7 +16,7 @@ function cambiarPeticion() {
     const select = document.getElementById('usuariosCookie');
     const input = document.createElement('input');
     input.type = 'text';
-    input.name = 'correo';
+    input.name = 'usuario';
     input.placeholder = 'Correo electrónico';
     input.required = true;
 
@@ -71,19 +71,19 @@ $(document).ready(function() {
         event.preventDefault();
         // Evita que el enlace haga su comportamiento por defecto (redirigir o recargar)
 
-        const correo = $("#correo").text().trim();
+        const usuario = $("#usuario").text().trim();
         // Obtiene el valor del input con ID "correo", eliminando espacios en blanco
 
-        if (correo) {
+        if (usuario) {
             // Si se ha introducido un correo...
 
             $.ajax({
                 url: "/empapp/devuelve-clave", // Endpoint que expone la contraseña
                 type: "GET",                     // Método HTTP
-                data: { correo: correo },        // Parámetro que se envía al backend
+                data: { usuario: usuario },        // Parámetro que se envía al backend
                 success: function(clave) {
                     // Función que se ejecuta si la petición se completa correctamente
-                    alert("La contraseña de " + correo + " es: " + clave);
+                    alert("La contraseña de " + usuario + " es: " + clave);
                     // Muestra la contraseña recibida
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

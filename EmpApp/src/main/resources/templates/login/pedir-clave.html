@@ -9,9 +9,9 @@
 </head>
 <body>
 <div class="container">
-    <h2 th:text="${correo}">Usuario</h2>
+    <h2 th:text="${usuario}">Usuario</h2>
     <form th:action="@{/empapp/procesar-clave}" method="post" th:object="${dto}">
-        <span id="correo" th:text="${correo}" style="display:none;"></span>
+        <span id="usuario" th:text="${usuario}" style="display:none;"></span>
         <input type="password" id="clave" name="clave" placeholder="Contraseña">
         <div class="error" th:if="${error}" th:text="${error}"></div>
 

@@ -23,8 +23,6 @@ public class UsuarioEmpleadoServiceImp {
     // Conversor entre entidad y DTO
     private final LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert;
 
-    // Servicio de gestión de cookies
-    private final CookieService cookieService;
 
     // Máximo de intentos fallidos permitidos
     private static final int INTENTOS_MAXIMOS = 3;
@@ -32,17 +30,14 @@ public class UsuarioEmpleadoServiceImp {
     public UsuarioEmpleadoServiceImp(
             UsuarioEmpleadoRepository usuarioEmpRepo,
             MotivoBloqueoRepository motivoBloqueoRepo,
-            LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert,
-            CookieService cookieService
-    ) {
+            LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert) {
         this.usuarioEmpRepo = usuarioEmpRepo;
         this.motivoBloqueoRepo = motivoBloqueoRepo;
         this.loginUsuarioEmpConvert = loginUsuarioEmpConvert;
-        this.cookieService = cookieService;
     }
 
-    public UsuarioEmpleado devuelveUsuarioEmpPorCorreo(String correo){
-        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(correo);
+    public UsuarioEmpleado devuelveUsuarioEmpPorUsuario(String usuario){
+        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(usuario);
 
         if (usuarioOpt.isPresent()) {
 //            throw new RuntimeException("Usuario no registrado");
@@ -73,8 +68,6 @@ public class UsuarioEmpleadoServiceImp {
             throw new RuntimeException("Cuenta bloqueada hasta: " + usuario.getFechaDesbloqueo());
         }
 
-        /*cookieService.actualizarCookieHistorial(response, email);
-        return loginUsuarioEmpConvert.convertirADTO(usuario);*/
         return true;
     }
 
@@ -85,7 +78,7 @@ public class UsuarioEmpleadoServiceImp {
      * @throws RuntimeException Si las credenciales son inválidas
      */
     public Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto) {
-        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getCorreo())
+        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getUsuario())
                 .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
 
         if (!usuarioEmp.getClave().equals(dto.getClave())) {
@@ -94,8 +87,6 @@ public class UsuarioEmpleadoServiceImp {
             return false;
         }
 
-//        actualizarEstadisticasAcceso(usuario);
-//        cookieService.crearCookieSesion(response, usuario.getCorreo().toString());
         actualizarEstadisticasAcceso(usuarioEmp);
         return true;
     }

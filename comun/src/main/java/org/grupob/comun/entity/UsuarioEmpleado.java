@@ -38,8 +38,8 @@ public class UsuarioEmpleado extends Usuario {
     @Column(name = "intentos_sesion_fallidos")
     private Integer intentosSesionFallidos;
 
-    public UsuarioEmpleado(String email, String clave) {
-        super(email, clave);
+    public UsuarioEmpleado(String usuario, String clave) {
+        super(usuario, clave);
         setActivo(true);
         setIntentosSesionFallidos(0);
     }
