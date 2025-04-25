@@ -28,7 +28,7 @@ public class CargaDatosUsuarios implements CommandLineRunner {
             adminRepo.save(new Administrador("admin2@gmail.com", "admin123"));
         }
 
-        if (usuarioEmpleadoRepo.count() == 0) {
+        if (usuarioEmpleadoRepo.count() != 0) {
             usuarioEmpleadoRepo.save(new UsuarioEmpleado("emp1@gmail.com", "empleado"));
             usuarioEmpleadoRepo.save(new UsuarioEmpleado("emp2@gmail.com", "empleado"));
         }

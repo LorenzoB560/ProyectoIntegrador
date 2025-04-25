@@ -58,8 +58,9 @@ public class Empleado extends Persona {
 
 
     //LADO PROPIETARIO DE LA RELACION (es mas frecuente que se consulten datos desde aqui a la otra tabla)
-    @OneToOne
-    @JoinColumn(name = "id_usuario", foreignKey = @ForeignKey(name = "FK_empleado_usuario_empleado_id"))
+    @OneToOne//(optional = false)
+    @JoinColumn(name = "id_usuario", //nullable = false,
+            foreignKey = @ForeignKey(name = "FK_empleado_usuario_id"))
     private UsuarioEmpleado usuario;
 
     @Column(table = "informacion_economica")

@@ -3,46 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <title>Registro de usuario</title>
-  <link rel="stylesheet" href="/css/estilos.css">
+  <link rel="stylesheet" href="/css/registro-usuario-estilos.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/js/modificarCampos.js"></script>
+  <script src="/js/funciones.js"></script>
+  <style>
+    .error { color: red; }
+    .success { color: green; font-weight: bold; }
+  </style>
 </head>
 <body>
 <h2>Registro de usuario:</h2>
 
-
-<h2 th:text="*{mensajeNOK}" class="error"></h2>
-<!-- Introducir correo -->
-<form action="/guardar-login" method="POST" th:object="${datos}" id="formulario">
-
-<!--  Usuario-->
-  <label for="usuario" th:text="#{registro.usuario}"></label>
-  <input type="text" th:field="*{usuario}" id="usuario" th:placeholder="#{registro.usuario.placeholder}">
-  <br>
-  <div th:each="error : ${#fields.errors('usuario')}" th:text="${error}" class="error"></div>
-
-
-<!--  Contraseña-->
-  <label for="clave" th:text="#{registro.clave}"></label>
-  <input type="password" th:field="*{clave}" id="clave">
-  <div th:each="error : ${#fields.errors('clave')}" th:text="${error}" class="error"></div>
-
-  <!--  Confirmar contraseña-->
-  <label for="confirmarContrasena" th:text="#{registro.confirmarClave}"></label>
-  <input type="password" th:field="*{confirmarClave}" id="confirmarContrasena">
-
-  <!-- Mensaje de error si las contraseñas no coinciden.
-       Se hace de esta manera a diferencia del resto porque esta validación
-       es a nivel de clase, no de campo.-->
-
-  <div th:each="error : ${#fields.errors('confirmarClave')}" th:text="${error}" class="error"></div>
+<form id="formulario">
+  <!-- Usuario -->
+  <label for="usuario">Usuario</label>
+  <input type="text" name="usuario" id="usuario" placeholder="Ingrese su nombre de usuario">
   <br>
 
-  <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
-  <button type="reset" th:text="#{registro.reset}"></button>
-  <button type="submit" th:text="#{registro.submit}" onclick="confirmarAccion('¿Estás seguro que quieres crear el usuario?')"></button>
+  <!-- Contraseña -->
+  <label for="clave">Contraseña</label>
+  <input type="password" name="clave" id="clave">
+
+  <!-- Confirmar contraseña -->
+  <label for="confirmarClave">Confirmar contraseña</label>
+  <input type="password" name="confirmarClave" id="confirmarClave">
+  <br>
 
 
+  <br>
+  <div>
+    <input type="checkbox" id="mostrarClave" onclick="mostrarOcultarClave()">
+    <label for="mostrarClave">Mostrar contraseña</label>
+  </div>
+  <br>
+  <br>
 
+  <input type="button" value="Vaciar" onclick="vaciarCampos()">
+  <button type="reset">Restablecer</button>
+  <button type="button" id="btnEnviar">Enviar</button>
 </form>
+
+<div id="mensajes"></div>
+
+<a href="/redirigir-hacia-login">Autenticación de usuario</a>
+<script>
+  $(document).ready(function() {
+    $("#btnEnviar").click(function() {
+      if (confirm('¿Estás seguro que quieres crear el usuario?')) {
+        // Limpiar mensajes previos
+        $("#mensajes").empty();
+
+        // Guardo los datos del formulario en variables.
+        var datos = {
+          usuario: $("#usuario").val(),
+          clave: $("#clave").val(),
+          confirmarClave: $("#confirmarContrasena").val()
+        };
+
+        // Esta es la petición AJAX para POST
+        $.ajax({
+          type: "POST",
+          url: "/guardar-registro-usuario",
+          data: JSON.stringify(datos),
+          contentType: "application/json",
+          success: function(response) {
+            // Mostrar mensaje de éxito
+            $("#mensajes").html("<div class='success'>El usuario " + $("#usuario").val() + " se ha creado correctamente</div>");
+          },
+          error: function(xhr) {
+            try {
+              var errorResponse = JSON.parse(xhr.responseText);
+              var mensajesHTML = "";
+
+              // Estructura específica de InformacionExcepcion
+              if (errorResponse.listaErrores && errorResponse.listaErrores.length > 0) {
+                $.each(errorResponse.listaErrores, function(i, mensaje) {
+                  mensajesHTML += "<div class='error'>" + mensaje + "</div>";
+                });
+                $("#mensajes").html(mensajesHTML);
+              } else {
+                $("#mensajes").html("<div class='error'>Error al procesar el formulario</div>");
+              }
+            } catch (e) {
+              $("#mensajes").html("<div class='error'>Error al procesar el formulario</div>");
+            }
+          }
+        });
+      }
+    });
+  });
+</script>
 </body>
 </html>

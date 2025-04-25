@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name="usuario_empleado", uniqueConstraints = {
-        @UniqueConstraint(name = "UQ_usuario_empleado_correo", columnNames = "correo"),
+        @UniqueConstraint(name = "UQ_usuario_empleado_usuario", columnNames = "usuario"),
         @UniqueConstraint(name = "UQ_usuario_empleado", columnNames = "id_empleado")})
 public class UsuarioEmpleado extends Usuario {
 
-    @OneToOne
-    @JoinColumn(name = "id_empleado", unique = true,
-            foreignKey = @ForeignKey(name = "FK_usuario_empleado_id"))
-    private Empleado empleado;
+//    @OneToOne
+//    @JoinColumn(name = "id_empleado", unique = true,
+//            foreignKey = @ForeignKey(name = "FK_usuario_empleado_id"))
+//    private Empleado empleado;
 
     @Column(name = "ultima_conexion")
     private LocalDateTime ultimaConexion;

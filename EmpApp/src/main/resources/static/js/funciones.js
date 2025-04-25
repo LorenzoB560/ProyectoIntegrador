@@ -1,12 +1,16 @@
 function mostrarOcultarClave() {
     // Obtener los elementos de los campos de contraseña
     var clave = document.getElementById("clave");
+    var confirmarClave = document.getElementById("confirmarClave");
 
     // Cambiar el tipo de ambos campos
-    if (clave.type === "password") {
+    if (clave.type === "password" && confirmarClave.type === "password") {
         clave.type = "text";  // Cambiar a tipo 'text' para mostrar la clave
+        confirmarClave.type = "text";
+
     } else {
         clave.type = "password";  // Cambiar a tipo 'password' para ocultar la clave
+        confirmarClave.type = "password";
     }
 }
 
