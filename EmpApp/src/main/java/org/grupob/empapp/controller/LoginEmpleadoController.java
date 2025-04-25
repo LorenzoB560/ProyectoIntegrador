@@ -166,8 +166,9 @@ public class LoginEmpleadoController {
         } catch (CuentaBloqueadaException e) {
             modelo.addAttribute("usuario", ultimoUsuario);
             modelo.addAttribute("errorBloqueo",
-                    String.format("%s. Cuenta bloqueada hasta el %s",
+                    String.format("%s. Usuario %s bloqueado hasta el %s",
                             e.getMessage(),
+                            ultimoUsuario,
                             e.getFechaDesbloqueo().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                     ));
             return "login/pedir-usuario";
