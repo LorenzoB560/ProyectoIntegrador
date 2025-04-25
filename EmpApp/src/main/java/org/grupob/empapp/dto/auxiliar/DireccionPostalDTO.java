@@ -2,40 +2,50 @@ package org.grupob.empapp.dto.auxiliar;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoDireccion;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
+import org.grupob.empapp.validation.tipo_via.ExisteTipoVia;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DireccionPostalDTO {
 
-    @NotBlank(groups = GrupoDireccion.class)
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
+    @ExisteTipoVia(groups = GrupoDatosContacto.class)
     private String tipoVia;
 
-    @NotBlank(groups = GrupoDireccion.class)
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
     private String via;
 
-    @NotBlank(groups = GrupoDireccion.class)
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
     private String numero;
 
-    @NotNull(groups = GrupoDireccion.class)
-    private String piso;
+    @NotNull(groups = GrupoDatosContacto.class)
+    private String portal;
 
-    @NotNull(groups = GrupoDireccion.class)
+    @NotNull(groups = GrupoDatosContacto.class)
+    @Positive(groups = GrupoDatosContacto.class)
+    private Integer planta;
+
+    @NotNull(groups = GrupoDatosContacto.class)
     private String puerta;
 
-    @NotBlank(groups = GrupoDireccion.class)
-    private String codigoPostal;
-
-    @NotBlank(groups = GrupoDireccion.class)
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
     private String localidad;
 
-    @NotBlank(groups = GrupoDireccion.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
     private String region;
 
-    @NotBlank(groups = GrupoDireccion.class)
-    private String pais;
+    @NotNull
+    @NotBlank(groups = GrupoDatosContacto.class)
+    private String codigoPostal;
+
 }

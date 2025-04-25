@@ -3,8 +3,10 @@ package org.grupob.empapp.service;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.entity.maestras.Genero;
 import org.grupob.comun.entity.maestras.Pais;
+import org.grupob.comun.entity.maestras.TipoVia;
 import org.grupob.comun.repository.DepartamentoRepository;
 import org.grupob.comun.repository.PaisRepository;
+import org.grupob.comun.repository.TipoViaRepository;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
@@ -20,13 +22,15 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final GeneroRepository generoRepository;
     private final EmpleadoRepository empleadoRepository;
     private final PaisRepository paisRepository;
+    private final TipoViaRepository tipoViaRepository;
     private final EmpleadoConverter empleadoConverter;
     private final DepartamentoRepository departamentoRepository;
 
-    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository) {
+    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository) {
         this.generoRepository = generoRepository;
         this.empleadoRepository = empleadoRepository;
         this.paisRepository = paisRepository;
+        this.tipoViaRepository = tipoViaRepository;
         this.empleadoConverter = empleadoConverter;
         this.departamentoRepository = departamentoRepository;
     }
@@ -36,6 +40,9 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     }
     public List<Pais> devolverPaises(){
         return paisRepository.findAll();
+    }
+    public List<TipoVia> devolverTipoVias(){
+        return tipoViaRepository.findAll();
     }
     public List<Departamento> devolverDepartamentos() {
         return departamentoRepository.findAll();

@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Foto de perfil</title>
+  <title>Datos económicos</title>
   <link rel="stylesheet" href="/css/registro-empleado-estilos.css">
   <script src="/js/modificarCampos.js"></script>
 </head>
-<body id="body-foto">
+<body id="body-economicos">
 
 <a href="/datos-personales" id="datos-personales">
   <img src="/img/Paso1.png" alt="Paso 1">
 </a>
-<a href="/datos-direccion" id="datos-direccion">
+<a href="/datos-contacto" id="datos-contacto">
   <img src="/img/Paso2.png" alt="Paso 2">
 </a>
-<a href="/datos-laborales" id="datos-laborales">
+<a href="/datos-profesionales" id="datos-profesionales">
   <img src="/img/Paso3.png" alt="Paso 3">
 </a>
-<a href="/foto-perfil" id="foto-perfil">
+<a href="/datos-economicos" id="datos-economicos">
   <img src="/img/Paso4.png" alt="Paso 4">
 </a>
 <a href="/resumen" id="resumen">
@@ -26,7 +26,7 @@
 
 <h2 th:text="*{mensajeNOK}" class="error"></h2>
 
-<form action="/guardar-foto-perfil" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
+<form action="/guardar-datos-economicos" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
 
   <label th:text="#{registro.imagen}"></label> <br>
   <input type="file" name="imagen" accept="image/*"/>

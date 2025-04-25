@@ -33,6 +33,29 @@ VALUES (4, 'Italia', '+39');
 INSERT INTO pais (id, pais, prefijo)
 VALUES (5, 'Rumanía', '+40');
 
+-- Tipos de vía
+
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (1, 'Calle');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (2, 'Avenida');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (3, 'Paseo');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (4, 'Carretera');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (5, 'Camino');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (6, 'Plaza');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (7, 'Ronda');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (8, 'Travesía');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (9, 'Glorieta');
+INSERT INTO tipo_via (id, tipo_via)
+VALUES (10, 'Vía');
+
 
 -- Departamentos
 INSERT INTO departamento (id, nombre, codigo, localidad)

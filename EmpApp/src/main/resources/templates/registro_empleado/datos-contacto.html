@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dirección postal</title>
+  <title>Datos de contacto</title>
   <link rel="stylesheet" href="/css/registro-empleado-estilos.css">
   <script src="/js/modificarCampos.js"></script>
 </head>
-<body id="body-direccion">
+<body id="body-contacto">
 
 <a href="/datos-personales" id="datos-personales">
   <img src="/img/Paso1.png" alt="Paso 1">
 </a>
-<a href="/datos-direccion" id="datos-direccion">
+<a href="/datos-contacto" id="datos-contacto">
   <img src="/img/Paso2.png" alt="Paso 2">
 </a>
-<a href="/datos-laborales" id="datos-laborales">
+<a href="/datos-profesionales" id="datos-profesionales">
   <img src="/img/Paso3.png" alt="Paso 3">
 </a>
-<a href="/foto-perfil" id="foto-perfil">
+<a href="/datos-economicos" id="datos-economicos">
   <img src="/img/Paso4.png" alt="Paso 4">
 </a>
 <a href="/resumen" id="resumen">
@@ -26,20 +26,19 @@
 
 <h2 th:if="${mensajeNOK != null}" th:text="${mensajeNOK}" class="error"></h2>
 
-<form action="/guardar-datos-direccion" method="POST" th:object="${datos}" id="formulario">
+<form action="/guardar-datos-contacto" method="POST" th:object="${datos}" id="formulario">
 
   <fieldset>
 
     <!-- CAMPO DE TIPO VIA -->
-    <legend th:text="#{registro.direccionPostal}"></legend>
     <label for="tipoVia" th:text="#{registro.tipoVia}"></label>
     <select id="tipoVia" th:field="*{direccion.tipoVia}">
-      <option value="" th:text="#{registro.tipoVia.mensaje}"></option>
-      <option th:each="tipoVia: ${listaVias}"
-              th:value="${tipoVia}"
-              th:text="#{'registro.tipoVia.' + ${tipoVia}}"></option>
+      <option th:each="via: ${listaTipoVias}"
+              th:value="${via.tipoVia}"
+              th:text="${via.tipoVia}"></option>
     </select>
     <div th:each="error: ${#fields.errors('direccion.tipoVia')}" th:text="${error}" class="error"></div>
+    <br>
 
     <!-- CAMPO DE LA DIRECCIÓN PERSONAL -->
     <label for="via" th:text="#{registro.via}"></label>
@@ -52,10 +51,15 @@
     <div th:each="error: ${#fields.errors('direccion.numero')}" th:text="${error}" class="error"></div>
     <br> <br>
 
-    <!-- PISO -->
-    <label for="piso" th:text="#{registro.piso}"></label>
-    <input type="text" th:field="*{direccion.piso}" id="piso">
-    <div th:each="error: ${#fields.errors('direccion.piso')}" th:text="${error}" class="error"></div>
+    <!-- PORTAL -->
+    <label for="portal" th:text="#{registro.portal}"></label>
+    <input type="text" th:field="*{direccion.portal}" id="portal">
+    <div th:each="error: ${#fields.errors('direccion.portal')}" th:text="${error}" class="error"></div>
+
+    <!-- PLANTA -->
+    <label for="planta" th:text="#{registro.planta}"></label>
+    <input type="text" th:field="*{direccion.planta}" id="planta">
+    <div th:each="error: ${#fields.errors('direccion.planta')}" th:text="${error}" class="error"></div>
 
 
     <!-- PUERTA -->
@@ -63,12 +67,6 @@
     <input type="text" th:field="*{direccion.puerta}" id="puerta">
     <div th:each="error: ${#fields.errors('direccion.puerta')}" th:text="${error}" class="error"></div>
 
-
-    <!-- CODIGO POSTAL -->
-    <label for="codigoPostal" th:text="#{registro.codigoPostal}"></label>
-    <input type="text" th:field="*{direccion.codigoPostal}" id="codigoPostal">
-    <div th:each="error: ${#fields.errors('direccion.codigoPostal')}" th:text="${error}" class="error"></div>
-    <br> <br>
 
     <!-- LOCALIDAD -->
     <label for="localidad" th:text="#{registro.localidad}"></label>
@@ -81,14 +79,16 @@
     <input type="text" th:field="*{direccion.region}" id="region">
     <div th:each="error: ${#fields.errors('direccion.region')}" th:text="${error}" class="error"></div>
 
+    <!-- CODIGO POSTAL -->
+    <label for="codigoPostal" th:text="#{registro.codigoPostal}"></label>
+    <input type="text" th:field="*{direccion.codigoPostal}" id="codigoPostal">
+    <div th:each="error: ${#fields.errors('direccion.codigoPostal')}" th:text="${error}" class="error"></div>
+    <br> <br>
 
-    <!-- PAÍS -->
-    <label for="pais" th:text="#{registro.pais}"></label>
-    <input type="text" th:field="*{direccion.pais}" id="pais">
-    <div th:each="error: ${#fields.errors('direccion.pais')}" th:text="${error}" class="error"></div>
   </fieldset>
 
   <button type="submit" th:text="#{registro.datosDireccion.submit}"></button>
+  <button type="reset" th:text="#{registro.reset}"></button>
   <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
 </form>
 </body>

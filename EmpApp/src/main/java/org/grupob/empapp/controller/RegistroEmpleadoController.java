@@ -2,16 +2,15 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.entity.maestras.Pais;
+import org.grupob.comun.entity.maestras.TipoVia;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoDireccion;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoFotoPerfil;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoLaboral;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.entity.maestras.Genero;
-import org.grupob.comun.repository.DepartamentoRepository;
-import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -37,12 +35,15 @@ public class RegistroEmpleadoController {
     public void adicionColecciones(Model modelo) {
         List<Genero> listaGeneros = altaEmpleadoServiceImp.devolverGeneros();
         List<Pais> listaPaises = altaEmpleadoServiceImp.devolverPaises();
+        List<TipoVia> listaTipoVias = altaEmpleadoServiceImp.devolverTipoVias();
         List<Departamento> listaDepartamentos = altaEmpleadoServiceImp.devolverDepartamentos();
 
 //        List<String> listaVias = List.of("Calle", "Avenida");
 //        modelo.addAttribute("listaVias", listaVias);
         modelo.addAttribute("listaGeneros", listaGeneros);
         modelo.addAttribute("listaPaises", listaPaises);
+        modelo.addAttribute("listaTipoVias", listaTipoVias);
+
         modelo.addAttribute("listaDepartamentos", listaDepartamentos);
     }
 
@@ -65,7 +66,7 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
-            @Validated(GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(GrupoDatosPersonales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -87,10 +88,10 @@ public class RegistroEmpleadoController {
         //altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/datos-direccion";
+        return "redirect:/datos-contacto";
     }
-    @GetMapping("/datos-direccion")
-    public String datosDireccion(HttpSession sesion, Model model) {
+    @GetMapping("/datos-contacto")
+    public String datosContacto(HttpSession sesion, Model model) {
 
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -109,12 +110,12 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registro_empleado/datos-direccion";
+        return "registro_empleado/datos-contacto";
     }
 
-    @PostMapping("/guardar-datos-direccion")
-    public String guardarDatosDireccion(
-            @Validated(GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+    @PostMapping("/guardar-datos-contacto")
+    public String guardarDatosContacto(
+            @Validated(GrupoDatosContacto.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -123,7 +124,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registro_empleado/datos-direccion";
+            return "registro_empleado/datos-contacto";
         }
 
 
@@ -140,10 +141,10 @@ public class RegistroEmpleadoController {
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/datos-laborales";
+        return "redirect:/datos-profesionales";
     }
-    @GetMapping("/datos-laborales")
-    public String datosLaborales(HttpSession sesion, Model model){
+    @GetMapping("/datos-profesionales")
+    public String datosProfesionales(HttpSession sesion, Model model){
 
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -157,11 +158,11 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registro_empleado/datos-laborales";
+        return "registro_empleado/datos-profesionales";
     }
-    @PostMapping("/guardar-datos-laborales")
-    public String guardarDatosLaborales(
-            @Validated(GrupoLaboral.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+    @PostMapping("/guardar-datos-profesionales")
+    public String guardarDatosProfesionales(
+            @Validated(GrupoDatosProfesionales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -170,7 +171,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registro_empleado/datos-laborales";
+            return "registro_empleado/datos-profesionales";
         }
 
 
@@ -182,10 +183,10 @@ public class RegistroEmpleadoController {
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/foto-perfil";
+        return "redirect:/datos-economicos";
     }
-    @GetMapping("/foto-perfil")
-    public String fotoPerfil(HttpSession sesion, Model model) {
+    @GetMapping("/datos-economicos")
+    public String datosEconomicos(HttpSession sesion, Model model) {
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
@@ -198,11 +199,11 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registro_empleado/foto-perfil";
+        return "registro_empleado/datos-economicos";
     }
-    @PostMapping("/guardar-foto-perfil")
-    public String guardarFotoPerfil(
-            @Validated(GrupoFotoPerfil.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+    @PostMapping("/guardar-datos-economicos")
+    public String guardarDatosEconomicos(
+            @Validated(GrupoDatosEconomicos.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,
@@ -212,7 +213,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registro_empleado/foto-perfil";
+            return "registro_empleado/datos-economicos";
         }
 
 
@@ -302,12 +303,12 @@ public class RegistroEmpleadoController {
             nuevaDir.setTipoVia(nuevaDir.getTipoVia() != null ? nuevaDir.getTipoVia() : anteriorDir.getTipoVia());
             nuevaDir.setVia(nuevaDir.getVia() != null ? nuevaDir.getVia() : anteriorDir.getVia());
             nuevaDir.setNumero(nuevaDir.getNumero() != null ? nuevaDir.getNumero() : anteriorDir.getNumero());
-            nuevaDir.setPiso(nuevaDir.getPiso() != null ? nuevaDir.getPiso() : anteriorDir.getPiso());
+            nuevaDir.setPortal(nuevaDir.getPortal() != null ? nuevaDir.getPortal() : anteriorDir.getPortal());
+            nuevaDir.setPlanta(nuevaDir.getPlanta() != null ? nuevaDir.getPlanta() : anteriorDir.getPlanta());
             nuevaDir.setPuerta(nuevaDir.getPuerta() != null ? nuevaDir.getPuerta() : anteriorDir.getPuerta());
             nuevaDir.setCodigoPostal(nuevaDir.getCodigoPostal() != null ? nuevaDir.getCodigoPostal() : anteriorDir.getCodigoPostal());
             nuevaDir.setLocalidad(nuevaDir.getLocalidad() != null ? nuevaDir.getLocalidad() : anteriorDir.getLocalidad());
             nuevaDir.setRegion(nuevaDir.getRegion() != null ? nuevaDir.getRegion() : anteriorDir.getRegion());
-            nuevaDir.setPais(nuevaDir.getPais() != null ? nuevaDir.getPais() : anteriorDir.getPais());
         }
 
         // ** DATOS LABORALES **
