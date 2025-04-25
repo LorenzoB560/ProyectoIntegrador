@@ -5,8 +5,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.validation.contrasena.ContrasenaCoincide;
-import org.grupob.empapp.validation.email.EmailValidado;
+import org.grupob.empapp.validation.contrasena.ClaveCoincide;
+import org.grupob.comun.validation.email.EmailValidado;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 
 //Validacion personalizada a nivel de clase de la contraseña
-@ContrasenaCoincide
+@ClaveCoincide
 public class UsuarioDTO {
 
     private UUID id;
@@ -32,11 +32,11 @@ public class UsuarioDTO {
     // (?=.*\d)               -- CONTIENE 1 DIGITO [0-9]
     // (?=.*[@$!%*#?&])       -- CONTIENE UNO DE LOS CARACTERES ESPECIALES DEL CORCHETE
     // [A-Za-z\d@$!%*#?&]{8,} -- MÍNIMO 8 CARACTERES, LETRAS DE LA A-Z, DÍGITOS, Y SÍMBOLOS
-    private String contrasena;
+    private String clave;
 
     //VALIDAR CON VALIDACION DE CLASE QUE LAS CONTRASEÑAS SEAN IGUALES
 
-    private String confirmacionContrasena;
+    private String confirmarClave;
 
     private LocalDateTime ultimoAcceso;
 
