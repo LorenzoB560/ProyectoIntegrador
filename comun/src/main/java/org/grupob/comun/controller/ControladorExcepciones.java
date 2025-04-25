@@ -23,11 +23,14 @@ public class ControladorExcepciones {
         info.setMessage(ex.getMessage());
 
         List<String> listaErrores = new ArrayList<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {listaErrores.add(error.getDefaultMessage());});
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            listaErrores.add(error.getDefaultMessage());
+        });
         info.setListaErrores(listaErrores);
 
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(UsuarioYaExisteException.class)
     public ResponseEntity<InformacionExcepcion> manejaUsuarioYaExisteException(UsuarioYaExisteException ex) {
         InformacionExcepcion info = new InformacionExcepcion();
