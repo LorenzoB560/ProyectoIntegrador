@@ -1,4 +1,4 @@
-package org.grupob.empapp.validation.fechas;
+package org.grupob.comun.validation.fechas;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -12,11 +12,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ FIELD })
 @Retention(RUNTIME)
-@Constraint(validatedBy = MayorDe18Validator.class)
+@Constraint(validatedBy = LocalDateNotBlankValidator.class)
 @Documented
-public @interface MayorDe18 {
+public @interface LocalDateNotBlank {
 
-    String message() default "{MayorDe18.mensaje}";
+    String message() default "{LocalDateNotBlank.mensaje}";
 
     Class<?>[] groups() default { };
 

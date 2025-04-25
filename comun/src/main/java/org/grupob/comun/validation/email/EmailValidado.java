@@ -1,4 +1,4 @@
-package org.grupob.empapp.validation.email;
+package org.grupob.comun.validation.email;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

@@ -1,4 +1,4 @@
-package org.grupob.empapp.validation.fechas;
+package org.grupob.comun.validation.fechas;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

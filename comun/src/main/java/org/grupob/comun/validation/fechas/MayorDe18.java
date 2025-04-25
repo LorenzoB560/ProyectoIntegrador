@@ -1,4 +1,4 @@
-package org.grupob.adminapp.validation.email;
+package org.grupob.comun.validation.fechas;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -12,11 +12,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ FIELD })
 @Retention(RUNTIME)
-@Constraint(validatedBy = EmailValidadoValidator.class)
+@Constraint(validatedBy = MayorDe18Validator.class)
 @Documented
-public @interface EmailValidado {
+public @interface MayorDe18 {
 
-    String message() default "Formato de email invalido";
+    String message() default "{MayorDe18.mensaje}";
 
     Class<?>[] groups() default { };
 

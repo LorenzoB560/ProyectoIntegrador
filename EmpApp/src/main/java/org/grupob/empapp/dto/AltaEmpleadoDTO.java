@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoLaboral;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
-import org.grupob.empapp.validation.fechas.LocalDateNotBlank;
-import org.grupob.empapp.validation.fechas.MayorDe18;
+import org.grupob.comun.validation.fechas.LocalDateNotBlank;
+import org.grupob.comun.validation.fechas.MayorDe18;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
