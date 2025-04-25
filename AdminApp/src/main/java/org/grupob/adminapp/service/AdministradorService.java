@@ -1,11 +1,11 @@
 package org.grupob.adminapp.service;
 
 import org.grupob.adminapp.dto.LoginAdministradorDTO;
-import org.grupob.adminapp.entity.Administrador;
+import org.grupob.comun.entity.Administrador;
 
 public interface AdministradorService {
 
-    Administrador devuelveAdministradorPorCorreo(String correo);
+    Administrador devuelveAdministradorPorUsuario(String usuario);
     LoginAdministradorDTO comprobarCredenciales(LoginAdministradorDTO adminDTO);
     Administrador aumentarNumeroAccesos(Administrador admin);
 }

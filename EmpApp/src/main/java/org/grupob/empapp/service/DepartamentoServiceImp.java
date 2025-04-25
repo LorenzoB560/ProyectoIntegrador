@@ -3,10 +3,9 @@ package org.grupob.empapp.service;
 
 import org.grupob.empapp.converter.DepartamentoConverter;
 import org.grupob.empapp.dto.DepartamentoDTO;
-import org.grupob.empapp.entity.Departamento;
-import org.grupob.empapp.exception.DepartamentoNoEncontradoException;
-import org.grupob.empapp.repository.DepartamentoRepository;
-import org.modelmapper.ModelMapper;
+import org.grupob.comun.entity.Departamento;
+import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.comun.repository.DepartamentoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,11 +13,13 @@ import java.util.*;
 @Service
 public class DepartamentoServiceImp implements DepartamentoService {
 
-    private DepartamentoRepository departamentoRepository;
+//    private DepartamentoRepository departamentoRepository;
+    private final DepartamentoRepository departamentoRepository;
     private final DepartamentoConverter departamentoConverter;
 
     public DepartamentoServiceImp(DepartamentoRepository departamentoRepository, DepartamentoConverter departamentoConverter) {
         this.departamentoRepository = departamentoRepository;
+//        this.departamentoRepository = departamentoRepository;
         this.departamentoConverter = departamentoConverter;
 
     }

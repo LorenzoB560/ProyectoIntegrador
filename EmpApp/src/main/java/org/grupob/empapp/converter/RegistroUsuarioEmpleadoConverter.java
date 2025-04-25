@@ -1,7 +1,7 @@
 package org.grupob.empapp.converter;
 
 import org.grupob.empapp.dto.RegistroUsuarioEmpleadoDTO;
-import org.grupob.empapp.entity.UsuarioEmpleado;
+import org.grupob.comun.entity.UsuarioEmpleado;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

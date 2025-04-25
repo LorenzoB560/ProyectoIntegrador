@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.empapp.validation.contrasena.ClaveCoincide;
-import org.grupob.empapp.validation.email.EmailValidado;
+import org.grupob.comun.validation.email.EmailValidado;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

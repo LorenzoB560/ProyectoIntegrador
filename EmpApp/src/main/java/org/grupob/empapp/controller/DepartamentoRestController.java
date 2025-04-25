@@ -2,8 +2,8 @@ package org.grupob.empapp.controller;
 
 
 import org.grupob.empapp.dto.DepartamentoDTO;
-import org.grupob.empapp.entity.Departamento;
-import org.grupob.empapp.repository.DepartamentoRepository;
+import org.grupob.comun.entity.Departamento;
+import org.grupob.comun.repository.DepartamentoRepository;
 import org.grupob.empapp.service.DepartamentoServiceImp;
 import org.springframework.web.bind.annotation.*;
 

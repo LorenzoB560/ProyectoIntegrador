@@ -2,11 +2,9 @@ package org.grupob.empapp.service;
 
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
-import org.grupob.empapp.dto.RegistroUsuarioEmpleadoDTO;
-import org.grupob.empapp.entity.Empleado;
-import org.grupob.empapp.entity.UsuarioEmpleado;
-import org.grupob.empapp.repository.EmpleadoRepository;
-import org.grupob.empapp.repository.maestras.GeneroRepository;
+import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.repository.EmpleadoRepository;
+import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.springframework.stereotype.Service;
 
 @Service

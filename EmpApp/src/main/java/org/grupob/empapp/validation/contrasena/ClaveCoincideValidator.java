@@ -2,7 +2,6 @@ package org.grupob.empapp.validation.contrasena;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.grupob.empapp.dto.RegistroUsuarioEmpleadoDTO;
-import org.grupob.empapp.dto.UsuarioDTO;
 
 public class ClaveCoincideValidator implements ConstraintValidator<ClaveCoincide, Object> {
 

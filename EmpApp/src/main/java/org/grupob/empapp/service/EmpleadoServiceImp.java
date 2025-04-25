@@ -3,9 +3,9 @@ package org.grupob.empapp.service;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.EmpleadoSearchDTO;
-import org.grupob.empapp.entity.Empleado;
-import org.grupob.empapp.exception.DepartamentoNoEncontradoException;
-import org.grupob.empapp.repository.EmpleadoRepository;
+import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.comun.repository.EmpleadoRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

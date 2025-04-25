@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.adminapp.validation.contrasena.ContrasenaCoincide;
-import org.grupob.adminapp.validation.email.EmailValidado;
+import org.grupob.comun.validation.email.EmailValidado;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;

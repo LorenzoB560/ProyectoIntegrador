@@ -2,7 +2,7 @@ package org.grupob.empapp.service;
 
 
 import org.grupob.empapp.dto.DepartamentoDTO;
-import org.grupob.empapp.entity.Departamento;
+import org.grupob.comun.entity.Departamento;
 
 
 import java.util.List;

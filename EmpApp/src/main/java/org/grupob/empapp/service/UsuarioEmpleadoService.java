@@ -1,7 +1,7 @@
 package org.grupob.empapp.service;
 
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.empapp.entity.UsuarioEmpleado;
+import org.grupob.comun.entity.UsuarioEmpleado;
 
 public interface UsuarioEmpleadoService {
     UsuarioEmpleado devuelveUsuarioEmpPorCorreo(String correo);

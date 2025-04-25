@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.grupob.adminapp.converter.AdministradorConverter;
 import org.grupob.adminapp.dto.LoginAdministradorDTO;
-import org.grupob.adminapp.entity.Administrador;
+import org.grupob.comun.entity.Administrador;
 import org.grupob.adminapp.service.AdministradorServiceImp;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -37,7 +37,7 @@ public class LoginAdministradorRestController {
     @GetMapping("/devuelve-clave")
     public String devuelveClave(@RequestParam(required = false) String correo) {
         try {
-            Administrador admin = adminServicio.devuelveAdministradorPorCorreo(correo);
+            Administrador admin = adminServicio.devuelveAdministradorPorUsuario(correo);
             return admin.getClave(); // Recuerda: esto es solo para pruebas/demo
         } catch (RuntimeException e) {
             return "Usuario no encontrado";

@@ -3,7 +3,7 @@ package org.grupob.empapp.service;
 
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.EmpleadoSearchDTO;
-import org.grupob.empapp.entity.Empleado;
+import org.grupob.comun.entity.Empleado;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
