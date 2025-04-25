@@ -1,6 +1,8 @@
-package org.grupob.empapp.exception;
+package org.grupob.comun.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.comun.exception.InformacionExcepcion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

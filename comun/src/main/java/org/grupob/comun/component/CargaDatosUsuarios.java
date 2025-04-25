@@ -1,9 +1,9 @@
-//package org.grupob.adminapp.component;
+//package org.grupob.comun.component;
 //
-//import org.grupob.adminapp.entity.Administrador;
-//import org.grupob.adminapp.entity.UsuarioEmpleado;
-//import org.grupob.adminapp.repository.AdministradorRepository;
-//import org.grupob.adminapp.repository.UsuarioEmpleadoRepository;
+//import org.grupob.comun.entity.Administrador;
+//import org.grupob.comun.entity.UsuarioEmpleado;
+//import org.grupob.comun.repository.AdministradorRepository;
+//import org.grupob.comun.repository.UsuarioEmpleadoRepository;
 //import org.springframework.boot.CommandLineRunner;
 //import org.springframework.stereotype.Component;
 //
@@ -28,7 +28,7 @@
 //            adminRepo.save(new Administrador("admin2@gmail.com", "admin123"));
 //        }
 //
-//        if (usuarioEmpleadoRepo.count() == 0) {
+//        if (usuarioEmpleadoRepo.count() != 0) {
 //            usuarioEmpleadoRepo.save(new UsuarioEmpleado("emp1@gmail.com", "empleado"));
 //            usuarioEmpleadoRepo.save(new UsuarioEmpleado("emp2@gmail.com", "empleado"));
 //        }

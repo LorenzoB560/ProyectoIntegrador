@@ -1,4 +1,4 @@
-package org.grupob.adminapp.exception;
+package org.grupob.comun.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -3,7 +3,7 @@ package org.grupob.empapp.service;
 import org.grupob.empapp.converter.RegistroUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.RegistroUsuarioEmpleadoDTO;
 import org.grupob.comun.entity.UsuarioEmpleado;
-import org.grupob.empapp.exception.UsuarioYaExisteException;
+import org.grupob.comun.exception.UsuarioYaExisteException;
 import org.grupob.comun.repository.UsuarioEmpleadoRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

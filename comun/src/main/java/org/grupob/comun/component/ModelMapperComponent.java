@@ -1,4 +1,4 @@
-package org.grupob.empapp.component;
+package org.grupob.comun.component;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
