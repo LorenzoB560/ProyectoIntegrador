@@ -1,4 +1,4 @@
 rootProject.name = 'ProyectoIntegrador'
-include ':AdminApp'
-include ':EmpApp'
-include ':comun'
+include (':AdminApp')
+include (':EmpApp')
+include (':comun')
