@@ -1,10 +1,8 @@
+
 package org.grupob.comun.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode; // Asegúrate de tener esta importación
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.grupob.comun.entity.auxiliar.CuentaBancaria;
 import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.auxiliar.TarjetaCredito;
@@ -14,29 +12,33 @@ import org.grupob.comun.entity.maestras.TipoTarjetaCredito;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"jefe", "listaNominas", "especialidades", "etiquetas"}) // Excluir colecciones y relaciones recursivas
+
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "PK_empleado", columnNames = "id"),
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
+//        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
 @SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 public class Empleado extends Persona {
 
+//    private String dni;
+
     private String comentarios;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "empleado_especialidad",
             joinColumns = @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_empleado_especialidad_empleado_id")),
             inverseJoinColumns = @JoinColumn(name = "id_especialidad", foreignKey = @ForeignKey(name = "FK_empleado_especialidad_especialidad_id"))
     )
-    private Set<Especialidad> especialidades = new HashSet<>(); // Inicializar colecciones
+    private Set<Especialidad> especialidades;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Lazy fetching para jefe
+    @ManyToOne
     @JoinColumn(name = "id_jefe", foreignKey = @ForeignKey(name = "FK_empleado_empleado_id"))
     private Empleado jefe;
 
@@ -49,12 +51,16 @@ public class Empleado extends Persona {
 
     private boolean activo;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Lazy fetching
+    //@DondeEstoy-DondeVoy
+    //Many empleados pertenecen a One Departamento
+    @ManyToOne
     @JoinColumn(name = "id_departamento", foreignKey = @ForeignKey(name = "FK_departamento_empleado_id"))
     private Departamento departamento;
 
-    @OneToOne(fetch = FetchType.LAZY) // Lazy fetching
-    @JoinColumn(name = "id_usuario",
+
+    //LADO PROPIETARIO DE LA RELACION (es mas frecuente que se consulten datos desde aqui a la otra tabla)
+    @OneToOne//(optional = false)
+    @JoinColumn(name = "id_usuario", //nullable = false,
             foreignKey = @ForeignKey(name = "FK_empleado_usuario_id"))
     private UsuarioEmpleado usuario;
 
@@ -69,16 +75,25 @@ public class Empleado extends Persona {
     })
     private CuentaBancaria cuentaCorriente;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Lazy fetching
+    @ManyToOne
     @JoinColumn(name = "id_entidad_bancaria", foreignKey = @ForeignKey(name = "FK_empleado_entidad_bancaria_id"), table = "informacion_economica")
     private EntidadBancaria entidadBancaria;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Lazy fetching
+    // --- NUEVA RELACIÓN CON ETIQUETA ---
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "empleado_etiqueta",
+            joinColumns = @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_empleado_etiqueta_empleado_id")),
+            inverseJoinColumns = @JoinColumn(name = "id_etiqueta", foreignKey = @ForeignKey(name = "FK_empleado_etiqueta_etiqueta_id"))
+    )
+    private Set<Etiqueta> etiquetas = new HashSet<>();
+
+    @ManyToOne
     @JoinColumn(name = "id_tipo_tarjeta", foreignKey = @ForeignKey(name = "FK_empleado_tipo_tarjeta_id"), table = "informacion_economica")
     private TipoTarjetaCredito tipoTarjetaCredito;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Nomina> listaNominas = new HashSet<>(); // Inicializar colecciones
+    private Set<Nomina> listaNominas;
 
     @Embedded
     @AttributeOverrides({
@@ -89,47 +104,50 @@ public class Empleado extends Persona {
     })
     private TarjetaCredito tarjetaCredito;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY) // Carga perezosa para la foto
-    @Column(columnDefinition = "LONGBLOB")
-    private byte[] foto;
-
-    // --- NUEVA RELACIÓN CON ETIQUETA ---
-    @ManyToMany(fetch = FetchType.LAZY) // Carga perezosa
-    @JoinTable(
-            name = "empleado_etiqueta",
-            joinColumns = @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_empleado_etiqueta_empleado_id")),
-            inverseJoinColumns = @JoinColumn(name = "id_etiqueta", foreignKey = @ForeignKey(name = "FK_empleado_etiqueta_etiqueta_id"))
-    )
-    private Set<Etiqueta> etiquetas = new HashSet<>(); // Inicializar colección
-
-    // --- MÉTODOS HELPER PARA ETIQUETAS ---
-    public void addEtiqueta(Etiqueta etiqueta) {
-        this.etiquetas.add(etiqueta);
-        etiqueta.getEmpleados().add(this);
-    }
-
-    public void removeEtiqueta(Etiqueta etiqueta) {
-        this.etiquetas.remove(etiqueta);
-        etiqueta.getEmpleados().remove(this);
-    }
-
-    // --- Evitar recursión en toString ---
     @Override
-    public String toString() {
-        return "Empleado{" +
-                "id=" + getId() + // Usar getter de Persona
-                ", nombre='" + getNombre() + '\'' +
-                ", apellido='" + getApellido() + '\'' +
-                ", documento='" + getDocumento() + '\'' +
-                ", fechaNacimiento=" + getFechaNacimiento() +
-                ", genero=" + (getGenero() != null ? getGenero().getGenero() : null) +
-                ", activo=" + activo +
-                ", departamentoId=" + (departamento != null ? departamento.getId() : null) +
-                ", jefeId=" + (jefe != null ? jefe.getId() : null) +
-                ", usuarioId=" + (usuario != null ? usuario.getId() : null) +
-                ", especialidadesCount=" + (especialidades != null ? especialidades.size() : 0) +
-                ", etiquetasCount=" + (etiquetas != null ? etiquetas.size() : 0) +
-                '}';
+    public boolean equals(Object o) {
+        // 1. Comparación de identidad rápida
+        if (this == o) return true;
+        // 2. Verificar nulidad y tipo (usando getClass() para proxies)
+        if (o == null || getClass() != o.getClass()) return false;
+        // 3. Castear el objeto
+        Empleado empleado = (Empleado) o;
+        // 4. Comparar SÓLO por el ID. Si el ID es null (entidad nueva no persistida),
+        //    dos instancias nunca son iguales a menos que sean la misma instancia (chequeado en paso 1).
+        return id != null && Objects.equals(id, empleado.id);
     }
+
+    @Override
+    public int hashCode() {
+        // 5. Calcular hashCode SÓLO basado en el ID.
+        //    Si el ID es null, devuelve un hash consistente (ej. de la clase).
+        //    Usar Objects.hash maneja el caso null. O devolver una constante.
+        // return Objects.hash(id);
+        // Alternativa común para entidades JPA:
+        return getClass().hashCode(); // Hash constante si el ID es null (entidad nueva)
+        // Si quieres basarlo en ID sólo si no es null:
+        // return id != null ? id.hashCode() : getClass().hashCode();
+    }
+
+
+    @Lob
+    @Column(columnDefinition = "LONGBLOB") //nos aseguramos quepueda almacenar un tamaño grande de archivo
+    private byte[] foto; // Para almacenar la imagen en la base de datos
+
+//    @Column(name = "fecha_eliminacion")
+//    private LocalDate fechaEliminacion;
+//
+//    @Column(name = "fecha_insercion")
+//    private LocalDate fechaInsercion;
+@Override
+public String toString() {
+    // Incluir SOLO campos simples o IDs de relaciones
+    return getClass().getSimpleName() + "(" +
+            "id=" + getId() + // Usar getter de Persona si ID está allí
+            ", nombre='" + getNombre() + '\'' + // Asume getter en Persona o Empleado
+            ", apellido='" + getApellido() + '\'' + // Asume getter en Persona o Empleado
+            ", activo=" + activo +
+            ")";
+}
+
 }

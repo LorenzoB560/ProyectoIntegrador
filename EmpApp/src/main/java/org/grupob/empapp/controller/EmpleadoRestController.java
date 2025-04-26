@@ -3,16 +3,22 @@ package org.grupob.empapp.controller;
 
 
 import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.service.EmpleadoServiceImp;
+import org.grupob.empapp.service.EtiquetaService;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("empleados")
@@ -20,10 +26,12 @@ public class EmpleadoRestController {
 
     private final EmpleadoRepository empleadoRepository;
     private EmpleadoServiceImp empleadoService;
+    private final EtiquetaService etiquetaService; // Inyectar EtiquetaService
 
-    public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository) {
+    public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository, EtiquetaService etiquetaService) {
         this.empleadoRepository = empleadoRepository;
         this.empleadoService = empleadoService;
+        this.etiquetaService = etiquetaService;
     }
 
     @GetMapping("/listado1")
@@ -86,6 +94,24 @@ public class EmpleadoRestController {
     @GetMapping("/{id}/subordinados")
     public List<EmpleadoDTO> listarSubordinados(@PathVariable String id) {
         return empleadoService.listarSubordinados(id);
+    }
+    // --- NUEVO ENDPOINT PARA BUSCAR POR ETIQUETA ---
+    @GetMapping("/por-etiqueta/{etiquetaId}")
+    public ResponseEntity<List<EmpleadoDTO>> buscarEmpleadosPorEtiqueta(@PathVariable String etiquetaId) {
+        try {
+            // Validar UUID
+            UUID.fromString(etiquetaId);
+            List<EmpleadoDTO> empleados = etiquetaService.buscarEmpleadosPorEtiqueta(etiquetaId);
+            return ResponseEntity.ok(empleados);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build(); // ID de etiqueta inválido
+        } catch (DepartamentoNoEncontradoException e) { // Si la etiqueta no existe
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ArrayList<>()); // Devuelve lista vacía en Not Found
+        } catch (Exception e) {
+            System.err.println("Error al buscar empleados por etiqueta: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 //    @PutMapping("/{id}/etiquetas/{etiquetaId}")

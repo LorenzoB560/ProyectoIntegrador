@@ -16,18 +16,19 @@ import java.util.UUID;
 @RequestMapping("/etiquetas")
 public class EtiquetaRestController {
 
-    private final EtiquetaService etiquetaService; // *** CAMBIO: Inyectar EtiquetaService ***
+    private final EtiquetaService etiquetaService;
 
-    // *** CAMBIO: Actualizar constructor ***
     public EtiquetaRestController(EtiquetaService etiquetaService) {
         this.etiquetaService = etiquetaService;
     }
 
+    // --- Endpoints para listar etiquetas (sin cambios) ---
     @GetMapping("/jefe/{jefeId}")
     public ResponseEntity<List<EtiquetaDTO>> listarEtiquetasPorJefe(@PathVariable String jefeId) {
+        // ... (código existente) ...
         try {
             UUID.fromString(jefeId);
-            List<EtiquetaDTO> etiquetas = etiquetaService.listarEtiquetasPorJefe(jefeId); // *** CAMBIO: Llamar a etiquetaService ***
+            List<EtiquetaDTO> etiquetas = etiquetaService.listarEtiquetasPorJefe(jefeId);
             return ResponseEntity.ok(etiquetas);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -39,8 +40,9 @@ public class EtiquetaRestController {
 
     @GetMapping("/todas")
     public ResponseEntity<List<EtiquetaDTO>> listarTodasEtiquetasGlobales() {
+        // ... (código existente) ...
         try {
-            List<EtiquetaDTO> etiquetas = etiquetaService.listarTodasEtiquetasGlobales(); // *** CAMBIO: Llamar a etiquetaService ***
+            List<EtiquetaDTO> etiquetas = etiquetaService.listarTodasEtiquetasGlobales();
             return ResponseEntity.ok(etiquetas);
         } catch (Exception e) {
             System.err.println("Error al listar todas las etiquetas: " + e.getMessage());
@@ -48,72 +50,71 @@ public class EtiquetaRestController {
         }
     }
 
-
-    @PostMapping("/asignar-masivo")
-    public ResponseEntity<Void> asignarEtiquetasMasivo(@RequestBody Map<String, List<String>> payload) {
+    // --- Endpoint para ASIGNAR una etiqueta a un empleado ---
+    // Usamos PUT porque estamos actualizando el estado del empleado (sus etiquetas)
+    // La ruta podría ser /api/empleados/{empleadoId}/etiquetas/{etiquetaId} y estar en EmpleadoRestController,
+    // o /api/etiquetas/asignar/empleado/{empleadoId}/etiqueta/{etiquetaId} para mantenerlo aquí.
+    // Vamos a usar la segunda opción para mantener la lógica de asignación aquí.
+    @PutMapping("/asignar/empleado/{empleadoId}/etiqueta/{etiquetaId}")
+    public ResponseEntity<EmpleadoDTO> asignarEtiqueta(
+            @PathVariable String empleadoId,
+            @PathVariable String etiquetaId,
+            @RequestParam String jefeId) { // El jefe que realiza la acción, para validación
+        // Podría venir del contexto de seguridad en un futuro
         try {
-            List<String> empleadoIds = payload.get("empleadoIds");
-            List<String> etiquetaIds = payload.get("etiquetaIds");
-            List<String> jefeIdList = payload.get("jefeId");
+            // Validar IDs
+            UUID.fromString(empleadoId);
+            UUID.fromString(etiquetaId);
+            UUID.fromString(jefeId);
 
-            if (jefeIdList == null || jefeIdList.isEmpty() || empleadoIds == null || etiquetaIds == null || empleadoIds.isEmpty() || etiquetaIds.isEmpty()) {
+            EmpleadoDTO empleadoActualizado = etiquetaService.asignarEtiquetaExistente(empleadoId, etiquetaId, jefeId);
+            return ResponseEntity.ok(empleadoActualizado);
+        } catch (IllegalArgumentException | DepartamentoNoEncontradoException e) {
+            System.err.println("Error al asignar etiqueta: " + e.getMessage());
+            // Devolver 400 Bad Request o 404 Not Found según la excepción
+            if (e instanceof DepartamentoNoEncontradoException) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            } else {
                 return ResponseEntity.badRequest().build();
             }
-            String jefeId = jefeIdList.get(0);
-
-
-            etiquetaService.asignarEtiquetasMasivo(jefeId, empleadoIds, etiquetaIds); // *** CAMBIO: Llamar a etiquetaService ***
-            return ResponseEntity.ok().build();
-
-        } catch (NullPointerException | IndexOutOfBoundsException | IllegalArgumentException e) {
-            System.err.println("Error en la petición de etiquetado masivo: " + e.getMessage());
-            return ResponseEntity.badRequest().build();
-        } catch (DepartamentoNoEncontradoException e) {
-            System.err.println("Error: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            System.err.println("Error inesperado en etiquetado masivo: " + e.getMessage());
+            System.err.println("Error inesperado al asignar etiqueta: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PostMapping("/empleado/{empleadoId}/asignar/{jefeId}")
-    public ResponseEntity<EmpleadoDTO> asignarEtiquetaSimple(
+    // --- Endpoint para QUITAR una etiqueta de un empleado ---
+    @DeleteMapping("/eliminar/empleado/{empleadoId}/etiqueta/{etiquetaId}")
+    public ResponseEntity<EmpleadoDTO> quitarEtiqueta(
             @PathVariable String empleadoId,
-            @PathVariable String jefeId,
-            @RequestParam String nombreEtiqueta) {
+            @PathVariable String etiquetaId,
+            @RequestParam String jefeId) { // Jefe para validación
         try {
-            if (nombreEtiqueta == null || nombreEtiqueta.trim().isEmpty()) {
+            // Validar IDs
+            UUID.fromString(empleadoId);
+            UUID.fromString(etiquetaId);
+            UUID.fromString(jefeId);
+
+            EmpleadoDTO empleadoActualizado = etiquetaService.eliminarEtiquetaDeEmpleado(empleadoId, etiquetaId, jefeId);
+            return ResponseEntity.ok(empleadoActualizado); // Devuelve el empleado actualizado (con la etiqueta quitada)
+        } catch (IllegalArgumentException | DepartamentoNoEncontradoException e) {
+            System.err.println("Error al quitar etiqueta: " + e.getMessage());
+            if (e instanceof DepartamentoNoEncontradoException) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            } else {
                 return ResponseEntity.badRequest().build();
             }
-            // *** CAMBIO: Llamar a etiquetaService ***
-            EmpleadoDTO empleadoActualizado = etiquetaService.asignarEtiquetaSimple(empleadoId, nombreEtiqueta, jefeId);
-            return ResponseEntity.ok(empleadoActualizado);
-        } catch (IllegalArgumentException | DepartamentoNoEncontradoException e) {
-            System.err.println("Error al asignar etiqueta simple: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
-            System.err.println("Error inesperado al asignar etiqueta simple: " + e.getMessage());
+            System.err.println("Error inesperado al quitar etiqueta: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @DeleteMapping("/empleado/{empleadoId}/etiqueta/{etiquetaId}/eliminar/{jefeId}")
-    public ResponseEntity<EmpleadoDTO> eliminarEtiquetaDeEmpleado(
-            @PathVariable String empleadoId,
-            @PathVariable String etiquetaId,
-            @PathVariable String jefeId) {
-        try {
-            // *** CAMBIO: Llamar a etiquetaService ***
-            EmpleadoDTO empleadoActualizado = etiquetaService.eliminarEtiquetaDeEmpleado(empleadoId, etiquetaId, jefeId);
-            return ResponseEntity.ok(empleadoActualizado);
-        } catch (IllegalArgumentException | DepartamentoNoEncontradoException e) {
-            System.err.println("Error al eliminar etiqueta de empleado: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch (Exception e) {
-            System.err.println("Error inesperado al eliminar etiqueta de empleado: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+    // El endpoint asignarEtiquetaSimple (que crea la etiqueta si no existe) ya no se usa directamente aquí,
+    // pero se mantiene en el servicio por si se necesita.
+
+    // El endpoint de asignación masiva se elimina de este controlador.
+
 }
