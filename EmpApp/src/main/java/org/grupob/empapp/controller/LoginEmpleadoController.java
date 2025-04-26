@@ -3,8 +3,12 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoClave;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
+import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
 import org.grupob.empapp.exception.ClaveIncorrectaException;
 import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.empapp.service.CookieService;
@@ -12,6 +16,7 @@ import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
@@ -68,8 +73,13 @@ public class LoginEmpleadoController {
     public String procesarUsuario(Model modelo,
                                   HttpServletRequest request,
                                   HttpServletResponse respuesta,
-                                  @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
+                                  @Validated(GrupoUsuario.class) @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                   BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "login/pedir-usuario";
+        }
+
         try {
             if (!usuarioService.validarEmail(dto.getUsuario())) {
                 modelo.addAttribute("ErrorCredenciales", "Usuario incorrecto");
@@ -100,8 +110,8 @@ public class LoginEmpleadoController {
     public String mostrarClave(Model modelo,
                                HttpServletRequest request,
                                @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto) {
-        String estado = cookieService.obtenerValorCookie(request, "estado");
 
+        String estado = cookieService.obtenerValorCookie(request, "estado");
         if (estado == null || !estado.equals("/clave")) {
             return "redirect:/empapp/login";
         }
@@ -120,11 +130,17 @@ public class LoginEmpleadoController {
                                      HttpServletRequest request,
                                      HttpServletResponse response,
                                      @CookieValue(name = "usuario", required = false) String usuariosCookie,
-                                     @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
+                                     @Validated(GrupoClave.class) @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                      BindingResult result) {
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+       //DEBERIA VALIDARSE LA CONTRASEÑA INTRODUCIDA? PARA MI EN PRINCIPIO NO
+        //Comprobacion inecesario
+        /* if (result.hasErrors()) {
+            modelo.addAttribute("usuario", ultimoUsuario);
+            return "login/pedir-clave";
+        }*/
 
         // 1. Verificar nulidad del usuario antes de cualquier operación
-        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         if (ultimoUsuario == null) {
             modelo.addAttribute("error", "Sesión expirada o modificación detectada. Vuelva a autenticarse.");
             return "redirect:/empapp/login";
@@ -134,7 +150,7 @@ public class LoginEmpleadoController {
 
             // 2. Validación de credenciales con manejo de excepciones específicas
             if (!usuarioService.validarCredenciales(new LoginUsuarioEmpleadoDTO(ultimoUsuario, dto.getClave()))) {
-                modelo.addAttribute("correo", ultimoUsuario);
+                modelo.addAttribute("usuario", ultimoUsuario);
 //                modelo.addAttribute("error", "Error interno de validación");
                 return "login/pedir-clave";
             }
@@ -175,7 +191,7 @@ public class LoginEmpleadoController {
 
         } catch (ClaveIncorrectaException e) {
             modelo.addAttribute("usuario", ultimoUsuario);
-            modelo.addAttribute("error", e.getMessage()+ ", intentos restantes: " +e.getIntentosRestantes());
+            modelo.addAttribute("error", e.getMessage() + ", intentos restantes: " + e.getIntentosRestantes());
             return "login/pedir-clave";
         }
     }
@@ -231,5 +247,10 @@ public class LoginEmpleadoController {
     @ResponseBody
     public String devuelveClave(@RequestParam(required = false) String usuario) {
         return usuarioService.devuelveUsuarioEmpPorUsuario(usuario).getClave();
+    }
+
+    @GetMapping("/redirigir-hacia-registro-usuario")
+    public String redirigirLogin() {
+        return "redirect:/registro-usuario";
     }
 }

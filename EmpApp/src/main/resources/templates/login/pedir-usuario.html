@@ -18,6 +18,7 @@
         <div th:if="${usuariosAutenticados == null}">
             <input type="text" th:field="*{usuario}" placeholder="Correo electrónico">
         </div>
+        <div th:each="error: ${#fields.errors('usuario')}" th:text="${error}" class="error"></div>
 
         <!-- Si hay usuarios autenticados, mostrar un select con las claves -->
         <div th:unless="${usuariosAutenticados == null}">
@@ -39,6 +40,9 @@
         <!-- Enlaces adicionales -->
         <div class="links">
             <a href="javascript:void(0);" onclick="cambiarPeticion()"><b>Introducir nuevo usuario</b></a>
+        </div>
+        <div class="links">
+            <a href="/empapp/redirigir-hacia-registro-usuario"><b>Registrarse</b></a>
         </div>
 
         <!-- Botón de envío -->

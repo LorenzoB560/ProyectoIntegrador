@@ -7,9 +7,9 @@ VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2
 -- Insertar empleados solo si ya hay empleados en la tabla (esto no se puede hacer con lógica SQL condicional directamente)
 -- Por lo tanto, simplemente insertamos siempre. Si quieres controlar esto, tendrías que hacerlo con Java.
 INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id, fecha_desbloqueo, intentos_sesion_fallidos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado', 0, NULL, TRUE, NULL, NULL, 0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', '3mpleado!', 0, NULL, TRUE, NULL, NULL, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id, fecha_desbloqueo, intentos_sesion_fallidos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', 'empleado', 0, NULL, TRUE, NULL, NULL, 0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', '3mpleado!', 0, NULL, TRUE, NULL, NULL, 0);
 
 -- Géneros
 INSERT INTO genero (id, genero)

@@ -21,7 +21,6 @@ function cambiarPeticion() {
     input.type = 'text';
     input.name = 'correo';
     input.placeholder = 'Correo electrónico';
-    input.required = true;
 
     // Reemplazar el select por el nuevo input
     select.parentNode.replaceChild(input, select);
