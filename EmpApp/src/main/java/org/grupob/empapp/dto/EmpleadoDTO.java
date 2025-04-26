@@ -1,14 +1,13 @@
-package org.grupob.empapp.dto; // O el paquete que prefieras para tus DTOs
+package org.grupob.empapp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.empapp.dto.auxiliar.GeneroDTO;
 
-// Importa otros DTOs necesarios (EspecialidadDto, DepartamentoDto, etc.)
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet; // Asegúrate de importar HashSet
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,36 +16,30 @@ import java.util.UUID;
 @AllArgsConstructor
 public class EmpleadoDTO {
 
-    // Campos heredados de Persona (o los que quieras exponer)
+    // ... (otros campos existentes) ...
     private UUID id;
     private String nombre;
     private String apellido;
     private GeneroDTO genero;
     private LocalDate fechaNacimiento;
-    // ... otros campos de Persona que necesites ...
-    private String correo;
-
-    // Campos propios de Empleado
+    private String correo; // Asumiendo que lo mapeas desde UsuarioEmpleado
     private String comentarios;
-    private Set<EspecialidadDTO> especialidades; // Asume que tienes un EspecialidadDto
-    private UUID idJefe; // O un EmpleadoSimpleDto para evitar recursión
-    private String nombreJefe; // Podrías necesitar mapeo customizado
+    private Set<EspecialidadDTO> especialidades = new HashSet<>(); // Inicializar
+    private UUID idJefe;
+    private String nombreJefe;
     private PeriodoDTO periodo;
     private boolean activo;
-    private DepartamentoDTO departamento; // Asume que tienes un DepartamentoDto
-    private LoginUsuarioEmpleadoDTO usuario; // Asume que tienes un UsuarioEmpleadoDto
-
-    // Campos de informacion_economica
+    private DepartamentoDTO departamento;
+    // Eliminamos LoginUsuarioEmpleadoDTO si no es estrictamente necesario en este DTO
+    // private LoginUsuarioEmpleadoDTO usuario;
     private BigDecimal salario;
     private BigDecimal comision;
     private CuentaBancariaDTO cuentaCorriente;
-    private EntidadBancariaDTO entidadBancaria; // Asume que tienes un EntidadBancariaDto
-    private TipoTarjetaCreditoDTO tipoTarjetaCredito; // Asume que tienes un TipoTarjetaCreditoDto
+    private EntidadBancariaDTO entidadBancaria;
+    private TipoTarjetaCreditoDTO tipoTarjetaCredito;
     private TarjetaCreditoDTO tarjetaCredito;
-
-    // La foto (byte[]) podría no ser ideal para un DTO estándar.
-    // Podrías omitirla, devolver un booleano indicando si existe, o una URL para descargarla.
-    // private byte[] foto;
     private boolean tieneFoto;
 
+    // --- NUEVO CAMPO PARA ETIQUETAS ---
+    private Set<EtiquetaDTO> etiquetas = new HashSet<>(); // Inicializar colección
 }
