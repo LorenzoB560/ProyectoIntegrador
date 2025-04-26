@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.Especialidad;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
@@ -20,6 +21,7 @@ import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -93,7 +95,26 @@ public class AltaEmpleadoDTO {
 
     // ** PASO 3 - DATOS LABORALES **
     @NotNull(groups = GrupoDatosProfesionales.class)
+    @NotBlank(groups = GrupoDatosProfesionales.class)
     private UUID idDepartamentoSeleccionado;
 
-    // ** PASO 4 - FOTO DE PERFIL **
+    //TODO EMPEZAR POR ESTO
+    private Set<UUID> especialidades;
+
+
+    // ** PASO 4 - DATOS ECONOMICOS **
+
+//    private UUID idEntidadBancaria;
+//
+//    private String codigoPais;
+//    private String digitosControl;
+//    private String codigoEntidadBancaria;
+//    private String sucursal;
+//    private String numeroCuenta;
+//
+//    private Double salario;
+//    private Double comision;
+//
+//    @Valid
+//    private TarjetaCreditoDTO tarjetaCredito;
 }

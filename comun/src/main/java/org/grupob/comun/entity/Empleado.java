@@ -22,7 +22,9 @@ import java.util.*;
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
 //        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
-@SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+@SecondaryTable(
+        name = "informacion_economica",
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "id_empleado", referencedColumnName = "id"))
 public class Empleado extends Persona {
 
 //    private String dni;
@@ -90,7 +92,7 @@ public class Empleado extends Persona {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "numero", column = @Column(name = "numero", table = "informacion_economica")),
+            @AttributeOverride(name = "numeroTarjeta", column = @Column(name = "numero_tarjeta", table = "informacion_economica")),
             @AttributeOverride(name = "mesCaducidad", column = @Column(name = "mes_caducidad", table = "informacion_economica")),
             @AttributeOverride(name = "anioCaducidad", column = @Column(name = "anio_caducidad", table = "informacion_economica")),
             @AttributeOverride(name = "CVC", column = @Column(name = "CVC", table = "informacion_economica"))

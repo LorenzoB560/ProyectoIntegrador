@@ -393,107 +393,107 @@ VALUES (UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 'Raúl'
         UNHEX(REPLACE('a21a03aa-d844-47df-a834-7dbebac182dc', '-', '')));
 
 -- Información Económica
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), 87019.82, 14660.3, 'ES8664246703052344422926',
         UNHEX(REPLACE('2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e', '-', '')), 4,
         '372596233604526', '12', '2029', '335');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), 94898.97, 10275.35, 'ES3745781255629297379479',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 2,
         '375857670110535', '03', '2028', '152');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('4280629d-9787-4ec6-bad3-6b83db92f958', '-', '')), 111793.84, 17799.03,
         'ES2675791761561383354933',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 3,
         '4774415655693948685', '12', '2027', '825');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 77066.17, 19869.27, 'ES8091072352244665376399',
         UNHEX(REPLACE('3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f', '-', '')), 2,
         '4699988983989782469', '09', '2025', '439');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 118332.43, 14270.23,
         'ES5938690295472018916532',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 4,
         '4325987117410', '05', '2029', '758');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 119798.7, 17122.35, 'ES0993423471739576659875',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 4,
         '5107158973908285', '02', '2025', '826');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 77621.49, 6017.23, 'ES6361277010102780882315',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 3,
         '3546570312135780', '06', '2030', '131');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 66787.19, 4747.48, 'ES5575752961307291267561',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 1,
         '30574110188172', '04', '2026', '709');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 63339.56, 18509.99, 'ES0734627176473207288353',
         UNHEX(REPLACE('3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f', '-', '')), 4,
         '4759059056486369', '03', '2029', '446');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 99182.52, 18378.43, 'ES6596896828624237011631',
         UNHEX(REPLACE('2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e', '-', '')), 2,
         '503876466528', '09', '2025', '300');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 95020.1, 3310.83, 'ES5311679884191806165610',
         UNHEX(REPLACE('3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f', '-', '')), 2,
         '2227322937001981', '02', '2025', '422');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 100743.43, 11325.09,
         'ES9015553119672875027719',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 1,
         '30350229174845', '06', '2026', '930');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 48136.0, 15126.94, 'ES0724353030347230794723',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 1,
         '4967466016318891891', '12', '2028', '288');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 107250.04, 22836.05,
         'ES7979888574370079186391',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 2,
         '4569310867385607251', '03', '2030', '497');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 111582.39, 9999.16, 'ES7583903548414104812442',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 3,
         '3545626170408551', '04', '2026', '808');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 39531.76, 13685.05, 'ES3208036225068058672431',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 2,
         '30352499944816', '09', '2026', '856');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 71296.67, 16873.78, 'ES4415481759216068926570',
         UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 2,
         '30175791205242', '08', '2026', '706');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 50107.19, 22721.68, 'ES1673846676222302953361',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 3,
         '639046270687', '08', '2025', '183');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 53227.01, 17164.15, 'ES5345310524898726147957',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 2,
         '501803192548', '05', '2027', '608');
-INSERT INTO informacion_economica (id, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
-                                   numero, mes_caducidad, anio_caducidad, CVC)
+INSERT INTO informacion_economica (id_empleado, salario, comision, IBAN, id_entidad_bancaria, id_tipo_tarjeta,
+                                   numero_tarjeta, mes_caducidad, anio_caducidad, CVC)
 VALUES (UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 81981.97, 2447.05, 'ES3183510830919004418423',
         UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 2,
         '3532211105253250', '02', '2029', '420');
