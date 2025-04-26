@@ -76,16 +76,16 @@ INSERT INTO departamento (id, nombre, codigo, localidad)
 VALUES (UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d483', '-', '')), 'Finanzas', 'FIN', 'Bilbao');
 
 -- Especialidades
-INSERT INTO especialidad (id, nombre)
-VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-4a5b-8c7d-9e8f7a6b5c4d', '-', '')), 'Programación Java');
-INSERT INTO especialidad (id, nombre)
-VALUES (UNHEX(REPLACE('b2c3d4e5-f6a7-5b6c-9d0e-1f2a3b4c5d6e', '-', '')), 'Diseño UX/UI');
-INSERT INTO especialidad (id, nombre)
-VALUES (UNHEX(REPLACE('c3d4e5f6-a7b8-6c7d-0e1f-2a3b4c5d6e7f', '-', '')), 'Marketing Digital');
-INSERT INTO especialidad (id, nombre)
-VALUES (UNHEX(REPLACE('d4e5f6a7-b8c9-7d0e-1f2a-3b4c5d6e7f8a', '-', '')), 'Gestión de Proyectos');
-INSERT INTO especialidad (id, nombre)
-VALUES (UNHEX(REPLACE('e5f6a7b8-c9d0-8e1f-2a3b-4c5d6e7f8a9b', '-', '')), 'Administración de Bases de Datos');
+INSERT INTO especialidad (id, codigo, nombre)
+VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-4a5b-8c7d-9e8f7a6b5c4d', '-', '')), '1', 'Programación Java');
+INSERT INTO especialidad (id, codigo, nombre)
+VALUES (UNHEX(REPLACE('b2c3d4e5-f6a7-5b6c-9d0e-1f2a3b4c5d6e', '-', '')), '2', 'Diseño UX/UI');
+INSERT INTO especialidad (id, codigo, nombre)
+VALUES (UNHEX(REPLACE('c3d4e5f6-a7b8-6c7d-0e1f-2a3b4c5d6e7f', '-', '')), '3', 'Marketing Digital');
+INSERT INTO especialidad (id, codigo, nombre)
+VALUES (UNHEX(REPLACE('d4e5f6a7-b8c9-7d0e-1f2a-3b4c5d6e7f8a', '-', '')), '4', 'Gestión de Proyectos');
+INSERT INTO especialidad (id, codigo, nombre)
+VALUES (UNHEX(REPLACE('e5f6a7b8-c9d0-8e1f-2a3b-4c5d6e7f8a9b', '-', '')), '5', 'Administración de Bases de Datos');
 
 -- Entidades Bancarias
 INSERT INTO entidad_bancaria (id, codigo, nombre)

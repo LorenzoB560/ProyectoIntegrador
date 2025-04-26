@@ -1,6 +1,7 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.maestras.Pais;
 import org.grupob.comun.entity.maestras.TipoDocumento;
 import org.grupob.comun.entity.maestras.TipoVia;
@@ -39,14 +40,14 @@ public class RegistroEmpleadoController {
         List<TipoVia> listaTipoVias = altaEmpleadoServiceImp.devolverTipoVias();
         List<TipoDocumento> tipoDocumentos = altaEmpleadoServiceImp.devolverTipoDocumentos();
         List<Departamento> listaDepartamentos = altaEmpleadoServiceImp.devolverDepartamentos();
+        List<Especialidad> listaEspecialidades = altaEmpleadoServiceImp.devolverEspecialidades();
 
-//        List<String> listaVias = List.of("Calle", "Avenida");
-//        modelo.addAttribute("listaVias", listaVias);
         modelo.addAttribute("listaGeneros", listaGeneros);
         modelo.addAttribute("listaPaises", listaPaises);
         modelo.addAttribute("listaTipoVias", listaTipoVias);
         modelo.addAttribute("listaTipoDocumentos", tipoDocumentos);
         modelo.addAttribute("listaDepartamentos", listaDepartamentos);
+        modelo.addAttribute("listaEspecialidades", listaEspecialidades);
     }
 
     @GetMapping("/datos-personales")
@@ -174,6 +175,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            System.err.println(bindingResult.toString());
             return "registro_empleado/datos-profesionales";
         }
 

@@ -1,6 +1,7 @@
 package org.grupob.empapp.service;
 
 import org.grupob.comun.entity.Departamento;
+import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.maestras.Genero;
 import org.grupob.comun.entity.maestras.Pais;
 import org.grupob.comun.entity.maestras.TipoDocumento;
@@ -21,11 +22,12 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final EmpleadoRepository empleadoRepository;
     private final PaisRepository paisRepository;
     private final TipoViaRepository tipoViaRepository;
-    private final EmpleadoConverter empleadoConverter;
-    private final DepartamentoRepository departamentoRepository;
     private final TipoDocumentoRepository tipoDocumentoRepository;
+    private final DepartamentoRepository departamentoRepository;
+    private final EspecialidadRepository especialidadRepository;
+    private final EmpleadoConverter empleadoConverter;
 
-    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1) {
+    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository) {
         this.generoRepository = generoRepository;
         this.empleadoRepository = empleadoRepository;
         this.paisRepository = paisRepository;
@@ -33,6 +35,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
         this.empleadoConverter = empleadoConverter;
         this.departamentoRepository = departamentoRepository;
         this.tipoDocumentoRepository = tipoDocumentoRepository1;
+        this.especialidadRepository = especialidadRepository;
     }
 
     public List<Genero> devolverGeneros() {
@@ -49,6 +52,9 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     }
     public List<Departamento> devolverDepartamentos() {
         return departamentoRepository.findAll();
+    }
+    public List<Especialidad> devolverEspecialidades() {
+        return especialidadRepository.findAll();
     }
 
     public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO){

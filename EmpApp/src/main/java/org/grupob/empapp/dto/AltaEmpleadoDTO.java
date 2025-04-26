@@ -12,9 +12,13 @@ import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
+import org.grupob.empapp.validation.departamento.ExisteDepartamento;
 import org.grupob.empapp.validation.documento_valido.DocumentoValido;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
+import org.grupob.empapp.validation.especialidades.EspecialidadesMinimas;
+import org.grupob.empapp.validation.especialidades.ExisteEspecialidad;
+import org.grupob.empapp.validation.genero.ExisteGenero;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
 import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
@@ -48,6 +52,7 @@ public class AltaEmpleadoDTO {
 //    private byte[] foto; // Para almacenar la imagen en la base de datos
 
     @NotNull(groups = GrupoDatosPersonales.class)
+    @ExisteGenero(groups = GrupoDatosPersonales.class)
     private Long idGeneroSeleccionado;
 
     @NotNull(groups = GrupoDatosPersonales.class)
@@ -93,12 +98,14 @@ public class AltaEmpleadoDTO {
     @Valid
     private DireccionPostalDTO direccion;
 
-    // ** PASO 3 - DATOS LABORALES **
+    // ** PASO 3 - DATOS PROFESIONALES **
     @NotNull(groups = GrupoDatosProfesionales.class)
-    @NotBlank(groups = GrupoDatosProfesionales.class)
+    @ExisteDepartamento(groups = GrupoDatosProfesionales.class)
     private UUID idDepartamentoSeleccionado;
 
-    //TODO EMPEZAR POR ESTO
+    @NotNull(groups = GrupoDatosProfesionales.class)
+    @ExisteEspecialidad(groups = GrupoDatosProfesionales.class)
+    @EspecialidadesMinimas(groups = GrupoDatosProfesionales.class)
     private Set<UUID> especialidades;
 
 

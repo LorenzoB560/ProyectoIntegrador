@@ -86,7 +86,7 @@
         <select id="paisNacimiento" th:field="*{paisNacimiento}">
             <option th:each="pais: ${listaPaises}"
                     th:value="${pais.pais}"
-                    th:text="${pais.pais}"></option>
+                    th:text="#{'registro.paisNacimiento.' + ${pais.pais}}"></option>
         </select>
         <div th:each="error: ${#fields.errors('paisNacimiento')}" th:text="${error}" class="error"></div>
 

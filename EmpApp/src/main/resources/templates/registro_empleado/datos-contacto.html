@@ -57,7 +57,7 @@
     <select id="prefijoTelefono" th:field="*{prefijoTelefono}">
       <option th:each="pais: ${listaPaises}"
               th:value="${pais.prefijo}"
-              th:text="${pais.prefijo} + ' (' + ${pais.pais} + ')'"></option>
+              th:text="${pais.prefijo} + ' (' + #{'registro.paisNacimiento.' + ${pais.pais}} + ')'"></option>
     </select>
     <div th:each="error: ${#fields.errors('prefijoTelefono')}" th:text="${error}" class="error"></div>
 
@@ -75,7 +75,7 @@
     <select id="tipoVia" th:field="*{direccion.tipoVia}">
       <option th:each="via: ${listaTipoVias}"
               th:value="${via.tipoVia}"
-              th:text="${via.tipoVia}"></option>
+              th:text="#{'registro.tipoVia.' + ${via.tipoVia}}"></option>
     </select>
     <div th:each="error: ${#fields.errors('direccion.tipoVia')}" th:text="${error}" class="error"></div>
     <br>

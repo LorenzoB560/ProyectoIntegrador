@@ -36,12 +36,40 @@
         <!-- Seleccionar departamento -->
         <label for="departamento" th:text="#{registro.departamento}"></label>
         <select id="departamento" th:field="*{idDepartamentoSeleccionado}">
-            <option value="" th:text="#{registro.departamento.mensaje}"></option>
             <option th:each="dept: ${listaDepartamentos}"
                     th:value="${dept.id}"
-                    th:text="${dept.getNombre()}"></option>
+                    th:text="#{'registro.departamento.' + ${dept.getCodigo()}}"></option>
         </select>
         <div th:each="error: ${#fields.errors('idDepartamentoSeleccionado')}" th:text="${error}" class="error"></div>
+        <br> <br>
+
+        <!--Especialidades-->
+        <label th:text="#{registro.especialidades}"></label>
+        <div th:each="esp: ${listaEspecialidades}">
+            <input type="checkbox" name="especialidades"
+                   th:field="*{especialidades}"
+                   th:value="${esp.id}"
+                   th:id="'especialidad.' + ${esp.codigo}"
+            />
+            <label th:for="'especialidad.' + ${esp.codigo}"
+                   th:text="#{'registro.especialidades.' + ${esp.codigo}}"></label>
+        </div>
+        <div th:each="error: ${#fields.errors('especialidades')}" th:text="${error}" class="error"></div>
+
+        <!--Botón para deseleccionar todos los checkboxes-->
+
+        <input type="button" id="deseleccionarCheckbox" name="deseleccionarCheckbox"
+               th:value="#{registro.botonEspecialidades.deseleccionar}"
+               onclick="deseleccionaCheckbox('especialidades');" class="boton" />
+        &emsp;
+
+
+        <!--Botón para seleccionar todos los checkboxes-->
+
+        <input type="button" id="seleccionarCheckbox" name="seleccionarCheckbox"
+               th:value="#{registro.botonEspecialidades.seleccionar}"
+               onclick="seleccionaCheckbox('especialidades');" class="boton" />
+        <br> <br>
     </fieldset>
 
     <button type="submit" th:text="#{registro.datosLaborales.submit}"></button>
