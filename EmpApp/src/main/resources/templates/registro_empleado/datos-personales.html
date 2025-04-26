@@ -96,7 +96,7 @@
                th:field="*{comentarios}">
         <div th:each="error: ${#fields.errors('comentarios')}" th:text="${error}" class="error"></div>
 
-        <button type="submit" th:text="#{registro.submit}"></button>
+        <button type="submit" th:text="#{registro.datosPersonales.submit}"></button>
         <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()">
     </fieldset>
 

@@ -41,7 +41,7 @@ public class DireccionPostalDTO {
     @NotBlank(groups = GrupoDatosContacto.class)
     private String localidad;
 
-    @NotBlank(groups = GrupoDatosContacto.class)
+    @NotNull(groups = GrupoDatosContacto.class)
     private String region;
 
     @NotNull

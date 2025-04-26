@@ -27,6 +27,8 @@ public class Empleado extends Persona {
 
 //    private String dni;
 
+    private String prefijoTelefono;
+    private String numTelefono;
     private String comentarios;
 
     @ManyToMany

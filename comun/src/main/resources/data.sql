@@ -56,6 +56,12 @@ VALUES (9, 'Glorieta');
 INSERT INTO tipo_via (id, tipo_via)
 VALUES (10, 'Vía');
 
+--Tipo de documento
+
+INSERT INTO tipo_documento (id, documento) VALUES (1, 'DNI');
+INSERT INTO tipo_documento (id, documento) VALUES (2, 'NIE');
+INSERT INTO tipo_documento (id, documento) VALUES (3, 'Pasaporte');
+
 
 -- Departamentos
 INSERT INTO departamento (id, nombre, codigo, localidad)
@@ -184,7 +190,7 @@ VALUES (UNHEX(REPLACE('a21a03aa-d844-47df-a834-7dbebac182dc', '-', '')), 'raúl.
         '2024-05-07 18:19:46', true, 0);
 
 -- EMPLEADOS (ahora con id_usuario en lugar de que usuario tenga id_empleado)
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -194,7 +200,7 @@ VALUES (UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), 'Glauco
         'Network engineer', NULL, '2017-05-18', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d483', '-', '')),
         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a207', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -204,7 +210,7 @@ VALUES (UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), 'Moisé
         'Production assistant, radio', NULL, '2015-11-02', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')),
         UNHEX(REPLACE('95a974df-a636-46ba-b799-55f40c273b1a', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -214,7 +220,7 @@ VALUES (UNHEX(REPLACE('4280629d-9787-4ec6-bad3-6b83db92f958', '-', '')), 'Ester'
         'Therapist, nutritional', NULL, '2023-11-07', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d481', '-', '')),
         UNHEX(REPLACE('93a19953-fcd9-4527-9025-806cf8eb8654', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -224,7 +230,7 @@ VALUES (UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 'Samu',
         'Customer service manager', NULL, '2015-12-25', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d481', '-', '')),
         UNHEX(REPLACE('29e1cc76-a129-425f-9bf1-5e3d810c10d7', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -234,7 +240,7 @@ VALUES (UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 'Manu',
         'Learning mentor', NULL, '2020-01-19', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d482', '-', '')),
         UNHEX(REPLACE('f4b53a22-07eb-4282-bea3-07757a9f54e9', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -243,7 +249,7 @@ VALUES (UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 'Pía',
         'Calle', 'Acceso Emiliano Pi', '71', '1', '2', 'B', 'Baleares', '76565', 'Álava',
         'Nurse, adult', NULL, '2023-07-07', NULL, true, UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d483', '-', '')),
         UNHEX(REPLACE('4c2dc710-fc28-411e-8078-867b1be4c677', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -253,7 +259,7 @@ VALUES (UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 'Rosal�
         'Therapist, drama', NULL, '2020-11-04', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')),
         UNHEX(REPLACE('5a435ce7-0880-4ed2-8d1a-c026347bab3f', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -263,7 +269,7 @@ VALUES (UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 'Maribe
         'Art gallery manager', NULL, '2018-09-27', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')),
         UNHEX(REPLACE('5222da24-bc8d-4976-be89-399256d838f5', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -273,7 +279,7 @@ VALUES (UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 'Mariso
         'Insurance account manager', NULL, '2025-04-09', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d481', '-', '')),
         UNHEX(REPLACE('bf735c4b-1a7f-4134-b2f6-27d7b6b62f35', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -283,7 +289,7 @@ VALUES (UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 'Vicent
         'Chief Executive Officer', NULL, '2017-09-26', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d480', '-', '')),
         UNHEX(REPLACE('56e92970-d090-4349-b10f-b24f9c54d93a', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -293,7 +299,7 @@ VALUES (UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 'Paz', 
         'Engineer, electrical', NULL, '2022-11-17', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d482', '-', '')),
         UNHEX(REPLACE('f1ca5a34-f500-46c4-815e-b5633ed05502', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -302,7 +308,7 @@ VALUES (UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 'Alejan
         'Avenida', 'C. de Emilia Palomares', '109', '1', '6', 'B', 'Palencia', '69962', 'Málaga',
         'Optometrist', NULL, '2024-06-04', NULL, true, UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')),
         UNHEX(REPLACE('09544433-1feb-4d64-8d4d-8ba62a539a07', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -312,7 +318,7 @@ VALUES (UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 'Aarón
         'Health promotion specialist', NULL, '2022-12-10', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')),
         UNHEX(REPLACE('2d7ad5bd-778f-4436-9aee-6d097783fdb2', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -322,7 +328,7 @@ VALUES (UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 'Wilfre
         'Occupational therapist', NULL, '2022-05-27', NULL, true,
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d482', '-', '')),
         UNHEX(REPLACE('7618bea4-1357-4434-8351-aa2750ef3a32', '-', '')));
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -332,7 +338,7 @@ VALUES (UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 'Merced
         'Illustrator', NULL, '2015-09-29', NULL, true, UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')),
         UNHEX(REPLACE('ec15ed1f-ab85-4d43-8293-36c914a09a10', '-', '')));
 
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -342,7 +348,7 @@ VALUES (UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 'Verón
         'Oncologist', NULL, '2015-07-15', NULL, true, UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d480', '-', '')),
         UNHEX(REPLACE('a0d521f3-6d43-4754-99fc-1587fec7121d', '-', '')));
 
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -353,7 +359,7 @@ VALUES (UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 'Lilia'
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d482', '-', '')),
         UNHEX(REPLACE('c22711f9-6c6e-43cb-bf66-40b1636e5523', '-', '')));
 
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -364,7 +370,7 @@ VALUES (UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 'Pastor
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d481', '-', '')),
         UNHEX(REPLACE('8385d434-a40c-4357-8eb9-8379d461bf40', '-', '')));
 
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)
@@ -375,7 +381,7 @@ VALUES (UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 'Mirta'
         UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d482', '-', '')),
         UNHEX(REPLACE('ef4680f5-91a7-4407-82aa-35d9d355fa70', '-', '')));
 
-INSERT INTO empleado (id, nombre, apellido, tipo_documento, documento, fecha_nacimiento, edad, pais_nacimiento,
+INSERT INTO empleado (id, nombre, apellido, tipo_documento, num_documento, fecha_nacimiento, edad, pais_nacimiento,
                       genero_id,
                       tipo_via, via, numero, portal, planta, puerta, localidad, codigo_postal, region,
                       comentarios, id_jefe, fecha_contratacion, fecha_cese, activo, id_departamento, id_usuario)

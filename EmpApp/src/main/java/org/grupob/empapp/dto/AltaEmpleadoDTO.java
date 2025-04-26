@@ -1,20 +1,22 @@
 package org.grupob.empapp.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
+import org.grupob.empapp.validation.documento_valido.DocumentoValido;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
 import org.grupob.empapp.validation.pais.ExistePais;
+import org.grupob.empapp.validation.prefijo.ExistePrefijo;
+import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EdadCoincideConFechaNacimiento(groups = GrupoDatosPersonales.class)
+@DocumentoValido(groups = GrupoDatosContacto.class)
 public class AltaEmpleadoDTO {
 
     private UUID id;
@@ -65,7 +68,26 @@ public class AltaEmpleadoDTO {
     @NotNull(groups = GrupoDatosPersonales.class)
     @NotBlank(groups = GrupoDatosPersonales.class)
     private String comentarios;
-    // ** PASO 2 - DATOS DIRECCION **
+
+    // ** PASO 2 - DATOS CONTACTO **
+    @NotNull(groups = GrupoDatosContacto.class)
+    @ExisteTipoDocumento(groups = GrupoDatosContacto.class)
+    private String tipoDocumento;
+
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
+    private String numDocumento;
+
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
+    @ExistePrefijo(groups = GrupoDatosContacto.class)
+    private String prefijoTelefono;
+
+    @NotNull(groups = GrupoDatosContacto.class)
+    @NotBlank(groups = GrupoDatosContacto.class)
+    @Pattern(regexp = "^\\d{9}$", message = "{NumeroTelefono.message}", groups = GrupoDatosContacto.class)
+    private String numTelefono;
+
     @Valid
     private DireccionPostalDTO direccion;
 
