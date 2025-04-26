@@ -1,16 +1,20 @@
 -- Insertar administradores solo si no existen (esto no puede hacerse condicional en SQL puro, pero Spring los insertará si la tabla está vacía)
 INSERT INTO administrador (id, usuario, clave, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com', 'admin123', 0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com',
+        '$2a$10$9GV.MwFLsu/IGW/HC.frJOEnvpYjXGxmIiXTyiUk5a6bkwgDaq6Mu', 0);
 INSERT INTO administrador (id, usuario, clave, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2@gmail.com', 'admin123', 0);
-
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2@gmail.com',
+        '$2a$10$9GV.MwFLsu/IGW/HC.frJOEnvpYjXGxmIiXTyiUk5a6bkwgDaq6Mu', 0);
 -- Insertar empleados solo si ya hay empleados en la tabla (esto no se puede hacer con lógica SQL condicional directamente)
 -- Por lo tanto, simplemente insertamos siempre. Si quieres controlar esto, tendrías que hacerlo con Java.
-INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id, fecha_desbloqueo, intentos_sesion_fallidos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', '3mpleado!', 0, NULL, TRUE, NULL, NULL, 0);
-INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id, fecha_desbloqueo, intentos_sesion_fallidos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', '3mpleado!', 0, NULL, TRUE, NULL, NULL, 0);
-
+INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id,
+                              fecha_desbloqueo, intentos_sesion_fallidos)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com',
+        '$2a$10$Q9xQeQh9h1E5G8h8Q4h8QOeW9fB3zF1lXQwJQwQwQwQwQwQwQwQwq', 0, NULL, TRUE, NULL, NULL, 0);
+INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id,
+                              fecha_desbloqueo, intentos_sesion_fallidos)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com',
+        '$2a$10$Q9xQeQh9h1E5G8h8Q4h8QOeW9fB3zF1lXQwJQwQwQwQwQwQwQwQwq', 0, NULL, TRUE, NULL, NULL, 0);
 -- Géneros
 INSERT INTO genero (id, genero)
 VALUES (1, 'Masculino');

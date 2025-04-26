@@ -9,6 +9,8 @@ import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
 import org.grupob.comun.repository.UsuarioEmpleadoRepository;
 import org.grupob.comun.repository.maestras.MotivoBloqueoRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +28,8 @@ public class UsuarioEmpleadoServiceImp {
     // Conversor entre entidad y DTO
     private final LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert;
 
+    // Cifrador de contraseñas (para validar)
+    private final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 
     // Máximo de intentos fallidos permitidos
     private static final int INTENTOS_MAXIMOS = 3;
@@ -88,7 +92,7 @@ public class UsuarioEmpleadoServiceImp {
             throw new CuentaBloqueadaException("Cuenta bloqueada por intentos de sesion fallidos", usuarioEmp.getFechaDesbloqueo());
         }
 
-        if (!usuarioEmp.getClave().equals(dto.getClave())) {
+        if (!passwordEncoder.matches(dto.getClave(), usuarioEmp.getClave())) {
             int intentos = manejarIntentoFallido(usuarioEmp);
             int restantes = INTENTOS_MAXIMOS - intentos;
 

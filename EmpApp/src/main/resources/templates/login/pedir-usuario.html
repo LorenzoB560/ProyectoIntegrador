@@ -1,35 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Usuario</title>
+    <title th:text="#{login.titulo}"></title>
     <link rel="stylesheet" th:href="@{/css/login-estilos.css}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" href="data:;base64,=">
-    <script>
-
-    </script>
 </head>
 <body>
 <div class="container">
-    <h2>Iniciar sesión</h2>
+    <h2 th:text="#{login.iniciarSesion}"></h2>
     <form th:action="@{/empapp/procesar-usuario}" method="post" th:object="${dto}">
         <!-- Si no hay usuarios autenticados, mostrar un input de texto -->
         <div th:if="${usuariosAutenticados == null}">
-            <input type="text" th:field="*{usuario}" placeholder="Correo electrónico">
+            <input type="text" th:field="*{usuario}" th:placeholder="#{login.usuario.placeholder}">
         </div>
         <div th:each="error: ${#fields.errors('usuario')}" th:text="${error}" class="error"></div>
 
         <!-- Si hay usuarios autenticados, mostrar un select con las claves -->
         <div th:unless="${usuariosAutenticados == null}">
             <select th:field="*{usuario}" id="usuariosCookie">
-                <option value="" disabled selected>Selecciona un usuario</option>
+                <option value="" disabled selected th:text="#{login.usuario.select}"></option>
                 <option th:each="entry : ${usuariosAutenticados}"
                         th:value="${entry.key}"
                         th:text="${entry.key}">
                 </option>
             </select>
-<!--            <input type="hidden" id="otroUsuario" th:field="*{correo}" placeholder="Correo electrónico" disabled>-->
         </div>
 
         <!-- Mensaje de error -->
@@ -39,14 +35,14 @@
 
         <!-- Enlaces adicionales -->
         <div class="links">
-            <a href="javascript:void(0);" onclick="cambiarPeticion()"><b>Introducir nuevo usuario</b></a>
+            <a href="javascript:void(0);" onclick="cambiarPeticion()"><b th:text="#{login.introducirNuevoUsuario}">I</b></a>
         </div>
         <div class="links">
-            <a href="/empapp/redirigir-hacia-registro-usuario"><b>Registrarse</b></a>
+            <a th:href="@{/empapp/redirigir-hacia-registro-usuario}"><b th:text="#{login.registrarse}"></b></a>
         </div>
 
         <!-- Botón de envío -->
-        <button type="submit" class="button">Siguiente</button>
+        <button type="submit" class="button" th:text="#{login.siguiente}"></button>
     </form>
 </div>
 </body>

@@ -1,15 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Área Personal</title>
-<!--  <link rel="stylesheet" th:href="@{/css/login-estilos.css}">-->
+  <title th:text="#{areapersonal.titulo}"></title>
+  <!-- <link rel="stylesheet" th:href="@{/css/login-estilos.css}"> -->
 </head>
 <body th:object="${dto}">
-<h1>Bienvenido <span th:text="${usuario}"></span></h1>
-<p>Has accedido a tu área personal.</p>
-
-<p>Veces Autenticado en este navegador <span th:text="${contador}"></span></p>
-<p>Veces Autenticado en en total:<span th:text="*{numeroAccesos}"></span></p>
-<a th:href="@{/empapp/desconectar}">Desconectar</a>
+<h1>
+  <h1 th:text="#{areapersonal.bienvenido(*{usuario})}"></h1>
+</h1>
+<p th:text="#{areapersonal.acceso}">.</p>
+<p>
+  <span th:text="#{areapersonal.vecesNavegador}"></span>
+  <span th:text="${contador}"></span>
+</p>
+<p>
+  <span th:text="#{areapersonal.vecesTotal}"></span>
+  <span th:text="*{numeroAccesos}"></span>
+</p>
+<a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
 </body>
 </html>
