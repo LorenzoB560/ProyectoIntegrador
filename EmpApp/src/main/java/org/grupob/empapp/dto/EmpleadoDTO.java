@@ -1,37 +1,34 @@
 package org.grupob.empapp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.grupob.empapp.dto.auxiliar.GeneroDTO;
-
+// ... otras importaciones ...
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet; // Asegúrate de importar HashSet
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.grupob.empapp.dto.auxiliar.GeneroDTO; // Asegúrate de que existan estos DTOs
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+// @AllArgsConstructor // Puede que necesites quitar o ajustar el @AllArgsConstructor de Lombok
 public class EmpleadoDTO {
 
-    // ... (otros campos existentes) ...
     private UUID id;
     private String nombre;
     private String apellido;
     private GeneroDTO genero;
     private LocalDate fechaNacimiento;
-    private String correo; // Asumiendo que lo mapeas desde UsuarioEmpleado
+    private String correo;
     private String comentarios;
-    private Set<EspecialidadDTO> especialidades = new HashSet<>(); // Inicializar
+    private Set<EspecialidadDTO> especialidades = new HashSet<>(); // Se llenará después si es necesario
     private UUID idJefe;
     private String nombreJefe;
     private PeriodoDTO periodo;
     private boolean activo;
     private DepartamentoDTO departamento;
-    // Eliminamos LoginUsuarioEmpleadoDTO si no es estrictamente necesario en este DTO
-    // private LoginUsuarioEmpleadoDTO usuario;
     private BigDecimal salario;
     private BigDecimal comision;
     private CuentaBancariaDTO cuentaCorriente;
@@ -39,7 +36,38 @@ public class EmpleadoDTO {
     private TipoTarjetaCreditoDTO tipoTarjetaCredito;
     private TarjetaCreditoDTO tarjetaCredito;
     private boolean tieneFoto;
+    private Set<EtiquetaDTO> etiquetas = new HashSet<>(); // Se llenará después si es necesario
 
-    // --- NUEVO CAMPO PARA ETIQUETAS ---
-    private Set<EtiquetaDTO> etiquetas = new HashSet<>(); // Inicializar colección
+    // *** CONSTRUCTOR PARA LA PROYECCIÓN JPA ***
+    public EmpleadoDTO(UUID id, String nombre, String apellido, GeneroDTO genero, LocalDate fechaNacimiento,
+                       String correo, String comentarios, UUID idJefe, String nombreJefe, PeriodoDTO periodo,
+                       boolean activo, DepartamentoDTO departamento, BigDecimal salario, BigDecimal comision,
+                       CuentaBancariaDTO cuentaCorriente, EntidadBancariaDTO entidadBancaria,
+                       TipoTarjetaCreditoDTO tipoTarjetaCredito, TarjetaCreditoDTO tarjetaCredito, boolean tieneFoto) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.genero = genero;
+        this.fechaNacimiento = fechaNacimiento;
+        this.correo = correo;
+        this.comentarios = comentarios;
+        this.idJefe = idJefe;
+        this.nombreJefe = nombreJefe;
+        this.periodo = periodo;
+        this.activo = activo;
+        this.departamento = departamento;
+        this.salario = salario;
+        this.comision = comision;
+        this.cuentaCorriente = cuentaCorriente;
+        this.entidadBancaria = entidadBancaria;
+        this.tipoTarjetaCredito = tipoTarjetaCredito;
+        this.tarjetaCredito = tarjetaCredito;
+        this.tieneFoto = tieneFoto;
+        // Las colecciones se inicializan vacías por defecto
+        this.especialidades = new HashSet<>();
+        this.etiquetas = new HashSet<>();
+    }
+
+    // Puedes mantener el @AllArgsConstructor si lo necesitas para otras cosas,
+    // pero asegúrate de que el constructor específico para JPA exista.
 }

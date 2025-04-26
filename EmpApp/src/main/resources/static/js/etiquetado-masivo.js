@@ -20,7 +20,7 @@ function cargarSubordinados() {
     selectEmpleados.innerHTML = '<option>Cargando...</option>';
 
     // *** URL CORRECTA: Apunta a EmpleadoRestController ***
-    fetch(`/api/empleados/${jefeId}/subordinados`)
+    fetch(`/empleados/${jefeId}/subordinados`)
         .then(response => {
             if (!response.ok) {
                 // Si el jefe no se encuentra (404) u otro error
