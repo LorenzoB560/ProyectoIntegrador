@@ -2,13 +2,15 @@ package org.grupob.empapp.converter;
 
 import org.grupob.comun.entity.*; // Importa todas las entidades necesarias
 import org.grupob.comun.entity.auxiliar.CuentaBancaria;
+import org.grupob.comun.entity.auxiliar.DireccionPostal; // Importar si lo necesitas para convertir desde Empleado
 import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.auxiliar.TarjetaCredito;
 import org.grupob.comun.entity.maestras.Genero;
 import org.grupob.comun.entity.maestras.TipoTarjetaCredito;
 import org.grupob.empapp.dto.*;
+import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO; // Importar DTO
 import org.grupob.empapp.dto.auxiliar.GeneroDTO;
-import org.modelmapper.ModelMapper; // ModelMapper aún puede ser útil para campos simples o el otro método
+import org.modelmapper.ModelMapper; // Aún necesario para convertirAEntidad
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.hibernate.Hibernate;
@@ -20,24 +22,38 @@ import java.util.stream.Collectors;
 @Component
 public class EmpleadoConverter {
 
-    // ModelMapper todavía se puede inyectar y usar para convertirAEntidad
-    // o para mapear objetos internos si se desea, pero no para el mapeo principal en convertToDto.
+    // Inyectamos ModelMapper principalmente para convertirAEntidad
     private final ModelMapper modelMapper;
 
     public EmpleadoConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        // Ya no necesitamos configurar el TypeMap para Empleado -> EmpleadoDTO aquí
-        // porque lo haremos manualmente en convertToDto.
+        // No se necesita configuración de TypeMap para Empleado->EmpleadoDTO aquí
     }
 
-    // Este método puede seguir usando ModelMapper si funciona bien para esta dirección
+    // Este método puede seguir usando ModelMapper
     public Empleado convertirAEntidad(AltaEmpleadoDTO altaEmpleadoDTO) {
-        return modelMapper.map(altaEmpleadoDTO, Empleado.class);
+        // Podrías necesitar mapeo manual aquí también si AltaEmpleadoDTO es complejo
+        Empleado empleado = modelMapper.map(altaEmpleadoDTO, Empleado.class);
+
+        // Mapeo manual para la dirección si usas DTO en AltaEmpleadoDTO
+        if (altaEmpleadoDTO.getDireccion() != null) {
+            DireccionPostal dp = modelMapper.map(altaEmpleadoDTO.getDireccion(), DireccionPostal.class);
+            // O mapeo manual completo si es necesario
+            // DireccionPostal dp = new DireccionPostal();
+            // dp.setTipoVia(altaEmpleadoDTO.getDireccion().getTipoVia());
+            // ... etc ...
+            empleado.setDireccion(dp);
+        }
+        // Asegúrate de mapear Genero, Departamento desde los IDs en AltaEmpleadoDTO
+        // Esto requeriría inyectar los repositorios aquí o hacerlo en el servicio
+        // Por simplicidad, asumimos que esto se maneja en el servicio que llama a este método.
+
+        return empleado;
     }
 
     /**
-     * Convierte una entidad Empleado a EmpleadoDTO de forma manual
-     * para evitar problemas con proxies de Hibernate y ModelMapper.
+     * Convierte una entidad Empleado a EmpleadoDTO de forma 100% manual
+     * para evitar cualquier problema con proxies de Hibernate y ModelMapper.
      * @param empleado La entidad Empleado (puede contener proxies).
      * @return El EmpleadoDTO mapeado.
      */
@@ -48,7 +64,7 @@ public class EmpleadoConverter {
 
         EmpleadoDTO dto = new EmpleadoDTO();
 
-        // --- Mapeo Manual de Campos Simples y Embeddables ---
+        // --- Mapeo Manual de Campos Simples ---
         dto.setId(empleado.getId());
         dto.setNombre(empleado.getNombre());
         dto.setApellido(empleado.getApellido());
@@ -59,117 +75,121 @@ public class EmpleadoConverter {
         dto.setComision(empleado.getComision());
         dto.setTieneFoto(empleado.getFoto() != null && empleado.getFoto().length > 0);
 
-        // Embeddables (generalmente no son lazy)
-        if (empleado.getPeriodo() != null) {
-            // Puedes mapear manualmente o usar modelMapper para embeddables simples
-            dto.setPeriodo(modelMapper.map(empleado.getPeriodo(), PeriodoDTO.class));
-            // Alternativa manual:
-            // Periodo p = empleado.getPeriodo();
-            // dto.setPeriodo(new PeriodoDTO(p.getFechaInicio(), p.getFechaFin()));
+        // --- Mapeo Manual de Embeddables ---
+        Periodo periodo = empleado.getPeriodo();
+        if (periodo != null) {
+            dto.setPeriodo(new PeriodoDTO(periodo.getFechaInicio(), periodo.getFechaFin()));
+        } else {
+            dto.setPeriodo(null);
         }
-        if (empleado.getCuentaCorriente() != null) {
-            dto.setCuentaCorriente(modelMapper.map(empleado.getCuentaCorriente(), CuentaBancariaDTO.class));
-            // Alternativa manual:
-            // dto.setCuentaCorriente(CuentaBancariaDTO.of(empleado.getCuentaCorriente().getIBAN()));
+
+        CuentaBancaria cb = empleado.getCuentaCorriente();
+        if (cb != null) {
+            dto.setCuentaCorriente(new CuentaBancariaDTO(cb.getIBAN()));
+        } else {
+            dto.setCuentaCorriente(null);
         }
-        if (empleado.getTarjetaCredito() != null) {
-            dto.setTarjetaCredito(modelMapper.map(empleado.getTarjetaCredito(), TarjetaCreditoDTO.class));
-            // Alternativa manual:
-            // TarjetaCredito tc = empleado.getTarjetaCredito();
-            // dto.setTarjetaCredito(new TarjetaCreditoDTO(tc.getNumero(), tc.getMesCaducidad(), tc.getAnioCaducidad(), tc.getCVC()));
+
+        TarjetaCredito tc = empleado.getTarjetaCredito();
+        if (tc != null) {
+            dto.setTarjetaCredito(new TarjetaCreditoDTO(tc.getNumero(), tc.getMesCaducidad(), tc.getAnioCaducidad(), tc.getCVC()));
+        } else {
+            dto.setTarjetaCredito(null);
         }
 
         // --- Mapeo Manual Controlado para Relaciones Lazy ---
 
         // Usuario (para el correo)
         UsuarioEmpleado usuario = empleado.getUsuario();
-        if (Hibernate.isInitialized(usuario) && usuario != null) {
+        // Asumimos que el usuario siempre debe estar presente y cargado si es necesario
+        // Si pudiera ser lazy y fallar: if (Hibernate.isInitialized(usuario) && usuario != null)
+        if (usuario != null) {
             dto.setCorreo(usuario.getUsuario());
         } else {
-            dto.setCorreo(null); // Opcional: intentar obtener ID si el proxy no está inicializado
+            dto.setCorreo(null);
         }
 
         // Jefe
         Empleado jefe = empleado.getJefe();
-        if (Hibernate.isInitialized(jefe) && jefe != null) {
-            dto.setIdJefe(jefe.getId());
-            dto.setNombreJefe(jefe.getNombre()); // Acceder SÓLO después de inicializar/verificar
-        } else {
-            // Si es un proxy no inicializado, podríamos intentar obtener el ID si JPA lo permite
-            // if (jefe != null) dto.setIdJefe(jefe.getId()); // Esto podría fallar también
+        if (jefe != null && Hibernate.isInitialized(jefe)) {
+            // Solo si está inicializado accedemos a sus propiedades
+            dto.setIdJefe(jefe.getId()); // El ID se puede obtener a veces del proxy sin inicializar
+            dto.setNombreJefe(jefe.getNombre());
+        } else if (jefe != null) {
+            // Si es un proxy no inicializado, al menos intentamos obtener el ID
+            try {
+                dto.setIdJefe(jefe.getId());
+            } catch (Exception e) {
+                dto.setIdJefe(null); // Falló al obtener ID del proxy
+            }
+            dto.setNombreJefe(null); // No podemos obtener el nombre
+        }
+        else {
             dto.setIdJefe(null);
             dto.setNombreJefe(null);
         }
 
-
         // Departamento
         Departamento depto = empleado.getDepartamento();
-        if (Hibernate.isInitialized(depto) && depto != null) {
-            // Mapear manualmente o usar modelMapper para el sub-objeto
-            dto.setDepartamento(modelMapper.map(depto, DepartamentoDTO.class));
-            // Alternativa manual:
-            // dto.setDepartamento(new DepartamentoDTO(depto.getId(), depto.getCodigo(), depto.getNombre(), depto.getLocalidad()));
+        if (depto != null && Hibernate.isInitialized(depto)) {
+            dto.setDepartamento(new DepartamentoDTO(depto.getId(), depto.getCodigo(), depto.getNombre(), depto.getLocalidad()));
         } else {
             dto.setDepartamento(null);
         }
 
         // Genero
         Genero genero = empleado.getGenero();
-        if (Hibernate.isInitialized(genero) && genero != null) {
-            dto.setGenero(modelMapper.map(genero, GeneroDTO.class));
-            // Alternativa manual:
-            // dto.setGenero(new GeneroDTO(genero.getId(), genero.getGenero()));
+        if (genero != null && Hibernate.isInitialized(genero)) {
+            dto.setGenero(new GeneroDTO(genero.getId(), genero.getGenero()));
         } else {
             dto.setGenero(null);
         }
 
         // Entidad Bancaria
         EntidadBancaria eb = empleado.getEntidadBancaria();
-        if (Hibernate.isInitialized(eb) && eb != null) {
-            dto.setEntidadBancaria(modelMapper.map(eb, EntidadBancariaDTO.class));
-            // Alternativa manual:
-            // dto.setEntidadBancaria(new EntidadBancariaDTO(eb.getId(), eb.getCodigo(), eb.getNombre()));
+        if (eb != null && Hibernate.isInitialized(eb)) {
+            dto.setEntidadBancaria(new EntidadBancariaDTO(eb.getId(), eb.getCodigo(), eb.getNombre()));
         } else {
             dto.setEntidadBancaria(null);
         }
 
         // Tipo Tarjeta Credito
         TipoTarjetaCredito tt = empleado.getTipoTarjetaCredito();
-        if (Hibernate.isInitialized(tt) && tt != null) {
-            dto.setTipoTarjetaCredito(modelMapper.map(tt, TipoTarjetaCreditoDTO.class));
-            // Alternativa manual:
-            // dto.setTipoTarjetaCredito(new TipoTarjetaCreditoDTO(tt.getId(), tt.getTipoTarjetaCredito()));
+        if (tt != null && Hibernate.isInitialized(tt)) {
+            dto.setTipoTarjetaCredito(new TipoTarjetaCreditoDTO(tt.getId(), tt.getTipoTarjetaCredito()));
         } else {
             dto.setTipoTarjetaCredito(null);
         }
 
-
         // Colecciones (Especialidades y Etiquetas)
         Set<Especialidad> especialidades = empleado.getEspecialidades();
         Set<EspecialidadDTO> espDtos = new HashSet<>();
-        if (Hibernate.isInitialized(especialidades) && especialidades != null) {
-            // No es necesario inicializar cada elemento individualmente si la colección está inicializada
-            espDtos = especialidades.stream()
-                    .map(esp -> modelMapper.map(esp, EspecialidadDTO.class)) // Mapeo simple
-                    .collect(Collectors.toSet());
+        if (especialidades != null && Hibernate.isInitialized(especialidades)) {
+            for (Especialidad esp : especialidades) {
+                if (esp != null) { // Comprobar nulidad del elemento
+                    espDtos.add(new EspecialidadDTO(esp.getId(), esp.getNombre()));
+                }
+            }
         }
-        dto.setEspecialidades(espDtos); // Asignar (podría ser vacío)
+        dto.setEspecialidades(espDtos);
 
         Set<Etiqueta> etiquetas = empleado.getEtiquetas();
         Set<EtiquetaDTO> etDtos = new HashSet<>();
-        if (Hibernate.isInitialized(etiquetas) && etiquetas != null) {
-            etDtos = etiquetas.stream()
-                    .map(et -> modelMapper.map(et, EtiquetaDTO.class)) // Mapeo simple
-                    .collect(Collectors.toSet());
+        if (etiquetas != null && Hibernate.isInitialized(etiquetas)) {
+            for (Etiqueta et : etiquetas) {
+                if (et != null) { // Comprobar nulidad del elemento
+                    etDtos.add(new EtiquetaDTO(et.getId(), et.getNombre()));
+                }
+            }
         }
-        dto.setEtiquetas(etDtos); // Asignar (podría ser vacío)
-
+        dto.setEtiquetas(etDtos);
 
         return dto;
     }
 
-    // Método para convertir páginas (se mantiene igual, llama al convertToDto manual)
+    // Método para convertir páginas (llama al convertToDto manual)
     public Page<EmpleadoDTO> convertPageToDto(Page<Empleado> empleadoPage) {
+        // El método map de Page usará nuestro convertToDto manual
         return empleadoPage.map(this::convertToDto);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/etiquetas")
+@RequestMapping("/etiquetas")
 public class EtiquetaRestController {
 
     private final EtiquetaService etiquetaService; // *** CAMBIO: Inyectar EtiquetaService ***

@@ -58,35 +58,56 @@ function cargarEtiquetas() {
     const selectEtiquetas = document.getElementById('etiquetasDisponibles');
     selectEtiquetas.innerHTML = '<option>Cargando...</option>';
 
-    // *** URL CORRECTA: Apunta a EtiquetaRestController ***
-    fetch(`/api/etiquetas/jefe/${jefeId}`)
+    // *** Añadir log para verificar el jefeId usado en la URL ***
+    console.log('Cargando etiquetas para jefeId:', jefeId);
+
+    fetch(`/etiquetas/jefe/${jefeId}`)
         .then(response => {
+            console.log('Respuesta fetch etiquetas status:', response.status); // Log status
             if (!response.ok) {
                 return response.text().then(text => { throw new Error(`Error ${response.status}: ${text || response.statusText}`) });
             }
             return response.json();
         })
         .then(etiquetas => {
+            // *** Añadir log para ver los datos recibidos ***
+            console.log('Etiquetas recibidas del backend:', JSON.stringify(etiquetas, null, 2));
+
             selectEtiquetas.innerHTML = ''; // Limpiar
             if (!etiquetas || etiquetas.length === 0) {
+                console.log('No se recibieron etiquetas o la lista está vacía.');
                 selectEtiquetas.innerHTML = '<option disabled>No hay etiquetas disponibles creadas por este jefe.</option>';
             } else {
-                // El backend ya debería devolverlas ordenadas
-                etiquetas.forEach(et => {
-                    const option = document.createElement('option');
-                    option.value = et.id;
-                    option.textContent = et.nombre;
-                    selectEtiquetas.appendChild(option);
+                console.log(`Procesando ${etiquetas.length} etiquetas...`);
+                etiquetas.forEach((et, index) => {
+                    // *** Añadir log dentro del bucle ***
+                    console.log(`Procesando etiqueta #${index}: ID=${et.id}, Nombre=${et.nombre}`);
+                    try {
+                        const option = document.createElement('option');
+                        option.value = et.id;
+                        option.textContent = et.nombre;
+                        selectEtiquetas.appendChild(option);
+                        // *** Añadir log si la opción se añadió ***
+                        // console.log(`Opción "${et.nombre}" añadida al select.`);
+                    } catch (e) {
+                        // *** Añadir log si hay error al crear/añadir la opción ***
+                        console.error(`Error al procesar la etiqueta #${index} (${et.nombre}):`, e);
+                    }
                 });
+                // *** Añadir log para ver el HTML final del select ***
+                console.log('HTML final del select de etiquetas:', selectEtiquetas.innerHTML);
+                // Reordenar después de añadir todas
+                ordenarSelect(selectEtiquetas);
+                console.log('Select de etiquetas ordenado.');
             }
         })
         .catch(error => {
-            selectEtiquetas.innerHTML = '<option disabled>Error al cargar</option>';
+            // *** Añadir log si hubo error en fetch o procesamiento ***
+            console.error('Error en cargarEtiquetas:', error);
+            selectEtiquetas.innerHTML = '<option disabled>Error al cargar etiquetas</option>';
             mostrarMensaje('Error al cargar etiquetas: ' + error.message, 'error-message');
-            console.error(error);
         });
 }
-
 // Función genérica para mover opciones entre selects múltiples
 function moverOpciones(origenId, destinoId, moverTodo) {
     const selectOrigen = document.getElementById(origenId);
@@ -161,7 +182,7 @@ function enviarEtiquetadoMasivo() {
     mostrarMensaje('Procesando...', 'info-message'); // Feedback visual
 
     // *** URL CORRECTA: Apunta a EtiquetaRestController ***
-    fetch('/api/etiquetas/asignar-masivo', {
+    fetch('/etiquetas/asignar-masivo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

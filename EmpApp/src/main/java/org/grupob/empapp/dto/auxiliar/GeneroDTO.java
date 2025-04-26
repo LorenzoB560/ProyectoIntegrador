@@ -6,4 +6,7 @@ import lombok.Data;
 public class GeneroDTO {
     private Long id;
     private String genero;
+
+    public GeneroDTO(Long id, String genero) {
+    }
 }
