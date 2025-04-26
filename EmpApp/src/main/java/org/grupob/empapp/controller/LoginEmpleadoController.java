@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.dto.ActualizarClaveDTO;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoClave;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
 import org.grupob.empapp.exception.ClaveIncorrectaException;
 import org.grupob.empapp.exception.CuentaBloqueadaException;
@@ -253,4 +253,36 @@ public class LoginEmpleadoController {
     public String redirigirLogin() {
         return "redirect:/registro-usuario";
     }
+
+    @GetMapping("/procesar-actualizacion-clave")
+    public String redirigirActualizarClave(Model modelo, HttpServletRequest request) {
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+        ActualizarClaveDTO dto = new ActualizarClaveDTO(ultimoUsuario);
+        modelo.addAttribute("dto", dto);
+        return "login/actualizar-clave";
+    }
+
+
+    @PostMapping("/procesar-actualizacion-clave")
+    public String actualizarClave(Model modelo,
+                                  @Valid @ModelAttribute("dto") ActualizarClaveDTO dto,
+                                  BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "login/actualizar-clave";
+        }
+
+        if (!dto.getNuevaClave().equals(dto.getConfirmacionClave())) {
+            modelo.addAttribute("error", "Las contraseñas no coinciden");
+            return "login/actualizar-clave";
+        }
+
+        try {
+            usuarioService.actualizarClave(dto.getUsuario(), dto.getNuevaClave());
+            return "redirect:/empapp/clave";
+        } catch (UsuarioNoEncontradoException e) {
+            return "redirect:/empapp/pedir-clave";
+        }
+    }
+
 }

@@ -25,6 +25,9 @@
             <a href="#" id="recordarContraseña" th:text="#{login.clave.olvidada}"></a><br>
         </div>
         <div class="links">
+            <a th:href="@{/empapp/procesar-actualizacion-clave}" id="actualizarContraseña" th:text="#{login.clave.actualizar}"></a><br>
+        </div>
+        <div class="links">
             <a th:href="@{/empapp/seleccionar-otra-cuenta}"><b th:text="#{login.clave.otraCuenta}"></b></a>
         </div>
 

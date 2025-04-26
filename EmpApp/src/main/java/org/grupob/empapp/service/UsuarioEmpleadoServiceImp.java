@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.exception.ClaveIncorrectaException;
@@ -129,5 +130,13 @@ public class UsuarioEmpleadoServiceImp {
         }
         usuarioEmpRepo.save(usuario);
         return usuario.getIntentosSesionFallidos();
+    }
+
+    public void actualizarClave(String usuario, String nuevaClave) {
+        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(usuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Credenciales inválidas"));
+
+        usuarioEmp.setClave(passwordEncoder.encode(nuevaClave));
+        usuarioEmpRepo.save(usuarioEmp);
     }
 }
