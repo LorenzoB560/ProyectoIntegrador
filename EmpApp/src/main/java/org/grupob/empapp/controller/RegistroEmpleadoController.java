@@ -1,6 +1,7 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.maestras.Pais;
 import org.grupob.comun.entity.maestras.TipoDocumento;
@@ -41,6 +42,7 @@ public class RegistroEmpleadoController {
         List<TipoDocumento> tipoDocumentos = altaEmpleadoServiceImp.devolverTipoDocumentos();
         List<Departamento> listaDepartamentos = altaEmpleadoServiceImp.devolverDepartamentos();
         List<Especialidad> listaEspecialidades = altaEmpleadoServiceImp.devolverEspecialidades();
+        List<EntidadBancaria> listaEntidadesBancarias = altaEmpleadoServiceImp.devolverEntidadesBancarias();
 
         modelo.addAttribute("listaGeneros", listaGeneros);
         modelo.addAttribute("listaPaises", listaPaises);
@@ -48,6 +50,7 @@ public class RegistroEmpleadoController {
         modelo.addAttribute("listaTipoDocumentos", tipoDocumentos);
         modelo.addAttribute("listaDepartamentos", listaDepartamentos);
         modelo.addAttribute("listaEspecialidades", listaEspecialidades);
+        modelo.addAttribute("listaEntidadesBancarias", listaEntidadesBancarias);
     }
 
     @GetMapping("/datos-personales")
@@ -209,15 +212,17 @@ public class RegistroEmpleadoController {
     @PostMapping("/guardar-datos-economicos")
     public String guardarDatosEconomicos(
             @Validated(GrupoDatosEconomicos.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
-            @RequestParam MultipartFile imagen,
+//            @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
 
+        System.err.println(datosFormulario);
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            System.err.println(bindingResult.toString());
             return "registro_empleado/datos-economicos";
         }
 
@@ -235,7 +240,7 @@ public class RegistroEmpleadoController {
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/resumen";
+        return "redirect:/datos-profesionales";
     }
     @GetMapping("/resumen")
     public String resumen(HttpSession sesion, Model model) {

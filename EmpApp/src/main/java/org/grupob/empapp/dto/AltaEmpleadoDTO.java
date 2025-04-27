@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.Especialidad;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
@@ -16,6 +17,7 @@ import org.grupob.empapp.validation.departamento.ExisteDepartamento;
 import org.grupob.empapp.validation.documento_valido.DocumentoValido;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
+import org.grupob.empapp.validation.entidad_bancaria.ExisteEntidadBancaria;
 import org.grupob.empapp.validation.especialidades.EspecialidadesMinimas;
 import org.grupob.empapp.validation.especialidades.ExisteEspecialidad;
 import org.grupob.empapp.validation.genero.ExisteGenero;
@@ -111,17 +113,20 @@ public class AltaEmpleadoDTO {
 
     // ** PASO 4 - DATOS ECONOMICOS **
 
-//    private UUID idEntidadBancaria;
-//
-//    private String codigoPais;
-//    private String digitosControl;
-//    private String codigoEntidadBancaria;
-//    private String sucursal;
-//    private String numeroCuenta;
-//
-//    private Double salario;
-//    private Double comision;
-//
-//    @Valid
-//    private TarjetaCreditoDTO tarjetaCredito;
+    @Valid
+    private CuentaBancariaDTO cuentaBancaria;
+
+    @NotNull(groups = GrupoDatosEconomicos.class)
+    @Positive(groups = GrupoDatosEconomicos.class)
+    @Digits(integer = 8, fraction = 2, groups = GrupoDatosEconomicos.class)
+    private Double salario;
+
+
+    @Positive(groups = GrupoDatosEconomicos.class)
+    @Digits(integer = 8, fraction = 2, groups = GrupoDatosEconomicos.class)
+    private Double comision;
+
+    private Long idTipoTarjeta;
+    @Valid
+    private TarjetaCreditoDTO tarjetaCredito;
 }

@@ -28,10 +28,61 @@
 
 <form action="/guardar-datos-economicos" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
 
-  <label th:text="#{registro.imagen}"></label> <br>
-  <input type="file" name="imagen" accept="image/*"/>
+  <fieldset>
+    <legend th:text="#{registro.datosEconomicos}"></legend>
+    <!-- Entidad Bancaria -->
+    <label for="idEntidadBancaria" th:text="#{registro.entidadBancaria}"></label>
+    <select id="idEntidadBancaria" th:field="*{cuentaBancaria.idEntidadBancaria}">
+      <option th:each="entidad: ${listaEntidadesBancarias}"
+              th:value="${entidad.id}"
+              th:text="#{'registro.entidadBancaria.' + ${entidad.codigo}}"></option>
+    </select>
+    <div th:each="error: ${#fields.errors('cuentaBancaria.idEntidadBancaria')}" th:text="${error}" class="error"></div> <br>
 
-  <button type="submit" th:text="#{registro.fotoPerfil.submit}"></button>
+    <!-- IBAN-->
+
+    <!-- Código del pais -->
+    <label for="codigoPais" th:text="#{registro.codigoPais}"></label>
+    <input type="text" th:field="*{cuentaBancaria.codigoPais}" id="codigoPais">
+    <div th:each="error: ${#fields.errors('cuentaBancaria.codigoPais')}" th:text="${error}" class="error"></div>
+
+    <!-- Digitos de control -->
+    <label for="digitosControl" th:text="#{registro.digitosControl}"></label>
+    <input type="text" th:field="*{cuentaBancaria.digitosControl}" id="digitosControl">
+    <div th:each="error: ${#fields.errors('cuentaBancaria.digitosControl')}" th:text="${error}" class="error"></div>
+
+    <!-- Código de la entidad bancaria -->
+    <label for="codigoEntidadBancaria" th:text="#{registro.codigoEntidadBancaria}"></label>
+    <input type="text" th:field="*{cuentaBancaria.codigoEntidadBancaria}" id="codigoEntidadBancaria">
+    <div th:each="error: ${#fields.errors('cuentaBancaria.codigoEntidadBancaria')}" th:text="${error}" class="error"></div>
+
+    <!--Sucursal -->
+    <label for="sucursal" th:text="#{registro.sucursal}"></label>
+    <input type="text" th:field="*{cuentaBancaria.sucursal}" id="sucursal">
+    <div th:each="error: ${#fields.errors('cuentaBancaria.sucursal')}" th:text="${error}" class="error"></div>
+
+    <!--Número de cuenta -->
+    <label for="numeroCuenta" th:text="#{registro.numeroCuenta}"></label>
+    <input type="text" th:field="*{cuentaBancaria.numeroCuenta}" id="numeroCuenta">
+    <div th:each="error: ${#fields.errors('cuentaBancaria.numeroCuenta')}" th:text="${error}" class="error"></div>
+    <br> <br>
+
+    <div th:each="error: ${#fields.errors('cuentaBancaria')}" th:text="${error}" class="error"></div>
+
+    <!-- Salario -->
+    <label for="salario" th:text="#{registro.salario}"></label>
+    <input type="text" th:field="*{salario}" id="salario">
+    <div th:each="error: ${#fields.errors('salario')}" th:text="${error}" class="error"></div>
+    <br> <br>
+
+    <!-- Comisión -->
+    <label for="comision" th:text="#{registro.comision}"></label>
+    <input type="text" th:field="*{comision}" id="comision">
+    <div th:each="error: ${#fields.errors('comision')}" th:text="${error}" class="error"></div>
+    <br> <br>
+  </fieldset>
+
+  <button type="submit" th:text="#{registro.datosEconomicos.submit}"></button>
   <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
 </form>
 </body>

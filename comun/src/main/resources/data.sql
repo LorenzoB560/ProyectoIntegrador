@@ -22,16 +22,12 @@ VALUES (3, 'Otro');
 
 -- Países
 
-INSERT INTO pais (id, pais, prefijo)
-VALUES (1, 'España', '+34');
-INSERT INTO pais (id, pais, prefijo)
-VALUES (2, 'Francia', '+33');
-INSERT INTO pais (id, pais, prefijo)
-VALUES (3, 'Alemania', '+49');
-INSERT INTO pais (id, pais, prefijo)
-VALUES (4, 'Italia', '+39');
-INSERT INTO pais (id, pais, prefijo)
-VALUES (5, 'Rumanía', '+40');
+INSERT INTO pais (id, pais, prefijo, codigo) VALUES (1, 'España', '+34', 'ES');
+INSERT INTO pais (id, pais, prefijo, codigo) VALUES (2, 'Francia', '+33', 'FR');
+INSERT INTO pais (id, pais, prefijo, codigo) VALUES (3, 'Alemania', '+49', 'DE');
+INSERT INTO pais (id, pais, prefijo, codigo) VALUES (4, 'Italia', '+39', 'IT');
+INSERT INTO pais (id, pais, prefijo, codigo) VALUES (5, 'Rumanía', '+40', 'RO');
+
 
 -- Tipos de vía
 
@@ -58,9 +54,12 @@ VALUES (10, 'Vía');
 
 --Tipo de documento
 
-INSERT INTO tipo_documento (id, documento) VALUES (1, 'DNI');
-INSERT INTO tipo_documento (id, documento) VALUES (2, 'NIE');
-INSERT INTO tipo_documento (id, documento) VALUES (3, 'Pasaporte');
+INSERT INTO tipo_documento (id, documento)
+VALUES (1, 'DNI');
+INSERT INTO tipo_documento (id, documento)
+VALUES (2, 'NIE');
+INSERT INTO tipo_documento (id, documento)
+VALUES (3, 'Pasaporte');
 
 
 -- Departamentos
@@ -88,14 +87,30 @@ INSERT INTO especialidad (id, codigo, nombre)
 VALUES (UNHEX(REPLACE('e5f6a7b8-c9d0-8e1f-2a3b-4c5d6e7f8a9b', '-', '')), '5', 'Administración de Bases de Datos');
 
 -- Entidades Bancarias
-INSERT INTO entidad_bancaria (id, codigo, nombre)
-VALUES (UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), 'BBVA', 'Banco Bilbao Vizcaya Argentaria');
-INSERT INTO entidad_bancaria (id, codigo, nombre)
-VALUES (UNHEX(REPLACE('2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e', '-', '')), 'SANT', 'Banco Santander');
-INSERT INTO entidad_bancaria (id, codigo, nombre)
-VALUES (UNHEX(REPLACE('3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f', '-', '')), 'CAIXA', 'CaixaBank');
-INSERT INTO entidad_bancaria (id, codigo, nombre)
-VALUES (UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), 'SABD', 'Banco Sabadell');
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d', '-', '')), '0182',
+        'Banco Bilbao Vizcaya Argentaria (BBVA)', 1);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e', '-', '')), '0049', 'Banco Santander', 1);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f', '-', '')), '2100', 'CaixaBank', 1);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f9a', '-', '')), '0081', 'Banco Sabadell', 1);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), '30004', 'BNP Paribas', 2);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), '0019', 'Deutsche Bank', 3);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')), '02008', 'UniCredit', 4);
+
+INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
+VALUES (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), '03002', 'Banca Transilvania', 5);
 
 -- Tipos de Tarjetas de Crédito
 INSERT INTO tipo_tarjeta_credito (id, tipo_tarjeta)

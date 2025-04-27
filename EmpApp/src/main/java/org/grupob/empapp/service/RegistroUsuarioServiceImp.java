@@ -27,6 +27,8 @@ public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
     public void guardarUsuario(RegistroUsuarioEmpleadoDTO usuario) {
         UsuarioEmpleado usuarioEmpleado = registroUsuarioEmpleadoConverter.convertirAEntidad(usuario);
         usuarioEmpleado.setClave(passwordEncoder.encode(usuario.getClave())); // Hashear la contraseña con BCrypt
+        usuarioEmpleado.setIntentosSesionFallidos(0);
+        usuarioEmpleado.setActivo(true);
         usuarioEmpleadoRepository.save(usuarioEmpleado);
     }
 

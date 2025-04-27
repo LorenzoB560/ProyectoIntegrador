@@ -16,4 +16,5 @@ public class Pais {
     private Long id;
     private String pais;
     private String prefijo;
+    private String codigo;
 }
