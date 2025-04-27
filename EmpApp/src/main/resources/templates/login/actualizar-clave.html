@@ -1,4 +1,3 @@
-<!-- Paso 2 - Actualización de contraseña (pedir-clave.html) -->
 <!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
@@ -9,40 +8,34 @@
 <body>
 <div class="container">
   <h2 th:text="#{login.clave.actualizar}"></h2>
-  <form th:action="@{/empapp/procesar-actualizacion-clave}" method="post" th:object="${dto}">
+  <form id="form-actualizar-clave" th:action="@{/empapp/procesar-actualizacion-clave}" method="post" th:object="${dto}">
     <input type="text" th:field="*{usuario}" readonly/>
 
     <div class="form-group">
       <label th:text="#{login.clave.nueva}"></label>
-      <input type="password" th:field="*{nuevaClave}"
-             th:placeholder="#{login.clave.placeholder}">
+      <input type="password" th:field="*{nuevaClave}" class="campo-clave" th:placeholder="#{login.clave.placeholder}">
     </div>
 
     <div class="form-group">
       <label th:text="#{login.clave.confirmar}"></label>
-      <input type="password" th:field="*{confirmacionClave}"
-             th:placeholder="#{login.clave.placeholder}">
+      <input type="password" th:field="*{confirmacionClave}" class="campo-clave" th:placeholder="#{login.clave.placeholder}">
     </div>
 
     <div class="checkbox-container">
-      <input type="checkbox" id="mostrarClaves" onclick="mostrarOcultarClaves()">
+      <input type="checkbox" id="mostrarClaves" onclick="mostrarOcultarClave()">
       <label for="mostrarClaves" th:text="#{login.clave.mostrar}"></label>
     </div>
 
     <div class="error" th:if="${error}" th:text="${error}"></div>
     <div th:each="error: ${#fields.errors('*')}" th:text="${error}" class="error"></div>
 
+    <div class="links">
+      <a th:href="@{/empapp/clave}" th:text="#{login.volver}">Volver</a>
+    </div>
+
     <button type="submit" class="button" th:text="#{login.actualizar}"></button>
   </form>
 </div>
-
-<script>
-  function mostrarOcultarClaves() {
-    const claves = document.querySelectorAll('input[type="password"]');
-    claves.forEach(input => {
-      input.type = input.type === 'password' ? 'text' : 'password';
-    });
-  }
-</script>
 </body>
+<script th:src="@{/js/login-funciones.js}"></script>
 </html>

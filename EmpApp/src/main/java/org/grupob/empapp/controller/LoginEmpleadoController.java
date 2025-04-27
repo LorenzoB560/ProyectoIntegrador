@@ -46,6 +46,7 @@ public class LoginEmpleadoController {
         String estado = cookieService.obtenerValorCookie(request, "estado");
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
 
+        // Si no hay usuario en sesión o no está en la cookie de autenticados, mostrar selección de usuario
         if (ultimoUsuario == null || (usuariosAutenticados != null && !usuariosAutenticados.containsKey(ultimoUsuario))) {
             cookieService.crearCookie(respuesta, "estado", "login", (7 * 24 * 60 * 60));
 
@@ -53,13 +54,13 @@ public class LoginEmpleadoController {
             return "login/pedir-usuario";
         }
 
-        // Redirigir al paso correcto
+        // Redirigir al paso correcto según el estado almacenado
         switch (estado) {
             case "/clave":
                 return "redirect:/empapp/clave";
-            case "/area-personal":
+           /* case "/area-personal":
                 modelo.addAttribute("usuario", ultimoUsuario);
-                return "redirect:/empapp/area-personal";
+                return "redirect:/empapp/area-personal";*/
             case null:
                 modelo.addAttribute("usuariosAutenticados", usuariosAutenticados);
                 return "login/pedir-usuario";
@@ -76,8 +77,14 @@ public class LoginEmpleadoController {
                                   @Validated(GrupoUsuario.class) @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                   BindingResult result) {
 
+
         if (result.hasErrors()) {
             return "login/pedir-usuario";
+        }
+        String estado = cookieService.obtenerValorCookie(request, "estado");
+        // Si el estado es área personal, ir directamente
+        if ("/area-personal".equals(estado)) {
+            return "redirect:/empapp/area-personal";
         }
 
         try {
@@ -224,7 +231,6 @@ public class LoginEmpleadoController {
 
         modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
-//        modelo.addAttribute("dto", contador);
 
         return "login/area-personal";
     }
@@ -254,7 +260,7 @@ public class LoginEmpleadoController {
         return "redirect:/registro-usuario";
     }
 
-    @GetMapping("/procesar-actualizacion-clave")
+    @GetMapping("/actualizacion-clave")
     public String redirigirActualizarClave(Model modelo, HttpServletRequest request) {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         ActualizarClaveDTO dto = new ActualizarClaveDTO(ultimoUsuario);
@@ -265,6 +271,7 @@ public class LoginEmpleadoController {
 
     @PostMapping("/procesar-actualizacion-clave")
     public String actualizarClave(Model modelo,
+                                  HttpServletRequest request,
                                   @Valid @ModelAttribute("dto") ActualizarClaveDTO dto,
                                   BindingResult result) {
 
@@ -281,7 +288,9 @@ public class LoginEmpleadoController {
             usuarioService.actualizarClave(dto.getUsuario(), dto.getNuevaClave());
             return "redirect:/empapp/clave";
         } catch (UsuarioNoEncontradoException e) {
-            return "redirect:/empapp/pedir-clave";
+            request.getSession().invalidate();
+            modelo.addAttribute("error", "Detectado alteracion maliciosa. Sesión reiniciada");
+            return "login/pedir-usuario";
         }
     }
 

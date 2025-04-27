@@ -1,14 +1,9 @@
 function mostrarOcultarClave() {
-    // Obtener los elementos de los campos de contraseña
-    var clave = document.getElementById("clave");
-
-    // Cambiar el tipo de ambos campos
-    if (clave.type === "password") {
-        clave.type = "text";  // Cambiar a tipo 'text' para mostrar la clave
-
-    } else {
-        clave.type = "password";  // Cambiar a tipo 'password' para ocultar la clave
-    }
+    // Obtener los elementos de los campos de contraseña por clase
+    const claves = document.querySelectorAll('.campo-clave');
+    claves.forEach(input => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+    });
 }
 
 function cambiarPeticion() {
@@ -97,4 +92,16 @@ $(document).ready(function() {
             alert("Por favor, introduce tu correo para poder recuperar la contraseña.");
         }
     });
+});
+
+// Confirma antes de enviar el formulario de actualización de contraseña
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('form-actualizar-clave');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('¿Está seguro de que desea cambiar la contraseña?')) {
+                e.preventDefault();
+            }
+        });
+    }
 });
