@@ -68,5 +68,28 @@ public class EtiquetadoController {
     // con el etiquetado si las necesitas (ej. etiquetado simple, eliminar etiquetas).
     // @GetMapping("/simple/{jefeId}")
     // public String mostrarEtiquetadoSimple(...) { ... }
+    // --- NUEVO MÉTODO ---
+    @GetMapping("/limitado/{jefeId}")
+    public String mostrarNuevoEtiquetado(@PathVariable String jefeId, Model model) {
+        try {
+            // Validación opcional del jefe (recomendado)
+            UUID.fromString(jefeId);
+            empleadoService.devuelveEmpleado(jefeId); // Lanza excepción si no existe
+
+            model.addAttribute("jefeId", jefeId); // Pasar ID a la vista
+            return "etiquetado/limitado-etiquetado"; // Nombre de la nueva plantilla HTML
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "El ID del jefe proporcionado no es válido.");
+            return "error"; // O una vista de error genérica
+        } catch (DepartamentoNoEncontradoException e) { // Asumiendo que esta es tu excepción
+            model.addAttribute("error", "El jefe con ID " + jefeId + " no existe.");
+            return "error"; // O una vista de error genérica
+        } catch (Exception e) {
+            model.addAttribute("error", "Error inesperado al cargar la página de etiquetado.");
+            e.printStackTrace(); // Loguear el error completo
+            return "error"; // O una vista de error genérica
+        }
+    }
 
 }

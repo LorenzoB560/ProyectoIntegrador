@@ -81,6 +81,14 @@ public class EtiquetaServiceImp implements EtiquetaService {
                 });
     }
 
+    // Método para sugerencias (usa el método del repositorio)
+    @Transactional(readOnly = true)
+    public List<EtiquetaDTO> buscarEtiquetasPorPrefijo(UUID jefeId, String prefijo) {
+        List<Etiqueta> etiquetas = etiquetaRepository.findByCreadorIdAndNombreStartingWithIgnoreCaseOrderByNombreAsc(jefeId, prefijo);
+        Type listType = new TypeToken<List<EtiquetaDTO>>() {}.getType();
+        return modelMapper.map(etiquetas, listType);
+    }
+
     @Override
     @Transactional // Transacción de escritura
     public EmpleadoDTO asignarEtiquetaExistente(String empleadoId, String etiquetaId, String jefeId) {
