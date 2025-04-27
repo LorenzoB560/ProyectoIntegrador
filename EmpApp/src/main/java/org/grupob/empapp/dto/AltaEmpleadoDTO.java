@@ -18,6 +18,7 @@ import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
 import org.grupob.empapp.validation.especialidades.EspecialidadesMinimas;
 import org.grupob.empapp.validation.especialidades.ExisteEspecialidad;
+import org.grupob.empapp.validation.foto.ImagenValida;
 import org.grupob.empapp.validation.genero.ExisteGenero;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
@@ -50,7 +51,8 @@ public class AltaEmpleadoDTO {
     @NotBlank(groups = GrupoDatosPersonales.class)
     private String apellido;
 
-
+//    @NotNull(groups = GrupoDatosPersonales.class)
+//    @Size(min = 1, message = "{foto.message}", groups = GrupoDatosPersonales.class)
     private byte[] foto; // Para almacenar la imagen en la base de datos
 
     @NotNull(groups = GrupoDatosPersonales.class)

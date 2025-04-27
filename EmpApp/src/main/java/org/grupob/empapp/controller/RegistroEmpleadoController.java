@@ -14,6 +14,7 @@ import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
+import org.grupob.empapp.validation.foto.ImagenValida;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -82,19 +83,28 @@ public class RegistroEmpleadoController {
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
             @Validated(GrupoDatosPersonales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
-            @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
+            @RequestParam("imagen") MultipartFile imagen,
             HttpSession sesion,
             Model model) {
 
-        // Si hay errores, volver a la misma página
+        // Primero validar el MultipartFile manualmente
+        if (imagen == null || imagen.isEmpty()) {
+            bindingResult.rejectValue("foto", "error.imagen.obligatoria");
+        } else if (!(imagen.getContentType().equalsIgnoreCase("image/jpeg")
+                || imagen.getContentType().equalsIgnoreCase("image/jpg")
+                || imagen.getContentType().equalsIgnoreCase("image/gif"))) {
+            bindingResult.rejectValue("foto", "error.imagen.formato");
+        } else if (imagen.getSize() > 200 * 1024) {
+            bindingResult.rejectValue("foto", "error.imagen.tamano");
+        }
+
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            System.err.println(bindingResult.toString());
             return "registro_empleado/datos-personales";
         }
-
 
         try {
             datosFormulario.setFoto(imagen.getBytes());
@@ -106,11 +116,12 @@ public class RegistroEmpleadoController {
         if (datosAnteriores != null) {
             actualizarDatos(datosFormulario, datosAnteriores);
         }
-
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
         return "redirect:/datos-contacto";
     }
+
+
     @GetMapping("/datos-contacto")
     public String datosContacto(HttpSession sesion, Model model) {
 
@@ -319,6 +330,7 @@ public class RegistroEmpleadoController {
         // ** DATOS PERSONALES **
         datosNuevos.setNombre(datosNuevos.getNombre() != null ? datosNuevos.getNombre() : datosAnteriores.getNombre());
         datosNuevos.setApellido(datosNuevos.getApellido() != null ? datosNuevos.getApellido() : datosAnteriores.getApellido());
+        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
         datosNuevos.setFechaNacimiento(datosNuevos.getFechaNacimiento() != null ? datosNuevos.getFechaNacimiento() : datosAnteriores.getFechaNacimiento());
         datosNuevos.setIdGeneroSeleccionado(datosNuevos.getIdGeneroSeleccionado() != null ? datosNuevos.getIdGeneroSeleccionado() : datosAnteriores.getIdGeneroSeleccionado());
 
