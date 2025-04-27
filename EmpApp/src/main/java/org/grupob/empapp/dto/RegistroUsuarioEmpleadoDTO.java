@@ -18,7 +18,7 @@ import java.util.UUID;
 public class RegistroUsuarioEmpleadoDTO {
     private UUID id;
 
-    @NotBlank(groups = GrupoUsuario.class)
+    @NotBlank(message = "El usuario no debe estar vacío", groups = GrupoUsuario.class)
     @EmailValidado(groups = GrupoUsuario.class)
     private String usuario;
 

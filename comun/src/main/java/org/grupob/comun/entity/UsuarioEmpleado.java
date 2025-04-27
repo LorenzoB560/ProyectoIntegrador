@@ -38,6 +38,8 @@ public class UsuarioEmpleado extends Usuario {
     @Column(name = "intentos_sesion_fallidos")
     private Integer intentosSesionFallidos;
 
+    private LocalDateTime fechaCreacion;
+
     public UsuarioEmpleado(String email, String clave) {
         super(email, clave);
         setActivo(true);

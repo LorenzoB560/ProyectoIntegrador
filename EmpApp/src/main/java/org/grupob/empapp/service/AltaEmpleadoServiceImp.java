@@ -3,10 +3,7 @@ package org.grupob.empapp.service;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
-import org.grupob.comun.entity.maestras.Genero;
-import org.grupob.comun.entity.maestras.Pais;
-import org.grupob.comun.entity.maestras.TipoDocumento;
-import org.grupob.comun.entity.maestras.TipoVia;
+import org.grupob.comun.entity.maestras.*;
 import org.grupob.comun.repository.*;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
@@ -27,11 +24,11 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final DepartamentoRepository departamentoRepository;
     private final EspecialidadRepository especialidadRepository;
     private final EntidadBancariaRepository entidadBancariaRepository;
-
+    private final TipoTarjetaRepository tipoTarjetaRepository;
 
     private final EmpleadoConverter empleadoConverter;
 
-    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository) {
+    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository) {
         this.generoRepository = generoRepository;
         this.empleadoRepository = empleadoRepository;
         this.paisRepository = paisRepository;
@@ -41,6 +38,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
         this.tipoDocumentoRepository = tipoDocumentoRepository1;
         this.especialidadRepository = especialidadRepository;
         this.entidadBancariaRepository = entidadBancariaRepository;
+        this.tipoTarjetaRepository = tipoTarjetaRepository;
     }
 
     public List<Genero> devolverGeneros() {
@@ -64,6 +62,10 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     public List<EntidadBancaria> devolverEntidadesBancarias(){
         return entidadBancariaRepository.findAll();
     }
+    public List<TipoTarjetaCredito> devolverTipoTarjetasCredito(){
+        return tipoTarjetaRepository.findAll();
+    }
+
 
     public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO){
         Empleado empleado = empleadoConverter.convertirAEntidad(altaEmpleadoDTO);

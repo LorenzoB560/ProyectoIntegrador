@@ -82,6 +82,27 @@
     <br> <br>
   </fieldset>
 
+  <fieldset>
+    <legend th:text="#{registro.tarjetaCredito}"></legend>
+
+    <!-- Tipo de tarjeta de crédito -->
+    <label for="idTipoTarjeta" th:text="#{registro.tipoTarjeta}"></label>
+    <select id="idTipoTarjeta" th:field="*{idTipoTarjeta}">
+      <option th:each="tarjeta: ${listaTipoTarjetas}"
+              th:value="${tarjeta.id}"
+              th:text="${tarjeta.tipoTarjetaCredito}"></option>
+    </select>
+    <div th:each="error: ${#fields.errors('idTipoTarjeta')}" th:text="${error}" class="error"></div>
+    <br> <br>
+
+    <!-- Número de la tarjeta de crédito -->
+    <label for="numeroTarjeta" th:text="#{registro.numeroTarjeta}"></label>
+    <input type="text" th:field="*{tarjetaCredito.numero}" id="numeroTarjeta">
+    <div th:each="error: ${#fields.errors('tarjetaCredito.numero')}" th:text="${error}" class="error"></div>
+    <br> <br>
+
+  </fieldset>
+
   <button type="submit" th:text="#{registro.datosEconomicos.submit}"></button>
   <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
 </form>

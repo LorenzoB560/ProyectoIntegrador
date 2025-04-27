@@ -24,6 +24,7 @@ import org.grupob.empapp.validation.genero.ExisteGenero;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
 import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
+import org.grupob.empapp.validation.tipo_tarjeta.ExisteTipoTarjeta;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -126,7 +127,10 @@ public class AltaEmpleadoDTO {
     @Digits(integer = 8, fraction = 2, groups = GrupoDatosEconomicos.class)
     private Double comision;
 
+    @NotNull(groups = GrupoDatosEconomicos.class)
+    @ExisteTipoTarjeta(groups = GrupoDatosEconomicos.class)
     private Long idTipoTarjeta;
+
     @Valid
     private TarjetaCreditoDTO tarjetaCredito;
 }

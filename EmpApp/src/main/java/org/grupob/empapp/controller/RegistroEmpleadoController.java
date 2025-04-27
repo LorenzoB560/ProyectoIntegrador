@@ -3,17 +3,16 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
-import org.grupob.comun.entity.maestras.Pais;
-import org.grupob.comun.entity.maestras.TipoDocumento;
-import org.grupob.comun.entity.maestras.TipoVia;
+import org.grupob.comun.entity.maestras.*;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
+import org.grupob.empapp.dto.CuentaBancariaDTO;
+import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
 import org.grupob.comun.entity.Departamento;
-import org.grupob.comun.entity.maestras.Genero;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +42,7 @@ public class RegistroEmpleadoController {
         List<Departamento> listaDepartamentos = altaEmpleadoServiceImp.devolverDepartamentos();
         List<Especialidad> listaEspecialidades = altaEmpleadoServiceImp.devolverEspecialidades();
         List<EntidadBancaria> listaEntidadesBancarias = altaEmpleadoServiceImp.devolverEntidadesBancarias();
+        List<TipoTarjetaCredito> listaTipoTarjetas = altaEmpleadoServiceImp.devolverTipoTarjetasCredito();
 
         modelo.addAttribute("listaGeneros", listaGeneros);
         modelo.addAttribute("listaPaises", listaPaises);
@@ -51,6 +51,7 @@ public class RegistroEmpleadoController {
         modelo.addAttribute("listaDepartamentos", listaDepartamentos);
         modelo.addAttribute("listaEspecialidades", listaEspecialidades);
         modelo.addAttribute("listaEntidadesBancarias", listaEntidadesBancarias);
+        modelo.addAttribute("listaTipoTarjetas", listaTipoTarjetas);
     }
 
     @GetMapping("/datos-personales")
@@ -203,7 +204,14 @@ public class RegistroEmpleadoController {
             datosFormulario = new AltaEmpleadoDTO();
             sesion.setAttribute("datos", datosFormulario);
         }
-
+        // Asegurarse de que la cuenta bancaria esté inicializada
+        if(datosFormulario.getCuentaBancaria() == null) {
+            datosFormulario.setCuentaBancaria(new CuentaBancariaDTO());
+        }
+        // Asegurarse de que la tarjeta de credito esté inicializada
+        if(datosFormulario.getTarjetaCredito() == null) {
+            datosFormulario.setTarjetaCredito(new TarjetaCreditoDTO());
+        }
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
@@ -233,6 +241,16 @@ public class RegistroEmpleadoController {
 //            throw new RuntimeException(e);
 //        }
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Asegurarse de que la cuenta bancaria esté inicializada
+        if(datosFormulario.getCuentaBancaria() == null) {
+            datosFormulario.setCuentaBancaria(new CuentaBancariaDTO());
+        }
+
+        // Asegurarse de que la tarjeta de credito esté inicializada
+        if(datosFormulario.getTarjetaCredito() == null) {
+            datosFormulario.setTarjetaCredito(new TarjetaCreditoDTO());
+        }
         if (datosAnteriores != null) {
             actualizarDatos(datosFormulario, datosAnteriores);
         }
@@ -321,7 +339,7 @@ public class RegistroEmpleadoController {
             nuevaDir.setRegion(nuevaDir.getRegion() != null ? nuevaDir.getRegion() : anteriorDir.getRegion());
         }
 
-        // ** DATOS LABORALES **
+        // ** DATOS PROFESIONALES **
         datosNuevos.setIdDepartamentoSeleccionado(
                 datosNuevos.getIdDepartamentoSeleccionado() != null ?
                         datosNuevos.getIdDepartamentoSeleccionado() :
