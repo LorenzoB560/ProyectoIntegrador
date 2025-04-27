@@ -101,6 +101,27 @@
     <div th:each="error: ${#fields.errors('tarjetaCredito.numero')}" th:text="${error}" class="error"></div>
     <br> <br>
 
+
+    <!-- Mes de caducidad -->
+    <label for="mesCaducidad" th:text="#{registro.mesCaducidad}"></label>
+    <select id="mesCaducidad" th:field="*{tarjetaCredito.mesCaducidad}">
+      <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
+    </select>
+    <div th:each="error: ${#fields.errors('tarjetaCredito.mesCaducidad')}" th:text="${error}" class="error"></div>
+
+    <!-- Año de caducidad -->
+    <label for="anioCaducidad" th:text="#{registro.anioCaducidad}"></label>
+    <select id="anioCaducidad" th:field="*{tarjetaCredito.anioCaducidad}">
+      <option th:each="anio : ${anios}" th:value="${anio}" th:text="${anio}"></option>
+    </select>
+    <div th:each="error: ${#fields.errors('tarjetaCredito.anioCaducidad')}" th:text="${error}" class="error"></div>
+
+    <!-- CVC -->
+    <label for="cvc" th:text="#{registro.cvc}"></label>
+    <input type="text" th:field="*{tarjetaCredito.cvc}" id="cvc">
+    <div th:each="error: ${#fields.errors('tarjetaCredito.cvc')}" th:text="${error}" class="error"></div>
+    <div class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+    <br> <br>
   </fieldset>
 
   <button type="submit" th:text="#{registro.datosEconomicos.submit}"></button>

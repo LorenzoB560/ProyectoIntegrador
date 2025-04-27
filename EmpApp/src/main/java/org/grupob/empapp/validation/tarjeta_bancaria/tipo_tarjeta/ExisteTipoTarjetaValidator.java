@@ -1,13 +1,10 @@
-package org.grupob.empapp.validation.tipo_tarjeta;
+package org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.grupob.comun.repository.DepartamentoRepository;
 import org.grupob.comun.repository.TipoTarjetaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class ExisteTipoTarjetaValidator implements ConstraintValidator<ExisteTipoTarjeta, Long> {

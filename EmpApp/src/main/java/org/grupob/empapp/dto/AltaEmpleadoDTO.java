@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.comun.entity.Especialidad;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
@@ -17,14 +16,14 @@ import org.grupob.empapp.validation.departamento.ExisteDepartamento;
 import org.grupob.empapp.validation.documento_valido.DocumentoValido;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
-import org.grupob.empapp.validation.entidad_bancaria.ExisteEntidadBancaria;
 import org.grupob.empapp.validation.especialidades.EspecialidadesMinimas;
 import org.grupob.empapp.validation.especialidades.ExisteEspecialidad;
 import org.grupob.empapp.validation.genero.ExisteGenero;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
+import org.grupob.empapp.validation.tarjeta_bancaria.cvc.CVCValido;
 import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
-import org.grupob.empapp.validation.tipo_tarjeta.ExisteTipoTarjeta;
+import org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta.ExisteTipoTarjeta;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -36,6 +35,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EdadCoincideConFechaNacimiento(groups = GrupoDatosPersonales.class)
 @DocumentoValido(groups = GrupoDatosContacto.class)
+@CVCValido(groups = GrupoDatosEconomicos.class)
 public class AltaEmpleadoDTO {
 
     private UUID id;
@@ -50,9 +50,8 @@ public class AltaEmpleadoDTO {
     @NotBlank(groups = GrupoDatosPersonales.class)
     private String apellido;
 
-//    @NotNull(groups = GrupoPersonal.class)
-//    //TODO FALTAN REALIZAR LAS VALIDACIONES AQUÍ
-//    private byte[] foto; // Para almacenar la imagen en la base de datos
+
+    private byte[] foto; // Para almacenar la imagen en la base de datos
 
     @NotNull(groups = GrupoDatosPersonales.class)
     @ExisteGenero(groups = GrupoDatosPersonales.class)

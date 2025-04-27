@@ -34,21 +34,4 @@ public class RegistroUsuarioEmpleadoDTO {
 
 
     private String confirmarClave;
-//
-//    private Integer numeroAccesos;
-//
-//    private LocalDateTime ultimaConexion;
-//
-//    private String motivoBloqueo;
-//
-//    private String mensajeBloqueo;
-//
-//    private LocalDateTime fechaDesbloqueo;
-//
-//    private Integer intentosSesionFallidos;
-
-//    public RegistroUsuarioEmpleadoDTO(String correo, String clave){
-//        this.correo=correo;
-//        this.clave=clave;
-//    }
 }

@@ -1,4 +1,4 @@
-package org.grupob.empapp.validation.numero_tarjeta;
+package org.grupob.empapp.validation.tarjeta_bancaria.numero_tarjeta;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

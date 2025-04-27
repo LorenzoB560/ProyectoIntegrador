@@ -21,7 +21,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.Year;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class RegistroEmpleadoController {
@@ -44,6 +48,8 @@ public class RegistroEmpleadoController {
         List<EntidadBancaria> listaEntidadesBancarias = altaEmpleadoServiceImp.devolverEntidadesBancarias();
         List<TipoTarjetaCredito> listaTipoTarjetas = altaEmpleadoServiceImp.devolverTipoTarjetasCredito();
 
+
+
         modelo.addAttribute("listaGeneros", listaGeneros);
         modelo.addAttribute("listaPaises", listaPaises);
         modelo.addAttribute("listaTipoVias", listaTipoVias);
@@ -52,6 +58,8 @@ public class RegistroEmpleadoController {
         modelo.addAttribute("listaEspecialidades", listaEspecialidades);
         modelo.addAttribute("listaEntidadesBancarias", listaEntidadesBancarias);
         modelo.addAttribute("listaTipoTarjetas", listaTipoTarjetas);
+        modelo.addAttribute("meses", altaEmpleadoServiceImp.devolverMeses());
+        modelo.addAttribute("anios", altaEmpleadoServiceImp.devolverAnios());
     }
 
     @GetMapping("/datos-personales")
@@ -74,6 +82,7 @@ public class RegistroEmpleadoController {
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
             @Validated(GrupoDatosPersonales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -87,12 +96,17 @@ public class RegistroEmpleadoController {
         }
 
 
+        try {
+            datosFormulario.setFoto(imagen.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
             actualizarDatos(datosFormulario, datosAnteriores);
         }
 
-        //altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
         return "redirect:/datos-contacto";
@@ -220,7 +234,6 @@ public class RegistroEmpleadoController {
     @PostMapping("/guardar-datos-economicos")
     public String guardarDatosEconomicos(
             @Validated(GrupoDatosEconomicos.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
-//            @RequestParam MultipartFile imagen,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -235,11 +248,7 @@ public class RegistroEmpleadoController {
         }
 
 
-//        try {
-//            datosFormulario.setFoto(imagen.getBytes());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
         // Asegurarse de que la cuenta bancaria esté inicializada

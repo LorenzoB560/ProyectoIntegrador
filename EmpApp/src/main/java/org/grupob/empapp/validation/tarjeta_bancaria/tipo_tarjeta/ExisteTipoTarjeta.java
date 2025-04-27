@@ -1,4 +1,4 @@
-package org.grupob.empapp.validation.tipo_tarjeta;
+package org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

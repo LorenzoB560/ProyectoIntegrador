@@ -49,6 +49,9 @@
                th:field="*{apellido}">
         <div th:each="error: ${#fields.errors('apellido')}" th:text="${error}" class="error"></div>
 
+        <label th:text="#{registro.foto}"></label> <br>
+        <input type="file" name="imagen" accept="image/*"/>
+
         <!-- GENERO -->
         <label th:text="#{registro.genero}"></label>
         <div th:each="genero : ${listaGeneros}">
