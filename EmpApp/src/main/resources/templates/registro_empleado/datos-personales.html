@@ -38,10 +38,12 @@
         <section>
             <!-- Nombre y Apellido -->
             <article>
+                <span class="asterisco">*</span>
                 <label for="nombre" th:text="#{registro.nombre}"></label>
                 <input type="text" id="nombre" th:field="*{nombre}">
                 <div th:each="error: ${#fields.errors('nombre')}" th:text="${error}" class="error"></div>
 
+                <span class="asterisco">*</span>
                 <label for="apellido" th:text="#{registro.apellido}"></label>
                 <input type="text" id="apellido" th:field="*{apellido}">
                 <div th:each="error: ${#fields.errors('apellido')}" th:text="${error}" class="error"></div>
@@ -52,6 +54,7 @@
         <section>
             <!-- Fotografía -->
             <article>
+                <span class="asterisco">*</span>
                 <label th:text="#{registro.foto}"></label><br>
                 <input type="file" name="imagen" accept="image/*">
                 <div th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}" class="error"></div>
@@ -62,6 +65,7 @@
         <section>
             <!-- Género -->
             <article>
+                <span class="asterisco">*</span>
                 <label th:text="#{registro.genero}"></label><br>
                 <div th:each="genero : ${listaGeneros}">
                     <input type="radio" th:field="*{idGeneroSeleccionado}" th:value="${genero.id}" th:id="${'genero' + genero.id}">
@@ -79,10 +83,12 @@
         <section>
             <!-- Fecha de nacimiento y Edad -->
             <article>
+                <span class="asterisco">*</span>
                 <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
                 <input type="text" id="fechaNacimiento" th:field="*{fechaNacimiento}">
                 <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
 
+                <span class="asterisco">*</span>
                 <label for="edad" th:text="#{registro.edad}"></label>
                 <input type="text" id="edad" th:field="*{edad}">
                 <div th:each="error : ${#fields.errors('edad')}" th:text="${error}" class="error"></div>
@@ -96,6 +102,7 @@
         <section>
             <!-- País de nacimiento -->
             <article>
+                <span class="asterisco">*</span>
                 <label for="paisNacimiento" th:text="#{registro.paisNacimiento}"></label>
                 <select id="paisNacimiento" th:field="*{paisNacimiento}">
                     <option th:each="pais: ${listaPaises}" th:value="${pais.pais}" th:text="#{'registro.paisNacimiento.' + ${pais.pais}}"></option>

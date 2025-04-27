@@ -300,6 +300,12 @@ public class RegistroEmpleadoController {
                                  Model model,
                                  HttpServletRequest request) {
 
+
+        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        if (datosAnteriores != null) {
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
+        }
+
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
@@ -307,12 +313,6 @@ public class RegistroEmpleadoController {
             System.err.println(bindingResult.toString());
             return "registro_empleado/resumen";
         }
-
-        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
-        if (datosAnteriores != null) {
-            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
-        }
-
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);

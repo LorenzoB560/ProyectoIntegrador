@@ -24,3 +24,8 @@ a img{
     color: red;
     font-weight: bold;
 }
+.asterisco {
+    color: red;
+    font-weight: bold;
+    margin-right: 5px;
+}

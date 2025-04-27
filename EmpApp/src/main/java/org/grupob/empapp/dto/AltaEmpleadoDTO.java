@@ -76,7 +76,6 @@ public class AltaEmpleadoDTO {
     private String paisNacimiento;
 
     @NotNull(groups = GrupoDatosPersonales.class)
-    @NotBlank(groups = GrupoDatosPersonales.class)
     private String comentarios;
 
     // ** PASO 2 - DATOS CONTACTO **

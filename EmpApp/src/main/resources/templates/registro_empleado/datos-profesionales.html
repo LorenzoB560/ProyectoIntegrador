@@ -35,6 +35,7 @@
         <legend th:text="#{registro.datosLaborales}"></legend>
 
         <!-- DEPARTAMENTO -->
+        <span class="asterisco">*</span>
         <label for="departamento" th:text="#{registro.departamento}"></label>
         <select id="departamento" th:field="*{idDepartamentoSeleccionado}">
             <option th:each="dept : ${listaDepartamentos}"
@@ -46,6 +47,7 @@
         <br><br>
 
         <!-- ESPECIALIDADES -->
+        <span class="asterisco">*</span>
         <label th:text="#{registro.especialidades}"></label>
         <div th:each="esp : ${listaEspecialidades}">
             <input type="checkbox" th:field="*{especialidades}"

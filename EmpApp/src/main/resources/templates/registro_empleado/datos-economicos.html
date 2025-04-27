@@ -36,6 +36,7 @@
     <legend th:text="#{registro.datosEconomicos}"></legend>
 
     <!-- ENTIDAD BANCARIA -->
+    <span class="asterisco">*</span>
     <label for="idEntidadBancaria" th:text="#{registro.entidadBancaria}"></label>
     <select id="idEntidadBancaria" th:field="*{cuentaBancaria.idEntidadBancaria}">
       <option th:each="entidad : ${listaEntidadesBancarias}"
@@ -46,22 +47,27 @@
     <br>
 
     <!-- IBAN -->
+    <span class="asterisco">*</span>
     <label for="codigoPais" th:text="#{registro.codigoPais}"></label>
     <input type="text" th:field="*{cuentaBancaria.codigoPais}" id="codigoPais">
     <div th:each="error : ${#fields.errors('cuentaBancaria.codigoPais')}" th:text="${error}" class="error"></div>
 
+    <span class="asterisco">*</span>
     <label for="digitosControl" th:text="#{registro.digitosControl}"></label>
     <input type="text" th:field="*{cuentaBancaria.digitosControl}" id="digitosControl">
     <div th:each="error : ${#fields.errors('cuentaBancaria.digitosControl')}" th:text="${error}" class="error"></div>
 
+    <span class="asterisco">*</span>
     <label for="codigoEntidadBancaria" th:text="#{registro.codigoEntidadBancaria}"></label>
     <input type="text" th:field="*{cuentaBancaria.codigoEntidadBancaria}" id="codigoEntidadBancaria">
     <div th:each="error : ${#fields.errors('cuentaBancaria.codigoEntidadBancaria')}" th:text="${error}" class="error"></div>
 
+    <span class="asterisco">*</span>
     <label for="sucursal" th:text="#{registro.sucursal}"></label>
     <input type="text" th:field="*{cuentaBancaria.sucursal}" id="sucursal">
     <div th:each="error : ${#fields.errors('cuentaBancaria.sucursal')}" th:text="${error}" class="error"></div>
 
+    <span class="asterisco">*</span>
     <label for="numeroCuenta" th:text="#{registro.numeroCuenta}"></label>
     <input type="text" th:field="*{cuentaBancaria.numeroCuenta}" id="numeroCuenta">
     <div th:each="error : ${#fields.errors('cuentaBancaria.numeroCuenta')}" th:text="${error}" class="error"></div>
@@ -70,6 +76,7 @@
     <div th:each="error : ${#fields.errors('cuentaBancaria')}" th:text="${error}" class="error"></div>
 
     <!-- SALARIO -->
+    <span class="asterisco">*</span>
     <label for="salario" th:text="#{registro.salario}"></label>
     <input type="text" th:field="*{salario}" id="salario">
     <div th:each="error : ${#fields.errors('salario')}" th:text="${error}" class="error"></div>
@@ -87,6 +94,7 @@
     <legend th:text="#{registro.tarjetaCredito}"></legend>
 
     <!-- TIPO DE TARJETA DE CRÉDITO -->
+    <span class="asterisco">*</span>
     <label for="idTipoTarjeta" th:text="#{registro.tipoTarjeta}"></label>
     <select id="idTipoTarjeta" th:field="*{idTipoTarjeta}">
       <option th:each="tarjeta : ${listaTipoTarjetas}"
@@ -97,12 +105,14 @@
     <br><br>
 
     <!-- NÚMERO DE LA TARJETA DE CRÉDITO -->
+    <span class="asterisco">*</span>
     <label for="numeroTarjeta" th:text="#{registro.numeroTarjeta}"></label>
     <input type="text" th:field="*{tarjetaCredito.numero}" id="numeroTarjeta">
     <div th:each="error : ${#fields.errors('tarjetaCredito.numero')}" th:text="${error}" class="error"></div>
     <br><br>
 
     <!-- MES DE CADUCIDAD -->
+    <span class="asterisco">*</span>
     <label for="mesCaducidad" th:text="#{registro.mesCaducidad}"></label>
     <select id="mesCaducidad" th:field="*{tarjetaCredito.mesCaducidad}">
       <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
@@ -110,6 +120,7 @@
     <div th:each="error : ${#fields.errors('tarjetaCredito.mesCaducidad')}" th:text="${error}" class="error"></div>
 
     <!-- AÑO DE CADUCIDAD -->
+    <span class="asterisco">*</span>
     <label for="anioCaducidad" th:text="#{registro.anioCaducidad}"></label>
     <select id="anioCaducidad" th:field="*{tarjetaCredito.anioCaducidad}">
       <option th:each="anio : ${anios}" th:value="${anio}" th:text="${anio}"></option>
@@ -117,6 +128,7 @@
     <div th:each="error : ${#fields.errors('tarjetaCredito.anioCaducidad')}" th:text="${error}" class="error"></div>
 
     <!-- CVC -->
+    <span class="asterisco">*</span>
     <label for="cvc" th:text="#{registro.cvc}"></label>
     <input type="text" th:field="*{tarjetaCredito.cvc}" id="cvc">
     <div th:each="error : ${#fields.errors('tarjetaCredito.cvc')}" th:text="${error}" class="error"></div>
