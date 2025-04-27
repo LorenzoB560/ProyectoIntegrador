@@ -74,7 +74,6 @@ public class Empleado extends Persona {
 
     @Embedded
     @AttributeOverrides({
-//            @AttributeOverride(name = "entidadBancaria", column = @Column(name = "id_entidad_bancaria", table = "informacion_economica")),
             @AttributeOverride(name = "IBAN", column = @Column(name = "IBAN", table = "informacion_economica"))
     })
     private CuentaBancaria cuentaCorriente;

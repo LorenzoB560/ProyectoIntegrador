@@ -29,9 +29,11 @@ public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
         UsuarioEmpleado usuarioEmpleado = registroUsuarioEmpleadoConverter.convertirAEntidad(usuario);
         usuarioEmpleado.setClave(passwordEncoder.encode(usuario.getClave())); // Hashear la contraseña con BCrypt
         usuarioEmpleado.setIntentosSesionFallidos(0);
+        usuarioEmpleado.setNumeroAccesos(0);
         usuarioEmpleado.setActivo(true);
         usuarioEmpleado.setFechaCreacion(LocalDateTime.now());
         usuarioEmpleadoRepository.save(usuarioEmpleado);
+
     }
 
     public void usuarioExiste(RegistroUsuarioEmpleadoDTO registroUsuarioEmpleadoDTO){
