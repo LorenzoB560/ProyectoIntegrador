@@ -4,6 +4,7 @@ import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.EtiquetaDTO;
 import org.grupob.empapp.service.EtiquetaService; // *** CAMBIO: Importar la interfaz del servicio ***
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.empapp.service.EtiquetaServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ import java.util.UUID;
 @RequestMapping("/etiquetas")
 public class EtiquetaRestController {
 
-    private final EtiquetaService etiquetaService;
+    private final EtiquetaServiceImp etiquetaService;
 
-    public EtiquetaRestController(EtiquetaService etiquetaService) {
+    public EtiquetaRestController(EtiquetaServiceImp etiquetaService) {
         this.etiquetaService = etiquetaService;
     }
 
