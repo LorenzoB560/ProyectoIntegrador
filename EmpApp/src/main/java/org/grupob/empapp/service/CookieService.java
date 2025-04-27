@@ -127,16 +127,22 @@ public  String serializar(Map<String, Integer> usuarios) {
  * @param usuarioActual Usuario a actualizar
  * @return Nuevo valor serializado para la cookie
  */
-public  String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
+//public  String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
+//
+//    if (valor != null && valor.contains(usuarioActual)) {
+//        int contador = usuarios.getOrDefault(usuarioActual, 0);
+//        usuarios.put(usuarioActual, ++contador);
+//    } else {
+//        usuarios.put(usuarioActual, 1);
+//    }
+//    return serializar(usuarios);
+//}
 
-    if (valor != null && valor.contains(usuarioActual)) {
+    public String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
         int contador = usuarios.getOrDefault(usuarioActual, 0);
         usuarios.put(usuarioActual, ++contador);
-    } else {
-        usuarios.put(usuarioActual, 1);
+        return serializar(usuarios);
     }
-    return serializar(usuarios);
-}
 
 /**
  * Crea una nueva cookie con configuración de seguridad básica

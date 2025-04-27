@@ -1,17 +1,9 @@
 function mostrarOcultarClave() {
-    // Obtener los elementos de los campos de contraseña
-    var clave = document.getElementById("clave");
-    var confirmarClave = document.getElementById("confirmarClave");
-
-    // Cambiar el tipo de ambos campos
-    if (clave.type === "password" && confirmarClave.type === "password") {
-        clave.type = "text";  // Cambiar a tipo 'text' para mostrar la clave
-        confirmarClave.type = "text";
-
-    } else {
-        clave.type = "password";  // Cambiar a tipo 'password' para ocultar la clave
-        confirmarClave.type = "password";
-    }
+    // Obtener los elementos de los campos de contraseña por clase
+    const claves = document.querySelectorAll('.campo-clave');
+    claves.forEach(input => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+    });
 }
 
 function cambiarPeticion() {
@@ -19,7 +11,7 @@ function cambiarPeticion() {
     const select = document.getElementById('usuariosCookie');
     const input = document.createElement('input');
     input.type = 'text';
-    input.name = 'correo';
+    input.name = 'usuario';
     input.placeholder = 'Correo electrónico';
 
     // Reemplazar el select por el nuevo input
@@ -73,19 +65,19 @@ $(document).ready(function() {
         event.preventDefault();
         // Evita que el enlace haga su comportamiento por defecto (redirigir o recargar)
 
-        const correo = $("#correo").text().trim();
+        const usuario = $("#usuario").text().trim();
         // Obtiene el valor del input con ID "correo", eliminando espacios en blanco
 
-        if (correo) {
+        if (usuario) {
             // Si se ha introducido un correo...
 
             $.ajax({
                 url: "/empapp/devuelve-clave", // Endpoint que expone la contraseña
                 type: "GET",                     // Método HTTP
-                data: { correo: correo },        // Parámetro que se envía al backend
+                data: { usuario: usuario },        // Parámetro que se envía al backend
                 success: function(clave) {
                     // Función que se ejecuta si la petición se completa correctamente
-                    alert("La contraseña de " + correo + " es: " + clave);
+                    alert("La contraseña de " + usuario + " es: " + clave);
                     // Muestra la contraseña recibida
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -100,4 +92,16 @@ $(document).ready(function() {
             alert("Por favor, introduce tu correo para poder recuperar la contraseña.");
         }
     });
+});
+
+// Confirma antes de enviar el formulario de actualización de contraseña
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('form-actualizar-clave');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('¿Está seguro de que desea cambiar la contraseña?')) {
+                e.preventDefault();
+            }
+        });
+    }
 });

@@ -1,11 +1,17 @@
 package org.grupob.empapp.service;
 
+import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.exception.ClaveIncorrectaException;
+import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.comun.entity.UsuarioEmpleado;
+import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
 import org.grupob.comun.repository.UsuarioEmpleadoRepository;
 import org.grupob.comun.repository.maestras.MotivoBloqueoRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,8 +29,8 @@ public class UsuarioEmpleadoServiceImp {
     // Conversor entre entidad y DTO
     private final LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert;
 
-    // Servicio de gestión de cookies
-    private final CookieService cookieService;
+    // Cifrador de contraseñas (para validar)
+    private final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 
     // Máximo de intentos fallidos permitidos
     private static final int INTENTOS_MAXIMOS = 3;
@@ -32,23 +38,20 @@ public class UsuarioEmpleadoServiceImp {
     public UsuarioEmpleadoServiceImp(
             UsuarioEmpleadoRepository usuarioEmpRepo,
             MotivoBloqueoRepository motivoBloqueoRepo,
-            LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert,
-            CookieService cookieService
-    ) {
+            LoginUsuarioEmpleadoConverter loginUsuarioEmpConvert) {
         this.usuarioEmpRepo = usuarioEmpRepo;
         this.motivoBloqueoRepo = motivoBloqueoRepo;
         this.loginUsuarioEmpConvert = loginUsuarioEmpConvert;
-        this.cookieService = cookieService;
     }
 
-    public UsuarioEmpleado devuelveUsuarioEmpPorCorreo(String correo){
-        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(correo);
+    public LoginUsuarioEmpleadoDTO devuelveUsuarioEmpPorUsuario(String usuario){
+        Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(usuario);
 
         if (usuarioOpt.isPresent()) {
-//            throw new RuntimeException("Usuario no registrado");
-            return usuarioOpt.get();
+
+            return loginUsuarioEmpConvert.convertirADTO(usuarioOpt.get());
         }
-        throw new RuntimeException("Usuario no registrado");
+        throw new UsuarioNoEncontradoException("El usuario no está registrado");
     }
 
     /**
@@ -61,8 +64,7 @@ public class UsuarioEmpleadoServiceImp {
         Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(correo);
 
         if (usuarioOpt.isEmpty()) {
-//            throw new RuntimeException("Usuario no registrado");
-        return false;
+            throw new UsuarioNoEncontradoException("El usuario no está registrado");
         }
 
         UsuarioEmpleado usuario = usuarioOpt.get();
@@ -70,11 +72,9 @@ public class UsuarioEmpleadoServiceImp {
         // Verificar bloqueo temporal
         if (usuario.getFechaDesbloqueo() != null &&
                 usuario.getFechaDesbloqueo().isAfter(LocalDateTime.now())) {
-            throw new RuntimeException("Cuenta bloqueada hasta: " + usuario.getFechaDesbloqueo());
+            throw new CuentaBloqueadaException("Cuenta bloqueada por seguridad", usuario.getFechaDesbloqueo());
         }
 
-        /*cookieService.actualizarCookieHistorial(response, email);
-        return loginUsuarioEmpConvert.convertirADTO(usuario);*/
         return true;
     }
 
@@ -85,17 +85,22 @@ public class UsuarioEmpleadoServiceImp {
      * @throws RuntimeException Si las credenciales son inválidas
      */
     public Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto) {
-        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getCorreo())
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
+        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(dto.getUsuario())
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Credenciales inválidas"));
 
-        if (!usuarioEmp.getClave().equals(dto.getClave())) {
-            manejarIntentoFallido(usuarioEmp);
-//            throw new RuntimeException("Contraseña incorrecta");
-            return false;
+        // Verificar bloqueo temporal
+        if (usuarioEmp.getFechaDesbloqueo() != null &&
+                usuarioEmp.getFechaDesbloqueo().isAfter(LocalDateTime.now())) {
+            throw new CuentaBloqueadaException("Cuenta bloqueada por intentos de sesion fallidos", usuarioEmp.getFechaDesbloqueo());
         }
 
-//        actualizarEstadisticasAcceso(usuario);
-//        cookieService.crearCookieSesion(response, usuario.getCorreo().toString());
+        if (!passwordEncoder.matches(dto.getClave(), usuarioEmp.getClave())) {
+            int intentos = manejarIntentoFallido(usuarioEmp);
+            int restantes = INTENTOS_MAXIMOS - intentos;
+
+            throw new ClaveIncorrectaException("Contraseña incorrecta", restantes > 0 ? restantes : 0);
+        }
+
         actualizarEstadisticasAcceso(usuarioEmp);
         return true;
     }
@@ -113,8 +118,8 @@ public class UsuarioEmpleadoServiceImp {
     /**
      * Gestiona los intentos fallidos de autenticación
      */
-    private void manejarIntentoFallido(UsuarioEmpleado usuario) {
-        int intentos = usuario.getIntentosSesionFallidos() + 1;
+    private int manejarIntentoFallido(UsuarioEmpleado usuario) {
+        int intentos = usuario.getIntentosSesionFallidos() +1;
         usuario.setIntentosSesionFallidos(intentos);
 
         if (intentos >= INTENTOS_MAXIMOS) {
@@ -125,5 +130,14 @@ public class UsuarioEmpleadoServiceImp {
             usuario.setFechaDesbloqueo(LocalDateTime.now().plusMinutes(motivo.getMinutos()));
         }
         usuarioEmpRepo.save(usuario);
+        return usuario.getIntentosSesionFallidos();
+    }
+
+    public void actualizarClave(String usuario, String nuevaClave) {
+        UsuarioEmpleado usuarioEmp = usuarioEmpRepo.findByUsuario(usuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Credenciales inválidas"));
+
+        usuarioEmp.setClave(passwordEncoder.encode(nuevaClave));
+        usuarioEmpRepo.save(usuarioEmp);
     }
 }

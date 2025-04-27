@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
-import org.grupob.empapp.validation.contrasena.ClaveCoincide;
+import org.grupob.empapp.validation.clave.ClaveCoincide;
 import org.grupob.comun.validation.email.EmailValidado;
 
 import java.util.UUID;
