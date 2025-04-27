@@ -5,11 +5,9 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.Especialidad;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
+import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
 import org.grupob.empapp.validation.departamento.ExisteDepartamento;
@@ -23,6 +21,7 @@ import org.grupob.empapp.validation.genero.ExisteGenero;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
 import org.grupob.empapp.validation.tarjeta_bancaria.cvc.CVCValido;
+import org.grupob.empapp.validation.terminos.AceptarTerminos;
 import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
 import org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta.ExisteTipoTarjeta;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -110,7 +109,7 @@ public class AltaEmpleadoDTO {
     @NotNull(groups = GrupoDatosProfesionales.class)
     @ExisteEspecialidad(groups = GrupoDatosProfesionales.class)
     @EspecialidadesMinimas(groups = GrupoDatosProfesionales.class)
-    private Set<UUID> especialidades;
+    private Set<Especialidad> especialidades;
 
 
     // ** PASO 4 - DATOS ECONOMICOS **
@@ -134,4 +133,9 @@ public class AltaEmpleadoDTO {
 
     @Valid
     private TarjetaCreditoDTO tarjetaCredito;
+
+    // ** PASO 5 - RESUMEN **
+
+    @AceptarTerminos(groups = GrupoResumen.class)
+    private String aceptacionTerminos;
 }

@@ -8,6 +8,7 @@
 </head>
 <body id="body-profesionales">
 
+<!-- Navegación entre pasos -->
 <a href="/datos-personales" id="datos-personales">
     <img src="/img/Paso1.png" alt="Paso 1">
 </a>
@@ -24,56 +25,52 @@
     <img src="/img/Resumen.png" alt="Resumen">
 </a>
 
-<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
+<!-- MENSAJE DE ERROR GLOBAL (si existe) -->
+<h2 th:if="${mensajeNOK != null}" th:text="${mensajeNOK}" class="error"></h2>
 
+<!-- FORMULARIO -->
 <form action="/guardar-datos-profesionales" method="POST" th:object="${datos}" id="formulario">
-
-
 
     <fieldset>
         <legend th:text="#{registro.datosLaborales}"></legend>
 
-        <!-- Seleccionar departamento -->
+        <!-- DEPARTAMENTO -->
         <label for="departamento" th:text="#{registro.departamento}"></label>
         <select id="departamento" th:field="*{idDepartamentoSeleccionado}">
-            <option th:each="dept: ${listaDepartamentos}"
+            <option th:each="dept : ${listaDepartamentos}"
                     th:value="${dept.id}"
-                    th:text="#{'registro.departamento.' + ${dept.getCodigo()}}"></option>
+                    th:text="#{'registro.departamento.' + ${dept.codigo}}">
+            </option>
         </select>
-        <div th:each="error: ${#fields.errors('idDepartamentoSeleccionado')}" th:text="${error}" class="error"></div>
-        <br> <br>
+        <div th:each="error : ${#fields.errors('idDepartamentoSeleccionado')}" th:text="${error}" class="error"></div>
+        <br><br>
 
-        <!--Especialidades-->
+        <!-- ESPECIALIDADES -->
         <label th:text="#{registro.especialidades}"></label>
-        <div th:each="esp: ${listaEspecialidades}">
-            <input type="checkbox" name="especialidades"
-                   th:field="*{especialidades}"
+        <div th:each="esp : ${listaEspecialidades}">
+            <input type="checkbox" th:field="*{especialidades}"
                    th:value="${esp.id}"
-                   th:id="'especialidad.' + ${esp.codigo}"
-            />
-            <label th:for="'especialidad.' + ${esp.codigo}"
+                   th:id="${'especialidad_' + esp.codigo}" />
+            <label th:for="${'especialidad_' + esp.codigo}"
                    th:text="#{'registro.especialidades.' + ${esp.codigo}}"></label>
         </div>
-        <div th:each="error: ${#fields.errors('especialidades')}" th:text="${error}" class="error"></div>
+        <div th:each="error : ${#fields.errors('especialidades')}" th:text="${error}" class="error"></div>
 
-        <!--Botón para deseleccionar todos los checkboxes-->
-
+        <!-- BOTONES SELECCIONAR/DESELECCIONAR CHECKBOXES -->
         <input type="button" id="deseleccionarCheckbox" name="deseleccionarCheckbox"
                th:value="#{registro.botonEspecialidades.deseleccionar}"
                onclick="deseleccionaCheckbox('especialidades');" class="boton" />
         &emsp;
-
-
-        <!--Botón para seleccionar todos los checkboxes-->
-
         <input type="button" id="seleccionarCheckbox" name="seleccionarCheckbox"
                th:value="#{registro.botonEspecialidades.seleccionar}"
                onclick="seleccionaCheckbox('especialidades');" class="boton" />
-        <br> <br>
+        <br><br>
     </fieldset>
 
+    <!-- BOTONES DEL FORMULARIO -->
     <button type="submit" th:text="#{registro.datosLaborales.submit}"></button>
-    <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
+    <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()" />
 </form>
+
 </body>
 </html>

@@ -1,20 +1,18 @@
 package org.grupob.empapp.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.maestras.*;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
+import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosProfesionales;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosPersonales;
+import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
-import org.grupob.empapp.validation.foto.ImagenValida;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.Year;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 public class RegistroEmpleadoController {
@@ -114,7 +109,7 @@ public class RegistroEmpleadoController {
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
@@ -169,7 +164,7 @@ public class RegistroEmpleadoController {
             datosFormulario.setDireccion(new DireccionPostalDTO());
         }
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
 
         System.err.println(datosFormulario);
@@ -212,7 +207,7 @@ public class RegistroEmpleadoController {
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
 
         System.err.println(datosFormulario);
@@ -272,13 +267,13 @@ public class RegistroEmpleadoController {
             datosFormulario.setTarjetaCredito(new TarjetaCreditoDTO());
         }
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
 
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/datos-profesionales";
+        return "redirect:/resumen";
     }
     @GetMapping("/resumen")
     public String resumen(HttpSession sesion, Model model) {
@@ -298,12 +293,31 @@ public class RegistroEmpleadoController {
 
         return "registro_empleado/resumen";
     }
-    @PostMapping("/guardar-empleado")
-    public String guardarEmpleado(HttpSession sesion) {
+    @PostMapping("/guardar-resumen")
+    public String guardarResumen(@Validated(GrupoResumen.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+                                 BindingResult bindingResult,
+                                 HttpSession sesion,
+                                 Model model,
+                                 HttpServletRequest request) {
 
-        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        // Si hay errores, volver a la misma página
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("datos", datosFormulario);
+            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            System.err.println(bindingResult.toString());
+            return "registro_empleado/resumen";
+        }
+
+        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        if (datosAnteriores != null) {
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
+        }
+
+
         System.err.println(datosFormulario);
-        altaEmpleadoServiceImp.guardarEmpleado(datosFormulario);
+        sesion.setAttribute("datos", datosFormulario);
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        altaEmpleadoServiceImp.guardarEmpleado(datosFormulario, loginUsuarioEmpleadoDTO.getId().toString());
         return "redirect:/usuario-insertado";
     }
     @GetMapping("/usuario-insertado")
@@ -315,59 +329,6 @@ public class RegistroEmpleadoController {
     public String volverPrincipio(HttpSession sesion) {
         sesion.invalidate();
         return "redirect:/datos-personales";
-    }
-
-
-    private void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
-        if (datosNuevos == null) {
-            datosNuevos = new AltaEmpleadoDTO(); // Nueva instancia si los nuevos datos son nulos
-        }
-
-        if (datosAnteriores == null) {
-            return; // No hay nada anterior que recuperar
-        }
-
-        // ** DATOS PERSONALES **
-        datosNuevos.setNombre(datosNuevos.getNombre() != null ? datosNuevos.getNombre() : datosAnteriores.getNombre());
-        datosNuevos.setApellido(datosNuevos.getApellido() != null ? datosNuevos.getApellido() : datosAnteriores.getApellido());
-        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
-        datosNuevos.setFechaNacimiento(datosNuevos.getFechaNacimiento() != null ? datosNuevos.getFechaNacimiento() : datosAnteriores.getFechaNacimiento());
-        datosNuevos.setIdGeneroSeleccionado(datosNuevos.getIdGeneroSeleccionado() != null ? datosNuevos.getIdGeneroSeleccionado() : datosAnteriores.getIdGeneroSeleccionado());
-
-        // ** DATOS DIRECCIÓN **
-        // Asegurar que el objeto dirección no sea nulo
-        if (datosNuevos.getDireccion() == null) {
-            // Si el anterior tiene dirección, lo copiamos completamente
-            if (datosAnteriores.getDireccion() != null) {
-                datosNuevos.setDireccion(datosAnteriores.getDireccion());
-            } else {
-                // Si ninguno tiene dirección, creamos uno nuevo
-                datosNuevos.setDireccion(new DireccionPostalDTO());
-            }
-        } else if (datosAnteriores.getDireccion() != null) {
-            // Si ambos tienen dirección, completamos campos nulos con datos anteriores
-            DireccionPostalDTO nuevaDir = datosNuevos.getDireccion();
-            DireccionPostalDTO anteriorDir = datosAnteriores.getDireccion();
-
-            nuevaDir.setTipoVia(nuevaDir.getTipoVia() != null ? nuevaDir.getTipoVia() : anteriorDir.getTipoVia());
-            nuevaDir.setVia(nuevaDir.getVia() != null ? nuevaDir.getVia() : anteriorDir.getVia());
-            nuevaDir.setNumero(nuevaDir.getNumero() != null ? nuevaDir.getNumero() : anteriorDir.getNumero());
-            nuevaDir.setPortal(nuevaDir.getPortal() != null ? nuevaDir.getPortal() : anteriorDir.getPortal());
-            nuevaDir.setPlanta(nuevaDir.getPlanta() != null ? nuevaDir.getPlanta() : anteriorDir.getPlanta());
-            nuevaDir.setPuerta(nuevaDir.getPuerta() != null ? nuevaDir.getPuerta() : anteriorDir.getPuerta());
-            nuevaDir.setCodigoPostal(nuevaDir.getCodigoPostal() != null ? nuevaDir.getCodigoPostal() : anteriorDir.getCodigoPostal());
-            nuevaDir.setLocalidad(nuevaDir.getLocalidad() != null ? nuevaDir.getLocalidad() : anteriorDir.getLocalidad());
-            nuevaDir.setRegion(nuevaDir.getRegion() != null ? nuevaDir.getRegion() : anteriorDir.getRegion());
-        }
-
-        // ** DATOS PROFESIONALES **
-        datosNuevos.setIdDepartamentoSeleccionado(
-                datosNuevos.getIdDepartamentoSeleccionado() != null ?
-                        datosNuevos.getIdDepartamentoSeleccionado() :
-                        datosAnteriores.getIdDepartamentoSeleccionado());
-
-        // ** FOTO DE PERFIL **
-//        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
     }
 
 

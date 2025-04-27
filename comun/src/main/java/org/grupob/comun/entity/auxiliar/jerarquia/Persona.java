@@ -16,7 +16,7 @@ import java.util.UUID;
 @MappedSuperclass
 public class Persona {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String nombre;
