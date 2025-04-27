@@ -91,5 +91,28 @@ public class EtiquetadoController {
             return "error"; // O una vista de error genérica
         }
     }
+    // --- NUEVO MÉTODO PARA LA VISTA DE ELIMINAR ---
+    @GetMapping("/eliminar/{jefeId}")
+    public String mostrarEliminarEtiquetas(@PathVariable String jefeId, Model model) {
+        try {
+            // Validación opcional del jefe (recomendado)
+            UUID.fromString(jefeId);
+            empleadoService.devuelveEmpleado(jefeId); // Lanza excepción si no existe
+
+            model.addAttribute("jefeId", jefeId); // Pasar ID a la vista
+            return "etiquetado/eliminar-etiquetas"; // Nombre de la nueva plantilla HTML
+
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "El ID del jefe proporcionado no es válido.");
+            return "error";
+        } catch (DepartamentoNoEncontradoException e) { // O tu excepción de no encontrado
+            model.addAttribute("error", "El jefe con ID " + jefeId + " no existe.");
+            return "error";
+        } catch (Exception e) {
+            model.addAttribute("error", "Error inesperado al cargar la página de eliminación.");
+            e.printStackTrace();
+            return "error";
+        }
+    }
 
 }

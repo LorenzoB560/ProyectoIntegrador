@@ -150,6 +150,7 @@ public class EtiquetaServiceImp implements EtiquetaService {
         return empleadoConverter.convertToDto(empleado);
     }
 
+
     @Override
     @Transactional // Transacción de escritura
     public EmpleadoDTO eliminarEtiquetaDeEmpleado(String empleadoId, String etiquetaId, String jefeId) {
@@ -167,42 +168,65 @@ public class EtiquetaServiceImp implements EtiquetaService {
         // Validaciones
         System.out.println(">>> [DEBUG EliminarInd] Validando jefe...");
         if (empleado.getJefe() == null) {
+            System.err.println(">>> [DEBUG EliminarInd] ERROR: El empleado " + empleadoId + " NO tiene jefe asignado.");
             throw new IllegalArgumentException("El empleado no tiene jefe asignado.");
         }
-        // Hibernate.initialize(empleado.getJefe()); // Si fuera LAZY
         if (!empleado.getJefe().getId().equals(jefeUuid)) {
+            System.err.println(">>> [DEBUG EliminarInd] ERROR: El jefe " + jefeId + " NO es el jefe ("+ empleado.getJefe().getId() +") del empleado " + empleadoId);
             throw new IllegalArgumentException("El empleado no es subordinado del jefe especificado.");
         }
-        // Opcional: if(!etiqueta.getCreador().getId().equals(jefeUuid)) { ... }
+        System.out.println(">>> [DEBUG EliminarInd] Validación de jefe OK.");
+
 
         // Eliminar de ambos lados
         System.out.println(">>> [DEBUG EliminarInd] Modificando colecciones...");
         boolean removedEmp = false;
         boolean removedEtiq = false;
 
-        if (empleado.getEtiquetas() != null) { // Importante chequear nulidad antes de remover
-            removedEmp = empleado.getEtiquetas().remove(etiqueta);
-        }
-        if (etiqueta.getEmpleados() != null) { // Importante chequear nulidad antes de remover
-            removedEtiq = etiqueta.getEmpleados().remove(empleado);
+        if (empleado.getEtiquetas() != null) { // Importante chequear nulidad
+            System.out.println(">>> [DEBUG EliminarInd] Tamaño etiquetas ANTES para empleado " + empleadoId + ": " + empleado.getEtiquetas().size());
+            removedEmp = empleado.getEtiquetas().remove(etiqueta); // Lado propietario
+            System.out.println(">>> [DEBUG EliminarInd] Tamaño etiquetas DESPUÉS para empleado " + empleadoId + ": " + empleado.getEtiquetas().size() + " (Eliminado: " + removedEmp + ")");
+        } else {
+            System.out.println(">>> [DEBUG EliminarInd] El empleado " + empleadoId + " tenía colección de etiquetas null.");
         }
 
-        if (removedEmp || removedEtiq) { // Si se quitó de CUALQUIER lado
-            System.out.println(">>> [DEBUG EliminarInd] Asociación eliminada en memoria. Intentando flush...");
+        if (etiqueta.getEmpleados() != null) { // Importante chequear nulidad
+            System.out.println(">>> [DEBUG EliminarInd] Tamaño empleados ANTES para etiqueta " + etiquetaId + ": " + etiqueta.getEmpleados().size());
+            removedEtiq = etiqueta.getEmpleados().remove(empleado); // Lado inverso (buena práctica)
+            System.out.println(">>> [DEBUG EliminarInd] Tamaño empleados DESPUÉS para etiqueta " + etiquetaId + ": " + etiqueta.getEmpleados().size() + " (Eliminado: " + removedEtiq + ")");
+        } else {
+            System.out.println(">>> [DEBUG EliminarInd] La etiqueta " + etiquetaId + " tenía colección de empleados null.");
+        }
+
+
+        // --- CAMBIO IMPORTANTE AQUÍ ---
+        if (removedEmp) { // Solo necesitamos guardar si la colección del lado propietario (Empleado) cambió
+            System.out.println(">>> [DEBUG EliminarInd] Asociación eliminada del empleado. Guardando empleado y haciendo flush...");
             try {
-                // El commit debería encargarse. Flush es para diagnóstico.
-                entityManager.flush();
+                // Guardar explícitamente la entidad dueña tras modificar la colección
+                empleadoRepository.save(empleado);
+                System.out.println(">>> [DEBUG EliminarInd] save(empleado) ejecutado.");
+
+                entityManager.flush(); // Forzar SQL ahora para detectar errores de BD antes del commit
                 System.out.println(">>> [DEBUG EliminarInd] Flush exitoso.");
             } catch (Exception e) {
-                System.err.println("!!! EXCEPCIÓN durante flush en eliminarEtiquetaDeEmpleado !!!");
+                System.err.println("!!! EXCEPCIÓN durante save/flush en eliminarEtiquetaDeEmpleado !!!");
                 e.printStackTrace();
-                throw new RuntimeException("Error durante flush en eliminarEtiquetaDeEmpleado: " + e.getMessage(), e);
+                // Relanzar para que la transacción haga rollback y el controlador devuelva error 500
+                throw new RuntimeException("Error durante la persistencia al eliminar etiqueta: " + e.getMessage(), e);
             }
-        } else {
-            System.out.println("Advertencia: La etiqueta " + etiquetaId + " no estaba asignada al empleado " + empleadoId + " o viceversa.");
+        } else if (removedEtiq) {
+            System.out.println(">>> [DEBUG EliminarInd] Asociación eliminada solo del lado de la etiqueta (no propietario). No se requiere save explícito del empleado.");
+            // Podrías guardar la etiqueta si tuviera otros cambios, pero no es necesario para la relación ManyToMany aquí.
         }
+        else {
+            System.out.println("Advertencia: La etiqueta " + etiquetaId + " no estaba asignada al empleado " + empleadoId + " (o las colecciones eran null).");
+        }
+        // --- FIN DEL CAMBIO ---
 
         System.out.println(">>> [DEBUG EliminarInd] Fin del método (antes de commit/rollback).");
+        // Se devuelve el DTO del empleado (potencialmente sin la etiqueta si se guardó bien)
         return empleadoConverter.convertToDto(empleado);
     }
 
