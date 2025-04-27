@@ -227,11 +227,13 @@ public class LoginEmpleadoController {
         int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
         request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
 
+        System.err.println(request.getSession().getAttribute("usuarioLogeado"));
         modelo.addAttribute("dto", request.getSession().getAttribute("usuarioLogeado"));
 
-        modelo.addAttribute("usuario", ultimoUsuario);
+//        modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
 
+//        return "redirect:/datos-personales";
         return "login/area-personal";
     }
 

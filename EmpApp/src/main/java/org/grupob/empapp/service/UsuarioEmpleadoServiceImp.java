@@ -44,11 +44,12 @@ public class UsuarioEmpleadoServiceImp {
         this.loginUsuarioEmpConvert = loginUsuarioEmpConvert;
     }
 
-    public UsuarioEmpleado devuelveUsuarioEmpPorUsuario(String usuario){
+    public LoginUsuarioEmpleadoDTO devuelveUsuarioEmpPorUsuario(String usuario){
         Optional<UsuarioEmpleado> usuarioOpt = usuarioEmpRepo.findByUsuario(usuario);
 
         if (usuarioOpt.isPresent()) {
-            return usuarioOpt.get();
+
+            return loginUsuarioEmpConvert.convertirADTO(usuarioOpt.get());
         }
         throw new UsuarioNoEncontradoException("El usuario no está registrado");
     }

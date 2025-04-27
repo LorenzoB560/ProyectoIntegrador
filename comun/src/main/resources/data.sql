@@ -10,11 +10,11 @@ VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2
 INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id,
                               fecha_desbloqueo, intentos_sesion_fallidos)
 VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com',
-        '$2a$10$Q9xQeQh9h1E5G8h8Q4h8QOeW9fB3zF1lXQwJQwQwQwQwQwQwQwQwq', 0, NULL, TRUE, NULL, NULL, 0);
+        '$2a$12$Tge8Vs/cW2lPl4JokcshKehsFigi/FyhyZtlWwnaEXTGLJSS9.ohO', 0, NULL, TRUE, NULL, NULL, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, num_accesos, ultima_conexion, activo, motivo_bloqueo_id,
                               fecha_desbloqueo, intentos_sesion_fallidos)
 VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com',
-        '$2a$10$Q9xQeQh9h1E5G8h8Q4h8QOeW9fB3zF1lXQwJQwQwQwQwQwQwQwQwq', 0, NULL, TRUE, NULL, NULL, 0);
+        '$2a$12$Tge8Vs/cW2lPl4JokcshKehsFigi/FyhyZtlWwnaEXTGLJSS9.ohO', 0, NULL, TRUE, NULL, NULL, 0);
 -- Géneros
 INSERT INTO genero (id, genero)
 VALUES (1, 'Masculino');
@@ -100,10 +100,10 @@ INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, inten
 VALUES (UNHEX(REPLACE('5222da24-bc8d-4976-be89-399256d838f5', '-', '')), 'maribel.malo@empresa.com',
         '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36',
         '2025-03-14 15:30:20', true, 0);
-INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos)
+INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos,num_accesos)
 VALUES (UNHEX(REPLACE('bf735c4b-1a7f-4134-b2f6-27d7b6b62f35', '-', '')), 'marisol.valenciano@empresa.com',
         '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36',
-        '2024-05-04 04:38:05', true, 0);
+        '2024-05-04 04:38:05', true, 0,0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos)
 VALUES (UNHEX(REPLACE('56e92970-d090-4349-b10f-b24f9c54d93a', '-', '')), 'vicente.palma@empresa.com',
         '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36',

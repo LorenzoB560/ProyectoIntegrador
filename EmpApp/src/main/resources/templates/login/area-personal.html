@@ -3,20 +3,13 @@
 <head>
   <title th:text="#{areapersonal.titulo}"></title>
   <!-- <link rel="stylesheet" th:href="@{/css/login-estilos.css}"> -->
+   <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
 </head>
 <body th:object="${dto}">
-<h1>
-  <h1 th:text="#{areapersonal.bienvenido(*{usuario})}"></h1>
-</h1>
-<p th:text="#{areapersonal.acceso}">.</p>
-<p>
-  <span th:text="#{areapersonal.vecesNavegador}"></span>
-  <span th:text="${contador}"></span>
-</p>
-<p>
-  <span th:text="#{areapersonal.vecesTotal}"></span>
-  <span th:text="*{numeroAccesos}"></span>
-</p>
-<a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
+<div th:replace="fragmentos/header :: header"></div>
+<div th:replace="fragmentos/nav :: nav"></div>
+
+
+<div th:replace="fragmentos/footer :: footer"></div>
 </body>
 </html>
