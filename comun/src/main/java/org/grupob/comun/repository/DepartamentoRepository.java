@@ -19,4 +19,5 @@ public interface DepartamentoRepository extends JpaRepository<Departamento, UUID
 
     Optional<Departamento> findDepartamentoByNombre(String nombre);
 
+    boolean existsDepartamentoById(UUID id);
 }

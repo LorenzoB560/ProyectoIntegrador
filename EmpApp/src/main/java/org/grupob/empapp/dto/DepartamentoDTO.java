@@ -12,10 +12,9 @@ import java.util.UUID;
 @AllArgsConstructor@NoArgsConstructor
 @Data
 public class DepartamentoDTO {
+
     private UUID id;
-    @NotBlank
     private String codigo;
-    @NotBlank
     private String nombre;
     private String localidad;
 

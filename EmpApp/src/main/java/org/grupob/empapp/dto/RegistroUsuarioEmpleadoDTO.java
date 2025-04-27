@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
 import org.grupob.empapp.validation.clave.ClaveCoincide;
 import org.grupob.comun.validation.email.EmailValidado;
 
@@ -18,7 +18,7 @@ import java.util.UUID;
 public class RegistroUsuarioEmpleadoDTO {
     private UUID id;
 
-    @NotBlank(groups = GrupoUsuario.class)
+    @NotBlank(message = "El usuario no debe estar vacío", groups = GrupoUsuario.class)
     @EmailValidado(groups = GrupoUsuario.class)
     private String usuario;
 
@@ -34,21 +34,4 @@ public class RegistroUsuarioEmpleadoDTO {
 
 
     private String confirmarClave;
-//
-//    private Integer numeroAccesos;
-//
-//    private LocalDateTime ultimaConexion;
-//
-//    private String motivoBloqueo;
-//
-//    private String mensajeBloqueo;
-//
-//    private LocalDateTime fechaDesbloqueo;
-//
-//    private Integer intentosSesionFallidos;
-
-//    public RegistroUsuarioEmpleadoDTO(String correo, String clave){
-//        this.correo=correo;
-//        this.clave=clave;
-//    }
 }

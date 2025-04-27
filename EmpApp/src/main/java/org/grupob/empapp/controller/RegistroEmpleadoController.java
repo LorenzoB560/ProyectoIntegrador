@@ -1,16 +1,17 @@
 package org.grupob.empapp.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.entity.EntidadBancaria;
+import org.grupob.comun.entity.Especialidad;
+import org.grupob.comun.entity.maestras.*;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
+import org.grupob.empapp.dto.CuentaBancariaDTO;
+import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoDireccion;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoFotoPerfil;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoLaboral;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoPersonal;
+import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.Departamento;
-import org.grupob.comun.entity.maestras.Genero;
-import org.grupob.comun.repository.DepartamentoRepository;
-import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,24 +26,36 @@ import java.util.List;
 @Controller
 public class RegistroEmpleadoController {
 
-    private final GeneroRepository generoRepository;
     private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;
-    private final DepartamentoRepository departamentoRepository;
 
-    public RegistroEmpleadoController(GeneroRepository generoRepository, AltaEmpleadoServiceImp altaEmpleadoServiceImp, DepartamentoRepository departamentoRepository) {
-        this.generoRepository = generoRepository;
+    public RegistroEmpleadoController(AltaEmpleadoServiceImp altaEmpleadoServiceImp) {
         this.altaEmpleadoServiceImp = altaEmpleadoServiceImp;
-        this.departamentoRepository = departamentoRepository;
     }
+
 
     @ModelAttribute //Cargo las colecciones una vez para añadirlas al modelo
     public void adicionColecciones(Model modelo) {
-        List<Genero> listaGeneros = generoRepository.findAll();
-        List<String> listaVias = List.of("Calle", "Avenida");
-        List<Departamento> listaDepartamentos = departamentoRepository.findAll();
+        List<Genero> listaGeneros = altaEmpleadoServiceImp.devolverGeneros();
+        List<Pais> listaPaises = altaEmpleadoServiceImp.devolverPaises();
+        List<TipoVia> listaTipoVias = altaEmpleadoServiceImp.devolverTipoVias();
+        List<TipoDocumento> tipoDocumentos = altaEmpleadoServiceImp.devolverTipoDocumentos();
+        List<Departamento> listaDepartamentos = altaEmpleadoServiceImp.devolverDepartamentos();
+        List<Especialidad> listaEspecialidades = altaEmpleadoServiceImp.devolverEspecialidades();
+        List<EntidadBancaria> listaEntidadesBancarias = altaEmpleadoServiceImp.devolverEntidadesBancarias();
+        List<TipoTarjetaCredito> listaTipoTarjetas = altaEmpleadoServiceImp.devolverTipoTarjetasCredito();
+
+
+
         modelo.addAttribute("listaGeneros", listaGeneros);
-        modelo.addAttribute("listaVias", listaVias);
+        modelo.addAttribute("listaPaises", listaPaises);
+        modelo.addAttribute("listaTipoVias", listaTipoVias);
+        modelo.addAttribute("listaTipoDocumentos", tipoDocumentos);
         modelo.addAttribute("listaDepartamentos", listaDepartamentos);
+        modelo.addAttribute("listaEspecialidades", listaEspecialidades);
+        modelo.addAttribute("listaEntidadesBancarias", listaEntidadesBancarias);
+        modelo.addAttribute("listaTipoTarjetas", listaTipoTarjetas);
+        modelo.addAttribute("meses", altaEmpleadoServiceImp.devolverMeses());
+        modelo.addAttribute("anios", altaEmpleadoServiceImp.devolverAnios());
     }
 
     @GetMapping("/datos-personales")
@@ -64,32 +77,48 @@ public class RegistroEmpleadoController {
     }
     @PostMapping("/guardar-datos-personales")
     public String guardarDatosPersonales(
-            @Validated(GrupoPersonal.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+            @Validated(GrupoDatosPersonales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
+            @RequestParam("imagen") MultipartFile imagen,
             HttpSession sesion,
             Model model) {
 
-        // Si hay errores, volver a la misma página
+        // Primero validar el MultipartFile manualmente
+        if (imagen == null || imagen.isEmpty()) {
+            bindingResult.rejectValue("foto", "error.imagen.obligatoria");
+        } else if (!(imagen.getContentType().equalsIgnoreCase("image/jpeg")
+                || imagen.getContentType().equalsIgnoreCase("image/jpg")
+                || imagen.getContentType().equalsIgnoreCase("image/gif"))) {
+            bindingResult.rejectValue("foto", "error.imagen.formato");
+        } else if (imagen.getSize() > 200 * 1024) {
+            bindingResult.rejectValue("foto", "error.imagen.tamano");
+        }
+
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            System.err.println(bindingResult.toString());
             return "registro_empleado/datos-personales";
         }
 
+        try {
+            datosFormulario.setFoto(imagen.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
-
-        //altaEmpleadoService.guardarEmpleado(datosFormulario, imagen);
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/datos-direccion";
+        return "redirect:/datos-contacto";
     }
-    @GetMapping("/datos-direccion")
-    public String datosDireccion(HttpSession sesion, Model model) {
+
+
+    @GetMapping("/datos-contacto")
+    public String datosContacto(HttpSession sesion, Model model) {
 
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -108,12 +137,12 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registro_empleado/datos-direccion";
+        return "registro_empleado/datos-contacto";
     }
 
-    @PostMapping("/guardar-datos-direccion")
-    public String guardarDatosDireccion(
-            @Validated(GrupoDireccion.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+    @PostMapping("/guardar-datos-contacto")
+    public String guardarDatosContacto(
+            @Validated(GrupoDatosContacto.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -122,7 +151,8 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registro_empleado/datos-direccion";
+            System.err.println(bindingResult.toString());
+            return "registro_empleado/datos-contacto";
         }
 
 
@@ -134,15 +164,15 @@ public class RegistroEmpleadoController {
             datosFormulario.setDireccion(new DireccionPostalDTO());
         }
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/datos-laborales";
+        return "redirect:/datos-profesionales";
     }
-    @GetMapping("/datos-laborales")
-    public String datosLaborales(HttpSession sesion, Model model){
+    @GetMapping("/datos-profesionales")
+    public String datosProfesionales(HttpSession sesion, Model model){
 
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -156,11 +186,11 @@ public class RegistroEmpleadoController {
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registro_empleado/datos-laborales";
+        return "registro_empleado/datos-profesionales";
     }
-    @PostMapping("/guardar-datos-laborales")
-    public String guardarDatosLaborales(
-            @Validated(GrupoLaboral.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+    @PostMapping("/guardar-datos-profesionales")
+    public String guardarDatosProfesionales(
+            @Validated(GrupoDatosProfesionales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
@@ -169,22 +199,23 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registro_empleado/datos-laborales";
+            System.err.println(bindingResult.toString());
+            return "registro_empleado/datos-profesionales";
         }
 
 
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
 
         System.err.println(datosFormulario);
         sesion.setAttribute("datos", datosFormulario);
-        return "redirect:/foto-perfil";
+        return "redirect:/datos-economicos";
     }
-    @GetMapping("/foto-perfil")
-    public String fotoPerfil(HttpSession sesion, Model model) {
+    @GetMapping("/datos-economicos")
+    public String datosEconomicos(HttpSession sesion, Model model) {
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
@@ -193,36 +224,50 @@ public class RegistroEmpleadoController {
             datosFormulario = new AltaEmpleadoDTO();
             sesion.setAttribute("datos", datosFormulario);
         }
-
+        // Asegurarse de que la cuenta bancaria esté inicializada
+        if(datosFormulario.getCuentaBancaria() == null) {
+            datosFormulario.setCuentaBancaria(new CuentaBancariaDTO());
+        }
+        // Asegurarse de que la tarjeta de credito esté inicializada
+        if(datosFormulario.getTarjetaCredito() == null) {
+            datosFormulario.setTarjetaCredito(new TarjetaCreditoDTO());
+        }
         //Lo añado al modelo
         model.addAttribute("datos", datosFormulario);
 
-        return "registro_empleado/foto-perfil";
+        return "registro_empleado/datos-economicos";
     }
-    @PostMapping("/guardar-foto-perfil")
-    public String guardarFotoPerfil(
-            @Validated(GrupoFotoPerfil.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
-            @RequestParam MultipartFile imagen,
+    @PostMapping("/guardar-datos-economicos")
+    public String guardarDatosEconomicos(
+            @Validated(GrupoDatosEconomicos.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
             HttpSession sesion,
             Model model) {
 
+        System.err.println(datosFormulario);
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
-            return "registro_empleado/foto-perfil";
+            System.err.println(bindingResult.toString());
+            return "registro_empleado/datos-economicos";
         }
 
 
-        try {
-            datosFormulario.setFoto(imagen.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+
+        // Asegurarse de que la cuenta bancaria esté inicializada
+        if(datosFormulario.getCuentaBancaria() == null) {
+            datosFormulario.setCuentaBancaria(new CuentaBancariaDTO());
+        }
+
+        // Asegurarse de que la tarjeta de credito esté inicializada
+        if(datosFormulario.getTarjetaCredito() == null) {
+            datosFormulario.setTarjetaCredito(new TarjetaCreditoDTO());
+        }
         if (datosAnteriores != null) {
-            actualizarDatos(datosFormulario, datosAnteriores);
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
 
 
@@ -248,12 +293,31 @@ public class RegistroEmpleadoController {
 
         return "registro_empleado/resumen";
     }
-    @PostMapping("/guardar-empleado")
-    public String guardarEmpleado(HttpSession sesion) {
+    @PostMapping("/guardar-resumen")
+    public String guardarResumen(@Validated(GrupoResumen.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
+                                 BindingResult bindingResult,
+                                 HttpSession sesion,
+                                 Model model,
+                                 HttpServletRequest request) {
 
-        AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        // Si hay errores, volver a la misma página
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("datos", datosFormulario);
+            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            System.err.println(bindingResult.toString());
+            return "registro_empleado/resumen";
+        }
+
+        AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
+        if (datosAnteriores != null) {
+            altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
+        }
+
+
         System.err.println(datosFormulario);
-        altaEmpleadoServiceImp.guardarEmpleado(datosFormulario);
+        sesion.setAttribute("datos", datosFormulario);
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        altaEmpleadoServiceImp.guardarEmpleado(datosFormulario, loginUsuarioEmpleadoDTO.getId().toString());
         return "redirect:/usuario-insertado";
     }
     @GetMapping("/usuario-insertado")
@@ -265,58 +329,6 @@ public class RegistroEmpleadoController {
     public String volverPrincipio(HttpSession sesion) {
         sesion.invalidate();
         return "redirect:/datos-personales";
-    }
-
-
-    private void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
-        if (datosNuevos == null) {
-            datosNuevos = new AltaEmpleadoDTO(); // Nueva instancia si los nuevos datos son nulos
-        }
-
-        if (datosAnteriores == null) {
-            return; // No hay nada anterior que recuperar
-        }
-
-        // ** DATOS PERSONALES **
-        datosNuevos.setNombre(datosNuevos.getNombre() != null ? datosNuevos.getNombre() : datosAnteriores.getNombre());
-        datosNuevos.setApellido(datosNuevos.getApellido() != null ? datosNuevos.getApellido() : datosAnteriores.getApellido());
-        datosNuevos.setFechaNacimiento(datosNuevos.getFechaNacimiento() != null ? datosNuevos.getFechaNacimiento() : datosAnteriores.getFechaNacimiento());
-        datosNuevos.setIdGeneroSeleccionado(datosNuevos.getIdGeneroSeleccionado() != null ? datosNuevos.getIdGeneroSeleccionado() : datosAnteriores.getIdGeneroSeleccionado());
-
-        // ** DATOS DIRECCIÓN **
-        // Asegurar que el objeto dirección no sea nulo
-        if (datosNuevos.getDireccion() == null) {
-            // Si el anterior tiene dirección, lo copiamos completamente
-            if (datosAnteriores.getDireccion() != null) {
-                datosNuevos.setDireccion(datosAnteriores.getDireccion());
-            } else {
-                // Si ninguno tiene dirección, creamos uno nuevo
-                datosNuevos.setDireccion(new DireccionPostalDTO());
-            }
-        } else if (datosAnteriores.getDireccion() != null) {
-            // Si ambos tienen dirección, completamos campos nulos con datos anteriores
-            DireccionPostalDTO nuevaDir = datosNuevos.getDireccion();
-            DireccionPostalDTO anteriorDir = datosAnteriores.getDireccion();
-
-            nuevaDir.setTipoVia(nuevaDir.getTipoVia() != null ? nuevaDir.getTipoVia() : anteriorDir.getTipoVia());
-            nuevaDir.setVia(nuevaDir.getVia() != null ? nuevaDir.getVia() : anteriorDir.getVia());
-            nuevaDir.setNumero(nuevaDir.getNumero() != null ? nuevaDir.getNumero() : anteriorDir.getNumero());
-            nuevaDir.setPiso(nuevaDir.getPiso() != null ? nuevaDir.getPiso() : anteriorDir.getPiso());
-            nuevaDir.setPuerta(nuevaDir.getPuerta() != null ? nuevaDir.getPuerta() : anteriorDir.getPuerta());
-            nuevaDir.setCodigoPostal(nuevaDir.getCodigoPostal() != null ? nuevaDir.getCodigoPostal() : anteriorDir.getCodigoPostal());
-            nuevaDir.setLocalidad(nuevaDir.getLocalidad() != null ? nuevaDir.getLocalidad() : anteriorDir.getLocalidad());
-            nuevaDir.setRegion(nuevaDir.getRegion() != null ? nuevaDir.getRegion() : anteriorDir.getRegion());
-            nuevaDir.setPais(nuevaDir.getPais() != null ? nuevaDir.getPais() : anteriorDir.getPais());
-        }
-
-        // ** DATOS LABORALES **
-        datosNuevos.setIdDepartamentoSeleccionado(
-                datosNuevos.getIdDepartamentoSeleccionado() != null ?
-                        datosNuevos.getIdDepartamentoSeleccionado() :
-                        datosAnteriores.getIdDepartamentoSeleccionado());
-
-        // ** FOTO DE PERFIL **
-        datosNuevos.setFoto(datosNuevos.getFoto() != null ? datosNuevos.getFoto() : datosAnteriores.getFoto());
     }
 
 

@@ -16,29 +16,25 @@ import java.util.UUID;
 @MappedSuperclass
 public class Persona {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String nombre;
 
     private String apellido;
 
-    //TODO crear entidad tipo documento
-    private String tipoDocumento;
-
-    private String documento;
-
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "FK_persona_genero_id"))
+    private Genero genero;
 
     @Column(name="fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
     private Integer edad;
-
     private String paisNacimiento;
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_persona_genero_id"))
-    private Genero genero;
+    private String tipoDocumento;
+    private String numDocumento;
 
     //probablemente esto cambie
     @Embedded

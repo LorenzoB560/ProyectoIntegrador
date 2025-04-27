@@ -22,11 +22,15 @@ import java.util.*;
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
 //        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
-@SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+@SecondaryTable(
+        name = "informacion_economica",
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "id_empleado", referencedColumnName = "id"))
 public class Empleado extends Persona {
 
 //    private String dni;
 
+    private String prefijoTelefono;
+    private String numTelefono;
     private String comentarios;
 
     @ManyToMany
@@ -70,6 +74,7 @@ public class Empleado extends Persona {
 
     @Embedded
     @AttributeOverrides({
+//            @AttributeOverride(name = "entidadBancaria", column = @Column(name = "id_entidad_bancaria", table = "informacion_economica")),
             @AttributeOverride(name = "IBAN", column = @Column(name = "IBAN", table = "informacion_economica"))
     })
     private CuentaBancaria cuentaCorriente;
@@ -88,7 +93,7 @@ public class Empleado extends Persona {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "numero", column = @Column(name = "numero", table = "informacion_economica")),
+            @AttributeOverride(name = "numeroTarjeta", column = @Column(name = "numero_tarjeta", table = "informacion_economica")),
             @AttributeOverride(name = "mesCaducidad", column = @Column(name = "mes_caducidad", table = "informacion_economica")),
             @AttributeOverride(name = "anioCaducidad", column = @Column(name = "anio_caducidad", table = "informacion_economica")),
             @AttributeOverride(name = "CVC", column = @Column(name = "CVC", table = "informacion_economica"))
@@ -99,10 +104,5 @@ public class Empleado extends Persona {
     @Column(columnDefinition = "LONGBLOB") //nos aseguramos quepueda almacenar un tamaño grande de archivo
     private byte[] foto; // Para almacenar la imagen en la base de datos
 
-//    @Column(name = "fecha_eliminacion")
-//    private LocalDate fechaEliminacion;
-//
-//    @Column(name = "fecha_insercion")
-//    private LocalDate fechaInsercion;
-
+    private String aceptacionTerminos;
 }
