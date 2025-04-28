@@ -30,7 +30,7 @@ public  class Persona { // Hacer abstract
     private String nombre;
     private String apellido;
     private String tipoDocumento;
-    private String numDocumento;
+    private String documento;
 
     @Column(name="fecha_nacimiento")
     private LocalDate fechaNacimiento;
