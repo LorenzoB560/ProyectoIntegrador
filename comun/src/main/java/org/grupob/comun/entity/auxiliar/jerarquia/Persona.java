@@ -23,8 +23,8 @@ import java.util.UUID;
 public  class Persona { // Hacer abstract
 
     @Id // <<<=== AÑADIDO
-    @GeneratedValue(strategy = GenerationType.UUID) // <<<=== AÑADIDO
-    @JdbcTypeCode(SqlTypes.BINARY) // <<<=== AÑADIDO
+//    @GeneratedValue(strategy = GenerationType.UUID) // <<<=== AÑADIDO
+//    @JdbcTypeCode(SqlTypes.BINARY) // <<<=== AÑADIDO
     protected UUID id;
 
     private String nombre;
