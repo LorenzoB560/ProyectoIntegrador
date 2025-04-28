@@ -237,3 +237,65 @@ a.boton:hover {
     font-weight: bold;
     margin: 1rem 0;
 }
+
+/* Estilos para los selectores múltiples y botones */
+.select-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.select-box select[multiple] {
+    height: 200px; /* Ajusta la altura según necesites */
+    min-width: 200px;
+}
+.select-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.select-buttons button {
+    width: 50px; /* Ancho fijo para botones */
+}
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+}
+/* Estilos básicos para sugerencias */
+#sugerenciasEtiquetas {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute; /* Para que aparezca sobre otros elementos si es necesario */
+    background-color: white;
+    z-index: 1000; /* Para que esté por encima */
+    width: calc(100% - 2rem); /* Ajusta según el padding del contenedor */
+    list-style-type: none; /* Quita los puntos de la lista */
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#sugerenciasEtiquetas li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+#sugerenciasEtiquetas li:hover {
+    background-color: #f0f0f0;
+}
+/* Ocultar por defecto */
+#sugerenciasEtiquetas:empty {
+    display: none;
+}
+/* Contenedor relativo para el input y sugerencias */
+.tag-input-container {
+    position: relative;
+}
+/* Estilos adicionales si son necesarios */
+#listaEtiquetasActuales label { margin-left: 5px; }
+#listaEtiquetasActuales div { margin-bottom: 5px; }

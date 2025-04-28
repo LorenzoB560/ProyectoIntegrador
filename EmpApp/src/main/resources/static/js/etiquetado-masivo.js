@@ -1,10 +1,4 @@
-// Variable global 'jefeId' se espera que esté definida en el HTML
-// mediante Thymeleaf:
-/*
-<script th:inline="javascript">
-    const jefeId = / *[[${jefeId}]]* / 'default-jefe-id'; // Asegúrate que esto exista en tu HTML
-</script>
-*/
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Validar que jefeId existe y no es el valor por defecto

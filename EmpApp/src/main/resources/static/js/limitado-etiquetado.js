@@ -189,3 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+// Función específica para vaciar este formulario si no usas la genérica
+function vaciarFormularioNuevoEtiquetado() {
+    document.getElementById('formNuevoEtiquetado').reset();
+    document.getElementById('empleadosSubordinados').selectedIndex = -1; // Deselecciona
+    document.getElementById('sugerenciasEtiquetas').innerHTML = ''; // Limpia sugerencias
+    document.getElementById('errorEmpleados').style.display = 'none';
+    document.getElementById('errorEtiqueta').style.display = 'none';
+    document.getElementById('feedback').style.display = 'none';
+    // Si usas la función genérica vaciarCampos de modificarCampos.js, asegúrate
+    // que el form tenga id="formulario" o ajusta la llamada:
+    // vaciarCampos('formNuevoEtiquetado'); // Asumiendo que vaciarCampos acepta un id
+}

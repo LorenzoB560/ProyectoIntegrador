@@ -183,3 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+function vaciarFormularioEliminarEtiquetas() {
+    document.getElementById('formEliminarEtiquetas').reset(); // Resetea el select
+    document.getElementById('listaEtiquetasActuales').innerHTML = '<p class="text-muted">Selecciona un empleado para ver sus etiquetas.</p>'; // Limpia etiquetas
+    document.getElementById('errorEmpleadoSeleccionado').style.display = 'none';
+    document.getElementById('errorEtiquetasSeleccionadas').style.display = 'none';
+    document.getElementById('feedbackEliminar').style.display = 'none';
+}
