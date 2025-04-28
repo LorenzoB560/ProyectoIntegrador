@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Empleado</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Tu CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+</head>
+<body>
+<div class="container">
+    <!-- Breadcrumb navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="http://localhost:9090/empleado/lista">Empleados</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detalle de Empleado</li>
+        </ol>
+    </nav>
+
+    <!-- Loading indicator -->
+    <div id="cargando" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+
+    <!-- Error message -->
+    <div id="error" class="alert alert-danger" style="display: none;"></div>
+
+    <!-- Employee detail content -->
+    <div id="detalleEmpleado" style="display: none;">
+        <!-- Profile header -->
+        <div class="profile-header">
+            <div id="fotoEmpleado" class="profile-photo default-photo">
+                <i class="bi bi-person"></i>
+            </div>
+            <div>
+                <div class="d-flex align-items-center">
+                    <h1 id="nombreCompleto" class="profile-name">Nombre del Empleado</h1>
+                    <span id="estadoBadge" class="status-badge"></span>
+                </div>
+                <p id="puestoEmpleado" class="profile-position">Comentarios del puesto</p>
+                <p id="departamentoEmpleado" class="text-muted mb-0">Departamento</p>
+            </div>
+        </div>
+
+        <!-- Main navigation tabs -->
+        <ul class="nav nav-pills mb-4" id="empleadoTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="info-personal-tab" data-bs-toggle="tab" data-bs-target="#info-personal" type="button" role="tab">
+                    <i class="bi bi-person-vcard me-1"></i> Información Personal
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="info-laboral-tab" data-bs-toggle="tab" data-bs-target="#info-laboral" type="button" role="tab">
+                    <i class="bi bi-briefcase me-1"></i> Información Laboral
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="info-financiera-tab" data-bs-toggle="tab" data-bs-target="#info-financiera" type="button" role="tab">
+                    <i class="bi bi-cash-coin me-1"></i> Información Financiera
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="empleadoTabsContent">
+            <!-- Personal Information Tab -->
+            <div class="tab-pane fade show active" id="info-personal" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Datos Personales</div>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>ID:</th>
+                                        <td id="idEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Nombre:</th>
+                                        <td id="nombreEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Apellido:</th>
+                                        <td id="apellidoEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fecha de Nacimiento:</th>
+                                        <td id="fechaNacimientoEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email:</th>
+                                        <td id="emailEmpleado"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Especialidades</div>
+                            <div class="card-body">
+                                <div id="especialidadesEmpleado">
+                                    <!-- Las especialidades se cargarán dinámicamente -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Information Tab -->
+            <div class="tab-pane fade" id="info-laboral" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Datos Laborales</div>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Departamento:</th>
+                                        <td id="departamentoDetalle"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fecha de Contratación:</th>
+                                        <td id="fechaContratacion"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Fecha de Cese:</th>
+                                        <td id="fechaCese"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Estado:</th>
+                                        <td id="estadoEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Comentarios:</th>
+                                        <td id="comentariosEmpleado"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Jerarquía</div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="info-label">Jefe:</div>
+                                    <div id="jefeEmpleado" class="info-value"></div>
+                                </div>
+                                <div>
+                                    <div class="info-label">Subordinados:</div>
+                                    <div id="subordinadosEmpleado" class="info-value">
+                                        <!-- Se cargará dinámicamente -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Information Tab -->
+            <div class="tab-pane fade" id="info-financiera" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Datos Económicos</div>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Salario:</th>
+                                        <td id="salarioEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Comisión:</th>
+                                        <td id="comisionEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Salario + Comisión:</th>
+                                        <td id="totalEmpleado"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Datos Bancarios</div>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>Entidad Bancaria:</th>
+                                        <td id="entidadBancariaEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>IBAN:</th>
+                                        <td><span id="ibanEmpleado" class="sensitive-data"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tipo de Tarjeta:</th>
+                                        <td id="tipoTarjetaEmpleado"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Número de Tarjeta:</th>
+                                        <td><span id="numeroTarjetaEmpleado" class="sensitive-data"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Caducidad:</th>
+                                        <td id="caducidadTarjetaEmpleado"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions buttons -->
+        <div class="d-flex justify-content-between mt-4">
+            <a href="http://localhost:9090/empleado/lista" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Volver a la lista
+            </a>
+        </div>
+    </div>
+</div>
+
+<script  th:src="@{/js/detalle-emp.js}"></script>
+<!-- Bootstrap JS (para tabs y componentes interactivos) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

@@ -1,9 +1,8 @@
+
 package org.grupob.comun.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.grupob.comun.entity.auxiliar.CuentaBancaria;
 import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.auxiliar.TarjetaCredito;
@@ -13,23 +12,29 @@ import org.grupob.comun.entity.maestras.TipoTarjetaCredito;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "PK_empleado", columnNames = "id"),
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
 //        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
-@SecondaryTable(name = "informacion_economica", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
+@SecondaryTable(
+        name = "informacion_economica",
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "id_empleado", referencedColumnName = "id"))
 public class Empleado extends Persona {
 
 //    private String dni;
 
+    private String prefijoTelefono;
+    private String numTelefono;
     private String comentarios;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "empleado_especialidad",
             joinColumns = @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_empleado_especialidad_empleado_id")),
@@ -78,6 +83,14 @@ public class Empleado extends Persona {
     @JoinColumn(name = "id_entidad_bancaria", foreignKey = @ForeignKey(name = "FK_empleado_entidad_bancaria_id"), table = "informacion_economica")
     private EntidadBancaria entidadBancaria;
 
+    // --- NUEVA RELACIÓN CON ETIQUETA ---
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "empleado_etiqueta",
+            joinColumns = @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_empleado_etiqueta_empleado_id")),
+            inverseJoinColumns = @JoinColumn(name = "id_etiqueta", foreignKey = @ForeignKey(name = "FK_empleado_etiqueta_etiqueta_id"))
+    )
+    private Set<Etiqueta> etiquetas = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_tarjeta", foreignKey = @ForeignKey(name = "FK_empleado_tipo_tarjeta_id"), table = "informacion_economica")
@@ -88,21 +101,59 @@ public class Empleado extends Persona {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "numero", column = @Column(name = "numero", table = "informacion_economica")),
+            @AttributeOverride(name = "numeroTarjeta", column = @Column(name = "numero_tarjeta", table = "informacion_economica")),
             @AttributeOverride(name = "mesCaducidad", column = @Column(name = "mes_caducidad", table = "informacion_economica")),
             @AttributeOverride(name = "anioCaducidad", column = @Column(name = "anio_caducidad", table = "informacion_economica")),
             @AttributeOverride(name = "CVC", column = @Column(name = "CVC", table = "informacion_economica"))
     })
     private TarjetaCredito tarjetaCredito;
 
+    @Override
+    public boolean equals(Object o) {
+        // 1. Comparación de identidad rápida
+        if (this == o) return true;
+        // 2. Verificar nulidad y tipo (usando getClass() para proxies)
+        if (o == null || getClass() != o.getClass()) return false;
+        // 3. Castear el objeto
+        Empleado empleado = (Empleado) o;
+        // 4. Comparar SÓLO por el ID. Si el ID es null (entidad nueva no persistida),
+        //    dos instancias nunca son iguales a menos que sean la misma instancia (chequeado en paso 1).
+        return id != null && Objects.equals(id, empleado.id);
+    }
+
+    @Override
+    public int hashCode() {
+        // 5. Calcular hashCode SÓLO basado en el ID.
+        //    Si el ID es null, devuelve un hash consistente (ej. de la clase).
+        //    Usar Objects.hash maneja el caso null. O devolver una constante.
+        // return Objects.hash(id);
+        // Alternativa común para entidades JPA:
+        return getClass().hashCode(); // Hash constante si el ID es null (entidad nueva)
+        // Si quieres basarlo en ID sólo si no es null:
+        // return id != null ? id.hashCode() : getClass().hashCode();
+    }
+
+
     @Lob
     @Column(columnDefinition = "LONGBLOB") //nos aseguramos quepueda almacenar un tamaño grande de archivo
     private byte[] foto; // Para almacenar la imagen en la base de datos
 
-//    @Column(name = "fecha_eliminacion")
+    private String aceptacionTerminos;
+
+    //    @Column(name = "fecha_eliminacion")
 //    private LocalDate fechaEliminacion;
 //
 //    @Column(name = "fecha_insercion")
 //    private LocalDate fechaInsercion;
+@Override
+public String toString() {
+    // Incluir SOLO campos simples o IDs de relaciones
+    return getClass().getSimpleName() + "(" +
+            "id=" + getId() + // Usar getter de Persona si ID está allí
+            ", nombre='" + getNombre() + '\'' + // Asume getter en Persona o Empleado
+            ", apellido='" + getApellido() + '\'' + // Asume getter en Persona o Empleado
+            ", activo=" + activo +
+            ")";
+}
 
 }

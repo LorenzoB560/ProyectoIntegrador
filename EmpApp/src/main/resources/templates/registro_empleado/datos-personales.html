@@ -6,77 +6,132 @@
     <link rel="stylesheet" href="/css/registro-empleado-estilos.css">
     <script src="/js/modificarCampos.js"></script>
 </head>
-  <body id="body-personales" >
+<body id="body-personales">
 
-      <a href="/datos-personales" id="datos-personales">
+<!-- Navegación entre pasos -->
+<nav>
+    <a href="/datos-personales" id="datos-personales">
         <img src="/img/Paso1.png" alt="Paso 1">
-      </a>
-      <a href="/datos-direccion" id="datos-direccion">
+    </a>
+    <a href="/datos-contacto" id="datos-contacto">
         <img src="/img/Paso2.png" alt="Paso 2">
-      </a>
-      <a href="/datos-laborales" id="datos-laborales">
+    </a>
+    <a href="/datos-profesionales" id="datos-profesionales">
         <img src="/img/Paso3.png" alt="Paso 3">
-      </a>
-      <a href="/foto-perfil" id="foto-perfil">
-          <img src="/img/Paso4.png" alt="Paso 4">
-      </a>
-      <a href="/resumen" id="resumen">
-        <img src="/img/Resumen.png" alt="Resumen">
-      </a>
+    </a>
+    <a href="/datos-economicos" id="datos-economicos">
+        <img src="/img/Paso4.png" alt="Paso 4">
+    </a>
+<!--    <a  id="resumen">-->
+        <img src="/img/Resumen.png" alt="Resumen" id="resumen">
+<!--    </a>-->
+</nav>
 
+<!-- Mensaje de error a nivel general -->
+<h2 th:text="*{mensajeNOK}" class="error"></h2>
 
-      <h2 th:text="*{mensajeNOK}" class="error"></h2>
-
-      <form action="/guardar-datos-personales" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
-
-
-
-      <fieldset>
-
-        <!-- NOMBRE -->
+<!-- Formulario -->
+<form action="/guardar-datos-personales" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
+    <fieldset>
         <legend th:text="#{registro.datosPersonales}"></legend>
-        <label for="nombre" th:text="#{registro.nombre}"></label>
-          <input type="text" id="nombre"
-                 th:field="*{nombre}">
-          <!--Imprimir errores-->
-        <div th:each="error: ${#fields.errors('nombre')}" th:text="${error}" class="error"></div>
 
+        <section>
+            <!-- Nombre y Apellido -->
+            <article>
+                <span class="asterisco">*</span>
+                <label for="nombre" th:text="#{registro.nombre}"></label>
+                <input type="text" id="nombre" th:field="*{nombre}">
+                <div th:each="error: ${#fields.errors('nombre')}" th:text="${error}" class="error"></div>
 
-        <!-- APELLIDO -->
-        <label for="apellido" th:text="#{registro.apellido}"></label>
-        <input type="text" id="apellido"
-               th:field="*{apellido}">
-        <div th:each="error: ${#fields.errors('apellido')}" th:text="${error}" class="error"></div>
+                <span class="asterisco">*</span>
+                <label for="apellido" th:text="#{registro.apellido}"></label>
+                <input type="text" id="apellido" th:field="*{apellido}">
+                <div th:each="error: ${#fields.errors('apellido')}" th:text="${error}" class="error"></div>
+            </article>
+            <br>
+        </section>
 
+        <section>
+            <!-- Fotografía -->
+            <article>
+                <span class="asterisco">*</span>
+                <label th:text="#{registro.foto}"></label><br>
+                <input type="file" name="imagen" accept="image/*">
+                <div th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}" class="error"></div>
+            </article>
+            <br>
+        </section>
 
-        <!-- FECHA NACIMIENTO -->
-        <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
-        <input type="text" id="fechaNacimiento"
-               th:field="*{fechaNacimiento}"> <br>
+        <section>
+            <!-- Género -->
+            <article>
+                <span class="asterisco">*</span>
+                <label th:text="#{registro.genero}"></label><br>
+                <div th:each="genero : ${listaGeneros}">
+                    <input type="radio" th:field="*{idGeneroSeleccionado}" th:value="${genero.id}" th:id="${'genero' + genero.id}">
+                    <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label><br>
+                </div>
+                <div th:each="error: ${#fields.errors('idGeneroSeleccionado')}" th:text="${error}" class="error"></div>
 
-        <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
+                <!-- Botones seleccionar/deseleccionar género -->
+                <button type="button" onclick="seleccionarPrimerGenero()" th:text="#{registro.genero.seleccionar}"></button>
+                <input type="button" id="deseleccionarRadios" name="deseleccionarRadios" th:value="#{registro.deseleccionar}" onclick="deseleccionaRadios('idGeneroSeleccionado');">
+            </article>
+            <br>
+        </section>
 
+        <section>
+            <!-- Fecha de nacimiento y Edad -->
+            <article>
+                <span class="asterisco">*</span>
+                <label for="fechaNacimiento" th:text="#{registro.fechaNacimiento}"></label>
+                <input type="text" id="fechaNacimiento" th:field="*{fechaNacimiento}">
+                <div th:each="error : ${#fields.errors('fechaNacimiento')}" th:text="${error}" class="error"></div>
 
-        <!-- GENERO -->
-        <label th:text="#{registro.genero}"></label>
-        <div th:each="genero : ${listaGeneros}">
-          <input type="radio" th:field="*{idGeneroSeleccionado}"
-                 th:value="${genero.id}"
-                 th:id="${'genero' + genero.id}">
-          <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label>
-        </div>
-        <div th:each="error: ${#fields.errors('idGeneroSeleccionado')}" th:text="${error}" class="error"></div>
+                <span class="asterisco">*</span>
+                <label for="edad" th:text="#{registro.edad}"></label>
+                <input type="text" id="edad" th:field="*{edad}">
+                <div th:each="error : ${#fields.errors('edad')}" th:text="${error}" class="error"></div>
+            </article>
 
-        <!-- BOTÓN PARA DESELECCIONAR RADIOS -->
-        <input type="button" id="deseleccionarRadios" name="deseleccionarRadios"
-                 th:value="#{registro.deseleccionar}"
-                 onclick="deseleccionaRadios('idGeneroSeleccionado');" />
-        <br> <br>
+            <!-- Errores globales -->
+            <div class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+            <br>
+        </section>
 
-        <button type="submit" th:text="#{registro.submit}"></button>
-        <input type="button" th:value="#{registro.vaciar}"  onclick="vaciarCampos()">
-      </fieldset>
+        <section>
+            <!-- País de nacimiento -->
+            <article>
+                <span class="asterisco">*</span>
+                <label for="paisNacimiento" th:text="#{registro.paisNacimiento}"></label>
+                <select id="paisNacimiento" th:field="*{paisNacimiento}">
+                    <option th:each="pais: ${listaPaises}" th:value="${pais.pais}" th:text="#{'registro.paisNacimiento.' + ${pais.pais}}"></option>
+                </select>
+                <div th:each="error: ${#fields.errors('paisNacimiento')}" th:text="${error}" class="error"></div>
+            </article>
+            <br>
+        </section>
 
-    </form>
-  </body>
+        <section>
+            <!-- Comentarios -->
+            <article>
+                <label for="comentarios" th:text="#{registro.comentarios}"></label>
+                <input type="text" id="comentarios" th:field="*{comentarios}">
+                <div th:each="error: ${#fields.errors('comentarios')}" th:text="${error}" class="error"></div>
+            </article>
+            <br>
+        </section>
+
+        <section>
+            <!-- Botones de envío y reseteo -->
+            <article>
+                <button type="submit" th:text="#{registro.datosPersonales.submit}"></button>
+                <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()">
+            </article>
+        </section>
+
+    </fieldset>
+</form>
+
+</body>
 </html>

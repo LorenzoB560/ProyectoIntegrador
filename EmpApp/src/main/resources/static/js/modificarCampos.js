@@ -1,3 +1,10 @@
+function seleccionarPrimerGenero() {
+    const radios = document.querySelectorAll('input[name="idGeneroSeleccionado"]');
+    if (radios.length > 0) {
+        radios[0].checked = true;
+    }
+}
+
 function deseleccionaRadios(botonesRadioName) {
     const elementos = document.getElementsByName(botonesRadioName);
     for (var i = 0; i < elementos.length; i++) {

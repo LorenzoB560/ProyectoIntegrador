@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,7 +28,12 @@ public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
     public void guardarUsuario(RegistroUsuarioEmpleadoDTO usuario) {
         UsuarioEmpleado usuarioEmpleado = registroUsuarioEmpleadoConverter.convertirAEntidad(usuario);
         usuarioEmpleado.setClave(passwordEncoder.encode(usuario.getClave())); // Hashear la contraseña con BCrypt
+        usuarioEmpleado.setIntentosSesionFallidos(0);
+        usuarioEmpleado.setNumeroAccesos(0);
+        usuarioEmpleado.setActivo(true);
+        usuarioEmpleado.setFechaCreacion(LocalDateTime.now());
         usuarioEmpleadoRepository.save(usuarioEmpleado);
+
     }
 
     public void usuarioExiste(RegistroUsuarioEmpleadoDTO registroUsuarioEmpleadoDTO){

@@ -7,8 +7,8 @@ import jakarta.validation.Valid;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoClave;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
 import org.grupob.empapp.exception.ClaveIncorrectaException;
 import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.empapp.service.CookieService;
@@ -233,8 +233,8 @@ public class LoginEmpleadoController {
 //        modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
 
-//        return "redirect:/datos-personales";
-        return "login/area-personal";
+        return "redirect:/datos-personales";
+//        return "login/area-personal";
     }
 
     @GetMapping("/seleccionar-otra-cuenta")

@@ -6,8 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.validation.email.EmailValidado;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoClave;
-import org.grupob.empapp.dto.grupoValidaciones.GrupoUsuario;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
+import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;

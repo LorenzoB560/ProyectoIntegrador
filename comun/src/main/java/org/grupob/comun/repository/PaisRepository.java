@@ -1,0 +1,11 @@
+package org.grupob.comun.repository;
+
+import org.grupob.comun.entity.maestras.Pais;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface PaisRepository extends JpaRepository<Pais, Long> {
+    boolean existsPaisByPais(String pais);
+    boolean existsPaisByPrefijo(String prefijo);
+}

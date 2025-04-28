@@ -79,7 +79,7 @@ function mostrarDatosEmpleado(empleado) {
     document.getElementById('apellidoEmpleado').textContent = apellidos || 'No especificado';
 
     document.getElementById('fechaNacimientoEmpleado').textContent = formatearFecha(empleado.fechaNacimiento);
-    document.getElementById('emailEmpleado').textContent = empleado.email || 'No especificado';
+    document.getElementById('emailEmpleado').textContent = empleado.correo || 'No especificado';
 
     // Información laboral
     document.getElementById('departamentoDetalle').innerHTML = formatearDepartamento(empleado.departamento);

@@ -9,6 +9,7 @@ import org.grupob.empapp.dto.auxiliar.GeneroDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,4 +50,5 @@ public class EmpleadoDTO {
     // private byte[] foto;
     private boolean tieneFoto;
 
+    private Set<EtiquetaDTO> etiquetas = new HashSet<>();
 }

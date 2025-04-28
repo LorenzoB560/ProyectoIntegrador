@@ -1,134 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resumen</title>
     <link rel="stylesheet" href="/css/registro-empleado-estilos.css">
     <script src="/js/mensajeAlertas.js"></script>
 </head>
+
 <body id="body-resumen">
 
-<a href="/datos-personales" id="datos-personales">
-    <img src="/img/Paso1.png" alt="Paso 1">
-</a>
-<a href="/datos-direccion" id="datos-direccion">
-    <img src="/img/Paso2.png" alt="Paso 2">
-</a>
-<a href="/datos-laborales" id="datos-laborales">
-    <img src="/img/Paso3.png" alt="Paso 3">
-</a>
-<a href="/foto-perfil" id="foto-perfil">
-    <img src="/img/Paso4.png" alt="Paso 4">
-</a>
-<a href="/resumen" id="resumen">
-    <img src="/img/Resumen.png" alt="Resumen">
-</a>
 
-<form action="/guardar-empleado" method="POST" id="formulario">
-    <!-- DATOS PERSONALES -->
+<!-- Navegación entre pasos -->
+<nav>
+    <a href="/datos-personales" id="datos-personales">
+        <img src="/img/Paso1.png" alt="Paso 1">
+    </a>
+    <a href="/datos-contacto" id="datos-contacto">
+        <img src="/img/Paso2.png" alt="Paso 2">
+    </a>
+    <a href="/datos-profesionales" id="datos-profesionales">
+        <img src="/img/Paso3.png" alt="Paso 3">
+    </a>
+    <a href="/datos-economicos" id="datos-economicos">
+        <img src="/img/Paso4.png" alt="Paso 4">
+    </a>
+    <a href="/resumen" id="resumen">
+        <img src="/img/Resumen.png" alt="Resumen">
+    </a>
+</nav>
+
+<form action="/guardar-resumen" method="POST" id="formulario" th:object="${datos}">
+    <!-- PASO 1 - DATOS PERSONALES -->
     <fieldset>
         <legend><strong th:text="#{registro.datosPersonales}"></strong></legend>
-
-        <p>
-            <strong th:text="#{registro.nombre}"></strong>:
-            <span th:text="${datos.nombre}"></span>
-        </p>
-
-        <p>
-            <strong th:text="#{registro.apellido}"></strong>:
-            <span th:text="${datos.apellido}"></span>
-        </p>
-
-        <p>
-            <strong th:text="#{registro.genero}"></strong>:
-            <span th:each="g : ${listaGeneros}"
-                  th:if="${g.getId() == datos.getIdGeneroSeleccionado()}"
-                  th:text="${g.getGenero()}"></span>
-        </p>
-
-        <p>
-            <strong th:text="#{registro.fechaNacimiento}"></strong>:
-            <span th:text="${datos.fechaNacimiento}"></span>
-        </p>
+        <div class="resumen-seccion">
+            <p><strong th:text="#{registro.nombre}"></strong>: <span th:text="${datos.nombre}"></span></p>
+            <p><strong th:text="#{registro.apellido}"></strong>: <span th:text="${datos.apellido}"></span></p>
+            <p><strong th:text="#{registro.genero}"></strong>:
+                <span th:each="g : ${listaGeneros}" th:if="${g.getId() == datos.getIdGeneroSeleccionado()}" th:text="${g.getGenero()}"></span>
+            </p>
+            <p><strong th:text="#{registro.fechaNacimiento}"></strong>: <span th:text="${datos.fechaNacimiento}"></span></p>
+            <p><strong th:text="#{registro.edad}"></strong>: <span th:text="${datos.edad}"></span></p>
+            <p><strong th:text="#{registro.paisNacimiento}"></strong>: <span th:text="${datos.paisNacimiento}"></span></p>
+            <p><strong th:text="#{registro.comentarios}"></strong>: <span th:text="${datos.comentarios}"></span></p>
+        </div>
     </fieldset>
 
-    <!-- DIRECCIÓN POSTAL -->
+    <!-- PASO 2 - DATOS DE CONTACTO -->
     <fieldset>
-        <legend><strong th:text="#{registro.direccionPostal}"></strong></legend>
+        <legend><strong th:text="#{registro.datosContacto}"></strong></legend>
+        <div class="resumen-seccion">
+            <p><strong th:text="#{registro.tipoDocumento}"></strong>: <span th:text="${datos.tipoDocumento}"></span></p>
+            <p><strong th:text="#{registro.numDocumento}"></strong>: <span th:text="${datos.numDocumento}"></span></p>
+            <p><strong th:text="#{registro.prefijoTelefono}"></strong>: <span th:text="${datos.prefijoTelefono}"></span></p>
+            <p><strong th:text="#{registro.numTelefono}"></strong>: <span th:text="${datos.numTelefono}"></span></p>
 
-        <div th:if="${datos.getDireccion() != null}">
-            <p>
-                <strong th:text="#{registro.tipoVia}"></strong>:
-                <span th:if="${datos.getDireccion().getTipoVia() == 'Calle'}" th:text="#{registro.tipoVia.Calle}"></span>
-                <span th:if="${datos.getDireccion().getTipoVia() == 'Avenida'}" th:text="#{registro.tipoVia.Avenida}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.via}"></strong>:
-                <span th:text="${datos.getDireccion().getVia()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.numero}"></strong>:
-                <span th:text="${datos.getDireccion().getNumero()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.piso}"></strong>:
-                <span th:text="${datos.getDireccion().getPiso()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.puerta}"></strong>:
-                <span th:text="${datos.getDireccion().getPuerta()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.codigoPostal}"></strong>:
-                <span th:text="${datos.getDireccion().getCodigoPostal()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.localidad}"></strong>:
-                <span th:text="${datos.getDireccion().getLocalidad()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.region}"></strong>:
-                <span th:text="${datos.getDireccion().getRegion()}"></span>
-            </p>
-
-            <p>
-                <strong th:text="#{registro.pais}"></strong>:
-                <span th:text="${datos.getDireccion().getPais()}"></span>
-            </p>
-        </div>
-        <div th:if="${datos.getDireccion() == null}">
-            <p>No se ha proporcionado dirección</p>
+            <!-- DIRECCIÓN POSTAL -->
+            <p><strong th:text="#{registro.direccionPostal}"></strong>:</p>
+            <div th:if="${datos.direccion != null}">
+                <p><strong th:text="#{registro.tipoVia}"></strong>:
+                    <span th:if="${datos.direccion.tipoVia == 'Calle'}" th:text="#{registro.tipoVia.Calle}"></span>
+                    <span th:if="${datos.direccion.tipoVia == 'Avenida'}" th:text="#{registro.tipoVia.Avenida}"></span>
+                </p>
+                <p><strong th:text="#{registro.via}"></strong>: <span th:text="${datos.direccion.via}"></span></p>
+                <p><strong th:text="#{registro.numero}"></strong>: <span th:text="${datos.direccion.numero}"></span></p>
+                <p><strong th:text="#{registro.portal}"></strong>: <span th:text="${datos.direccion.portal}"></span></p>
+                <p><strong th:text="#{registro.planta}"></strong>: <span th:text="${datos.direccion.planta}"></span></p>
+                <p><strong th:text="#{registro.puerta}"></strong>: <span th:text="${datos.direccion.puerta}"></span></p>
+                <p><strong th:text="#{registro.codigoPostal}"></strong>: <span th:text="${datos.direccion.codigoPostal}"></span></p>
+                <p><strong th:text="#{registro.localidad}"></strong>: <span th:text="${datos.direccion.localidad}"></span></p>
+                <p><strong th:text="#{registro.region}"></strong>: <span th:text="${datos.direccion.region}"></span></p>
+            </div>
+            <div th:if="${datos.direccion == null}">
+                <p>No se ha proporcionado dirección</p>
+            </div>
         </div>
     </fieldset>
 
-    <!-- DATOS LABORALES -->
+    <!-- PASO 3 - DATOS PROFESIONALES -->
     <fieldset>
         <legend><strong th:text="#{registro.datosLaborales}"></strong></legend>
+        <div class="resumen-seccion">
+            <p><strong th:text="#{registro.departamento}"></strong>:
+                <span th:each="departamento : ${listaDepartamentos}" th:if="${departamento.id == datos.idDepartamentoSeleccionado}" th:text="${departamento.nombre}"></span>
+            </p>
 
-        <p>
-            <strong th:text="#{registro.departamento}"></strong>:
-            <span th:each="departamento : ${listaDepartamentos}"
-                  th:if="${departamento.getId() == datos.getIdDepartamentoSeleccionado()}"
-                  th:text="${departamento.getNombre()}"></span>
-        </p>
+            <p><strong th:text="#{registro.especialidades}"></strong>:
+                <span th:each="esp : ${datos.especialidades}">
+            <span th:text="${esp.nombre + ', '}"></span>
+            </span>
+            </p>
+        </div>
     </fieldset>
 
-    <!-- FOTO DE PERFIL -->
+    <!-- PASO 4 - DATOS ECONÓMICOS -->
     <fieldset>
-        <legend><strong th:text="#{registro.imagen}"></strong></legend>
+        <legend><strong th:text="#{registro.datosEconomicos}"></strong></legend>
+        <div class="resumen-seccion">
+            <!-- Salario -->
+            <p><strong th:text="#{registro.salario}"></strong>: <span th:text="${datos.salario}"></span></p>
 
-        <p th:text="${datos.getFoto()}"></p>
+            <!-- Comisión -->
+            <p><strong th:text="#{registro.comision}"></strong>: <span th:text="${datos.comision}"></span></p>
+
+            <!-- Tipo de Tarjeta -->
+            <p><strong th:text="#{registro.tipoTarjeta}"></strong>:
+                <span th:each="tipoTarjeta : ${listaTipoTarjetas}" th:if="${tipoTarjeta.id == datos.idTipoTarjeta}" th:text="${tipoTarjeta.tipoTarjetaCredito}"></span>
+            </p>
+
+            <!-- Cuenta Bancaria -->
+            <fieldset>
+                <legend th:text="#{registro.cuentaBancaria}"></legend>
+                <div th:if="${datos.cuentaBancaria != null}">
+                    <p><strong th:text="#{registro.codigoPais}"></strong>: <span th:text="${datos.cuentaBancaria.codigoPais}"></span></p>
+                    <p><strong th:text="#{registro.digitosControl}"></strong>: <span th:text="${datos.cuentaBancaria.digitosControl}"></span></p>
+                    <p><strong th:text="#{registro.codigoEntidadBancaria}"></strong>: <span th:text="${datos.cuentaBancaria.codigoEntidadBancaria}"></span></p>
+                    <p><strong th:text="#{registro.sucursal}"></strong>: <span th:text="${datos.cuentaBancaria.sucursal}"></span></p>
+                    <p><strong th:text="#{registro.numeroCuenta}"></strong>: <span th:text="${datos.cuentaBancaria.numeroCuenta}"></span></p>
+                </div>
+                <div th:if="${datos.cuentaBancaria == null}">
+                    <p>No se ha proporcionado cuenta bancaria</p>
+                </div>
+            </fieldset>
+            <!-- Tarjeta de Crédito -->
+            <p><strong th:text="#{registro.tarjetaCredito}"></strong>:</p>
+            <div th:if="${datos.tarjetaCredito != null}">
+                <p><strong th:text="#{registro.numeroTarjeta}"></strong>: <span th:text="${datos.tarjetaCredito.numero}"></span></p>
+                <p><strong th:text="#{registro.mesCaducidad}"></strong>: <span th:text="${datos.tarjetaCredito.mesCaducidad}"></span></p>
+                <p><strong th:text="#{registro.anioCaducidad}"></strong>: <span th:text="${datos.tarjetaCredito.anioCaducidad}"></span></p>
+                <p><strong th:text="#{registro.cvc}"></strong>: <span th:text="${datos.tarjetaCredito.cvc}"></span></p>
+            </div>
+            <div th:if="${datos.tarjetaCredito == null}">
+                <p>No se ha proporcionado tarjeta de crédito</p>
+            </div>
+        </div>
     </fieldset>
-    <a href="/volver-principio" id="volverAlPrincipio" th:text="#{registro.volver}"></a>
-    <button type="submit" id="guardarEmpleado" th:text="#{registro.guardar}"></button>
+
+
+    <!-- Checkbox -->
+    <div>
+        <span class="asterisco">*</span>
+        <label for="aceptacionTerminos">
+            <input type="checkbox" id="aceptacionTerminos" name="aceptacionTerminos"
+                   th:field="*{aceptacionTerminos}" th:text="#{registro.terminos}" value="on"/>
+        </label>
+        <div th:each="error : ${#fields.errors('aceptacionTerminos')}" th:text="${error}" class="error"></div>
+    </div>
+
+
+<!--    <div th:if="${erroresValidacion != null}" class="alert alert-danger">-->
+<!--        <h4 th:text="${mensajeNOK}"></h4>-->
+<!--        <p></p>-->
+<!--        <ul>-->
+<!--            <li th:each="error : ${erroresValidacion}" th:text="${error}"></li>-->
+<!--        </ul>-->
+<!--        <p th:text="#{error.mensajeError}"></p>-->
+<!--    </div>-->
+
+
+    <!-- BOTONES DE NAVEGACIÓN -->
+    <div class="botones">
+        <a href="/volver-principio" id="volverAlPrincipio" th:text="#{registro.volver}">Volver al inicio</a>
+        <button type="submit" id="guardarEmpleado" th:text="#{registro.guardar}">Guardar</button>
+    </div>
+
 </form>
 
 </body>
+
 </html>

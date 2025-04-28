@@ -3,7 +3,9 @@ package org.grupob.comun.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.maestras.Pais;
 
 import java.util.Set;
 import java.util.UUID;
@@ -22,4 +24,9 @@ public class EntidadBancaria {
 
     @OneToMany(mappedBy = "entidadBancaria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Empleado> empleados;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pais", nullable = false)
+    private Pais pais;
+
 }

@@ -19,12 +19,12 @@ public class EmpleadoConverter {
         return modelMapper.map(altaEmpleadoDTO, Empleado.class);
     }
 
-        public EmpleadoDTO convertToDto(Empleado empleado) {
+    public EmpleadoDTO convertToDto(Empleado empleado) {
 //     Crear DTO base
-            EmpleadoDTO empleadoDto = modelMapper.map(empleado, EmpleadoDTO.class);
+        EmpleadoDTO empleadoDto = modelMapper.map(empleado, EmpleadoDTO.class);
 //        EmpleadoDTO empleadoDto = new EmpleadoDTO();
 //
-//        // Mapear propiedades básicas
+//        // Mapear propiedades bÃ¡sicas
 //        empleadoDto.setId(empleado.getId());
 //        empleadoDto.setEmpno(empleado.getEmpno());
 //        empleadoDto.setEname(empleado.getEname());
@@ -76,5 +76,5 @@ public class EmpleadoConverter {
 //        }
 
         return empleadoDto;
-   }
+    }
 }

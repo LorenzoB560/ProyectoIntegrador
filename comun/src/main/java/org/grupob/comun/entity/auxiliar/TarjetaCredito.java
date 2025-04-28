@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TarjetaCredito {
-    private String numero;
+    private String numeroTarjeta;
 
     @Column(name = "mes_caducidad")
     private String mesCaducidad;
