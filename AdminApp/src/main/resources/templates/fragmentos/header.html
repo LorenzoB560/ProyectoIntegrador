@@ -1,0 +1,16 @@
+<!-- src/main/resources/templates/fragments/header.html -->
+<header th:fragment="header">
+    <div class="user-info">
+        <h1 th:text="#{areapersonal.bienvenido} + ' ' +  *{usuario}"></h1>
+        <h1 th:text="#{areapersonal.bienvenido} + ' ' +  *{id}"></h1>
+        <p>
+            <span th:text="#{areapersonal.vecesNavegador}"></span>
+            <span th:text="${contador}"></span>
+        </p>
+        <p>
+            <span th:text="#{areapersonal.vecesTotal}"></span>
+            <span th:text="*{numeroAccesos}"></span>
+            <span th:text="${numeroAccesos}"></span>
+
+        </p>
+</header>
