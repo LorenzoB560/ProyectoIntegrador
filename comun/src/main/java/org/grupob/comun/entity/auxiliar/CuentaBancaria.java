@@ -10,9 +10,7 @@ import org.grupob.comun.entity.EntidadBancaria;
 @Embeddable
 public class CuentaBancaria {
 
-//    @ManyToOne
-//    @JoinColumn(name = "id_entidad_bancaria", foreignKey = @ForeignKey(name = "FK_empleado_entidad_bancaria_id"))
-//    private EntidadBancaria entidadBancaria;
+
     private String IBAN;
 
     protected CuentaBancaria() {

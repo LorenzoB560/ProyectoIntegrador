@@ -35,6 +35,7 @@
     <legend th:text="#{registro.datosContacto}"></legend>
 
     <!-- Tipo de documento -->
+    <span class="asterisco">*</span>
     <label th:text="#{registro.tipoDocumento}"></label>
     <div th:each="doc : ${listaTipoDocumentos}">
       <input type="radio" th:field="*{tipoDocumento}"
@@ -45,6 +46,7 @@
     <div th:each="error: ${#fields.errors('idGeneroSeleccionado')}" th:text="${error}" class="error"></div>
 
     <!-- Número de documento -->
+    <span class="asterisco">*</span>
     <label for="numDocumento" th:text="#{registro.numDocumento}"></label>
     <input type="text" th:field="*{numDocumento}" id="numDocumento">
     <div th:each="error: ${#fields.errors('numDocumento')}" th:text="${error}" class="error"></div>
@@ -54,6 +56,7 @@
     <div class="error" th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
 
     <!-- Prefijo telefónico -->
+    <span class="asterisco">*</span>
     <label for="prefijoTelefono" th:text="#{registro.prefijoTelefono}"></label>
     <select id="prefijoTelefono" th:field="*{prefijoTelefono}">
       <option th:each="pais: ${listaPaises}"
@@ -64,6 +67,7 @@
     <div th:each="error: ${#fields.errors('prefijoTelefono')}" th:text="${error}" class="error"></div>
 
     <!-- Número de teléfono -->
+    <span class="asterisco">*</span>
     <label for="numTelefono" th:text="#{registro.numTelefono}"></label>
     <input type="text" th:field="*{numTelefono}" id="numTelefono">
     <div th:each="error: ${#fields.errors('numTelefono')}" th:text="${error}" class="error"></div>
@@ -74,6 +78,7 @@
     <legend th:text="#{registro.direccionPostal}"></legend>
 
     <!-- Tipo de vía -->
+    <span class="asterisco">*</span>
     <label for="tipoVia" th:text="#{registro.tipoVia}"></label>
     <select id="tipoVia" th:field="*{direccion.tipoVia}">
       <option th:each="via: ${listaTipoVias}"
@@ -85,11 +90,13 @@
     <br>
 
     <!-- Vía -->
+    <span class="asterisco">*</span>
     <label for="via" th:text="#{registro.via}"></label>
     <input type="text" th:field="*{direccion.via}" id="via">
     <div th:each="error: ${#fields.errors('direccion.via')}" th:text="${error}" class="error"></div>
 
     <!-- Número -->
+    <span class="asterisco">*</span>
     <label for="numero" th:text="#{registro.numero}"></label>
     <input type="text" th:field="*{direccion.numero}" id="numero">
     <div th:each="error: ${#fields.errors('direccion.numero')}" th:text="${error}" class="error"></div>
@@ -111,6 +118,7 @@
     <div th:each="error: ${#fields.errors('direccion.puerta')}" th:text="${error}" class="error"></div>
 
     <!-- Localidad -->
+    <span class="asterisco">*</span>
     <label for="localidad" th:text="#{registro.localidad}"></label>
     <input type="text" th:field="*{direccion.localidad}" id="localidad">
     <div th:each="error: ${#fields.errors('direccion.localidad')}" th:text="${error}" class="error"></div>
@@ -121,6 +129,7 @@
     <div th:each="error: ${#fields.errors('direccion.region')}" th:text="${error}" class="error"></div>
 
     <!-- Código postal -->
+    <span class="asterisco">*</span>
     <label for="codigoPostal" th:text="#{registro.codigoPostal}"></label>
     <input type="text" th:field="*{direccion.codigoPostal}" id="codigoPostal">
     <div th:each="error: ${#fields.errors('direccion.codigoPostal')}" th:text="${error}" class="error"></div>

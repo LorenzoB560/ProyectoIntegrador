@@ -13,6 +13,7 @@ import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
+import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.springframework.stereotype.Service;
@@ -96,37 +97,28 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
 
         Empleado empleado = empleadoConverter.convertirAEntidad(altaEmpleadoDTO);
         empleado.setGenero(generoRepository.findById(altaEmpleadoDTO.getIdGeneroSeleccionado()).orElseThrow());
-
-//        UUID idEntidadBancaria = altaEmpleadoDTO.getCuentaBancaria().getIdEntidadBancaria();
-//        Optional<EntidadBancaria> entidadBancariaOptional = entidadBancariaRepository.findById(idEntidadBancaria);
-//
-//        if (entidadBancariaOptional.isPresent()) {
-//            // Si la entidad bancaria existe, la asignamos a la cuenta bancaria
-//            CuentaBancaria cuentaBancaria = CuentaBancaria.of(altaEmpleadoDTO.getCuentaBancaria().getIban());
-//            cuentaBancaria.setEntidadBancaria(entidadBancariaOptional.get());
-//
-//            // Establecer la cuenta bancaria en el empleado
-//            empleado.setCuentaCorriente(cuentaBancaria);
-//        } else {
-//            // Si no se encuentra la entidad bancaria, lanzar una excepción o manejarlo según tu lógica
-//            throw new RuntimeException("Entidad bancaria no encontrada");
-//        }
-
         for (Especialidad especialidad : altaEmpleadoDTO.getEspecialidades()) {
             if (especialidad.getId() == null) {  // Verificar si la especialidad aún no tiene ID (si es nueva)
                 especialidadRepository.save(especialidad);  // Guardar la especialidad
             }
         }
 
+        CuentaBancaria cuentaBancaria = CuentaBancaria.of(altaEmpleadoDTO.getCuentaBancaria().getIban());
+
+        empleado.setCuentaCorriente(cuentaBancaria);
+        
         // Asignar las especialidades al empleado
         empleado.setEspecialidades(altaEmpleadoDTO.getEspecialidades());
         empleado.setActivo(true);
         empleado.setPeriodo(Periodo.of(LocalDate.now(), null));
         empleado.setId(UUID.fromString(id));
         System.err.println(empleado);
+//        empleado.setAceptacionTerminos(altaEmpleadoDTO.getAceptacionTerminos().equals("on"));
         empleadoRepository.save(empleado);
     }
-
+    public boolean usuarioExiste(LoginUsuarioEmpleadoDTO sesion){
+        return sesion != null;
+    }
 
     public void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
         if (datosNuevos == null) {
