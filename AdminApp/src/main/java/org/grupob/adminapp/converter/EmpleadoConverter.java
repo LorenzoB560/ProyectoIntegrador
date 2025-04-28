@@ -1,8 +1,8 @@
-package org.grupob.empapp.converter;
+package org.grupob.adminapp.converter;
 
-import org.grupob.empapp.dto.AltaEmpleadoDTO;
-import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
+import org.grupob.adminapp.dto.AltaEmpleadoDTO;
+import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

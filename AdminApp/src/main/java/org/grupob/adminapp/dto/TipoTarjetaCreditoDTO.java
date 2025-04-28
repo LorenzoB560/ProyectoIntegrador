@@ -1,15 +1,13 @@
-package org.grupob.empapp.dto.auxiliar;
+package org.grupob.adminapp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class GeneroDTO {
+public class TipoTarjetaCreditoDTO {
     private Long id;
-    private String genero;
-
-
+    private String tipoTarjetaCredito;
 }

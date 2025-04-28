@@ -1,11 +1,9 @@
-package org.grupob.empapp.dto; // O el paquete que prefieras para tus DTOs
+package org.grupob.adminapp.dto; // O el paquete que prefieras para tus DTOs
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.dto.auxiliar.GeneroDTO;
-
-// Importa otros DTOs necesarios (EspecialidadDto, DepartamentoDto, etc.)
+import org.grupob.adminapp.dto.auxiliar.GeneroDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

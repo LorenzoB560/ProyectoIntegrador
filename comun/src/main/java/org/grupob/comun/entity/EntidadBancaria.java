@@ -3,6 +3,7 @@ package org.grupob.comun.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.maestras.Pais;
 

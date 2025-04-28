@@ -1,13 +1,15 @@
-package org.grupob.empapp.controller;
+package org.grupob.adminapp.controller;
 
 
 
+import org.grupob.adminapp.dto.EmpleadoDTO;
+import org.grupob.adminapp.service.EmpleadoServiceImp;
+import org.grupob.adminapp.service.EtiquetaServiceImp;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
-import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.service.EmpleadoServiceImp;
-import org.grupob.empapp.service.EtiquetaService;
+
+
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -26,9 +28,9 @@ public class EmpleadoRestController {
 
     private final EmpleadoRepository empleadoRepository;
     private EmpleadoServiceImp empleadoService;
-    private final EtiquetaService etiquetaService; // Inyectar EtiquetaService
+    private final EtiquetaServiceImp etiquetaService; // Inyectar EtiquetaService
 
-    public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository, EtiquetaService etiquetaService) {
+    public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository, EtiquetaServiceImp etiquetaService) {
         this.empleadoRepository = empleadoRepository;
         this.empleadoService = empleadoService;
         this.etiquetaService = etiquetaService;
@@ -38,6 +40,7 @@ public class EmpleadoRestController {
     public List<EmpleadoDTO> listarEmpleados() {
         return empleadoService.devuelveTodosEmpleados();
     }
+
     @GetMapping("/listado")
     public Page<EmpleadoDTO> listarEmpleados(
             @RequestParam(required = false) String nombre,

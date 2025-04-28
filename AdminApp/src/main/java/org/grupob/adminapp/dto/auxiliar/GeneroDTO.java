@@ -1,4 +1,4 @@
-package org.grupob.empapp.dto.auxiliar;
+package org.grupob.adminapp.dto.auxiliar;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

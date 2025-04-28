@@ -700,3 +700,20 @@ WHERE id IN (
 UPDATE empleado
 SET id_jefe = UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', ''))
 WHERE id = UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')); -- Lilia Rivas
+
+-- Etiquetas creadas por Vicente Palma (CEO)
+INSERT INTO etiqueta (id, nombre, creador_id, fecha_creacion) VALUES
+                                                                  (UNHEX(REPLACE('e1e1e1e1-1111-4a4a-aaaa-111111111111', '-', '')), 'Alto Potencial', UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), NOW()),
+                                                                  (UNHEX(REPLACE('e1e1e1e1-2222-4a4a-aaaa-222222222222', '-', '')), 'Necesita Seguimiento', UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), NOW()),
+                                                                  (UNHEX(REPLACE('e1e1e1e1-3333-4a4a-aaaa-333333333333', '-', '')), 'Liderazgo', UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), NOW());
+
+-- Etiquetas creadas por Moisés Villalba (RRHH)
+INSERT INTO etiqueta (id, nombre, creador_id, fecha_creacion) VALUES
+                                                                  (UNHEX(REPLACE('e2e2e2e2-1111-4b4b-bbbb-111111111111', '-', '')), 'Comunicación Excelente', UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), NOW()),
+                                                                  (UNHEX(REPLACE('e2e2e2e2-2222-4b4b-bbbb-222222222222', '-', '')), 'Trabajo en Equipo', UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), NOW()),
+                                                                  (UNHEX(REPLACE('e2e2e2e2-3333-4b4b-bbbb-333333333333', '-', '')), 'Resolutivo', UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), NOW());
+
+-- Etiquetas creadas por Glauco Perelló (Finanzas)
+INSERT INTO etiqueta (id, nombre, creador_id, fecha_creacion) VALUES
+                                                                  (UNHEX(REPLACE('e3e3e3e3-1111-4c4c-cccc-111111111111', '-', '')), 'Meticuloso/a', UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), NOW()),
+                                                                  (UNHEX(REPLACE('e3e3e3e3-2222-4c4c-cccc-222222222222', '-', '')), 'Analítico', UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), NOW());
