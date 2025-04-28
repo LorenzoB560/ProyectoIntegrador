@@ -13,6 +13,7 @@ import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
+import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,9 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
 //        empleado.setAceptacionTerminos(altaEmpleadoDTO.getAceptacionTerminos().equals("on"));
         empleadoRepository.save(empleado);
     }
-
+    public boolean usuarioExiste(LoginUsuarioEmpleadoDTO sesion){
+        return sesion != null;
+    }
 
     public void actualizarDatos(AltaEmpleadoDTO datosNuevos, AltaEmpleadoDTO datosAnteriores) {
         if (datosNuevos == null) {

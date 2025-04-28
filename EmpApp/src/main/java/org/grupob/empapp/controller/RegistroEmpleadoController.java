@@ -61,6 +61,11 @@ public class RegistroEmpleadoController {
     @GetMapping("/datos-personales")
     public String datosPersonales(HttpSession sesion, Model model) {
 
+
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        if (!altaEmpleadoServiceImp.usuarioExiste(loginUsuarioEmpleadoDTO)){
+            return "redirect:/empapp/login";
+        }
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
@@ -120,6 +125,11 @@ public class RegistroEmpleadoController {
     @GetMapping("/datos-contacto")
     public String datosContacto(HttpSession sesion, Model model) {
 
+
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        if (!altaEmpleadoServiceImp.usuarioExiste(loginUsuarioEmpleadoDTO)){
+            return "redirect:/empapp/login";
+        }
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
@@ -174,6 +184,10 @@ public class RegistroEmpleadoController {
     @GetMapping("/datos-profesionales")
     public String datosProfesionales(HttpSession sesion, Model model){
 
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        if (!altaEmpleadoServiceImp.usuarioExiste(loginUsuarioEmpleadoDTO)){
+            return "redirect:/empapp/login";
+        }
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
@@ -216,6 +230,11 @@ public class RegistroEmpleadoController {
     }
     @GetMapping("/datos-economicos")
     public String datosEconomicos(HttpSession sesion, Model model) {
+
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        if (!altaEmpleadoServiceImp.usuarioExiste(loginUsuarioEmpleadoDTO)){
+            return "redirect:/empapp/login";
+        }
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 
@@ -277,6 +296,11 @@ public class RegistroEmpleadoController {
     }
     @GetMapping("/resumen")
     public String resumen(HttpSession sesion, Model model) {
+
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        if (!altaEmpleadoServiceImp.usuarioExiste(loginUsuarioEmpleadoDTO)){
+            return "redirect:/empapp/login";
+        }
         //Obtengo la sesión de personales
         AltaEmpleadoDTO datosFormulario = (AltaEmpleadoDTO) sesion.getAttribute("datos");
 

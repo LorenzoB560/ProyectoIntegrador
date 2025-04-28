@@ -6,10 +6,10 @@ VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2
 
 -- Usuarios sin claves cifradas
 
-INSERT INTO usuario_empleado (id, usuario, clave)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado');
-INSERT INTO usuario_empleado (id, usuario, clave)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', 'empleado');
+INSERT INTO usuario_empleado (id, usuario, clave, intentos_sesion_fallidos, num_accesos)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado', 0, 5);
+INSERT INTO usuario_empleado (id, usuario, clave, intentos_sesion_fallidos, num_accesos)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', 'empleado', 0, 0);
 
 
 -- Géneros
