@@ -233,8 +233,8 @@ public class LoginEmpleadoController {
 //        modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
 
-        return "redirect:/datos-personales";
-//        return "login/area-personal";
+//        return "redirect:/datos-personales";
+        return "login/area-personal";
     }
 
     @GetMapping("/seleccionar-otra-cuenta")
