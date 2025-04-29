@@ -137,7 +137,7 @@ public class EmpleadoRestController {
             }
 
             // 2. Comprobar si el usuario YA está desbloqueado
-            // Asumimos que "desbloqueado" significa motivoBloqueo es null Y activo es true
+            // Asumimos que "desbloqueado" significa motivoBloqueo es null
             if (usuario.getMotivoBloqueo() == null ) {
                 // Devolver un 400 Bad Request indicando que la operación no es aplicable
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -164,14 +164,50 @@ public class EmpleadoRestController {
         }
     }
 
+    // --- MÉTODO MODIFICADO ---
     @PostMapping("/{id}/bloquear")
     public ResponseEntity<?> asignarBloqueo(@PathVariable String id, @RequestParam Long motivoId) {
         try {
-            usuarioEmpleadoService.bloquearEmpleado(id, motivoId);
-            return ResponseEntity.ok().build(); // O redirigir, o devolver un mensaje JSON
+            // 1. Buscar al Empleado y su UsuarioEmpleado asociado
+            UUID empleadoUuid = UUID.fromString(id); // Convertir String a UUID
+            Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
+
+            UsuarioEmpleado usuario = empleado.getUsuario();
+            if (usuario == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario asociado al empleado no encontrado.");
+            }
+
+            // 2. Comprobar si el usuario YA está bloqueado o inactivo
+            // Usamos !isActivo() como indicador principal.
+            if (usuario.getMotivoBloqueo() != null ) {
+                // Devolver un 400 Bad Request indicando que la operación no es aplicable
+                // Puedes añadir el motivo actual si quieres:
+                String mensaje = "El empleado ya se encuentra bloqueado";
+                if (usuario.getMotivoBloqueo() != null) {
+                    mensaje += " (Motivo: " + usuario.getMotivoBloqueo().getMotivo() + ")";
+                }
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensaje);
+            }
+
+            // 3. Si está activo, proceder a bloquear
+            usuarioEmpleadoService.bloquearEmpleado(id, motivoId); // Llama al servicio
+
+
+            // 4. Devolver éxito (el JS redirigirá)
+            return ResponseEntity.ok().build();
+
+        } catch (IllegalArgumentException e) {
+            // Captura el error si el ID proporcionado no es un UUID válido
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID proporcionado no es válido: " + id);
+        } catch (EntityNotFoundException e) {
+            // Captura si el empleado o el motivo (dentro del service) no se encuentran
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
+            // Captura cualquier otra excepción inesperada
             // Loggear error
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al bloquear empleado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al intentar bloquear el empleado: " + e.getMessage());
         }
     }
 
