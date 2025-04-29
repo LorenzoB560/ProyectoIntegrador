@@ -4,7 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
+import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
@@ -12,6 +14,7 @@ import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
 import org.grupob.empapp.exception.ClaveIncorrectaException;
 import org.grupob.empapp.exception.CuentaBloqueadaException;
 import org.grupob.empapp.service.CookieService;
+import org.grupob.empapp.service.EmpleadoServiceImp;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,11 +32,13 @@ public class LoginEmpleadoController {
 
     private final UsuarioEmpleadoServiceImp usuarioService;
     private final CookieService cookieService;
+    private final EmpleadoServiceImp empleadoServiceImp;
 
     public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioService,
-                                   CookieService cookieService) {
+                                   CookieService cookieService, EmpleadoServiceImp empleadoServiceImp) {
         this.usuarioService = usuarioService;
         this.cookieService = cookieService;
+        this.empleadoServiceImp = empleadoServiceImp;
     }
 
     @GetMapping("/login")
@@ -228,14 +233,21 @@ public class LoginEmpleadoController {
         int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
         request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
 
-        modelo.addAttribute("dto", request.getSession().getAttribute("usuarioLogeado"));
+        LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+        modelo.addAttribute("dto", dto);
 
 //        modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
         modelo.addAttribute("ultimaPagina", ultimaPagina);
 
-//        return "redirect:/datos-personales";
+        EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
+        System.err.println(emp);
+
+        /*if(emp==null){
+            return "login/area-personal";
+        }*/
         return "login/area-personal";
+//        return "redirect:/datos-personales";
     }
 
     @GetMapping("/seleccionar-otra-cuenta")
