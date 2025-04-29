@@ -1,0 +1,27 @@
+<header th:fragment="header">
+    <div class="user-info">
+        <div class="user-main">
+            <strong>
+                <span th:text="#{areapersonal.bienvenido}"></span>
+                <span th:text="*{usuario}"></span>
+                <span class="user-id">(ID: <span th:text="*{id}"></span>)</span>
+            </strong>
+        </div>
+        <div class="user-stats">
+            <span>
+                <span th:text="#{areapersonal.vecesNavegador}"></span>
+                <strong th:text="${contador}"></strong>
+            </span>
+            <span>
+                <span th:text="#{areapersonal.vecesTotal}"></span>
+                <strong th:text="*{numeroAccesos}"></strong>
+            </span>
+            <span>
+                <span th:text="#{areapersonal.ultimaPagina}"></span>
+                <strong>
+                    <a th:href="${ultimaPagina}" th:text="${ultimaPagina}" style="color:inherit;text-decoration:underline;"></a>
+                </strong>
+            </span>
+        </div>
+    </div>
+</header>

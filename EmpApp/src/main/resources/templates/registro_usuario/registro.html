@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de usuario</title>
+  <link rel="stylesheet" href="/css/registro-usuario-estilos.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/modificarCampos.js"></script>
+  <script src="/js/funciones.js"></script>
+  <script src="/js/envioPost.js"></script>
+</head>
+<body>
+<div class="container">
+  <h2>Registro de Usuario</h2>
+
+  <form id="formulario">
+    <!-- Nombre de Usuario -->
+    <label for="usuario">Usuario:</label>
+    <input type="text" id="usuario" name="usuario" placeholder="Ingrese su nombre de usuario">
+    <br><br>
+
+    <!-- Contraseña -->
+    <label for="clave">Contraseña:</label>
+    <input type="password" id="clave" name="clave">
+    <br><br>
+
+    <!-- Confirmar Contraseña -->
+    <label for="confirmarClave">Confirmar Contraseña:</label>
+    <input type="password" id="confirmarClave" name="confirmarClave">
+    <span class="nota">Debe tener una longitud de entre 8 y 12 caracteres, contener al menos una letra mayúscula, una minúscula, un número y un signo de puntuación.</span>
+    <br><br>
+
+    <!-- Mostrar Contraseña -->
+    <div class="checkbox-container">
+      <input type="checkbox" id="mostrarClave" onclick="mostrarOcultarClave()">
+      <label for="mostrarClave">Mostrar Contraseña</label>
+    </div>
+    <br>
+
+    <!-- Botones -->
+    <button class="button" type="button" onclick="vaciarCampos()">Vaciar</button>
+    <button class="button" type="reset">Restablecer</button>
+    <button class="button" type="button" id="btnEnviar">Enviar</button>
+  </form>
+
+  <!-- Mensajes -->
+  <div id="mensajes" class="error"></div>
+
+  <!-- Enlace a autenticación -->
+  <div class="links">
+    <a href="/redirigir-hacia-login">Ir a Autenticación de Usuario</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Empleados</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Tu CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Estilos para los fragmentos   -->
+    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+
+</head>
+<body th:object="${loginAdminDTO}">
+<div th:replace="fragmentos/header :: header"></div>
+<div th:replace="fragmentos/nav :: nav"></div>
+<div class="container-fluid my-4">
+    <h1 class="text-center mb-4">Gestión de Empleados</h1>
+
+    <!-- Sección de filtros -->
+    <div class="filter-section">
+        <div class="row">
+            <div class="col-md-3 mb-2">
+                <label for="filtroNombre" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="filtroNombre" placeholder="Filtrar por nombre">
+            </div>
+            <div class="col-md-3 mb-2">
+                <label for="filtroDepartamento" class="form-label">Departamento:</label>
+                <input type="text" class="form-control" id="filtroDepartamento" placeholder="Filtrar por departamento">
+            </div>
+            <div class="col-md-3 mb-2">
+                <label for="filtroComentario" class="form-label">Comentarios:</label>
+                <input type="text" class="form-control" id="filtroComentario" placeholder="Filtrar por comentarios">
+            </div>
+            <div class="col-md-3 mb-2">
+                <label for="filtroFechaAntes" class="form-label">Contratados antes de:</label>
+                <input type="date" class="form-control" id="filtroFechaAntes">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-2">
+                <label for="filtroSalarioMinimo" class="form-label">Salario mínimo:</label>
+                <input type="number" class="form-control" id="filtroSalarioMinimo" placeholder="Ej: 30000">
+            </div>
+            <div class="col-md-9 d-flex align-items-end justify-content-end mb-2">
+                <button id="aplicarFiltros" class="btn btn-primary me-2">Aplicar Filtros</button>
+                <button id="limpiarFiltros" class="btn btn-secondary">Limpiar Filtros</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de carga inicial -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button id="cargarDatos" class="btn btn-success">Cargar Empleados</button>
+        <div class="d-flex align-items-center">
+            <span class="me-2">Ordenar por:</span>
+            <button id="ordenarPorNombre" class="btn-sort active me-2">Nombre</button>
+            <button id="ordenarPorSalario" class="btn-sort me-2">Salario</button>
+            <span id="direccionOrden" class="btn-sort">↑</span>
+        </div>
+    </div>
+
+    <!-- Resultados y carga -->
+    <div id="contadorResultados" class="mb-2 fw-bold"></div>
+    <div id="cargando" class="loading-spinner" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+    <div id="error" class="alert alert-danger" style="display: none;"></div>
+
+    <!-- Tabla de empleados -->
+    <div class="table-responsive">
+        <table id="tablaEmpleados" class="table table-striped table-hover" style="display: none;">
+            <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Comentarios</th>
+                <th>Fecha Contratación</th>
+                <th>Salario</th>
+                <th>Comisión</th>
+                <th>Departamento</th>
+                <th>Jefe</th>
+                <th>Especialidades</th>
+                <th>Detalle</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+            <!-- Los datos de empleados se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div id="paginacion" class="d-flex justify-content-center mt-3">
+        <!-- Controles de paginación se generarán dinámicamente -->
+    </div>
+</div>
+<div th:replace="fragmentos/footer :: footer"></div>
+
+<script th:src="@{/js/listado-emp.js}"></script>
+<!-- Bootstrap JS (para tabs y componentes interactivos) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

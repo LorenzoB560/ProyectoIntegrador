@@ -1,0 +1,9 @@
+<!-- src/main/resources/templates/fragments/header.html -->
+<header th:fragment="header">
+    <div class="user-info">
+        <h1 th:text="Bienvenido + ' ' +  *{usuario}"></h1>
+        <p>
+            <span th:text="'Número de accesos totales: '  + ' ' +  *{numeroAccesos}"></span>
+        </p>
+    </div>
+</header>
