@@ -184,8 +184,11 @@ public class LoginEmpleadoController {
             modelo.addAttribute("usuario", ultimoUsuario);
             modelo.addAttribute("contador", contador);
 
+//            System.err.println(ultimoUsuario);
             request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
 
+//            cookieService.crearCookie(response, "usuario", ultimoUsuario, 604800);
+//            System.err.println(ultimoUsuario);
              dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
             modelo.addAttribute("dto", dto);
 
@@ -213,7 +216,6 @@ public class LoginEmpleadoController {
             return "login/pedir-clave";
         }
     }
-
 
     @GetMapping("/area-personal")
     public String mostrarAreaPersonal(Model modelo,
@@ -256,12 +258,6 @@ public class LoginEmpleadoController {
             return "login/area-personal";
 
         }
-
-        /*if(emp==null){
-            return "login/area-personal";
-        }*/
-//        return "login/area-personal";
-//        return "redirect:/datos-personales";
     }
 
     @GetMapping("/seleccionar-otra-cuenta")

@@ -1,6 +1,5 @@
 package org.grupob.empapp.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
@@ -24,6 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
+//@RequestMapping("/empapp")
 public class RegistroEmpleadoController {
 
     private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;
@@ -84,7 +84,6 @@ public class RegistroEmpleadoController {
     public String guardarDatosPersonales(
             @Validated(GrupoDatosPersonales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
-//            @RequestParam("foto") MultipartFile foto,
             HttpSession sesion,
             Model model) {
 
@@ -326,8 +325,7 @@ public class RegistroEmpleadoController {
     public String guardarResumen(@Validated(GrupoResumen.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
                                  BindingResult bindingResult,
                                  HttpSession sesion,
-                                 Model model,
-                                 HttpServletRequest request) {
+                                 Model model) {
 
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -350,8 +348,9 @@ public class RegistroEmpleadoController {
         return "redirect:/usuario-insertado";
     }
     @GetMapping("/usuario-insertado")
-    public String usuarioInsertado(){
-        return "registro_empleado/usuario-insertado";
+    public String usuarioInsertado(HttpSession sesion){
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        return "redirect:/empleado/detalle/" + loginUsuarioEmpleadoDTO.getId().toString();
     }
 
     @GetMapping("/volver-principio")

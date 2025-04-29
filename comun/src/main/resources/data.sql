@@ -8,9 +8,9 @@ VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a202', '-', '')), 'admin2
 
 -- Usuarios sin claves cifradas (Estos parecen ser de prueba y no estar asociados directamente a los empleados de abajo, los mantengo como estaban pero añadiendo los campos a 0)
 INSERT INTO usuario_empleado (id, usuario, clave, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', 'empleado', 0, 0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@gmail.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', 'empleado', 0, 0);
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', 0, 0);
 
 
 -- Géneros
@@ -74,45 +74,46 @@ INSERT INTO tipo_tarjeta_credito (id, tipo_tarjeta) VALUES (4, 'Visa Platinum');
 
 -- USUARIOS EMPLEADOS (El ID ahora es el mismo que el del empleado asociado)
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), 'glauco.perelló@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2025-04-16 10:12:45', true, 0, 0);
+VALUES (UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), 'glauco.perello@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2025-04-16 10:12:45', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), 'moisés.villalba@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-09-17 05:25:30', true, 0, 0);
+VALUES (UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), 'moises.villalba@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-09-17 05:25:30', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('4280629d-9787-4ec6-bad3-6b83db92f958', '-', '')), 'ester.somoza@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-08-30 09:34:51', true, 0, 0);
+VALUES (UNHEX(REPLACE('4280629d-9787-4ec6-bad3-6b83db92f958', '-', '')), 'ester.somoza@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-08-30 09:34:51', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 'samu.ortuño@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-12-28 03:16:37', true, 0, 0);
+VALUES (UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 'samu.ortuno@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-12-28 03:16:37', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 'manu.roma@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-07-17 05:57:15', true, 0, 0);
+VALUES (UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 'manu.roma@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-07-17 05:57:15', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 'pía.lago@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-07-21 09:20:18', true, 0, 0);
+VALUES (UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 'pia.lago@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-07-21 09:20:18', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 'rosalía.cabañas@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-05-22 06:02:09', true, 0, 0);
+VALUES (UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 'rosalia.cabanas@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-05-22 06:02:09', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 'maribel.malo@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2025-03-14 15:30:20', true, 0, 0);
+VALUES (UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 'maribel.malo@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2025-03-14 15:30:20', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 'marisol.valenciano@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-05-04 04:38:05', true, 0, 0);
+VALUES (UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 'marisol.valenciano@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-05-04 04:38:05', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 'vicente.palma@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2025-02-04 03:22:58', true, 0, 0);
+VALUES (UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 'vicente.palma@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2025-02-04 03:22:58', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 'paz.mur@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2025-01-27 07:05:40', true, 0, 0);
+VALUES (UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 'paz.mur@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2025-01-27 07:05:40', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 'alejandro.cerro@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-07-18 15:42:41', true, 0, 0);
+VALUES (UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 'alejandro.cerro@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-07-18 15:42:41', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 'aarón.pintor@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-06-04 09:11:57', true, 0, 0);
+VALUES (UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 'aaron.pintor@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-06-04 09:11:57', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 'wilfredo.cózar@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-12-02 18:40:01', true, 0, 0);
+VALUES (UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 'wilfredo.cozar@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-12-02 18:40:01', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 'mercedes.gisbert@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-06-13 06:13:35', true, 0, 0);
+VALUES (UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 'mercedes.gisbert@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-06-13 06:13:35', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 'verónica.blanca@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-05-14 07:41:15', true, 0, 0);
+VALUES (UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 'veronica.blanca@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-05-14 07:41:15', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 'lilia.rivas@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2025-01-16 17:20:08', true, 0, 0);
+VALUES (UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 'lilia.rivas@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2025-01-16 17:20:08', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 'pastora.cabezas@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-05-11 17:11:30', true, 0, 0);
+VALUES (UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 'pastora.cabezas@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-05-11 17:11:30', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 'mirta.molina@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-11-27 09:00:46', true, 0, 0);
+VALUES (UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 'mirta.molina@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-11-27 09:00:46', true, 0, 0);
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
-VALUES (UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 'raúl.requena@empresa.com', '$2a$10$56VCAiApLO8NQYeOPiu2De/EBC5RWrTZvLl7uoeC3r7aOHnWSPo36', '2024-05-07 18:19:46', true, 0, 0);
+VALUES (UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 'raul.requena@empresa.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', '2024-05-07 18:19:46', true, 0, 0);
+
 
 
 -- EMPLEADOS (id_usuario ahora referencia el ID del empleado)
