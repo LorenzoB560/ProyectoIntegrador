@@ -88,6 +88,13 @@ footer {
     bottom: 0;
 }
 
+.disabled-link {
+    color: #b0bec5;
+    opacity: 0.6;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
 /* Responsive design */
 @media (max-width: 700px) {
     header, footer {

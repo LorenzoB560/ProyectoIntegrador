@@ -25,5 +25,4 @@ public class DepartamentoController {
         return "listados/detalle-vista-dep";
     }
 
-
 }
