@@ -1,5 +1,8 @@
 package org.grupob.empapp.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.service.EmpleadoServiceImp; // Necesario para validar que el jefe existe
 import org.grupob.comun.exception.DepartamentoNoEncontradoException; // O la excepción que uses para 'no encontrado'
 import org.springframework.stereotype.Controller;
@@ -28,7 +31,7 @@ public class EtiquetadoController {
      * @return El nombre de la plantilla Thymeleaf.
      */
     @GetMapping("/masivo/{jefeId}")
-    public String mostrarEtiquetadoMasivo(@PathVariable String jefeId, Model model) {
+    public String mostrarEtiquetadoMasivo(@PathVariable String jefeId, Model model, HttpServletRequest request, HttpSession sesion) {
         // --- Validación Opcional ---
         // Es buena práctica validar que el jefe existe antes de mostrar la página.
         // También, en una aplicación real, verificarías si el usuario logueado
@@ -40,6 +43,8 @@ public class EtiquetadoController {
 
             model.addAttribute("jefeId", jefeId); // Pasa el ID del jefe a la vista
             // Asegúrate de que la plantilla exista en la ruta correcta
+            LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            model.addAttribute("dto", dto);
             return "etiquetado/etiquetado-masivo";
 
         } catch (IllegalArgumentException e) {
@@ -70,13 +75,16 @@ public class EtiquetadoController {
     // public String mostrarEtiquetadoSimple(...) { ... }
     // --- NUEVO MÉTODO ---
     @GetMapping("/limitado/{jefeId}")
-    public String mostrarNuevoEtiquetado(@PathVariable String jefeId, Model model) {
+    public String mostrarNuevoEtiquetado(@PathVariable String jefeId, Model model, HttpServletRequest request, HttpSession sesion) {
         try {
             // Validación opcional del jefe (recomendado)
             UUID.fromString(jefeId);
             empleadoService.devuelveEmpleado(jefeId); // Lanza excepción si no existe
 
             model.addAttribute("jefeId", jefeId); // Pasar ID a la vista
+
+            LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            model.addAttribute("dto", dto);
             return "etiquetado/limitado-etiquetado"; // Nombre de la nueva plantilla HTML
 
         } catch (IllegalArgumentException e) {
@@ -93,13 +101,15 @@ public class EtiquetadoController {
     }
     // --- NUEVO MÉTODO PARA LA VISTA DE ELIMINAR ---
     @GetMapping("/eliminar/{jefeId}")
-    public String mostrarEliminarEtiquetas(@PathVariable String jefeId, Model model) {
+    public String mostrarEliminarEtiquetas(@PathVariable String jefeId, Model model, HttpServletRequest request, HttpSession sesion) {
         try {
             // Validación opcional del jefe (recomendado)
             UUID.fromString(jefeId);
             empleadoService.devuelveEmpleado(jefeId); // Lanza excepción si no existe
 
             model.addAttribute("jefeId", jefeId); // Pasar ID a la vista
+            LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            model.addAttribute("dto", dto);
             return "etiquetado/eliminar-etiquetas"; // Nombre de la nueva plantilla HTML
 
         } catch (IllegalArgumentException e) {

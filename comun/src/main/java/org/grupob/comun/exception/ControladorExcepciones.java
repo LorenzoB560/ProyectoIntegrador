@@ -43,6 +43,20 @@ public class ControladorExcepciones {
     }
 
 
+    @ExceptionHandler(EmpleadoNoEncontradoException.class)
+    public ResponseEntity<InformacionExcepcion> manejaEmpleadoNoEncontradoException(EmpleadoNoEncontradoException ex) {
+        InformacionExcepcion info = new InformacionExcepcion();
+        info.setTimestamp(LocalDateTime.now());
+        info.setStatus(HttpStatus.NOT_FOUND.value());
+        info.setMessage(ex.getMessage());
+        List<String> listaErrores = new ArrayList<>();
+        listaErrores.add(ex.getMessage());
+        info.setListaErrores(listaErrores);
+
+        return new ResponseEntity<>(info, HttpStatus.NOT_FOUND);
+    }
+
+
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public String manejaHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         InformacionExcepcion info = new InformacionExcepcion();

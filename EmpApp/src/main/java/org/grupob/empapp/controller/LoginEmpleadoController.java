@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.ClaveIncorrectaException;
 import org.grupob.comun.exception.CuentaBloqueadaException;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
@@ -243,14 +244,19 @@ public class LoginEmpleadoController {
         modelo.addAttribute("contador", contador);
         modelo.addAttribute("ultimaPagina", ultimaPagina);
 
-        EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
-        System.err.println(emp);
+        try{
+            EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
+            System.err.println(emp);
+            logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
+            return "login/area-personal";
+        }catch(EmpleadoNoEncontradoException e){
+            return "redirect:/datos-personales";
+        }
 
         /*if(emp==null){
             return "login/area-personal";
         }*/
-        logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
-        return "login/area-personal";
+//        return "login/area-personal";
 //        return "redirect:/datos-personales";
     }
 

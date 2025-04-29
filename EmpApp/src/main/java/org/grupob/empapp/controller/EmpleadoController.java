@@ -1,6 +1,8 @@
 package org.grupob.empapp.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +18,10 @@ public class EmpleadoController {
         return "listados/listado-vista-emp";
     }
     @GetMapping("detalle/{id}")
-    public String listadoEmpleadoVista(@PathVariable String id, Model modelo, HttpSession sesion){
+    public String listadoEmpleadoVista(@PathVariable String id, Model modelo, HttpServletRequest request, HttpSession sesion){
 
-        modelo.addAttribute("dto", sesion.getAttribute("usuarioLogeado"));
+        LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+        modelo.addAttribute("dto", dto);
 
         return "listados/detalle-vista-emp";
     }
