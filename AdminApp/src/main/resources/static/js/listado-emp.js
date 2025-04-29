@@ -88,6 +88,8 @@ function obtenerEmpleados(pagina) {
             llenarTabla(datos.content);
             // Crear controles de paginación
             crearControlesPaginacion();
+            // Asignar event listeners a los botones
+            asignarEventListenersAcciones();
             // Mostrar conteo de resultados
             document.getElementById('contadorResultados').textContent =
                 `Mostrando ${datos.numberOfElements} de ${totalElementos} resultados - Página ${paginaActual + 1} de ${totalPaginas || 1}`;
@@ -277,13 +279,9 @@ function asignarEventListenersAcciones() {
 
                 // --- Cabeceras (si usas CSRF) ---
                 const headers = {
-                    // Ejemplo CSRF: Adapta según tu configuración
-                    // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.getAttribute('content')
+
                 };
-                // const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
-                // if (csrfToken && csrfHeader) {
-                //     headers[csrfHeader] = csrfToken;
-                // }
+
 
                 // Deshabilitar botón temporalmente
                 clone.classList.add('disabled');
@@ -330,7 +328,5 @@ function asignarEventListenersAcciones() {
         });
     });
 
-    // --- Añadir aquí listeners para Editar y Eliminar si los manejas con JS ---
-    // Ejemplo:
-    // document.querySelectorAll('.btn-eliminar-js').forEach(button => { ... });
+
 }
