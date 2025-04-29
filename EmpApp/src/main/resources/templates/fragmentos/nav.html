@@ -1,9 +1,11 @@
 <!-- src/main/resources/templates/fragments/nav.html -->
 <nav th:fragment="nav">
   <ul>
-    <li><a th:href="@{/registro}">Registro</a></li>
-    <li><a th:href="@{/etiquetado}"></a></li>
-    <li><a th:href="@{/colaboracion}">Colaboración</a></li>
+    <li><a th:href="@{/etiquetado/limitado/{jefeId}(jefeId=*{id})}">Etiquetado</a></li>
+    <li><a th:href="@{/etiquetado/masivo/{jefeId}(jefeId=*{id})}">Etiquetado Masivo</a></li>
+    <li><a th:href="@{/etiquetado/eliminar/{jefeId}(jefeId=*{id})}">Eliminar Etiqueta</a></li>
+    <li><a>Colaboración</a></li>
+    <li><a>Colaboración</a></li>
     <li><a th:href="@{/empleado/detalle/{id}(id=*{id})}">Detalle</a></li>
     <!-- Añade más enlaces según las funcionalidades de tu aplicación -->
     <li><a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a></li>
