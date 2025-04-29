@@ -11,9 +11,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Tu CSS personalizado -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!--CSS para los fragmentos    -->
+    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
 
 </head>
-<body>
+<body th:object="${dto}">
+<div th:replace="fragmentos/header :: header"></div>
+<div th:replace="fragmentos/nav :: nav"></div>
 <div class="container">
     <!-- Breadcrumb navigation -->
     <nav aria-label="breadcrumb">
@@ -233,7 +237,7 @@
         </div>
     </div>
 </div>
-
+<div th:replace="fragmentos/footer :: footer"></div>
 <script  th:src="@{/js/detalle-emp.js}"></script>
 <!-- Bootstrap JS (para tabs y componentes interactivos) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

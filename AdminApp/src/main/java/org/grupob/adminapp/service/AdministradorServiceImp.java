@@ -30,7 +30,7 @@ public class AdministradorServiceImp implements AdministradorService {
     }
 
     public LoginAdministradorDTO  comprobarCredenciales(LoginAdministradorDTO adminDTO) {
-        Administrador admin = adminRepo.findAdministradorByUsuario(adminDTO.getCorreo())
+        Administrador admin = adminRepo.findAdministradorByUsuario(adminDTO.getUsuario())
                 .orElseThrow(() -> new CredencialesInvalidasException("Correo o contraseña incorrectos"));
 
         if (!adminDTO.getClave().equals(admin.getClave())) {
