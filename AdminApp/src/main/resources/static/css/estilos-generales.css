@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f8f9fa; /* Fondo aún más claro y neutro */
+}
+
+/* HEADER */
+header {
+    background-color: #181c20; /* Más oscuro para mayor sobriedad */
+    color: #e4e6eb;
+    padding: 14px 24px;
+    text-align: left;
+    font-size: 1rem;
+    border-bottom: 1px solid #b0bec5; /* Borde muy sutil y claro */
+    letter-spacing: 0.5px;
+}
+header .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+}
+header .user-info h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+    color: #e4e6eb;
+}
+header .user-info p {
+    margin: 0;
+    color: #b0bec5;
+    font-size: 0.98rem;
+}
+
+/* NAV */
+nav {
+    background-color: #23272b; /* Gris muy oscuro */
+    border-bottom: 1px solid #b0bec5;
+    padding: 0;
+}
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 24px 0 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0;
+}
+nav li {
+    margin: 0;
+}
+nav a {
+    display: block;
+    color: #b0bec5; /* Gris azulado claro */
+    text-decoration: none;
+    padding: 12px 22px;
+    transition: background 0.2s, color 0.2s;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-radius: 0; /* Sin bordes redondeados para mayor sobriedad */
+}
+nav a:hover, nav a:focus {
+    background-color: #181c20;
+    color: #f8f9fa;
+}
+
+/* MAIN */
+main {
+    flex: 1 0 auto;
+    padding: 24px;
+}
+
+/* FOOTER */
+footer {
+    background-color: #181c20;
+    color: #b0bec5;
+    text-align: center;
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    border-top: 1px solid #b0bec5;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+    header, footer {
+        font-size: 0.92rem;
+        padding: 8px 5px;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: flex-end;
+        padding-right: 0;
+    }
+    nav a {
+        padding: 10px 12px;
+    }
+    header .user-info {
+        gap: 2px;
+    }
+}

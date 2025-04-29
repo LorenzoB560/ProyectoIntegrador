@@ -20,8 +20,8 @@ public class AdministradorServiceImp implements AdministradorService {
         this.adminConverter = adminConverter;
     }
 
-    public Administrador devuelveAdministradorPorUsuario(String correo) {
-        Optional<Administrador> adminOpt = adminRepo.findAdministradorByUsuario(correo);
+    public Administrador devuelveAdministradorPorUsuario(String usuario) {
+        Optional<Administrador> adminOpt = adminRepo.findAdministradorByUsuario(usuario);
 
         if (adminOpt.isPresent()) {
             return adminOpt.get();
@@ -30,7 +30,7 @@ public class AdministradorServiceImp implements AdministradorService {
     }
 
     public LoginAdministradorDTO  comprobarCredenciales(LoginAdministradorDTO adminDTO) {
-        Administrador admin = adminRepo.findAdministradorByUsuario(adminDTO.getCorreo())
+        Administrador admin = adminRepo.findAdministradorByUsuario(adminDTO.getUsuario())
                 .orElseThrow(() -> new CredencialesInvalidasException("Correo o contraseña incorrectos"));
 
         if (!adminDTO.getClave().equals(admin.getClave())) {

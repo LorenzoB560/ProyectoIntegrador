@@ -25,7 +25,6 @@ public class LoginAdministradorController {
     // Endpoint inicial: /correo (ingresar nombre de usuario)
     @GetMapping("login")
     public String login(@ModelAttribute("loginAdminDTO") LoginAdministradorDTO loginAdminDTO) {
-
         return "login";
     }
 
@@ -39,7 +38,7 @@ public class LoginAdministradorController {
         }
 
         modelo.addAttribute("loginAdminDTO", adminDTO);
-        return "area-personal";
+        return "redirect:/empleado/lista";
     }
 
     // Endpoint para desconectar
