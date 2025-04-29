@@ -193,9 +193,11 @@ function llenarTabla(datos) {
                                 </a>
                                 <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
                                 </a>
-                                <a id="btnBloquear" href="#" class="btn btn-primary me-2"> <i class="bi bi-lock-fill me-1"></i> Bloquear
+                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos"" class="btn btn-primary me-2">
+                                <i class="bi bi-lock-fill me-1"></i> Bloquear
                                 </a>
-                                <a id="btnDesbloquear" href="#" class="btn btn-success"> <i class="bi bi-unlock-fill me-1"></i> Desbloquear
+                                <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
+                                    <i class="bi bi-unlock-fill me-1"></i> Desbloquear
                                 </a>
                             </div>
                             
@@ -248,4 +250,87 @@ function mostrarError(mensaje) {
     elementoError.textContent = mensaje;
     elementoError.style.display = 'block';
     document.getElementById('cargando').style.display = 'none';
+}
+function asignarEventListenersAcciones() {
+
+    // --- Listener para botones de Desbloquear ---
+    document.querySelectorAll('.btn-desbloquear-js').forEach(button => {
+        // Clonar y reemplazar para evitar listeners duplicados si esta función se llama múltiples veces
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+
+        clone.addEventListener('click', (event) => {
+            event.preventDefault(); // Evitar comportamiento por defecto del enlace '#'
+            const employeeId = clone.getAttribute('data-employee-id');
+            if (!employeeId) {
+                console.error("No se encontró el ID del empleado en el botón.");
+                return;
+            }
+
+            // Obtener nombre para confirmación
+            const employeeRow = clone.closest('tr');
+            const employeeName = employeeRow?.cells[1]?.textContent || employeeId; // Celda 1 (nombre) o ID
+
+            if (confirm(`¿Está seguro de desbloquear al empleado ${employeeName}?`)) {
+                // URL del endpoint (¡Asegúrate que sea la correcta! Probablemente /empleados/...)
+                const url = `/empleados/${employeeId}/desbloquear`;
+
+                // --- Cabeceras (si usas CSRF) ---
+                const headers = {
+                    // Ejemplo CSRF: Adapta según tu configuración
+                    // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.getAttribute('content')
+                };
+                // const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
+                // if (csrfToken && csrfHeader) {
+                //     headers[csrfHeader] = csrfToken;
+                // }
+
+                // Deshabilitar botón temporalmente
+                clone.classList.add('disabled');
+                const originalText = clone.innerHTML;
+                clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+
+                // --- Llamada Fetch ---
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers // Añadir cabeceras si es necesario
+                })
+                    .then(response => {
+                        if (response.ok) { // Status 200-299 OK
+                            return null; // Éxito
+                        } else {
+                            // Error: Leer cuerpo para mensaje
+                            return response.text().then(text => {
+                                const error = new Error(text || `Error del servidor: ${response.status}`);
+                                error.status = response.status;
+                                throw error;
+                            });
+                        }
+                    })
+                    .then(() => {
+                        // --- ÉXITO ---
+                        console.log('Empleado desbloqueado con éxito');
+                        alert('Empleado desbloqueado.');
+                        // Cambiar botón visualmente (opcional)
+                        clone.innerHTML = '<i class="bi bi-unlock-fill me-1"></i> Desbloqueado';
+                        clone.classList.remove('btn-success');
+                        clone.classList.add('btn-secondary', 'disabled'); // Ya está 'disabled' por la clase
+                        // NO RECARGAR: // obtenerEmpleados(paginaActual);
+                    })
+                    .catch(error => {
+                        // --- ERROR ---
+                        console.error('Error al desbloquear:', error);
+                        alert(`Error al desbloquear: ${error.message}`);
+                        // Rehabilitar botón en caso de error
+                        clone.classList.remove('disabled');
+                        clone.innerHTML = originalText;
+                    });
+            }
+        });
+    });
+
+    // --- Añadir aquí listeners para Editar y Eliminar si los manejas con JS ---
+    // Ejemplo:
+    // document.querySelectorAll('.btn-eliminar-js').forEach(button => { ... });
 }

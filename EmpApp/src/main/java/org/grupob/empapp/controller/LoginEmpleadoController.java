@@ -248,6 +248,7 @@ public class LoginEmpleadoController {
                                HttpSession sesion) {
         sesion.removeAttribute("ultimoUsuario");
         sesion.removeAttribute("usuarioLogeado");
+
         return "redirect:/empapp/login";
     }
 

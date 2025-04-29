@@ -19,7 +19,7 @@ public class LoginAdministradorDTO {
 
     @NotBlank
     @EmailValidado
-    private String correo;
+    private String usuario;
 
     @NotBlank
     private String clave;

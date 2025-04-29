@@ -2,10 +2,13 @@ package org.grupob.adminapp.controller;
 
 
 
+import jakarta.persistence.EntityNotFoundException;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.adminapp.service.EmpleadoServiceImp;
 import org.grupob.adminapp.service.EtiquetaServiceImp;
+import org.grupob.adminapp.service.UsuarioEmpleadoServiceImp;
 import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 
@@ -29,11 +32,12 @@ public class EmpleadoRestController {
     private final EmpleadoRepository empleadoRepository;
     private EmpleadoServiceImp empleadoService;
     private final EtiquetaServiceImp etiquetaService; // Inyectar EtiquetaService
-
-    public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository, EtiquetaServiceImp etiquetaService) {
+    private final UsuarioEmpleadoServiceImp usuarioEmpleadoService;
+    public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository, EtiquetaServiceImp etiquetaService, UsuarioEmpleadoServiceImp usuarioEmpleadoService) {
         this.empleadoRepository = empleadoRepository;
         this.empleadoService = empleadoService;
         this.etiquetaService = etiquetaService;
+        this.usuarioEmpleadoService = usuarioEmpleadoService;
     }
 
     @GetMapping("/listado1")
@@ -114,6 +118,60 @@ public class EmpleadoRestController {
             System.err.println("Error al buscar empleados por etiqueta: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/{id}/desbloquear")
+    public ResponseEntity<?> quitarBloqueo(@PathVariable String id) {
+        try {
+            // 1. Buscar al Empleado y su UsuarioEmpleado asociado
+
+            UUID empleadoUuid = UUID.fromString(id); // Convertir String a UUID
+            Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
+
+            UsuarioEmpleado usuario = empleado.getUsuario();
+            if (usuario == null) {
+                // Considera qué hacer si un empleado no tiene usuario (¿error?)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario asociado al empleado no encontrado.");
+            }
+
+            // 2. Comprobar si el usuario YA está desbloqueado
+            // Asumimos que "desbloqueado" significa motivoBloqueo es null Y activo es true
+            if (usuario.getMotivoBloqueo() == null ) {
+                // Devolver un 400 Bad Request indicando que la operación no es aplicable
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El empleado ya se encuentra desbloqueado.");
+            }
+
+            // 3. Si está bloqueado, proceder a desbloquear
+            usuarioEmpleadoService.desbloquearEmpleado(id); // Llama al servicio
+
+
+            // 4. Devolver éxito
+            return ResponseEntity.ok().build();
+
+        } catch (IllegalArgumentException e) {
+            // Captura el error si el ID proporcionado no es un UUID válido
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID proporcionado no es válido: " + id);
+        } catch (EntityNotFoundException e) {
+            // Captura si el empleado no se encuentra
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            // Captura cualquier otra excepción inesperada
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al intentar desbloquear el empleado: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/bloquear")
+    public ResponseEntity<?> asignarBloqueo(@PathVariable String id, @RequestParam Long motivoId) {
+        try {
+            usuarioEmpleadoService.bloquearEmpleado(id, motivoId);
+            return ResponseEntity.ok().build(); // O redirigir, o devolver un mensaje JSON
+        } catch (Exception e) {
+            // Loggear error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al bloquear empleado: " + e.getMessage());
         }
     }
 

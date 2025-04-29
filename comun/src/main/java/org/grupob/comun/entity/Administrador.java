@@ -10,11 +10,11 @@ import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 //@NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = {
-        @UniqueConstraint(name = "UQ_administrador_correo", columnNames = "correo")
+        @UniqueConstraint(name = "UQ_administrador_usuario", columnNames = "usuario")
 })
 public class Administrador extends Usuario {
 
-    public Administrador(String email, String clave) {
-        super(email, clave);
+    public Administrador(String usuario, String clave) {
+        super(usuario, clave);
     }
 }

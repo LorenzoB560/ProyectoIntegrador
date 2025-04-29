@@ -51,7 +51,7 @@ $(document).ready(function () {
 
         // Preparar datos para el backend
         const loginData = {
-            correo: correo,
+            usuario: correo,
             clave: clave
         };
 

@@ -1,5 +1,7 @@
 package org.grupob.adminapp.controller;
 
+import jakarta.servlet.http.HttpSession;
+import org.grupob.adminapp.dto.LoginAdministradorDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +16,13 @@ public class DepartamentoController {
         return "departamentos/listado-vista";
     }
     @GetMapping("detalle/{id}")
-    public String listadoDepartamentoVista(@PathVariable String id, Model modelo){
-
+    public String listadoDepartamentoVista(@PathVariable String id, Model modelo, HttpSession sesion){
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+        }
+        modelo.addAttribute("loginAdminDTO", adminDTO);
         return "listados/detalle-vista-dep";
     }
-
 
 }

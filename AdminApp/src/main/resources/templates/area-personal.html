@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Área Personal</title>
+    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
 </head>
 <body th:object="${loginAdminDTO}">
-<h1>Bienvenido <span th:text="*{correo}"></span></h1>
-<p>Has accedido a tu área personal.</p>
+<div th:replace="fragmentos/header :: header"></div>
+<div th:replace="fragmentos/nav :: nav"></div>
 
-<p>Veces Autenticado <span th:text="*{numeroAccesos}"></span></p>
-<a th:href="@{/adminapp/desconectar}">Desconectar</a>
+<h1>LOGIN CORRECTO</h1>
+
+<div th:replace="fragmentos/footer :: footer"></div>
+
 </body>
 </html>
