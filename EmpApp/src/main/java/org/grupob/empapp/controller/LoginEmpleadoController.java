@@ -32,6 +32,8 @@ public class LoginEmpleadoController {
     private final UsuarioEmpleadoServiceImp usuarioService;
     private final CookieService cookieService;
 
+    private final Logger logger = LoggerFactory.getLogger(LoginEmpleadoController.class);
+
     public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioService,
                                    CookieService cookieService) {
         this.usuarioService = usuarioService;
@@ -235,6 +237,7 @@ public class LoginEmpleadoController {
 //        modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
 
+        logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
         return "redirect:/datos-personales";
 //        return "login/area-personal";
     }

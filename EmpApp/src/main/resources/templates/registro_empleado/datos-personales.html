@@ -56,7 +56,7 @@
             <article>
                 <span class="asterisco">*</span>
                 <label th:text="#{registro.foto}"></label><br>
-                <input type="file" accept="image/*" th:filed="*{archivoFoto}">
+                <input type="file" th:field="*{archivoFoto}" />
                 <div th:if="${#fields.hasErrors('archivoFoto')}" th:errors="*{foto}" class="error"></div>
             </article>
             <br>

@@ -1,10 +1,9 @@
 package org.grupob.empapp.service;
 
-import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.empapp.exception.ClaveIncorrectaException;
-import org.grupob.empapp.exception.CuentaBloqueadaException;
+import org.grupob.comun.exception.ClaveIncorrectaException;
+import org.grupob.comun.exception.CuentaBloqueadaException;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;

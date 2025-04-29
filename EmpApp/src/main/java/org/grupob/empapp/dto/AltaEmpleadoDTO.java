@@ -64,7 +64,7 @@ public class AltaEmpleadoDTO {
     private byte[] foto; // Para almacenar la imagen en la base de datos
 
 
-    @NotNull(groups = GrupoDatosPersonales.class)
+//    @NotNull(groups = GrupoDatosPersonales.class)
 //    @Size(min = 1, message = "{foto.message}", groups = GrupoDatosPersonales.class)
     private MultipartFile archivoFoto;
 

@@ -105,6 +105,7 @@ public class RegistroEmpleadoController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
             model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            System.out.println(bindingResult);
             return "registro_empleado/datos-personales";
         }
 
