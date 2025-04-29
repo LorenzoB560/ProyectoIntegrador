@@ -193,9 +193,10 @@ function llenarTabla(datos) {
                                 </a>
                                 <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
                                 </a>
-                                <a id="btnBloquear" href="#" class="btn btn-primary me-2"> <i class="bi bi-lock-fill me-1"></i> Bloquear
+                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos"" class="btn btn-primary me-2">
+                                <i class="bi bi-lock-fill me-1"></i> Bloquear
                                 </a>
-                                <a id="btnDesbloquear" href="#" class="btn btn-success"> <i class="bi bi-unlock-fill me-1"></i> Desbloquear
+                                <a id="btnDesbloquear" href="@{/empleado/{id}/desbloquear(id=${emp.id})}" class="btn btn-success"> <i class="bi bi-unlock-fill me-1"></i> Desbloquear
                                 </a>
                             </div>
                             
