@@ -26,9 +26,9 @@
     <a href="/datos-economicos" id="datos-economicos">
         <img src="/img/Paso4.png" alt="Paso 4">
     </a>
-    <a href="/resumen" id="resumen">
-        <img src="/img/Resumen.png" alt="Resumen">
-    </a>
+    <!--    <a  id="resumen">-->
+    <img src="/img/Resumen.png" alt="Resumen" id="resumen">
+    <!--    </a>-->
 </nav>
 
 <form action="/guardar-resumen" method="POST" id="formulario" th:object="${datos}">
@@ -148,17 +148,6 @@
         </label>
         <div th:each="error : ${#fields.errors('aceptacionTerminos')}" th:text="${error}" class="error"></div>
     </div>
-
-
-<!--    <div th:if="${erroresValidacion != null}" class="alert alert-danger">-->
-<!--        <h4 th:text="${mensajeNOK}"></h4>-->
-<!--        <p></p>-->
-<!--        <ul>-->
-<!--            <li th:each="error : ${erroresValidacion}" th:text="${error}"></li>-->
-<!--        </ul>-->
-<!--        <p th:text="#{error.mensajeError}"></p>-->
-<!--    </div>-->
-
 
     <!-- BOTONES DE NAVEGACIÓN -->
     <div class="botones">

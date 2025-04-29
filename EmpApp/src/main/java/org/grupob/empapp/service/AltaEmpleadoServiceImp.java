@@ -91,7 +91,6 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
                 .collect(Collectors.toList());
     }
 
-
     public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO, String id){
 
 
@@ -189,6 +188,9 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
             nuevaCuenta.setNumeroCuenta(nuevaCuenta.getNumeroCuenta() != null ? nuevaCuenta.getNumeroCuenta() : anteriorCuenta.getNumeroCuenta());
         }
 
+        datosNuevos.setSalario(datosNuevos.getSalario() != null ? datosNuevos.getSalario() : datosAnteriores.getSalario());
+        datosNuevos.setComision(datosNuevos.getComision() != null ? datosNuevos.getComision() : datosAnteriores.getComision());
+
         if (datosNuevos.getTarjetaCredito() == null) {
             if (datosAnteriores.getTarjetaCredito() != null) {
                 datosNuevos.setTarjetaCredito(datosAnteriores.getTarjetaCredito());
@@ -207,124 +209,4 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
         //** RESUMEN
         datosNuevos.setAceptacionTerminos(datosNuevos.getAceptacionTerminos() != null ? datosNuevos.getAceptacionTerminos() : datosAnteriores.getAceptacionTerminos());
     }
-
-
-//
-//    public List<String> validarFormularioCompleto(AltaEmpleadoDTO datosFormulario) {
-//        List<String> errores = new ArrayList<>();
-//
-//        // ** DATOS PERSONALES **
-//        if (datosFormulario.getNombre() == null || datosFormulario.getNombre().trim().isEmpty()) {
-//            errores.add("error.nombre.requerido");
-//        }
-//        if (datosFormulario.getApellido() == null || datosFormulario.getApellido().trim().isEmpty()) {
-//            errores.add("error.apellido.requerido");
-//        }
-//        if (datosFormulario.getFoto() == null || datosFormulario.getFoto().length == 0) {
-//            errores.add("error.foto.requerida");
-//        }
-//        if (datosFormulario.getFechaNacimiento() == null) {
-//            errores.add("error.fechaNacimiento.requerida");
-//        }
-//        if (datosFormulario.getIdGeneroSeleccionado() == null) {
-//            errores.add("error.genero.requerido");
-//        }
-//
-//        // ** DATOS DIRECCIÓN **
-//        if (datosFormulario.getDireccion() == null) {
-//            errores.add("error.direccion.requerida");
-//        } else {
-//            DireccionPostalDTO direccion = datosFormulario.getDireccion();
-//            if (direccion.getTipoVia() == null) {
-//                errores.add("error.tipoVia.requerido");
-//            }
-//            if (direccion.getVia() == null || direccion.getVia().trim().isEmpty()) {
-//                errores.add("error.via.requerida");
-//            }
-//            if (direccion.getNumero() == null || direccion.getNumero().trim().isEmpty()) {
-//                errores.add("error.numero.requerido");
-//            }
-//            if (direccion.getCodigoPostal() == null || direccion.getCodigoPostal().trim().isEmpty()) {
-//                errores.add("error.codigoPostal.requerido");
-//            }
-//            if (direccion.getLocalidad() == null || direccion.getLocalidad().trim().isEmpty()) {
-//                errores.add("error.localidad.requerida");
-//            }
-//            if (direccion.getRegion() == null || direccion.getRegion().trim().isEmpty()) {
-//                errores.add("error.region.requerida");
-//            }
-//            // Campos opcionales como portal, planta, puerta no son validados
-//        }
-//
-//        // ** DATOS PROFESIONALES **
-//        if (datosFormulario.getIdDepartamentoSeleccionado() == null) {
-//            errores.add("error.departamento.requerido");
-//        }
-//
-//        // ** DATOS ECONÓMICOS **
-//        if (datosFormulario.getCuentaBancaria() == null) {
-//            errores.add("error.cuentaBancaria.requerida");
-//        } else {
-//            CuentaBancariaDTO cuenta = datosFormulario.getCuentaBancaria();
-//            if (cuenta.getIdEntidadBancaria() == null) {
-//                errores.add("error.entidadBancaria.requerida");
-//            }
-//            if (cuenta.getCodigoPais() == null || cuenta.getCodigoPais().trim().isEmpty()) {
-//                errores.add("error.codigoPais.requerido");
-//            }
-//            if (cuenta.getDigitosControl() == null || cuenta.getDigitosControl().trim().isEmpty()) {
-//                errores.add("error.digitosControl.requeridos");
-//            }
-//            if (cuenta.getCodigoEntidadBancaria() == null || cuenta.getCodigoEntidadBancaria().trim().isEmpty()) {
-//                errores.add("error.codigoEntidadBancaria.requerido");
-//            }
-//            if (cuenta.getSucursal() == null || cuenta.getSucursal().trim().isEmpty()) {
-//                errores.add("error.sucursal.requerida");
-//            }
-//            if (cuenta.getNumeroCuenta() == null || cuenta.getNumeroCuenta().trim().isEmpty()) {
-//                errores.add("error.numeroCuenta.requerido");
-//            }
-//        }
-//
-//        if (datosFormulario.getTarjetaCredito() == null) {
-//            errores.add("error.tarjetaCredito.requerida");
-//        } else {
-//            TarjetaCreditoDTO tarjeta = datosFormulario.getTarjetaCredito();
-//            if (tarjeta.getNumero() == null || tarjeta.getNumero().trim().isEmpty()) {
-//                errores.add("error.numeroTarjeta.requerido");
-//            }
-//            if (tarjeta.getMesCaducidad() == null || tarjeta.getMesCaducidad().trim().isEmpty()) {
-//                errores.add("error.mesCaducidad.requerido");
-//            }
-//            if (tarjeta.getAnioCaducidad() == null || tarjeta.getAnioCaducidad().trim().isEmpty()) {
-//                errores.add("error.anioCaducidad.requerido");
-//            }
-//            if (tarjeta.getCvc() == null || tarjeta.getCvc().trim().isEmpty()) {
-//                errores.add("error.cvc.requerido");
-//            }
-//        }
-//
-//        // ** RESUMEN **
-//        if (datosFormulario.getAceptacionTerminos() == null || !datosFormulario.getAceptacionTerminos().isBlank()) {
-//            errores.add("error.aceptacionTerminos.requerida");
-//        }
-//
-//        return errores;
-//    }
-//
-//    public List<String> traducirMensajesError(List<String> codigosError) {
-//        ResourceBundle bundle = ResourceBundle.getBundle("messages");
-//        List<String> mensajes = new ArrayList<>();
-//
-//        for (String codigo : codigosError) {
-//            try {
-//                mensajes.add(bundle.getString(codigo));
-//            } catch (MissingResourceException e) {
-//                // Si no encuentra el mensaje, usa el código como mensaje
-//                mensajes.add(codigo);
-//            }
-//        }
-//
-//        return mensajes;
-//    }
 }

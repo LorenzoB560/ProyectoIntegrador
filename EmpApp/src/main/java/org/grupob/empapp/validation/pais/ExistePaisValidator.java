@@ -14,6 +14,6 @@ public class ExistePaisValidator implements ConstraintValidator<ExistePais, Stri
 
     @Override
     public boolean isValid(String pais, ConstraintValidatorContext context) {
-        return pais != null && paisRepository.existsPaisByPais(pais);
+        return paisRepository.existsPaisByPais(pais);
     }
 }

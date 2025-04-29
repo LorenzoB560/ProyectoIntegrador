@@ -9,10 +9,12 @@ import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
-import org.grupob.empapp.exception.ClaveIncorrectaException;
-import org.grupob.empapp.exception.CuentaBloqueadaException;
+import org.grupob.comun.exception.ClaveIncorrectaException;
+import org.grupob.comun.exception.CuentaBloqueadaException;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +31,8 @@ public class LoginEmpleadoController {
 
     private final UsuarioEmpleadoServiceImp usuarioService;
     private final CookieService cookieService;
+
+    private final Logger logger = LoggerFactory.getLogger(LoginEmpleadoController.class);
 
     public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioService,
                                    CookieService cookieService) {
@@ -233,8 +237,9 @@ public class LoginEmpleadoController {
 //        modelo.addAttribute("usuario", ultimoUsuario);
         modelo.addAttribute("contador", contador);
 
-//        return "redirect:/datos-personales";
-        return "login/area-personal";
+        logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
+        return "redirect:/datos-personales";
+//        return "login/area-personal";
     }
 
     @GetMapping("/seleccionar-otra-cuenta")
@@ -248,7 +253,6 @@ public class LoginEmpleadoController {
                                HttpSession sesion) {
         sesion.removeAttribute("ultimoUsuario");
         sesion.removeAttribute("usuarioLogeado");
-
         return "redirect:/empapp/login";
     }
 

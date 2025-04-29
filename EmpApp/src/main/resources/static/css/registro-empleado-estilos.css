@@ -1,12 +1,15 @@
-a img{
+a img,
+img#resumen {
     width: 50px;
     height: auto;
     opacity: 0.5;
 }
-#body-personales a img,
-#body-contacto a img,
-#body-profesionales a img,
-#body-economicos a img,
+
+
+#body-personales img,
+#body-contacto img,
+#body-profesionales img,
+#body-economicos img,
 #body-resumen img {
     opacity: 0.5; /* Reafirmamos la opacidad por defecto */
     width: 50px;
@@ -18,7 +21,7 @@ a img{
 #body-contacto #datos-contacto img,
 #body-profesionales #datos-profesionales img,
 #body-economicos #datos-economicos img,
-#body-resumen #resumen img {
+#body-resumen img#resumen {
     opacity: 1;
 }
 

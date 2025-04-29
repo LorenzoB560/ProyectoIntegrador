@@ -3,6 +3,8 @@ package org.grupob.empapp.controller;
 import org.grupob.empapp.dto.RegistroUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
 import org.grupob.empapp.service.RegistroUsuarioServiceImp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,7 @@ public class RegistroUsuarioRestController {
         System.out.println(datosFormulario);
         registroUsuarioServiceImp.usuarioExiste(datosFormulario);
         registroUsuarioServiceImp.guardarUsuario(datosFormulario);
+
         return ResponseEntity.ok(datosFormulario);
     }
 

@@ -10,6 +10,8 @@ import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
+import org.grupob.empapp.service.AltaEmpleadoService;
+import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.grupob.empapp.validation.departamento.ExisteDepartamento;
 import org.grupob.empapp.validation.documento_valido.DocumentoValido;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
@@ -25,21 +27,30 @@ import org.grupob.empapp.validation.terminos.AceptarTerminos;
 import org.grupob.empapp.validation.tipo_documento.ExisteTipoDocumento;
 import org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta.ExisteTipoTarjeta;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.Transient;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @EdadCoincideConFechaNacimiento(groups = GrupoDatosPersonales.class)
 @DocumentoValido(groups = GrupoDatosContacto.class)
 @CVCValido(groups = GrupoDatosEconomicos.class)
 public class AltaEmpleadoDTO {
 
-    private UUID id;
+    public AltaEmpleadoDTO(){
+        this.idGeneroSeleccionado = 2L;
+        this.paisNacimiento = "España";
+        this.tipoDocumento = "DNI";
+        this.prefijoTelefono = "+34";
+    }
 
+    private UUID id;
     // ** PASO 1 - DATOS PERSONALES **
 
     @NotNull(groups = GrupoDatosPersonales.class)
@@ -50,9 +61,12 @@ public class AltaEmpleadoDTO {
     @NotBlank(groups = GrupoDatosPersonales.class)
     private String apellido;
 
+    private byte[] foto; // Para almacenar la imagen en la base de datos
+
+
 //    @NotNull(groups = GrupoDatosPersonales.class)
 //    @Size(min = 1, message = "{foto.message}", groups = GrupoDatosPersonales.class)
-    private byte[] foto; // Para almacenar la imagen en la base de datos
+    private MultipartFile archivoFoto;
 
     @NotNull(groups = GrupoDatosPersonales.class)
     @ExisteGenero(groups = GrupoDatosPersonales.class)

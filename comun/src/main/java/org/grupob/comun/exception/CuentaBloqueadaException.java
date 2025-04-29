@@ -1,4 +1,4 @@
-package org.grupob.empapp.exception;
+package org.grupob.comun.exception;
 
 import java.time.LocalDateTime;
 

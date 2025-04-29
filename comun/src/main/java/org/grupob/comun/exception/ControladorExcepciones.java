@@ -1,7 +1,5 @@
-package org.grupob.comun.controller;
+package org.grupob.comun.exception;
 
-import org.grupob.comun.exception.InformacionExcepcion;
-import org.grupob.comun.exception.UsuarioYaExisteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
