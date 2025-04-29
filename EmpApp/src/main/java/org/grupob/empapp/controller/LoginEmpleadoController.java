@@ -5,9 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.grupob.comun.entity.Empleado;
-import org.grupob.comun.exception.ClaveIncorrectaException;
-import org.grupob.comun.exception.CuentaBloqueadaException;
-import org.grupob.comun.exception.UsuarioNoEncontradoException;
+import org.grupob.comun.exception.*;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
@@ -186,6 +184,14 @@ public class LoginEmpleadoController {
             modelo.addAttribute("usuario", ultimoUsuario);
             modelo.addAttribute("contador", contador);
 
+//            System.err.println(ultimoUsuario);
+            request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
+
+//            cookieService.crearCookie(response, "usuario", ultimoUsuario, 604800);
+//            System.err.println(ultimoUsuario);
+             dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            modelo.addAttribute("dto", dto);
+
             return "redirect:/empapp/area-personal";
 
         } catch (UsuarioNoEncontradoException e) {
@@ -210,7 +216,6 @@ public class LoginEmpleadoController {
             return "login/pedir-clave";
         }
     }
-
 
     @GetMapping("/area-personal")
     public String mostrarAreaPersonal(Model modelo,
@@ -243,15 +248,16 @@ public class LoginEmpleadoController {
         modelo.addAttribute("contador", contador);
         modelo.addAttribute("ultimaPagina", ultimaPagina);
 
-        EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
-        System.err.println(emp);
-
-        /*if(emp==null){
+        try{
+            EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
+            logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
+            String id = String.valueOf(dto.getId());
+            return "redirect:/empleado/detalle/" + id;
+            //TODO CAMBIAR LA EXCEPCION QUE LANZA EL SERVICIO Y SE CAPTURA AQUI
+        }catch(DepartamentoNoEncontradoException e){
             return "login/area-personal";
-        }*/
-        logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
-        return "login/area-personal";
-//        return "redirect:/datos-personales";
+
+        }
     }
 
     @GetMapping("/seleccionar-otra-cuenta")

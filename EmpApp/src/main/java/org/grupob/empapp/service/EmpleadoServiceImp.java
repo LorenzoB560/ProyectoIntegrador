@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.EmpleadoSearchDTO;
