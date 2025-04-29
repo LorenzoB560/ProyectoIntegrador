@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.grupob.comun.entity.Empleado;
-import org.grupob.comun.exception.ClaveIncorrectaException;
-import org.grupob.comun.exception.CuentaBloqueadaException;
-import org.grupob.comun.exception.EmpleadoNoEncontradoException;
-import org.grupob.comun.exception.UsuarioNoEncontradoException;
+import org.grupob.comun.exception.*;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
@@ -187,6 +184,11 @@ public class LoginEmpleadoController {
             modelo.addAttribute("usuario", ultimoUsuario);
             modelo.addAttribute("contador", contador);
 
+            request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
+
+             dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            modelo.addAttribute("dto", dto);
+
             return "redirect:/empapp/area-personal";
 
         } catch (UsuarioNoEncontradoException e) {
@@ -246,11 +248,13 @@ public class LoginEmpleadoController {
 
         try{
             EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
-            System.err.println(emp);
             logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
+            String id = String.valueOf(dto.getId());
+            return "redirect:/empleado/detalle/" + id;
+            //TODO CAMBIAR LA EXCEPCION QUE LANZA EL SERVICIO Y SE CAPTURA AQUI
+        }catch(DepartamentoNoEncontradoException e){
             return "login/area-personal";
-        }catch(EmpleadoNoEncontradoException e){
-            return "redirect:/datos-personales";
+
         }
 
         /*if(emp==null){
