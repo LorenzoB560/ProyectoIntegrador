@@ -41,6 +41,7 @@ public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
         usuarioEmpleado
                 .forEach(u -> {
                     if (u.getUsuario().equals(registroUsuarioEmpleadoDTO.getUsuario())) {
+
                         throw new UsuarioYaExisteException("Este usuario ya existe");
                     }
                 });

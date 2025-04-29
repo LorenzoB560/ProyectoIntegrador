@@ -84,19 +84,21 @@ public class RegistroEmpleadoController {
     public String guardarDatosPersonales(
             @Validated(GrupoDatosPersonales.class) @ModelAttribute("datos") AltaEmpleadoDTO datosFormulario,
             BindingResult bindingResult,
-            @RequestParam("imagen") MultipartFile imagen,
+//            @RequestParam("foto") MultipartFile foto,
             HttpSession sesion,
             Model model) {
 
-        // Primero validar el MultipartFile manualmente
-        if (imagen == null || imagen.isEmpty()) {
-            bindingResult.rejectValue("foto", "error.imagen.obligatoria");
-        } else if (!(imagen.getContentType().equalsIgnoreCase("image/jpeg")
-                || imagen.getContentType().equalsIgnoreCase("image/jpg")
-                || imagen.getContentType().equalsIgnoreCase("image/gif"))) {
-            bindingResult.rejectValue("foto", "error.imagen.formato");
-        } else if (imagen.getSize() > 200 * 1024) {
-            bindingResult.rejectValue("foto", "error.imagen.tamano");
+        MultipartFile foto = datosFormulario.getArchivoFoto();
+
+        // Validación manual
+        if (foto == null || foto.isEmpty()) {
+            bindingResult.rejectValue("archivoFoto", "error.imagen.obligatoria");
+        } else if (!(foto.getContentType().equalsIgnoreCase("image/jpeg")
+                || foto.getContentType().equalsIgnoreCase("image/jpg")
+                || foto.getContentType().equalsIgnoreCase("image/gif"))) {
+            bindingResult.rejectValue("archivoFoto", "error.imagen.formato");
+        } else if (foto.getSize() > 200 * 1024) {
+            bindingResult.rejectValue("archivoFoto", "error.imagen.tamano");
         }
 
 
@@ -107,9 +109,11 @@ public class RegistroEmpleadoController {
         }
 
         try {
-            datosFormulario.setFoto(imagen.getBytes());
+            // Asignar la imagen al DTO
+            datosFormulario.setFoto(foto.getBytes());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            bindingResult.rejectValue("archivoFoto", "error.imagen.carga");
+            return "registro_empleado/datos-personales";
         }
 
         AltaEmpleadoDTO datosAnteriores = (AltaEmpleadoDTO) sesion.getAttribute("datos");
@@ -351,7 +355,7 @@ public class RegistroEmpleadoController {
 
     @GetMapping("/volver-principio")
     public String volverPrincipio(HttpSession sesion) {
-        sesion.invalidate();
+        sesion.removeAttribute("datos");
         return "redirect:/datos-personales";
     }
 

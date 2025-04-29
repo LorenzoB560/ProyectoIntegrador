@@ -23,7 +23,7 @@
         <img src="/img/Paso4.png" alt="Paso 4">
     </a>
 <!--    <a  id="resumen">-->
-        <img src="/img/Resumen.png" alt="Resumen" id="resumen">
+    <img src="/img/Resumen.png" alt="Resumen" id="resumen">
 <!--    </a>-->
 </nav>
 
@@ -56,8 +56,8 @@
             <article>
                 <span class="asterisco">*</span>
                 <label th:text="#{registro.foto}"></label><br>
-                <input type="file" name="imagen" accept="image/*">
-                <div th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}" class="error"></div>
+                <input type="file" accept="image/*" th:filed="*{archivoFoto}">
+                <div th:if="${#fields.hasErrors('archivoFoto')}" th:errors="*{foto}" class="error"></div>
             </article>
             <br>
         </section>
@@ -126,6 +126,7 @@
             <!-- Botones de envío y reseteo -->
             <article>
                 <button type="submit" th:text="#{registro.datosPersonales.submit}"></button>
+                <button type="reset" th:text="#{registro.reset}"></button>
                 <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()">
             </article>
         </section>

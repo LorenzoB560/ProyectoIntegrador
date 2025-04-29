@@ -21,9 +21,9 @@
 <a href="/datos-economicos" id="datos-economicos">
   <img src="/img/Paso4.png" alt="Paso 4">
 </a>
-<a href="/resumen" id="resumen">
-  <img src="/img/Resumen.png" alt="Resumen">
-</a>
+<!--    <a  id="resumen">-->
+<img src="/img/Resumen.png" alt="Resumen" id="resumen">
+<!--    </a>-->
 
 <!-- MENSAJE DE ERROR GLOBAL (si existe) -->
 <h2 th:if="${mensajeNOK != null}" th:text="${mensajeNOK}" class="error"></h2>
@@ -138,6 +138,7 @@
 
   <!-- BOTONES DEL FORMULARIO -->
   <button type="submit" th:text="#{registro.datosEconomicos.submit}"></button>
+  <button type="reset" th:text="#{registro.reset}"></button>
   <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()" />
 </form>
 

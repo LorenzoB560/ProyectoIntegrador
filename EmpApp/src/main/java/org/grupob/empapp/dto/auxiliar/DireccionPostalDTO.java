@@ -10,9 +10,13 @@ import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
 import org.grupob.empapp.validation.tipo_via.ExisteTipoVia;
 
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 public class DireccionPostalDTO {
+
+    public DireccionPostalDTO(){
+        this.tipoVia = "Calle";
+    }
 
     @NotNull(groups = GrupoDatosContacto.class)
     @NotBlank(groups = GrupoDatosContacto.class)
