@@ -108,7 +108,8 @@ public class RegistroEmpleadoController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "El formurario tiene errores");
+//            bindingResult.rejectValue("mensajeNOK", "registro.error");
             System.out.println(bindingResult);
             return "registro_empleado/datos-personales";
         }
@@ -169,7 +170,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/datos-contacto";
         }
@@ -221,7 +222,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/datos-profesionales";
         }
@@ -276,7 +277,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/datos-economicos";
         }
@@ -341,7 +342,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/resumen";
         }
