@@ -1,5 +1,6 @@
 package org.grupob.empapp.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
@@ -12,15 +13,19 @@ import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 //@RequestMapping("/empapp")

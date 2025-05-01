@@ -1,23 +1,22 @@
-function setLanguageSelect() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const lang = urlParams.get('lang') || 'es';
+document.addEventListener("DOMContentLoaded", function () {
     const langSelect = document.getElementById('seleccionarIdioma');
-    langSelect.value = lang;
 
-    // Añadir ?lang=xx a todos los <a> sin parámetro de idioma
-    document.querySelectorAll('a').forEach(a => {
-        const href = a.getAttribute('href');
-        if (href && !href.includes('lang=')) {
-            const separator = href.includes('?') ? '&' : '?';
-            a.setAttribute('href', href + separator + 'lang=' + lang);
-        }
-    });
-}
+    if (langSelect) {
+        langSelect.addEventListener('change', function () {
+            const selectedLang = this.value;
+            const currentPath = window.location.pathname;
+            const currentSearch = new URLSearchParams(window.location.search);
 
-window.onload = setLanguageSelect;
+            currentSearch.set('lang', selectedLang);
 
-document.getElementById('seleccionarIdioma').addEventListener('change', function () {
-    const lang = this.value;
-    const currentUrl = window.location.pathname;
-    window.location.href = currentUrl + '?lang=' + lang;
+            fetch(currentPath + '?' + currentSearch.toString(), {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(() => {
+                location.reload(); // recarga para aplicar idioma
+            });
+        });
+    }
 });

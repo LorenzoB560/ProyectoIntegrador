@@ -6,6 +6,7 @@
   <link id="estilos" rel="stylesheet" href="/css/registro-empleado-estilos.css">
   <script src="/js/modificarCampos.js"></script>
   <script src="/js/modificarCSS.js"></script>
+  <script src="/js/internacionalizacion.js"></script>
 </head>
 <body id="body-economicos">
 
@@ -34,8 +35,8 @@
 
 <label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
 <select id="seleccionarIdioma">
-  <option value="es" th:text="#{registro.idioma.español}"></option>
-  <option value="en" th:text="#{registro.idioma.ingles}"></option>
+  <option value="es" th:selected="${#locale.language == 'es'}" th:text="#{registro.idioma.español}"></option>
+  <option value="en" th:selected="${#locale.language == 'en'}" th:text="#{registro.idioma.ingles}"></option>
 </select>
 
 <div style="text-align: right; margin: 10px;">
@@ -158,7 +159,6 @@
   <button type="submit" th:text="#{registro.datosEconomicos.submit}"></button>
   <button type="reset" th:text="#{registro.reset}"></button>
   <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()" />
-  <script src="/js/internacionalizacion.js"></script>
 </form>
 <a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
 

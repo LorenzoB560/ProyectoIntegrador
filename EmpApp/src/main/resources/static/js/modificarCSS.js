@@ -1,33 +1,24 @@
-// Función que inicializa el control de CSS
-function inicializaFuncion() {
-    // Obtenemos los botones de radio
-    const botonesRadio = document.querySelectorAll('input[name="modificarCSS"]');
+document.addEventListener("DOMContentLoaded", function () {
+    const botones = document.querySelectorAll('input[name="modificarCSS"]');
+    const hojaEstilo = document.getElementById("estilos");
 
-    // Obtenemos la etiqueta style que contiene los estilos CSS
-    const hojaEstilo = document.getElementById('estilos');
+    // Cargar estado guardado en sessionStorage
+    const estadoGuardado = sessionStorage.getItem("cssActivo");
 
-    // Añadimos evento para controlar los cambios en los botones de radio
-    botonesRadio.forEach(button => {
-        button.addEventListener('change', function() {
-            modificaCSS(this.value, hojaEstilo);
+    if (estadoGuardado === "false") {
+        hojaEstilo.disabled = true;
+        document.querySelector('input[value="off"]').checked = true;
+    } else {
+        hojaEstilo.disabled = false;
+        document.querySelector('input[value="on"]').checked = true;
+    }
+
+    // Cambiar y guardar estado al cambiar el botón
+    botones.forEach(boton => {
+        boton.addEventListener("change", function () {
+            const activo = this.value === "on";
+            hojaEstilo.disabled = !activo;
+            sessionStorage.setItem("cssActivo", activo);
         });
     });
-}
-
-function modificaCSS(valor, estilo) {
-    if (valor === 'on') {
-        // Activar CSS
-        estilo.disabled = false;
-    } else if (valor === 'off') {
-        // Desactivar CSS
-        estilo.disabled = true;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    inicializaFuncion();
-
-    // Deshabilitamos el CSS por defecto al cargar la página
-    const hojaEstilo = document.getElementById('estilos');
-    hojaEstilo.disabled = true;
 });
