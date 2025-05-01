@@ -32,6 +32,12 @@
 <!-- Mensaje de error a nivel general -->
 <h2 th:text="*{mensajeNOK}" class="error"></h2>
 
+<label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
+<select id="seleccionarIdioma">
+  <option value="es" th:text="#{registro.idioma.español}"></option>
+  <option value="en" th:text="#{registro.idioma.ingles}"></option>
+</select>
+
 <div style="text-align: right; margin: 10px;">
   <label th:text="#{registro.activarCSS}" for="activarCSS"></label>
   <input type="radio" name="modificarCSS" value="on" id="activarCSS">
@@ -146,7 +152,7 @@
     <input type="text" th:field="*{direccion.codigoPostal}" id="codigoPostal">
     <div th:each="error: ${#fields.errors('direccion.codigoPostal')}" th:text="${error}" class="error"></div>
     <br><br>
-
+    <script src="/js/internacionalizacion.js"></script>
   </fieldset>
 
   <!-- Botones de acción -->

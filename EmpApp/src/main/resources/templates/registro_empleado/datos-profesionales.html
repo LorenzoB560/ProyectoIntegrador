@@ -29,6 +29,12 @@
     <!--    </a>-->
 </nav>
 
+<label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
+<select id="seleccionarIdioma">
+    <option value="es" th:text="#{registro.idioma.español}"></option>
+    <option value="en" th:text="#{registro.idioma.ingles}"></option>
+</select>
+
 <!-- Mensaje de error a nivel general -->
 <h2 th:text="*{mensajeNOK}" class="error"></h2>
 
@@ -86,6 +92,7 @@
     <button type="submit" th:text="#{registro.datosProfesionales.submit}"></button>
     <button type="reset" th:text="#{registro.reset}"></button>
     <input type="button" th:value="#{registro.vaciar}" onclick="vaciarCampos()" />
+    <script src="/js/internacionalizacion.js"></script>
 </form>
 <a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
 </body>

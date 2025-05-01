@@ -36,6 +36,12 @@
 <!-- Mensaje de error a nivel general -->
 <h2 th:text="*{mensajeNOK}" class="error"></h2>
 
+<label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
+<select id="seleccionarIdioma">
+    <option value="es" th:text="#{registro.idioma.español}"></option>
+    <option value="en" th:text="#{registro.idioma.ingles}"></option>
+</select>
+
 <div style="text-align: right; margin: 10px;">
     <label th:text="#{registro.activarCSS}" for="activarCSS"></label>
     <input type="radio" name="modificarCSS" value="on" id="activarCSS">
@@ -167,7 +173,7 @@
         <a href="/volver-principio" id="volverAlPrincipio" th:text="#{registro.volver}">Volver al inicio</a>
         <button type="submit" id="guardarEmpleado" th:text="#{registro.guardar}">Guardar</button>
     </div>
-
+    <script src="/js/internacionalizacion.js"></script>
 </form>
 <a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
 </body>
