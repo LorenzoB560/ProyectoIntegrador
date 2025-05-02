@@ -10,9 +10,12 @@ import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Producto1 extends Producto {
+@DiscriminatorValue("LIBRO")
+public class Libro extends Producto{
 
     private String autor;
     private String editorial;
+    @Column(name = "num_paginas")
+    private Integer numPaginas;
 
 }

@@ -294,3 +294,129 @@ INSERT INTO etiqueta (id, nombre, creador_id, fecha_creacion) VALUES
                                                                   (UNHEX(REPLACE('e6e6e6e6-1111-4f4f-ffff-111111111111', '-', '')), 'Creativo/a', UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), NOW()),
                                                                   (UNHEX(REPLACE('e6e6e6e6-2222-4f4f-ffff-222222222222', '-', '')), 'Visión Estratégica', UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), NOW()),
                                                                   (UNHEX(REPLACE('e6e6e6e6-3333-4f4f-ffff-333333333333', '-', '')), 'Adaptable', UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), NOW());
+
+
+-- Insertar categorías (IDs autoincrementales)
+INSERT INTO categoria (nombre) VALUES
+                                                ('Libros'),
+                                                ('Electrónicos'),
+                                                ('Ropa');
+
+-- Obtener IDs de categorías recién insertadas
+SET @libro_cat_id = (SELECT id FROM categoria WHERE nombre = 'Libros');
+SET @electronico_cat_id = (SELECT id FROM categoria WHERE nombre = 'Electrónicos');
+SET @ropa_cat_id = (SELECT id FROM categoria WHERE nombre = 'Ropa');
+
+-- Libro 1
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (
+           @producto_uuid,
+           'Cien años de soledad',
+           25.99,
+           'Novela clásica de realismo mágico',
+           @libro_cat_id,
+           'LIBRO'
+       );
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (
+           @producto_uuid,
+           'Gabriel García Márquez',
+           'Sudamericana',
+           432
+       );
+
+-- Libro 2
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (
+           @producto_uuid,
+           '1984',
+           19.95,
+           'Novela distópica clásica',
+           @libro_cat_id,
+           'LIBRO'
+       );
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (
+           @producto_uuid,
+           'George Orwell',
+           'Secker & Warburg',
+           328
+       );
+
+-- Electrónico 1
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (
+           @producto_uuid,
+           'Smartphone X',
+           799.99,
+           'Teléfono flagship 2025',
+           @electronico_cat_id,
+           'ELECTRONICO'
+       );
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (
+           @producto_uuid,
+           'TechCorp',
+           'X-2025',
+           '2 años'
+       );
+
+-- Electrónico 2
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (
+           @producto_uuid,
+           'Tablet Pro',
+           349.99,
+           'Tablet profesional 12 pulgadas',
+           @electronico_cat_id,
+           'ELECTRONICO'
+       );
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (
+           @producto_uuid,
+           'DigitalWorks',
+           'T-Pro-12',
+           '3 años'
+       );
+
+-- Ropa 1
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (
+           @producto_uuid,
+           'Camisa Oxford',
+           59.95,
+           'Camisa formal 100% algodón',
+           @ropa_cat_id,
+           'ROPA'
+       );
+INSERT INTO ropa (id, talla, color, material)
+VALUES (
+           @producto_uuid,
+           'M',
+           'Azul marino',
+           'Algodón'
+       );
+
+-- Ropa 2
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (
+           @producto_uuid,
+           'Jeans Slim Fit',
+           89.99,
+           'Vaqueros ajustados',
+           @ropa_cat_id,
+           'ROPA'
+       );
+INSERT INTO ropa (id, talla, color, material)
+VALUES (
+           @producto_uuid,
+           '32',
+           'Azul oscuro',
+           'Denim'
+       );

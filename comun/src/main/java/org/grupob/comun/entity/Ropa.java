@@ -1,5 +1,6 @@
 package org.grupob.comun.entity;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +11,11 @@ import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Producto3 extends Producto {
+@DiscriminatorValue("ROPA")
+public class Ropa extends Producto {
 
+    private String talla;
+    private String color;
     private String material;
 
 }
