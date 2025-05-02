@@ -4,15 +4,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.maestras.Categoria;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@MappedSuperclass
-public class Producto {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "tipo_producto")
+public abstract class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -21,10 +25,13 @@ public class Producto {
     private String nombre;
 
     @Column(nullable = false)
-    private Double precio;
-
+    private BigDecimal precio;
 
     @Column(nullable = false)
     private String descripcion;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
 }
 
