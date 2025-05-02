@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.maestras.Concepto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -19,12 +20,15 @@ public class LineaNomina {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String concepto;  // Concepto de la línea (ej: salario, impuestos, etc.)
+    @ManyToOne
+    @JoinColumn(name = "id_concepto", nullable = false)
+    private Concepto concepto;  // Concepto de la línea (ej: salario, impuestos, etc.)
+
     private BigDecimal cantidad;  // Cantidad (positiva para ingresos, negativa para retenciones)
 
-//    @ManyToOne()
-//    @JoinColumn(name = "id_nomina", foreignKey = @ForeignKey(name = "FK_nomina_linea_nomina_id"))
-//    private Nomina nomina;
-
+    public LineaNomina(Concepto concepto, BigDecimal importe) {
+        setConcepto(concepto);
+        setCantidad(importe);
+    }
 
 }

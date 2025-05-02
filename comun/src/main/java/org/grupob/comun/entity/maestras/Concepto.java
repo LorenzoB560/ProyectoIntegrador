@@ -8,18 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class Categoria {
+public class Concepto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
-
-    // Si se quiere la relación bidireccional:
-    // @OneToMany(mappedBy = "categoria")
-    // private List<Producto> productos;
+    private String nombre; // Ejemplo: "Salario base", "IRPF", "SS"
+    private String tipo;   // "INGRESO" o "DEDUCCION"
 }
