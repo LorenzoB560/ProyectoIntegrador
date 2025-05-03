@@ -17,22 +17,23 @@ import java.util.*;
 public class Nomina {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_nomina")
     private UUID id;
 
     private Integer mes;
-    private Integer annio;
+    private Integer anio;
     private BigDecimal totalLiquido;
 
     @OneToMany
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_nomina_linea_id"))
+    @JoinColumn(name = "id_nomina", foreignKey = @ForeignKey(name = "FK_nomina_linea_id"))
     private Set<LineaNomina> lineaNominas = new HashSet<>();
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
+    @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
     private Empleado empleado;
 
     public Nomina(Integer mes, Integer annio){
         setMes(mes);
-        setAnnio(annio);
+        setAnio(annio);
     }
 
 

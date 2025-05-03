@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alta de nómina</title>
+</head>
+<body>
+<h1>Alta de Nómina</h1>
+
+<form action="/adminapp/guardar-nomina" th:object="${datos}" method="post">
+
+    <label for="idEmpleado">Empleado:</label>
+    <select th:field="*{idEmpleado}" id="idEmpleado" name="idEmpleado">
+        <option th:each="emp : ${listaEmpleados}"
+                th:value="${emp.id}"
+                th:text="${emp.nombre}">
+        </option>
+    </select>
+    <br><br>
+
+    <!-- MES DE NOMINA -->
+    <span class="asterisco">*</span>
+    <label for="mes">Mes de nómina</label>
+    <select id="mes" th:field="*{mes}">
+        <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
+    </select>
+    <div th:each="error : ${#fields.errors('mes')}" th:text="${error}" class="error"></div>
+
+    <!-- AÑO DE NOMINA -->
+    <span class="asterisco">*</span>
+    <label for="anio">Año de nómina</label>
+    <select id="anio" th:field="*{anio}">
+        <option th:each="anio : ${anios}" th:value="${anio}" th:text="${anio}"></option>
+    </select>
+    <div th:each="error : ${#fields.errors('anio')}" th:text="${error}" class="error"></div>
+
+    <h3>Conceptos:</h3>
+<!--    <div th:each="concepto, iterStat : *{conceptos}">-->
+<!--        <label>Descripción:</label>-->
+<!--        <input type="text" th:field="*{conceptos[__${iterStat.index}__].descripcion}">-->
+<!--        <label>Importe:</label>-->
+<!--        <input type="number" step="0.01" th:field="*{conceptos[__${iterStat.index}__].importe}"><br><br>-->
+<!--    </div>-->
+
+    <button type="submit">Guardar Nómina</button>
+</form>
+
+</body>
+</html>
