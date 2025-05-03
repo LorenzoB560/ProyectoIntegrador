@@ -86,7 +86,6 @@ public class CookieService {
 
 /**
  * Convierte el valor de la cookie en un mapa de usuarios con sus contadores
- *
  * @param cookieValue Valor de la cookie a deserializar
  * @return Mapa de <Usuario, Contador> o mapa vacío si es inválido
  */
@@ -103,7 +102,6 @@ public  Map<String, Integer> deserializar(String cookieValue) {
 
 /**
  * Serializa un mapa de usuarios a formato de cadena para cookies
- *
  * @param usuarios Mapa con usuarios y contadores
  * @return Cadena en formato "usuario!contador[/usuario!contador]*"
  */
@@ -121,7 +119,6 @@ public  String serializar(Map<String, Integer> usuarios) {
 
 /**
  * Actualiza el contador de accesos para un usuario específico
- *
  * @param usuarios      Mapa actual de usuarios
  * @param valor         Valor actual de la cookie
  * @param usuarioActual Usuario a actualizar
@@ -214,6 +211,13 @@ public void actualizarCookieHistorial(HttpServletResponse response, String email
     Map<String, Integer> usuarios = deserializar(valorActual);
     String nuevoValor = actualizar(usuarios, valorActual, email);
     crearCookie(response, "historialLogins", nuevoValor, 604800); // 7 días
+}
+
+public int obtenerInicios(String cookie, String usuario){
+    if (cookie == null || usuario == null) return 0;
+
+    Map<String, Integer> usuarios = deserializar(cookie);
+    return usuarios.getOrDefault(usuario, 1);
 }
 
 /**
