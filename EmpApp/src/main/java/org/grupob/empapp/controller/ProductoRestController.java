@@ -1,0 +1,43 @@
+package org.grupob.empapp.controller;
+
+import jakarta.persistence.EntityNotFoundException;
+import org.grupob.empapp.dto.EmpleadoDTO;
+import org.grupob.empapp.dto.ProductoDTO;
+import org.grupob.empapp.service.ProductoServiceImp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/productos") // Ruta base para API REST (plural)
+public class ProductoRestController {
+
+    private final ProductoServiceImp productoService;
+
+    @Autowired
+    public ProductoRestController(ProductoServiceImp productoService) {
+        this.productoService = productoService;
+    }
+    @GetMapping("/listado1")
+    public ResponseEntity<List<ProductoDTO>> listarProductos() {
+        return ResponseEntity.ok(productoService.listarProductos());
+    }
+
+    @GetMapping("/detalle/{id}")
+    public ResponseEntity<?> getDetalleProducto(@PathVariable UUID id) {
+        try {
+            ProductoDTO productoDTO = productoService.devuelveProducto(id);
+            return ResponseEntity.ok(productoDTO); // Devuelve DTO como JSON
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            // Considera añadir logging aquí
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al obtener detalles del producto.");
+        }
+    }
+}
