@@ -100,14 +100,16 @@ public class UsuarioEmpleadoServiceImp {
             throw new ClaveIncorrectaException("Contraseña incorrecta", restantes > 0 ? restantes : 0);
         }
 
-        actualizarEstadisticasAcceso(usuarioEmp);
+        actualizarEstadisticasAcceso(dto);
         return true;
     }
 
     /**
      * Actualiza las estadísticas de acceso del usuario
      */
-    private void actualizarEstadisticasAcceso(UsuarioEmpleado usuario) {
+    public void actualizarEstadisticasAcceso(LoginUsuarioEmpleadoDTO dto) {
+        UsuarioEmpleado usuario =  usuarioEmpRepo.findByUsuario(dto.getUsuario())
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         usuario.setUltimaConexion(LocalDateTime.now());
         usuario.setNumeroAccesos(usuario.getNumeroAccesos() + 1);
         usuario.setIntentosSesionFallidos(0); // Resetear contador de fallos
