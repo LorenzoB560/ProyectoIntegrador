@@ -15,6 +15,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()  // Permite acceso libre a todas las URLs
                 )
+//        Spring Security protege contra CSRF exigiendo un token especial en
+//        las peticiones que modifican datos (como POST, PUT o DELETE)
                 .csrf(AbstractHttpConfigurer::disable);  // Deshabilitar CSRF si no lo necesitas
 
         return http.build();
