@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<!--<body th:object="${loginEmpDTO}"> <div th:replace="~{fragmentos/header :: header}"></div>-->
+<!--<div th:replace="~{fragmentos/nav :: nav}"></div>-->
+
+<div class="container-fluid my-4">
+    <h1 class="text-center mb-4">Listado de Productos</h1>
+
+    <div class="filter-section card p-3 mb-3">
+        <h5 class="card-title">Filtros</h5>
+        <div class="row g-2">
+            <div class="col-md-4">
+                <label for="filtroNombreProd" class="form-label">Nombre:</label>
+                <input type="text" class="form-control form-control-sm" id="filtroNombreProd" placeholder="Filtrar por nombre">
+            </div>
+            <div class="col-md-3">
+                <label for="filtroTipoProd" class="form-label">Tipo:</label>
+                <select id="filtroTipoProd" class="form-select form-select-sm">
+                    <option value="" selected>Todos</option>
+                    <option value="Libro">Libro</option>
+                    <option value="Electrónico">Electrónico</option>
+                    <option value="Ropa">Ropa</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="filtroPrecioProd" class="form-label">Precio (Exacto):</label>
+                <input type="number" step="0.01" class="form-control form-control-sm" id="filtroPrecioProd" placeholder="Ej: 19.99">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button id="aplicarFiltrosProd" class="btn btn-primary btn-sm w-100 me-1">Filtrar</button>
+                <button id="limpiarFiltrosProd" class="btn btn-secondary btn-sm w-100">Limpiar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div id="contadorResultadosProd" class="fw-bold"></div>
+    </div>
+
+    <div id="cargandoProd" class="loading-spinner text-center" style="display: none;">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+    </div>
+    <div id="errorProd" class="alert alert-danger" style="display: none;"></div>
+
+    <div class="table-responsive">
+        <table id="tablaProductos" class="table table-striped table-hover table-sm" style="display: none;">
+            <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Descripción (corta)</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="cuerpoTablaProd">
+            </tbody>
+        </table>
+    </div>
+
+    <div id="paginacionProd" class="d-flex justify-content-center mt-3"></div>
+</div>
+
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+
+<script th:src="@{/js/listado-prod.js}"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

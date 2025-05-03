@@ -29,4 +29,17 @@ public class ProductoController {
 
         return "listados/detalle-vista-prod";
     }
+    @GetMapping("/lista")
+    public String vistaListaProductos(Model model, HttpSession session) {
+//        LoginUsuarioEmpleadoDTO loginEmpDTO = (LoginUsuarioEmpleadoDTO) session.getAttribute("usuarioLogueado");
+//        if (loginEmpDTO == null) {
+//            return "redirect:/login/pedir-usuario";
+//        }
+//
+//        model.addAttribute("loginEmpDTO", loginEmpDTO);
+//        model.addAttribute("dto", loginEmpDTO); // Para compatibilidad con header
+
+        return "listados/listado-vista-prod"; // Ruta a la plantilla HTML de lista
+    }
+
 }
