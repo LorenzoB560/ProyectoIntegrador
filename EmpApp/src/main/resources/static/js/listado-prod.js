@@ -163,38 +163,38 @@ function llenarTablaProductos(productos) {
 
 // --- Función crearControlesPaginacionProductos (sin cambios) ---
 function crearControlesPaginacionProductos() {
-    const divPaginacion = document.getElementById('paginacionProd');
-    if (!divPaginacion) return;
+    const divPaginacion = document.getElementById('paginacion');
     divPaginacion.innerHTML = '';
-    if (totalPaginasProd <= 1) return;
-    const crearBoton = (texto, pagina, habilitado = true, activo = false) => {
-        const li = document.createElement('li');
-        li.className = `page-item ${!habilitado ? 'disabled' : ''} ${activo ? 'active' : ''}`;
-        const a = document.createElement('a');
-        a.className = 'page-link';
-        a.href = '#';
-        a.innerHTML = texto;
-        if (habilitado && !activo) {
-            a.addEventListener('click', (e) => { e.preventDefault(); obtenerProductos(pagina); });
-        }
-        if (activo) { a.setAttribute('aria-current', 'page'); }
-        li.appendChild(a);
-        return li;
-    };
-    const ul = document.createElement('ul');
-    ul.className = 'pagination pagination-sm justify-content-center';
-    ul.appendChild(crearBoton('&laquo; <span class="d-none d-sm-inline">Anterior</span>', paginaActualProd - 1, paginaActualProd > 0));
-    const maxBotonesVisibles = 5;
-    let inicio = Math.max(0, paginaActualProd - Math.floor(maxBotonesVisibles / 2));
-    let fin = Math.min(totalPaginasProd - 1, inicio + maxBotonesVisibles - 1);
-    if(fin === totalPaginasProd - 1){ inicio = Math.max(0, fin - maxBotonesVisibles + 1); }
-    if (inicio > 0) { ul.appendChild(crearBoton('1', 0)); }
-    if (inicio > 1) { const liPuntos = document.createElement('li'); liPuntos.className = 'page-item disabled'; liPuntos.innerHTML = '<span class="page-link">...</span>'; ul.appendChild(liPuntos); }
-    for (let i = inicio; i <= fin; i++) { ul.appendChild(crearBoton(i + 1, i, true, i === paginaActualProd)); }
-    if (fin < totalPaginasProd - 1) { const liPuntos = document.createElement('li'); liPuntos.className = 'page-item disabled'; liPuntos.innerHTML = '<span class="page-link">...</span>'; ul.appendChild(liPuntos); }
-    if (fin < totalPaginasProd - 1) { ul.appendChild(crearBoton(totalPaginasProd, totalPaginasProd - 1)); }
-    ul.appendChild(crearBoton('<span class="d-none d-sm-inline">Siguiente</span> &raquo;', paginaActualProd + 1, paginaActualProd < totalPaginasProd - 1));
-    divPaginacion.appendChild(ul);
+
+    if (totalPaginasProd <= 1) return; // No mostrar paginación si hay una página o menos
+
+    // Botón anterior
+    const botonAnterior = document.createElement('button');
+    botonAnterior.innerHTML = '&laquo; Anterior';
+    botonAnterior.className = 'btn btn-outline-primary me-2';
+    botonAnterior.disabled = paginaActualProd === 0;
+    botonAnterior.addEventListener('click', () => obtenerProductos(paginaActualProd - 1));
+    divPaginacion.appendChild(botonAnterior);
+
+    // Botones de páginas
+    const paginaInicio = Math.max(0, paginaActualProd - 2);
+    const paginaFin = Math.min(totalPaginasProd - 1, paginaActualProd + 2);
+
+    for (let i = paginaInicio; i <= paginaFin; i++) {
+        const botonPagina = document.createElement('button');
+        botonPagina.textContent = i + 1;
+        botonPagina.className = i === paginaActualProd ? 'btn btn-primary me-2' : 'btn btn-outline-primary me-2';
+        botonPagina.addEventListener('click', () => obtenerProductos(i));
+        divPaginacion.appendChild(botonPagina);
+    }
+
+    // Botón siguiente
+    const botonSiguiente = document.createElement('button');
+    botonSiguiente.innerHTML = 'Siguiente &raquo;';
+    botonSiguiente.className = 'btn btn-outline-primary';
+    botonSiguiente.disabled = paginaActualProd >= totalPaginasProd - 1;
+    botonSiguiente.addEventListener('click', () => obtenerProductos(paginaActualProd + 1));
+    divPaginacion.appendChild(botonSiguiente);
 }
 
 // --- Función limpiarFiltrosProductos (sin cambios) ---
