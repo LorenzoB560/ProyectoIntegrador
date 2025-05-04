@@ -5,10 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RopaDTO extends ProductoDTO{
+    private UUID id;
+
     @NotBlank
     private String talla;
 
@@ -17,4 +22,11 @@ public class RopaDTO extends ProductoDTO{
 
     @NotBlank
     private String material;
+
+    public RopaDTO(String nombre, BigDecimal precio, String descripcion, CategoriaDTO categoria, String talla, String color, String material) {
+        super(nombre, precio, descripcion, categoria);
+        this.talla = talla;
+        this.color = color;
+        this.material = material;
+    }
 }

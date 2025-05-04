@@ -1,5 +1,6 @@
 package org.grupob.adminapp.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grupob.adminapp.converter.ElectronicoConverter;
 import org.grupob.adminapp.converter.LibroConverter;
@@ -8,13 +9,14 @@ import org.grupob.adminapp.dto.ElectronicoDTO;
 import org.grupob.adminapp.dto.LibroDTO;
 import org.grupob.adminapp.dto.ProductoDTO;
 import org.grupob.adminapp.dto.RopaDTO;
-import org.grupob.comun.entity.Electronico;
-import org.grupob.comun.entity.Libro;
-import org.grupob.comun.entity.Ropa;
+// Asume que CargaMasivaException está definida en otro archivo, ej. en un paquete de excepciones
+import org.grupob.comun.exception.CargaMasivaException;
 import org.grupob.comun.repository.ElectronicoRepository;
 import org.grupob.comun.repository.LibroRepository;
 import org.grupob.comun.repository.RopaRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,12 +48,15 @@ public class ProductoCargaService {
         this.ropaRepository = ropaRepository;
     }
 
-    public void cargarDesdeJson(InputStream jsonInput) throws IOException {
+    @Transactional(rollbackFor = Exception.class) // Revierte si CUALQUIER excepción ocurre
+    public void cargaMasiva(InputStream jsonInput) throws CargaMasivaException {
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            ObjectMapper mapper = new ObjectMapper();
             ProductoDTO[] productos = mapper.readValue(jsonInput, ProductoDTO[].class);
 
             Arrays.stream(productos).forEach(dto -> {
+                // El try-catch interno se omite aquí para que cualquier error
+                // dentro del stream detenga la transacción completa y se propague.
                 if (dto instanceof LibroDTO libroDTO) {
                     libroRepository.save(libroConverter.convertirAEntidad(libroDTO));
                 } else if (dto instanceof ElectronicoDTO electronicoDTO) {
@@ -59,11 +64,22 @@ public class ProductoCargaService {
                 } else if (dto instanceof RopaDTO ropaDTO) {
                     ropaRepository.save(ropaConverter.convertirAEntidad(ropaDTO));
                 } else {
-                    throw new IllegalArgumentException("Tipo de producto desconocido: " + dto.getClass().getSimpleName());
+                    // Si llega aquí, Jackson deserializó algo inesperado
+                    throw new IllegalArgumentException("Tipo de producto DTO desconocido encontrado: " + dto.getClass().getSimpleName());
                 }
             });
-        } catch (IOException e) {
-            System.err.println("Error leyendo el archivo JSON: " + e.getMessage());
+
+        } catch (JsonProcessingException e) { // Captura errores específicos de Jackson (parseo, mapeo)
+            throw new CargaMasivaException("Error en el formato o contenido del archivo JSON.");
+        } catch (IOException e) { // Captura otros errores de I/O durante la lectura inicial
+            throw new CargaMasivaException("Error leyendo el archivo.");
+        } catch (DataAccessException e) { // Captura errores de base de datos (ej. violación de constraint)
+            throw new CargaMasivaException("Error interactuando con la base de datos durante el guardado.");
+        } catch (IllegalArgumentException e) { // Captura el error de tipo desconocido u otros errores de validación interna
+            throw new CargaMasivaException("Error en los datos proporcionados: " + e.getMessage());
+        } catch (Exception e) { // Captura cualquier otra excepción inesperada (ej. de los converters)
+            // Es buena idea loguear 'e' aquí en un sistema real antes de lanzar
+            throw new CargaMasivaException("Error inesperado durante el procesamiento de la carga masiva.");
         }
     }
 }

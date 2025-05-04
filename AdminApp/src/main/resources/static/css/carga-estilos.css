@@ -1,0 +1,86 @@
+/* Estilos específicos para la página de carga masiva */
+
+/* Este contenedor va DENTRO de <main> y centra el .form-container */
+.carga-masiva-wrapper {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente el .form-container */
+    align-items: center;   /* Centra verticalmente el .form-container */
+    width: 100%;           /* Ocupa el ancho disponible en <main> */
+    flex-grow: 1;          /* Permite que este wrapper crezca para llenar el espacio vertical de <main> */
+    /* Esto funciona porque <main> es un flex item (flex: 1 0 auto) en un body con flex-direction: column */
+}
+
+/* Estilos para el contenedor del formulario en sí */
+.form-container {
+    background-color: #fff;
+    padding: 2rem 3rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;           /* Usa el ancho completo disponible hasta max-width */
+    max-width: 500px;      /* Limita el ancho máximo del formulario */
+    box-sizing: border-box; /* Incluye padding y border en el width/height total */
+}
+
+/* Estilos para elementos DENTRO del form-container para evitar colisiones */
+.form-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+    /* Hereda font-family del body o puedes especificarlo aquí si es diferente */
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: bold;
+}
+
+.form-container input[type="file"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fafafa;
+    box-sizing: border-box; /* Asegura que el padding no desborde */
+    margin-bottom: 1rem; /* Añade espacio antes del botón */
+}
+
+.form-container button {
+    margin-top: 0.5rem; /* Ajusta margen si es necesario */
+    padding: 0.6rem 1.2rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para el contenedor de mensajes (sin cambios, pero puedes prefijarlo con .form-container si es necesario) */
+.mensaje {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    box-sizing: border-box;
+    width: 100%; /* Asegura que ocupe el ancho del contenedor */
+}
+
+.mensaje-exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.mensaje-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}

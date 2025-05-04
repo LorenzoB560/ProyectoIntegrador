@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "tipoProducto")
 @JsonSubTypes({
@@ -21,6 +22,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductoDTO {
+
+    private UUID id;
+
     @NotBlank
     private String nombre;
 
@@ -31,5 +35,12 @@ public class ProductoDTO {
     private String descripcion;
 
     @NotBlank
-    private String categoriaNombre;
+    private CategoriaDTO categoria;
+
+    public ProductoDTO(String nombre, BigDecimal precio, String descripcion, CategoriaDTO categoria) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.categoria = categoria;
+    }
 }
