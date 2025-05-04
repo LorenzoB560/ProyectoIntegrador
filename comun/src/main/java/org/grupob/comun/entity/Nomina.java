@@ -6,14 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.*;
-
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table()
+@Table(name = "nomina")
 public class Nomina {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,18 +25,22 @@ public class Nomina {
     private Integer anio;
     private BigDecimal totalLiquido;
 
-    @OneToMany
-    @JoinColumn(name = "id_nomina", foreignKey = @ForeignKey(name = "FK_nomina_linea_id"))
+    @OneToMany(mappedBy = "nomina", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LineaNomina> lineaNominas = new HashSet<>();
+
     @ManyToOne
     @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
     private Empleado empleado;
 
-    public Nomina(Integer mes, Integer annio){
-        setMes(mes);
-        setAnio(annio);
+    // añadir línea de nómina
+    public void addLineaNomina(LineaNomina lineaNomina) {
+        lineaNominas.add(lineaNomina);
+        lineaNomina.setNomina(this);
     }
 
-
+    // eliminar línea de nómina
+    public void removeLineaNomina(LineaNomina lineaNomina) {
+        lineaNominas.remove(lineaNomina);
+        lineaNomina.setNomina(null);
+    }
 }
-

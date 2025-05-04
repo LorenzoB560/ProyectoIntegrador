@@ -29,7 +29,9 @@ public class AltaNominaController {
 
         modelo.addAttribute("listaEmpleados", altaNominaServiceImp.devuelveEmpleados());
         modelo.addAttribute("meses", altaNominaServiceImp.devolverMeses());
-        modelo.addAttribute("anios", altaNominaServiceImp.devolverAnios());    }
+        modelo.addAttribute("anios", altaNominaServiceImp.devolverAnios());
+        modelo.addAttribute("listaConceptos", altaNominaServiceImp.devolverConcepto());
+    }
 
     @GetMapping("/alta-nomina")
     public String altaNomina(Model model) {
