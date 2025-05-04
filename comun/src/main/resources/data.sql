@@ -15,13 +15,13 @@ VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@g
         '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', 0, 0);
 
 
-INSERT INTO concepto (nombre, tipo)
-VALUES ('Salario base', 'INGRESO'),
-       ('Horas extras', 'INGRESO'),
-       ('Bonus productividad', 'INGRESO'),
-       ('IRPF', 'DEDUCCION'),
-       ('Seguridad Social', 'DEDUCCION'),
-       ('Descuento transporte', 'DEDUCCION');
+INSERT INTO concepto (id, nombre, tipo)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a101', '-', '')), 'Salario base', 'INGRESO'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a102', '-', '')), 'Horas extras', 'INGRESO'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a103', '-', '')), 'Bonus productividad', 'INGRESO'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a104', '-', '')), 'IRPF', 'DEDUCCION'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a105', '-', '')), 'Seguridad Social', 'DEDUCCION'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a106', '-', '')), 'Descuento transporte', 'DEDUCCION');
 
 -- Nómina ejemplo 1 (Mayo 2025)
 -- SET @nomina_id = UNHEX(REPLACE(UUID(), '-', ''));

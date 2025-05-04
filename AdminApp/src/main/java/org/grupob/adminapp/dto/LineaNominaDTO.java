@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LineaNominaDTO {
 
-    private Long idConcepto;
+    private UUID idConcepto;
     private BigDecimal cantidad;
 }

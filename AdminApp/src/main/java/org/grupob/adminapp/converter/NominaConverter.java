@@ -25,33 +25,8 @@ public class NominaConverter {
 
     public Nomina convierteAEntidad(AltaNominaDTO altaNominaDTO){
         // Mapear propiedades básicas
-        Nomina nomina = modelMapper.map(altaNominaDTO, Nomina.class);
 
-//        // Inicializar el conjunto si es null
-//        if (nomina.getLineaNominas() == null) {
-//            nomina.setLineaNominas(new HashSet<>());
-//        }
 
-//        // Mapear líneas de nómina
-//        if (altaNominaDTO.getLineaNominas() != null && !altaNominaDTO.getLineaNominas().isEmpty()) {
-//            Set<LineaNomina> lineas = altaNominaDTO.getLineaNominas().stream()
-//                    .filter(lineaDTO -> lineaDTO.getIdConcepto() != null) // Asegurar que idConcepto no sea null
-//                    .map(lineaDTO -> {
-//                        Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
-//                                .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));
-//
-//                        LineaNomina linea = new LineaNomina();
-//                        linea.setConcepto(concepto);
-//                        linea.setCantidad(lineaDTO.getCantidad());
-//                        linea.setNomina(nomina); // Importante: establecer la relación bidireccional
-//
-//                        return linea;
-//                    })
-//                    .collect(Collectors.toSet());
-//
-//            nomina.setLineaNominas(lineas);
-//        }
-
-        return nomina;
+        return modelMapper.map(altaNominaDTO, Nomina.class);
     }
 }

@@ -6,12 +6,12 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     const anio = document.getElementById("anio").value;
     const totalLiquido = parseFloat(document.getElementById("totalLiquidoHidden").value || "0");
 
-    const conceptos = [];
+    const lineaNominas = [];
     document.querySelectorAll("#conceptos-container > div").forEach(div => {
         const conceptoId = div.querySelector("select[name='conceptoId']").value;
         const cantidad = div.querySelector("input[name='cantidad']").value;
         if (conceptoId && cantidad) {
-            conceptos.push({
+            lineaNominas.push({
                 idConcepto: conceptoId,
                 cantidad: parseFloat(cantidad)
             });
@@ -23,8 +23,9 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
         mes: parseInt(mes),
         anio: parseInt(anio),
         totalLiquido: totalLiquido,
-        conceptos: conceptos
+        lineaNominas: lineaNominas
     };
+
 
     fetch("/adminapp/guardar-nomina", {
         method: "POST",

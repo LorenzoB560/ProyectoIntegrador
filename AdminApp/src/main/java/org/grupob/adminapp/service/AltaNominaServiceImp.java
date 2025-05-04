@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -55,7 +56,6 @@ public class AltaNominaServiceImp implements AltaNominaService {
         return conceptoRepository.findAll();
     }
 
-    @Transactional
     public void guardarNomina(AltaNominaDTO altaNominaDTO){
         // Verificar datos recibidos para depuración
         System.out.println("AltaNominaDTO recibido: " + altaNominaDTO);
@@ -64,7 +64,18 @@ public class AltaNominaServiceImp implements AltaNominaService {
         // El converter se encarga de crear las entidades Nomina y LineaNomina correctamente
         Nomina nomina = nominaConverter.convierteAEntidad(altaNominaDTO);
 
-        // Guardar la nómina y sus líneas en una sola transacción
+        Set<LineaNomina> lineas = altaNominaDTO.getLineaNominas().stream().map(lineaDTO -> {
+            Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
+                    .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));
+            LineaNomina linea = new LineaNomina();
+            linea.setConcepto(concepto);
+            linea.setCantidad(lineaDTO.getCantidad());
+            linea.setNomina(nomina);
+            return linea;
+        }).collect(Collectors.toSet());
+
+        nomina.setLineaNominas(lineas);
+
         nominaRepository.save(nomina);
 
 

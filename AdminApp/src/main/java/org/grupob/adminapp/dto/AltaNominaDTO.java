@@ -13,12 +13,9 @@ import java.util.*;
 public class AltaNominaDTO {
 
     private UUID id;
-
-    private String mes;
-    private String anio;
-    private BigDecimal totalLiquido;
-
-    private List<LineaNominaDTO> lineaNominas = new ArrayList<>();
-
     private UUID idEmpleado;
+    private int mes;
+    private int anio;
+    private BigDecimal totalLiquido;
+    private List<LineaNominaDTO> lineaNominas;
 }

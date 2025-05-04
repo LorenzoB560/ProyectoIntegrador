@@ -1,5 +1,6 @@
 package org.grupob.comun.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,15 +34,15 @@ public class Nomina {
     @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
     private Empleado empleado;
 
-    // añadir línea de nómina
-    public void addLineaNomina(LineaNomina lineaNomina) {
-        lineaNominas.add(lineaNomina);
-        lineaNomina.setNomina(this);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Nomina nomina)) return false;
+        return id != null && id.equals(nomina.id);
     }
 
-    // eliminar línea de nómina
-    public void removeLineaNomina(LineaNomina lineaNomina) {
-        lineaNominas.remove(lineaNomina);
-        lineaNomina.setNomina(null);
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
