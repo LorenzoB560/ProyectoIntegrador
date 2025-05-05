@@ -84,3 +84,33 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
+
+/* --- Añadir estas reglas a carga-estilos.css --- */
+
+/* Estilos para el elemento SELECT dentro del form-container */
+.form-container select {
+    width: 100%;
+    padding: 0.6rem; /* Ajusta el padding si es necesario */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fafafa;
+    box-sizing: border-box; /* Incluye padding/border en el tamaño total */
+    margin-bottom: 1rem; /* Espacio debajo del select, antes del botón */
+    cursor: pointer;
+    /* Apariencia básica para que se vea más como un input */
+    appearance: none; /* Oculta el estilo nativo del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Añade un icono de flecha (puedes personalizarlo) */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23555" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1em;
+}
+
+/* (Opcional) Estilo para el foco del select */
+.form-container select:focus {
+    outline: none;
+    border-color: #007bff; /* Color de borde al enfocar */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Sombra suave al enfocar */
+}

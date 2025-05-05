@@ -1,26 +1,27 @@
 package org.grupob.adminapp.controller;
 
-import jakarta.servlet.http.HttpSession;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
-import org.grupob.adminapp.service.ProductoCargaService;
+import org.grupob.adminapp.dto.CategoriaDTO;
+import org.grupob.adminapp.service.CategoriaServiceImp;
+import org.grupob.adminapp.service.ProductoMasivoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @RestController
 @RequestMapping("adminapp")
 public class ProductoRestController {
-    private final ProductoCargaService productoService;
+    private final ProductoMasivoService productoService;
+    private final CategoriaServiceImp categoriaService;
 
-    public ProductoRestController(ProductoCargaService productoService) {
+    public ProductoRestController(ProductoMasivoService productoService, CategoriaServiceImp categoriaService) {
         this.productoService = productoService;
+        this.categoriaService = categoriaService;
     }
 
     @PostMapping("/carga-masiva")
@@ -47,6 +48,22 @@ public class ProductoRestController {
             return ResponseEntity.status(400).body("Error al leer el archivo: " + e.getMessage());
         }
     }
+
+    // Endpoint para obtener todas las categorías
+    @GetMapping("/categorias")
+    public ResponseEntity<List<CategoriaDTO>> obtenerCategorias() {
+        List<CategoriaDTO> categorias = categoriaService.devuelveTodas();
+        return ResponseEntity.ok(categorias);
+    }
+
+    // Endpoint para borrado masivo
+    @DeleteMapping("/borrado-masivo")
+    public ResponseEntity<?> borradoMasivo(@RequestParam("categoria") String categoriaId) {
+        productoService.borradoMasivo(categoriaId);
+        return ResponseEntity.ok().body("Productos eliminados correctamente");
+    }
+
+
 }
 
 

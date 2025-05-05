@@ -11,9 +11,12 @@ import org.grupob.adminapp.dto.ProductoDTO;
 import org.grupob.adminapp.dto.RopaDTO;
 // Asume que CargaMasivaException está definida en otro archivo, ej. en un paquete de excepciones
 import org.grupob.comun.exception.CargaMasivaException;
+import org.grupob.comun.exception.CategoriaNoEncontradaException;
 import org.grupob.comun.repository.ElectronicoRepository;
 import org.grupob.comun.repository.LibroRepository;
+import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.comun.repository.RopaRepository;
+import org.grupob.comun.repository.maestras.CategoriaRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,29 +26,34 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 @Service
-public class ProductoCargaService {
+public class ProductoMasivoService {
 
     private final LibroConverter libroConverter;
     private final ElectronicoConverter electronicoConverter;
     private final RopaConverter ropaConverter;
 
+    private final ProductoRepository productoRepository;
     private final LibroRepository libroRepository;
     private final ElectronicoRepository electronicoRepository;
     private final RopaRepository ropaRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public ProductoCargaService(
+    public ProductoMasivoService(
             LibroConverter libroConverter,
             ElectronicoConverter electronicoConverter,
             RopaConverter ropaConverter,
+            ProductoRepository productoRepository,
             LibroRepository libroRepository,
             ElectronicoRepository electronicoRepository,
-            RopaRepository ropaRepository) {
+            RopaRepository ropaRepository, CategoriaRepository categoriaRepository) {
         this.libroConverter = libroConverter;
         this.electronicoConverter = electronicoConverter;
         this.ropaConverter = ropaConverter;
+        this.productoRepository = productoRepository;
         this.libroRepository = libroRepository;
         this.electronicoRepository = electronicoRepository;
         this.ropaRepository = ropaRepository;
+        this.categoriaRepository = categoriaRepository;
     }
 
     @Transactional(rollbackFor = Exception.class) // Revierte si CUALQUIER excepción ocurre
@@ -78,8 +86,38 @@ public class ProductoCargaService {
         } catch (IllegalArgumentException e) { // Captura el error de tipo desconocido u otros errores de validación interna
             throw new CargaMasivaException("Error en los datos proporcionados: " + e.getMessage());
         } catch (Exception e) { // Captura cualquier otra excepción inesperada (ej. de los converters)
-            // Es buena idea loguear 'e' aquí en un sistema real antes de lanzar
             throw new CargaMasivaException("Error inesperado durante el procesamiento de la carga masiva.");
         }
     }
+
+    @Transactional // <-- ¡Esta anotación es obligatoria para ejecutar consultas de borrado/actualización!
+    public void borradoMasivo(String opcion){
+
+        if(opcion.equals(0)){
+            eliminarTodos();
+        }else{
+            eliminarPorCategoria(opcion);
+        }
+
+    }
+
+
+    // Elimina todos los productos
+    private void eliminarTodos() {
+        productoRepository.deleteAll();
+    }
+
+    private void eliminarPorCategoria(String  categoriaId) {
+        Long id;
+        try {
+            id = Long.parseLong(categoriaId);
+        } catch (NumberFormatException e) {
+            throw new CategoriaNoEncontradaException("Formato no aceptado");
+        }
+        if (!categoriaRepository.existsById(id)) {
+            throw new CategoriaNoEncontradaException("No existe esa categoria");
+        }
+        productoRepository.deleteByCategoriaId(id);
+    }
+
 }
