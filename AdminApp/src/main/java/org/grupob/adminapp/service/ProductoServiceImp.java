@@ -1,6 +1,7 @@
 package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.adminapp.converter.ProductoConverter;
@@ -8,6 +9,7 @@ import org.grupob.adminapp.dto.ProductoDTO;
 import org.grupob.adminapp.dto.ProductoSearchDTO;
 import org.grupob.adminapp.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -89,5 +91,23 @@ public class ProductoServiceImp implements ProductoService {
         // Mapear la página resultante (de Producto, Producto1, etc.) a Page<ProductoDTO>
         // El converter se encarga de manejar los distintos tipos de Producto
         return productoPage.map(productoConverter::convertToDto);
+    }
+
+    @Override
+    @Transactional // Asegura atomicidad en la operación de borrado
+    public void eliminarProducto(UUID id) {
+        if (!productoRepository.existsById(id)) {
+            // Lanza excepción si el producto no existe para informar al controlador
+            throw new EntityNotFoundException("Producto no encontrado con ID: " + id);
+        }
+        try {
+            productoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            // Esto puede ocurrir si el producto se eliminó entre el existsById y el delete,
+            // aunque es raro con @Transactional. Lo relanzamos como not found.
+            throw new EntityNotFoundException("Producto no encontrado con ID: " + id + " (posiblemente eliminado por otro proceso)");
+        }
+        // Nota: Si tienes relaciones (ej: Producto en Pedidos), puede que necesites
+        // manejar `DataIntegrityViolationException` o configurar el borrado en cascada (con cuidado).
     }
 }

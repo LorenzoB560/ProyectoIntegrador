@@ -112,6 +112,7 @@ function obtenerProductos(pagina) {
             totalElementosProd = datos.totalElements;
             llenarTablaProductos(datos.content);
             crearControlesPaginacionProductos();
+
             if(contadorSpan) {
                 const inicio = datos.numberOfElements > 0 ? (paginaActualProd * tamanioPaginaProd) + 1 : 0;
                 const fin = inicio + datos.numberOfElements - 1;
@@ -154,12 +155,15 @@ function llenarTablaProductos(productos) {
                     <a href="${detalleUrl}" class="btn btn-sm btn-primary" title="Ver Detalle">
                         <i class="bi bi-eye"></i> Ver
                     </a>
+
                 </td>
             `;
             cuerpoTabla.appendChild(fila);
         });
     }
 }
+
+
 
 // --- Función crearControlesPaginacionProductos (sin cambios) ---
 function crearControlesPaginacionProductos() {

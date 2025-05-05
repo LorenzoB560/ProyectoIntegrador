@@ -112,6 +112,7 @@ function obtenerProductos(pagina) {
             totalElementosProd = datos.totalElements;
             llenarTablaProductos(datos.content);
             crearControlesPaginacionProductos();
+            asignarEventListenersAccionesProd();
             if(contadorSpan) {
                 const inicio = datos.numberOfElements > 0 ? (paginaActualProd * tamanioPaginaProd) + 1 : 0;
                 const fin = inicio + datos.numberOfElements - 1;
@@ -151,8 +152,12 @@ function llenarTablaProductos(productos) {
                 <td>${precioFormateado}</td>
                 <td>${descCorta}</td>
                 <td>
-                    <a href="${detalleUrl}" class="btn btn-sm btn-primary" title="Ver Detalle">
+                    <a href="${detalleUrl}" class="btn btn-sm btn-primary " title="Ver Detalle">
                         <i class="bi bi-eye"></i> Ver
+                    </a>
+                    <a id="btnEliminar" href="#" class="btn btn-danger me-2 btn-eliminar-prod-js" 
+                        data-product-id="${prod.id}" data-product-name="${prod.nombre}"> 
+                        <i class="bi bi-trash me-1"></i> Eliminar
                     </a>
                 </td>
             `;
@@ -160,7 +165,76 @@ function llenarTablaProductos(productos) {
         });
     }
 }
+function asignarEventListenersAccionesProd() {
+    // --- Listener para botones de Eliminar Producto ---
+    document.querySelectorAll('.btn-eliminar-prod-js').forEach(button => {
+        // Clonar y reemplazar para evitar listeners duplicados si esta función se llama múltiples veces
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
 
+        clone.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevenir cualquier acción por defecto
+            const productId = clone.getAttribute('data-product-id');// Leer data-product-id
+            const productName = clone.getAttribute('data-product-name'); // Leer data-product-name
+
+            if (!productId) {
+                console.error("ID de producto no encontrado en el botón de eliminar.");
+                alert("Error: No se pudo obtener la ID del producto a eliminar.");
+                return;
+            }
+
+            // --- 1. Ventana de Confirmación ---
+            if (confirm(`¿Está seguro de eliminar el producto "${productName}" (ID: ${productId})? Esta acción no se puede deshacer.`)) {
+
+                // --- 2. Llamada al Endpoint DELETE ---
+                const url = `/productos/eliminar/${productId}`; // URL del endpoint DELETE en ProductoRestController de AdminApp
+                const headers = {
+                    // Añadir cabecera CSRF aquí si la estás usando en AdminApp con Spring Security
+                    // 'X-CSRF-TOKEN': '...'
+                };
+
+                // Deshabilitar botón y mostrar carga (opcional)
+                clone.disabled = true;
+                const originalHtml = clone.innerHTML; // Guardar icono original
+                clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: headers
+                })
+                    .then(response => {
+                        // DELETE exitoso puede devolver 200 OK o 204 No Content
+                        if (response.ok || response.status === 204) {
+                            return null; // Indicar éxito
+                        } else {
+                            // Si hay error, intentar obtener el mensaje del cuerpo
+                            return response.text().then(text => {
+                                throw new Error(text || `Error ${response.status}`);
+                            });
+                        }
+                    })
+                    .then(() => {
+                        // --- 3. Acciones en caso de ÉXITO ---
+                        console.log(`Producto ${productId} eliminado.`);
+                        alert(`Producto "${productName}" eliminado correctamente.`);
+                        // Recargar la tabla para reflejar el cambio
+                        obtenerProductos(paginaActualProd); // Llama a la función que recarga la lista
+                    })
+                    .catch(error => {
+                        // --- 4. Acciones en caso de ERROR ---
+                        console.error(`Error al eliminar producto ${productId}:`, error);
+                        alert(`Error al eliminar producto: ${error.message}`);
+                        // Rehabilitar el botón
+                        clone.disabled = false;
+                        clone.innerHTML = originalHtml; // Restaurar icono/texto original
+                    });
+            } else {
+                // El usuario canceló la confirmación
+                console.log(`Eliminación cancelada para producto ${productId}.`);
+            }
+        });
+    });
+}
 // --- Función crearControlesPaginacionProductos (sin cambios) ---
 function crearControlesPaginacionProductos() {
     const divPaginacion = document.getElementById('paginacion');

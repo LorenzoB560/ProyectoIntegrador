@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -58,6 +59,22 @@ public class ProductoRestController {
             System.err.println("Error al listar productos: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable UUID id) {
+        // Aquí podrías añadir @PreAuthorize("hasRole('ADMIN')") si usas Spring Security
+        try {
+            productoService.eliminarProducto(id);
+            // Éxito: Devolver 204 No Content (estándar para DELETE exitoso)
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            // Si el servicio lanza esta excepción, devolver 404 Not Found
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            // Otros errores inesperados, devolver 500 Internal Server Error
+            // Loggear el error e.getMessage() o e
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar el producto", e);
         }
     }
 }

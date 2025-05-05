@@ -14,4 +14,5 @@ public interface ProductoService {
     Page<ProductoDTO> buscarProductosPaginados(
             ProductoSearchDTO searchParams, // <-- Usar el DTO
             int page, int size, String sortBy, String sortDir);
+    void eliminarProducto(UUID id);
 }
