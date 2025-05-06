@@ -1,0 +1,198 @@
+[
+  {
+    "nombre": "Cien Años de Soledad",
+    "precio": 21.50,
+    "descripcion": "Obra maestra del realismo mágico.",
+    "categoria": {
+      "id": 1,
+      "nombre": "LIBRO"
+    },
+    "tipoProducto": "LIBRO",
+    "autor": "Gabriel García Márquez",
+    "editorial": "Sudamericana",
+    "numPaginas": 471
+  },
+  {
+    "nombre": "El Hobbit",
+    "precio": 15.95,
+    "descripcion": "Aventura clásica en la Tierra Media.",
+    "categoria": {
+      "id": 1,
+      "nombre": "LIBRO"
+    },
+    "tipoProducto": "LIBRO",
+    "autor": "J.R.R. Tolkien",
+    "editorial": "Minotauro",
+    "numPaginas": 310
+  },
+  {
+    "nombre": "Design Patterns",
+    "precio": 45.00,
+    "descripcion": "Elementos de software orientado a objetos reutilizable.",
+    "categoria": {
+      "id": 1,
+      "nombre": "LIBRO"
+    },
+    "tipoProducto": "LIBRO",
+    "autor": "Erich Gamma et al.",
+    "editorial": "Addison-Wesley",
+    "numPaginas": 395
+  },
+  {
+    "nombre": "Homo Deus",
+    "precio": 23.50,
+    "descripcion": "Breve historia del mañana.",
+    "categoria": {
+      "id": 1,
+      "nombre": "LIBRO"
+    },
+    "tipoProducto": "LIBRO",
+    "autor": "Yuval Noah Harari",
+    "editorial": "Debate",
+    "numPaginas": 464
+  },
+  {
+    "nombre": "Fundación",
+    "precio": 17.80,
+    "descripcion": "Inicio de la saga de ciencia ficción.",
+    "categoria": {
+      "id": 1,
+      "nombre": "LIBRO"
+    },
+    "tipoProducto": "LIBRO",
+    "autor": "Isaac Asimov",
+    "editorial": "Debolsillo",
+    "numPaginas": 255
+  },
+  {
+    "nombre": "Polo Manga Corta",
+    "precio": 24.99,
+    "descripcion": "Polo clásico de piqué.",
+    "categoria": {
+      "id": 3,
+      "nombre": "ROPA"
+    },
+    "tipoProducto": "ROPA",
+    "talla": "L",
+    "color": "Azul Marino",
+    "material": "Algodón Piqué"
+  },
+  {
+    "nombre": "Pantalones Chino",
+    "precio": 34.95,
+    "descripcion": "Pantalones versátiles de algodón.",
+    "categoria": {
+      "id": 3,
+      "nombre": "ROPA"
+    },
+    "tipoProducto": "ROPA",
+    "talla": "34",
+    "color": "Beige",
+    "material": "Algodón Twill"
+  },
+  {
+    "nombre": "Jersey Cuello V",
+    "precio": 49.90,
+    "descripcion": "Jersey fino de lana merino.",
+    "categoria": {
+      "id": 3,
+      "nombre": "ROPA"
+    },
+    "tipoProducto": "ROPA",
+    "talla": "M",
+    "color": "Burdeos",
+    "material": "Lana Merino"
+  },
+  {
+    "nombre": "Falda Plisada Midi",
+    "precio": 39.99,
+    "descripcion": "Falda elegante y fluida.",
+    "categoria": {
+      "id": 3,
+      "nombre": "ROPA"
+    },
+    "tipoProducto": "ROPA",
+    "talla": "M",
+    "color": "Verde Esmeralda",
+    "material": "Poliéster"
+  },
+  {
+    "nombre": "Abrigo de Lana",
+    "precio": 120.00,
+    "descripcion": "Abrigo clásico para invierno.",
+    "categoria": {
+      "id": 3,
+      "nombre": "ROPA"
+    },
+    "tipoProducto": "ROPA",
+    "talla": "S",
+    "color": "Camel",
+    "material": "Mezcla de Lana"
+  },
+  {
+    "nombre": "TV LED 55\" 4K UHD",
+    "precio": 699.00,
+    "descripcion": "Televisor inteligente con alta resolución.",
+    "categoria": {
+      "id": 2,
+      "nombre": "ELECTRONICO"
+    },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "ScreenMax",
+    "modelo": "SM-55K4",
+    "garantia": "2 años"
+  },
+  {
+    "nombre": "Cámara Réflex Digital EOS",
+    "precio": 850.00,
+    "descripcion": "Cámara DSLR para fotógrafos entusiastas.",
+    "categoria": {
+      "id": 2,
+      "nombre": "ELECTRONICO"
+    },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "PhotoPro",
+    "modelo": "EOS 900D",
+    "garantia": "2 años"
+  },
+  {
+    "nombre": "Altavoz Inteligente Echo",
+    "precio": 99.99,
+    "descripcion": "Altavoz con asistente de voz integrado.",
+    "categoria": {
+      "id": 2,
+      "nombre": "ELECTRONICO"
+    },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Amz",
+    "modelo": "Echo Dot 5",
+    "garantia": "1 año"
+  },
+  {
+    "nombre": "E-Reader Kindle Oasis",
+    "precio": 249.99,
+    "descripcion": "Lector de libros electrónicos premium.",
+    "categoria": {
+      "id": 2,
+      "nombre": "ELECTRONICO"
+    },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Amz",
+    "modelo": "Kindle Oasis",
+    "garantia": "1 año"
+  },
+  {
+    "nombre": "Monitor Gaming Curvo 27\"",
+    "precio": 329.00,
+    "descripcion": "Monitor de alta tasa de refresco para juegos.",
+    "categoria": {
+      "id": 2,
+      "nombre": "ELECTRONICO"
+    },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "GameView",
+    "modelo": "GV-C27FHD",
+    "garantia": "3 años"
+  }
+]
+

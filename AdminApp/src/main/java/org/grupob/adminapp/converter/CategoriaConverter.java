@@ -1,0 +1,26 @@
+package org.grupob.adminapp.converter;
+
+import org.grupob.adminapp.dto.CategoriaDTO;
+import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.entity.Administrador;
+import org.grupob.comun.entity.maestras.Categoria;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
+
+@Component
+public class CategoriaConverter {
+    ModelMapper modelMapper;
+
+
+    public CategoriaConverter(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
+    public CategoriaDTO convertirADTO(Categoria categoria) {
+        return modelMapper.map(categoria, CategoriaDTO.class);
+    }
+
+    public Categoria convertirAEntidad(CategoriaDTO dto) {
+        return modelMapper.map(dto, Categoria.class);
+    }
+}

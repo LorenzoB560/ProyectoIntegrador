@@ -312,20 +312,19 @@ SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
 VALUES (
            @producto_uuid,
-           'Cien años de soledad',
-           25.99,
-           'Novela clásica de realismo mágico',
+           'Matar un ruiseñor',
+           18.50,
+           'Clásico sobre justicia y prejuicio racial',
            @libro_cat_id,
            'LIBRO'
        );
 INSERT INTO libro (id, autor, editorial, num_paginas)
 VALUES (
            @producto_uuid,
-           'Gabriel García Márquez',
-           'Sudamericana',
-           432
+           'Harper Lee',
+           'Vintage Español',
+           384
        );
-
 -- Libro 2
 SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)

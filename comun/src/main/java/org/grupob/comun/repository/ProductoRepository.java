@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,13 @@ import java.util.UUID; // Importa UUID
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, UUID> {
+
+
+    // Elimina por categoría usando JPQL
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE p.categoria.id = :categoriaId")
+    void deleteByCategoriaId(@Param("categoriaId") Long categoriaId);
+
 ; // --- Consulta Base (solo campos comunes) ---
     @Query("SELECT p FROM Producto p WHERE " +
             "(:nombre IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +

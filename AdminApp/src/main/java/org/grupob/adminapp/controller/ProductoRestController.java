@@ -1,16 +1,23 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.adminapp.dto.ProductoDTO;
 import org.grupob.adminapp.dto.ProductoSearchDTO;
+import org.grupob.adminapp.service.CategoriaServiceImp;
+import org.grupob.adminapp.service.ProductoMasivoService;
 import org.grupob.adminapp.service.ProductoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,10 +26,14 @@ import java.util.UUID;
 public class ProductoRestController {
 
     private final ProductoServiceImp productoService;
+    private final CategoriaServiceImp categoriaService;
+    private final ProductoMasivoService productoMasivoService;
 
     @Autowired
-    public ProductoRestController(ProductoServiceImp productoService) {
+    public ProductoRestController(ProductoServiceImp productoService, CategoriaServiceImp categoriaService, ProductoMasivoService productoMasivoService) {
         this.productoService = productoService;
+        this.categoriaService = categoriaService;
+        this.productoMasivoService = productoMasivoService;
     }
     @GetMapping("/listado1")
     public ResponseEntity<List<ProductoDTO>> listarProductos() {
@@ -76,5 +87,44 @@ public class ProductoRestController {
             // Loggear el error e.getMessage() o e
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar el producto", e);
         }
+    }
+
+    @PostMapping("/carga-masiva")
+    public ResponseEntity<String> cargarMasivaProductos(@RequestParam(value = "archivo", required = false) MultipartFile archivo) {
+
+        if(archivo==null){
+            return ResponseEntity.badRequest().body("Debes seleccionar un archivo JSON");
+        }
+
+        if (archivo.isEmpty()) {
+            return ResponseEntity.badRequest().body("El archivo proporcionado está vacío.");
+        }
+
+        String contentType = archivo.getContentType();
+        if (contentType == null || !contentType.equals(MediaType.APPLICATION_JSON_VALUE)) {
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE) // 415 Unsupported Media Type
+                    .body("El tipo de archivo no es JSON.");
+        }
+
+        try (InputStream input = archivo.getInputStream()) {
+            productoMasivoService.cargaMasiva(input);
+            return ResponseEntity.ok("Carga completada correctamente.");
+        } catch (IOException e) {
+            return ResponseEntity.status(400).body("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+
+    // Endpoint para obtener todas las categorías
+    @GetMapping("/categorias")
+    public ResponseEntity<List<CategoriaDTO>> obtenerCategorias() {
+        List<CategoriaDTO> categorias = categoriaService.devuelveTodas();
+        return ResponseEntity.ok(categorias);
+    }
+
+    // Endpoint para borrado masivo
+    @DeleteMapping("/borrado-masivo")
+    public ResponseEntity<?> borradoMasivo(@RequestParam("categoria") String categoriaId) {
+        productoMasivoService.borradoMasivo(categoriaId);
+        return ResponseEntity.ok().body("Productos eliminados correctamente");
     }
 }

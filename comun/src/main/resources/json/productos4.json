@@ -1,0 +1,303 @@
+[
+  {
+    "nombre": "El Nombre del Viento",
+    "precio": 22.50,
+    "descripcion": "Primer día de la Crónica del Asesino de Reyes.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Patrick Rothfuss",
+    "editorial": "Plaza & Janés",
+    "numPaginas": 880
+  },
+  {
+    "nombre": "La Sombra del Viento",
+    "precio": 19.90,
+    "descripcion": "Inicio de la saga del Cementerio de los Libros Olvidados.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Carlos Ruiz Zafón",
+    "editorial": "Planeta",
+    "numPaginas": 576
+  },
+  {
+    "nombre": "Neuromante",
+    "precio": 14.95,
+    "descripcion": "Novela seminal del género cyberpunk.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "William Gibson",
+    "editorial": "Minotauro",
+    "numPaginas": 312
+  },
+  {
+    "nombre": "El Problema de los Tres Cuerpos",
+    "precio": 21.00,
+    "descripcion": "Primer libro de la trilogía del Recuerdo del Pasado de la Tierra.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Cixin Liu",
+    "editorial": "Nova",
+    "numPaginas": 416
+  },
+  {
+    "nombre": "Kafka en la Orilla",
+    "precio": 20.50,
+    "descripcion": "Novela compleja y onírica.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Haruki Murakami",
+    "editorial": "Tusquets Editores",
+    "numPaginas": 688
+  },
+  {
+    "nombre": "Thinking, Fast and Slow",
+    "precio": 18.00,
+    "descripcion": "Exploración de los dos sistemas de pensamiento.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Daniel Kahneman",
+    "editorial": "Debate",
+    "numPaginas": 624
+  },
+  {
+    "nombre": "Los Miserables",
+    "precio": 25.00,
+    "descripcion": "Clásico de la literatura francesa.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Victor Hugo",
+    "editorial": "Penguin Clásicos",
+    "numPaginas": 1488
+  },
+  {
+    "nombre": "Guerra y Paz",
+    "precio": 28.90,
+    "descripcion": "Épica novela histórica rusa.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "León Tolstói",
+    "editorial": "Alianza Editorial",
+    "numPaginas": 1440
+  },
+  {
+    "nombre": "The Pragmatic Programmer",
+    "precio": 38.50,
+    "descripcion": "Consejos para desarrolladores de software efectivos.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Andrew Hunt, David Thomas",
+    "editorial": "Addison-Wesley",
+    "numPaginas": 352
+  },
+  {
+    "nombre": "American Gods",
+    "precio": 17.99,
+    "descripcion": "Fantasía moderna sobre dioses antiguos y nuevos.",
+    "categoria": { "id": 1, "nombre": "LIBRO" },
+    "tipoProducto": "LIBRO",
+    "autor": "Neil Gaiman",
+    "editorial": "Roca Editorial",
+    "numPaginas": 592
+  },
+  {
+    "nombre": "Camisa de Lino",
+    "precio": 45.00,
+    "descripcion": "Camisa ligera ideal para climas cálidos.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "M",
+    "color": "Celeste",
+    "material": "Lino"
+  },
+  {
+    "nombre": "Pantalones Cortos Deportivos",
+    "precio": 19.95,
+    "descripcion": "Shorts transpirables para ejercicio.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "L",
+    "color": "Negro",
+    "material": "Poliéster"
+  },
+  {
+    "nombre": "Calcetines de Lana (Pack 3)",
+    "precio": 15.50,
+    "descripcion": "Calcetines cálidos para invierno.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "40-43",
+    "color": "Surtido",
+    "material": "Lana/Mezcla"
+  },
+  {
+    "nombre": "Bañador Estampado",
+    "precio": 28.00,
+    "descripcion": "Traje de baño con secado rápido.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "M",
+    "color": "Azul Tropical",
+    "material": "Poliéster Reciclado"
+  },
+  {
+    "nombre": "Bufanda de Cachemira",
+    "precio": 75.00,
+    "descripcion": "Bufanda suave y lujosa.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "Única",
+    "color": "Gris Oscuro",
+    "material": "Cachemira"
+  },
+  {
+    "nombre": "Guantes de Cuero",
+    "precio": 55.90,
+    "descripcion": "Guantes elegantes con forro interior.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "L",
+    "color": "Marrón",
+    "material": "Cuero Ovino"
+  },
+  {
+    "nombre": "Sombrero Panamá",
+    "precio": 90.00,
+    "descripcion": "Sombrero clásico tejido a mano.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "58cm",
+    "color": "Natural",
+    "material": "Paja Toquilla"
+  },
+  {
+    "nombre": "Cinturón Reversible",
+    "precio": 30.00,
+    "descripcion": "Cinturón de cuero con dos colores.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "100cm",
+    "color": "Negro/Marrón",
+    "material": "Cuero"
+  },
+  {
+    "nombre": "Chaqueta Vaquera",
+    "precio": 59.95,
+    "descripcion": "Clásica chaqueta denim.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "M",
+    "color": "Azul Medio",
+    "material": "Denim Algodón"
+  },
+  {
+    "nombre": "Gabardina Clásica",
+    "precio": 150.00,
+    "descripcion": "Impermeable elegante y atemporal.",
+    "categoria": { "id": 3, "nombre": "ROPA" },
+    "tipoProducto": "ROPA",
+    "talla": "L",
+    "color": "Beige",
+    "material": "Algodón Gabardina"
+  },
+  {
+    "nombre": "Router WiFi 6 Mesh",
+    "precio": 189.99,
+    "descripcion": "Sistema de red WiFi Mesh para cobertura total.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "NetGear",
+    "modelo": "Orbi AX4200",
+    "garantia": "2 años"
+  },
+  {
+    "nombre": "Impresora Multifunción Láser",
+    "precio": 250.00,
+    "descripcion": "Imprime, escanea y copia. Conectividad WiFi.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Brother",
+    "modelo": "MFC-L2710DW",
+    "garantia": "3 años"
+  },
+  {
+    "nombre": "Teclado Inalámbrico Ergonómico",
+    "precio": 75.50,
+    "descripcion": "Teclado dividido para mayor comodidad.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Microsoft",
+    "modelo": "Sculpt Ergonomic",
+    "garantia": "1 año"
+  },
+  {
+    "nombre": "Webcam 4K Pro",
+    "precio": 199.00,
+    "descripcion": "Cámara web de alta resolución para streaming/conferencias.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Logitech",
+    "modelo": "Brio 4K",
+    "garantia": "2 años"
+  },
+  {
+    "nombre": "Tarjeta Gráfica RTX 4070",
+    "precio": 650.00,
+    "descripcion": "GPU potente para gaming y creación.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "NVIDIA",
+    "modelo": "GeForce RTX 4070",
+    "garantia": "3 años"
+  },
+  {
+    "nombre": "Robot Aspirador Inteligente",
+    "precio": 399.00,
+    "descripcion": "Aspira y friega, con mapeo láser.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Roomba",
+    "modelo": "i7+",
+    "garantia": "2 años"
+  },
+  {
+    "nombre": "Micrófono USB Condensador",
+    "precio": 120.00,
+    "descripcion": "Micrófono de calidad para podcasting y grabación.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Blue Yeti",
+    "modelo": "Yeti Standard",
+    "garantia": "1 año"
+  },
+  {
+    "nombre": "Cargador Rápido GaN 100W",
+    "precio": 49.99,
+    "descripcion": "Cargador compacto con múltiples puertos USB-C.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Anker",
+    "modelo": "737 Charger (GaNPrime 100W)",
+    "garantia": "18 meses"
+  },
+  {
+    "nombre": "NAS 2 Bahías Synology",
+    "precio": 299.00,
+    "descripcion": "Servidor de almacenamiento en red para hogar/oficina.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Synology",
+    "modelo": "DS220+",
+    "garantia": "2 años"
+  },
+  {
+    "nombre": "Barra de Sonido Dolby Atmos",
+    "precio": 349.00,
+    "descripcion": "Sistema de sonido envolvente para TV.",
+    "categoria": { "id": 2, "nombre": "ELECTRONICO" },
+    "tipoProducto": "ELECTRONICO",
+    "marca": "Sonos",
+    "modelo": "Beam (Gen 2)",
+    "garantia": "1 año"
+  }
+]
+
