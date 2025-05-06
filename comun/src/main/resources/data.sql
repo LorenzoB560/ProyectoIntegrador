@@ -12,6 +12,14 @@ VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a203', '-', '')), 'emp1@g
 INSERT INTO usuario_empleado (id, usuario, clave, intentos_sesion_fallidos, num_accesos)
 VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com', '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', 0, 0);
 
+-- CONCEPTO
+INSERT INTO concepto (id, nombre, tipo)
+VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a101', '-', '')), 'Salario base', 'INGRESO'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a102', '-', '')), 'Horas extras', 'INGRESO'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a103', '-', '')), 'Bonus productividad', 'INGRESO'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a104', '-', '')), 'IRPF', 'DEDUCCION'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a105', '-', '')), 'Seguridad Social', 'DEDUCCION'),
+       (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a106', '-', '')), 'Descuento transporte', 'DEDUCCION');
 
 -- Géneros
 INSERT INTO genero (id, genero) VALUES (1, 'Masculino');

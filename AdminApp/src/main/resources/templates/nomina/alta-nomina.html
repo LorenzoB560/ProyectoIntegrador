@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Alta de nómina</title>
+</head>
+<body>
+<h1>Alta de Nómina</h1>
+
+<form id="formulario">
+    <!-- Empleado -->
+    <label for="idEmpleado">Empleado:</label>
+    <select id="idEmpleado" name="idEmpleado">
+        <option th:each="emp : ${listaEmpleados}"
+                th:value="${emp.id}"
+                th:text="${emp.nombre}">
+        </option>
+    </select>
+    <br><br>
+
+    <!-- Mes -->
+    <label for="mes">Mes de nómina</label>
+    <select id="mes" name="mes">
+        <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
+    </select>
+
+    <!-- Año -->
+    <label for="anio">Año de nómina</label>
+    <select id="anio" name="anio">
+        <option th:each="anio : ${anios}" th:value="${anio}" th:text="${anio}"></option>
+    </select>
+    <br><br>
+
+    <!-- Conceptos -->
+    <h3>Conceptos:</h3>
+    <div id="conceptos-container">
+    </div>
+
+    <button type="button" onclick="agregarConcepto()">+ Añadir Concepto</button>
+    <br><br>
+
+    <!-- Total -->
+    <h3>Total líquido: <span id="totalLiquido">0.00</span> €</h3>
+    <input type="hidden" name="totalLiquido" id="totalLiquidoHidden">
+
+
+    <!-- Template oculto para options -->
+    <select id="concepto-template" hidden>
+        <option th:each="c : ${listaConceptos}" th:value="${c.id}" th:data-tipo="${c.tipo}"
+                th:text="${c.nombre + ' (' + c.tipo + ')'}"></option>
+    </select>
+
+
+
+
+    <button type="submit">Guardar Nómina</button>
+</form>
+
+<!-- Scripts -->
+<script src="/js/calcularTotal.js"></script>
+<script src="/js/agregarConcepto.js"></script>
+<script src="/js/enviarNomina.js"></script>
+
+</body>
+</html>
