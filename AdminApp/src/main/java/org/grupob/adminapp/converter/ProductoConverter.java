@@ -19,19 +19,19 @@ public class ProductoConverter {
 
     public ProductoDTO convertToDto(Producto producto) {
         ProductoDTO dto = modelMapper.map(producto, ProductoDTO.class);
-        if (producto instanceof Libro libro) {
-            dto.setTipoProductoNombre("Libro");
-            dto.setAutor(libro.getAutor());
-            dto.setEditorial(libro.getEditorial());
-        } else if (producto instanceof Electronico electronico) {
-            dto.setTipoProductoNombre("Electrónico");
-            dto.setMarca(electronico.getMarca());
-        } else if (producto instanceof Ropa ropa) {
-            dto.setTipoProductoNombre("Ropa");
-            dto.setMaterial(ropa.getMaterial());
-        } else {
-            dto.setTipoProductoNombre("Otro");
-        }
+//        if (producto instanceof Libro libro) {
+//            dto.setTipoProductoNombre("Libro");
+//            dto.setAutor(libro.getAutor());
+//            dto.setEditorial(libro.getEditorial());
+//        } else if (producto instanceof Electronico electronico) {
+//            dto.setTipoProductoNombre("Electrónico");
+//            dto.setMarca(electronico.getMarca());
+//        } else if (producto instanceof Ropa ropa) {
+//            dto.setTipoProductoNombre("Ropa");
+//            dto.setMaterial(ropa.getMaterial());
+//        } else {
+//            dto.setTipoProductoNombre("Otro");
+//        }
         return dto;
     }
     }
