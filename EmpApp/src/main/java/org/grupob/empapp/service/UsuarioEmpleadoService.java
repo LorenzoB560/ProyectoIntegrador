@@ -7,7 +7,7 @@ public interface UsuarioEmpleadoService {
     LoginUsuarioEmpleadoDTO devuelveUsuarioEmpPorUsuario(String usuario);
     Boolean validarEmail(String correo);
      Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto);
-     void actualizarEstadisticasAcceso(UsuarioEmpleado usuario);
+     void actualizarEstadisticasAcceso(LoginUsuarioEmpleadoDTO dto);
      void manejarIntentoFallido(UsuarioEmpleado usuario);
 
 }

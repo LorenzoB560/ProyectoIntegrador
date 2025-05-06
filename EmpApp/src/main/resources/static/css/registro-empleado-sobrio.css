@@ -1,0 +1,36 @@
+a img,
+img#resumen {
+    width: 50px;
+    height: auto;
+    opacity: 0.5;
+}
+
+
+#body-personales img,
+#body-contacto img,
+#body-profesionales img,
+#body-economicos img,
+#body-resumen img {
+    opacity: 0.5; /* Reafirmamos la opacidad por defecto */
+    width: 50px;
+    height: auto;
+}
+
+
+#body-personales #datos-personales img,
+#body-contacto #datos-contacto img,
+#body-profesionales #datos-profesionales img,
+#body-economicos #datos-economicos img,
+#body-resumen img#resumen {
+    opacity: 1;
+}
+
+.error{
+    color: red;
+    font-weight: bold;
+}
+.asterisco {
+    color: red;
+    font-weight: bold;
+    margin-right: 5px;
+}

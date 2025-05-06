@@ -37,10 +37,18 @@ public class EmpleadoController {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
 
+        if(dto==null){
+            return "redirect:/empapp/login";
+        }
+
         modelo.addAttribute("dto", dto);
-        Map<String, Integer> usuariosAutenticados = (cookieService.validar(usuariosCookie))
-                ? cookieService.deserializar(usuariosCookie) : null;
-        int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
+
+        int contador = cookieService.obtenerInicios(usuariosCookie,ultimoUsuario);
+
+        modelo.addAttribute("contador", contador);
+        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+        modelo.addAttribute("ultimaPagina", ultimaPagina);
+
         return "listados/detalle-vista-emp";
     }
 }

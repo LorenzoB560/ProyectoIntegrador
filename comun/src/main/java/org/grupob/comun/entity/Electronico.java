@@ -6,12 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("ELECTRONICO")
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class Electronico extends Producto {
 
     private String marca;
