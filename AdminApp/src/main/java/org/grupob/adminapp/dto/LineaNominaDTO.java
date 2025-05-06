@@ -13,5 +13,6 @@ import java.util.UUID;
 public class LineaNominaDTO {
 
     private UUID idConcepto;
+    private String nombreConcepto;
     private BigDecimal cantidad;
 }

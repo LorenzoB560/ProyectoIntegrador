@@ -77,6 +77,8 @@ VALUES (4, 'Italia', '+39', 'IT');
 INSERT INTO pais (id, pais, prefijo, codigo)
 VALUES (5, 'Rumanía', '+40', 'RO');
 
+-- INSERT INTO nomina(id )
+
 -- Tipos de vía
 INSERT INTO tipo_via (id, tipo_via)
 VALUES (1, 'Calle');

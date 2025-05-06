@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/adminapp")
+@RequestMapping("/nomina")
 public class AltaNominaController {
 
     private final AltaNominaServiceImp altaNominaServiceImp;
@@ -33,7 +33,7 @@ public class AltaNominaController {
         modelo.addAttribute("listaConceptos", altaNominaServiceImp.devolverConcepto());
     }
 
-    @GetMapping("/alta-nomina")
+    @GetMapping("/alta")
     public String altaNomina(Model model) {
 
         AltaNominaDTO altaNominaDTO = new AltaNominaDTO();
