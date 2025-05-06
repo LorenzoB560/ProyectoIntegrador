@@ -251,6 +251,26 @@ INSERT INTO empleado_especialidad (id_empleado, id_especialidad) VALUES (UNHEX(R
 INSERT INTO empleado_especialidad (id_empleado, id_especialidad) VALUES (UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), UNHEX(REPLACE('b2c3d4e5-f6a7-5b6c-9d0e-1f2a3b4c5d6e', '-', '')));
 INSERT INTO empleado_especialidad (id_empleado, id_especialidad) VALUES (UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), UNHEX(REPLACE('d4e5f6a7-b8c9-7d0e-1f2a-3b4c5d6e7f8a', '-', '')));
 
+--NOMINA
+
+INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
+VALUES (UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')),
+        UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 10, 2025, 1100);
+
+--LINEA DE NOMINA
+
+INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+VALUES
+    (UNHEX(REPLACE('11111111-0000-0000-0000-000000000001', '-', '')), UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a105', '-', '')), UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 150.00),
+    (UNHEX(REPLACE('11111111-0000-0000-0000-000000000002', '-', '')), UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a106', '-', '')), UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 25.00),
+    (UNHEX(REPLACE('11111111-0000-0000-0000-000000000003', '-', '')), UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a102', '-', '')), UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 50.00),
+    (UNHEX(REPLACE('11111111-0000-0000-0000-000000000004', '-', '')), UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a104', '-', '')), UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 500.00),
+    (UNHEX(REPLACE('11111111-0000-0000-0000-000000000005', '-', '')), UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a103', '-', '')), UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 60.00),
+    (UNHEX(REPLACE('11111111-0000-0000-0000-000000000006', '-', '')), UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a101', '-', '')), UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 1500.00);
+
+
+
+
 -- Establecimiento de la estructura jerárquica de jefes (No requiere cambios en la lógica, ya que usa los IDs de empleado)
 -- Establecer jefes de departamento que reportan al CEO (Vicente Palma)
 UPDATE empleado SET id_jefe = UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')) WHERE id IN (UNHEX(REPLACE('88ad5d0c-7919-4edb-a7f5-fd07cb8ba81e', '-', '')), UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')));

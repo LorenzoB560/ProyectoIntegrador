@@ -13,6 +13,7 @@
   <table class="table table-bordered table-hover shadow-sm bg-white">
     <thead class="table-primary text-center">
     <tr>
+      <th>Id</th>
       <th>Empleado</th>
       <th>Mes</th>
       <th>Año</th>
@@ -23,7 +24,8 @@
     </thead>
     <tbody>
     <tr th:each="nomina : ${listaNominas}">
-      <td th:text="${nomina.id}">Nombre del empleado</td>
+      <td th:text="${nomina.id}">Id</td>
+      <td th:text="${nomina.nombre}">Nombre del empleado</td>
       <td th:text="${nomina.mes}">Mes</td>
       <td th:text="${nomina.anio}">Año</td>
       <td th:text="${#numbers.formatDecimal(nomina.totalLiquido, 1, 'COMMA', 2, 'POINT')} + ' €'">0,00 €</td>
@@ -31,7 +33,7 @@
         <ul class="mb-0">
           <li th:each="c : ${nomina.lineaNominas}">
             <span th:text="${c.nombreConcepto}"></span>
-            <span th:text="${#numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>)
+            <span th:text="${' =' + #numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
           </li>
         </ul>
       </td>
