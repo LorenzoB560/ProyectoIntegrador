@@ -420,3 +420,134 @@ VALUES (
            'Azul oscuro',
            'Denim'
        );
+-- Libro 3
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'El Hobbit', 18.50, 'Precuela de El Señor de los Anillos', @libro_cat_id, 'LIBRO');
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (@producto_uuid, 'J.R.R. Tolkien', 'Minotauro', 310);
+
+-- Libro 4
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Matar un ruiseñor', 17.99, 'Clásico sobre justicia y racismo', @libro_cat_id, 'LIBRO');
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (@producto_uuid, 'Harper Lee', 'HarperCollins', 281);
+
+-- Libro 5
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Donde viven los monstruos', 14.50, 'Libro infantil ilustrado', @libro_cat_id, 'LIBRO');
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (@producto_uuid, 'Maurice Sendak', 'Kalandraka', 48);
+
+-- Libro 6
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Fahrenheit 451', 16.75, 'Distopía sobre la quema de libros', @libro_cat_id, 'LIBRO');
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (@producto_uuid, 'Ray Bradbury', 'Debolsillo', 158);
+
+-- Libro 7
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Orgullo y Prejuicio', 15.00, 'Clásico de la literatura inglesa', @libro_cat_id, 'LIBRO');
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (@producto_uuid, 'Jane Austen', 'Penguin Clásicos', 480);
+
+-- === Electrónicos Adicionales ===
+
+-- Electrónico 3
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Auriculares NoiseFree', 129.99, 'Cancelación activa de ruido premium', @electronico_cat_id, 'ELECTRONICO');
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (@producto_uuid, 'SoundWave', 'NF-3000', '1 año');
+
+-- Electrónico 4
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Monitor Curvo 34"', 450.00, 'Monitor ultrapanorámico para gaming', @electronico_cat_id, 'ELECTRONICO');
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (@producto_uuid, 'ViewMax', 'VM-C34WQ', '3 años');
+
+-- Electrónico 5
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Teclado Mecánico RGB', 85.50, 'Teclado gaming retroiluminado', @electronico_cat_id, 'ELECTRONICO');
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (@producto_uuid, 'ClickKeys', 'MK-RGB-Pro', '2 años');
+
+-- Electrónico 6
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Webcam ProStream', 65.00, 'Cámara web Full HD para streaming', @electronico_cat_id, 'ELECTRONICO');
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (@producto_uuid, 'CamLink', 'StreamerX', '1 año');
+
+-- Electrónico 7
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Disco Duro Externo 2TB', 75.99, 'Almacenamiento portátil USB 3.0', @electronico_cat_id, 'ELECTRONICO');
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (@producto_uuid, 'DataStore', 'PortableHD-2T', '2 años');
+
+-- === Ropa Adicional ===
+
+-- Ropa 3
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Polo Clásico Piqué', 34.99, 'Polo de algodón piqué', @ropa_cat_id, 'ROPA');
+INSERT INTO ropa (id, talla, color, material)
+VALUES (@producto_uuid, 'L', 'Blanco', 'Algodón Piqué');
+
+-- Ropa 4
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Bermudas Cargo', 45.00, 'Pantalón corto con bolsillos laterales', @ropa_cat_id, 'ROPA');
+INSERT INTO ropa (id, talla, color, material)
+VALUES (@producto_uuid, 'M', 'Beige', 'Algodón Ripstop');
+
+-- Ropa 5
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Vestido de Lino', 69.90, 'Vestido fresco de verano', @ropa_cat_id, 'ROPA');
+INSERT INTO ropa (id, talla, color, material)
+VALUES (@producto_uuid, 'S', 'Verde Oliva', 'Lino');
+
+-- Ropa 6
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Chaqueta Bomber', 79.99, 'Chaqueta ligera estilo bomber', @ropa_cat_id, 'ROPA');
+INSERT INTO ropa (id, talla, color, material)
+VALUES (@producto_uuid, 'XL', 'Negro', 'Nylon');
+
+-- Ropa 7
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Jersey Cuello Pico Lana', 95.00, 'Jersey fino de lana merino', @ropa_cat_id, 'ROPA');
+INSERT INTO ropa (id, talla, color, material)
+VALUES (@producto_uuid, 'M', 'Gris Jaspeado', 'Lana Merino');
+
+-- === Mixto Adicional ===
+
+-- Libro 8
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Crónica de una muerte anunciada', 14.00, 'Novela corta sobre un asesinato inevitable', @libro_cat_id, 'LIBRO');
+INSERT INTO libro (id, autor, editorial, num_paginas)
+VALUES (@producto_uuid, 'Gabriel García Márquez', 'Bruguera', 128);
+
+-- Electrónico 8
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Ratón Inalámbrico Ergo', 35.50, 'Ratón ergonómico para oficina', @electronico_cat_id, 'ELECTRONICO');
+INSERT INTO electronico (id, marca, modelo, garantia)
+VALUES (@producto_uuid, 'ClickWell', 'ErgoMouse-W', '18 meses');
+
+-- Ropa 8
+SET @producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
+VALUES (@producto_uuid, 'Calcetines Deportivos (Pack 3)', 12.95, 'Pack de 3 pares de calcetines técnicos', @ropa_cat_id, 'ROPA');
+INSERT INTO ropa (id, talla, color, material)
+VALUES (@producto_uuid, '42-45', 'Multicolor', 'Poliéster/Elastano');
