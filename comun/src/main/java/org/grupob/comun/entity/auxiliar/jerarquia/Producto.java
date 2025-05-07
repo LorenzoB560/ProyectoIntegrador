@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.maestras.Categoria;
+import org.grupob.comun.entity.maestras.Proveedor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -22,16 +25,33 @@ public abstract class Producto {
     private UUID id;
 
     @Column(nullable = false)
-    private String nombre;
+    private String descripcion;
 
     @Column(nullable = false)
     private BigDecimal precio;
 
-    @Column(nullable = false)
-    private String descripcion;
+    private String marca;
+
+    @ManyToMany
+    @JoinTable(name="producto_categoria",
+            joinColumns = @JoinColumn(name = "id_producto"),
+            inverseJoinColumns = @JoinColumn(name = "id_categoria")
+    )
+    private Set<Categoria> categoria;
+
+    private Boolean segundaMano;
+
+    private Integer unidades;
 
     @ManyToOne
-    @JoinColumn(name = "id_categoria")
-    private Categoria categoria;
+    private Proveedor proveedor;
+
+    @JoinTable(name="fecha_alta")
+    private LocalDate fechaAlta;
+
+    private Integer valoracion;
+
+
+
 }
 

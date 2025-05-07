@@ -1,23 +1,16 @@
 package org.grupob.empapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.Predicate; // Necesario para Specifications
 import org.grupob.empapp.converter.ProductoConverter;
 import org.grupob.empapp.dto.ProductoDTO;
-import org.grupob.comun.entity.Libro; // Importar subclases
-import org.grupob.comun.entity.Electronico;
-import org.grupob.comun.entity.Ropa;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.empapp.dto.ProductoSearchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.domain.Specification; // Necesario
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils; // Para verificar Strings no vacíos
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;

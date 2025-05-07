@@ -1,8 +1,5 @@
 package org.grupob.adminapp.converter;
 
-import org.grupob.comun.entity.Electronico;
-import org.grupob.comun.entity.Libro;
-import org.grupob.comun.entity.Ropa;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.adminapp.dto.ProductoDTO;
 import org.modelmapper.ModelMapper;

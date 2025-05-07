@@ -1,12 +1,9 @@
 package org.grupob.empapp.converter;
 
 import org.grupob.comun.entity.Electronico;
-import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Libro;
-import org.grupob.comun.entity.Ropa;
+import org.grupob.comun.entity.Mueble;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
-import org.grupob.empapp.dto.AltaEmpleadoDTO;
-import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.ProductoDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -29,7 +26,7 @@ public class ProductoConverter {
         } else if (producto instanceof Electronico electronico) {
             dto.setTipoProductoNombre("Electrónico");
             dto.setMarca(electronico.getMarca());
-        } else if (producto instanceof Ropa ropa) {
+        } else if (producto instanceof Mueble ropa) {
             dto.setTipoProductoNombre("Ropa");
             dto.setMaterial(ropa.getMaterial());
         } else {

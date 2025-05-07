@@ -2,13 +2,11 @@ package org.grupob.comun.repository;
 
 import org.grupob.comun.entity.Electronico;
 import org.grupob.comun.entity.Libro;
-import org.grupob.comun.entity.Ropa;
+import org.grupob.comun.entity.Mueble;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -56,11 +54,11 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
             Pageable pageable);
 
     // --- Consulta Específica para Producto3 (Ropa) ---
-    @Query("SELECT p3 FROM Ropa p3 WHERE " +
+    @Query("SELECT p3 FROM Mueble p3 WHERE " +
             "(:nombre IS NULL OR LOWER(p3.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
             "(:precio IS NULL OR p3.precio = :precio)")
     // Añadir filtros específicos de Producto3 si es necesario
-    Page<Ropa> buscarRopaPaginado(
+    Page<Mueble> buscarRopaPaginado(
             @Param("nombre") String nombre,
             @Param("precio") Double precio,
             // @Param("material") String material, // <-- Ejemplo
