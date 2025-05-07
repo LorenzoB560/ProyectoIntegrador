@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID; // Importa UUID
 
 @Repository
@@ -23,6 +24,9 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
     @Query("DELETE FROM Producto p WHERE p IN " +
             "(SELECT p2 FROM Producto p2 JOIN p2.categoria c WHERE c.id = :categoriaId)")
     void deleteByCategoriaId(@Param("categoriaId") Long categoriaId);
+
+    @Query("SELECT p FROM Producto p WHERE TYPE(p) = :clase")
+    <T extends Producto> List<T> findByType(@Param("clase") Class<T> clase);
 
 
 /*; // --- Consulta Base (solo campos comunes) ---

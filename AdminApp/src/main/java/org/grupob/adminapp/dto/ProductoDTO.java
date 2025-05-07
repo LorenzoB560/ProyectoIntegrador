@@ -3,21 +3,24 @@ package org.grupob.adminapp.dto;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.adminapp.dto.grupoValidaciones.ProveedorDTO;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "tipoProducto")
-@JsonSubTypes({
-        @Type(value = LibroDTO.class, name = "LIBRO"),
-        @Type(value = ElectronicoDTO.class, name = "ELECTRONICO"),
-        @Type(value = RopaDTO.class, name = "ROPA")
-})
+@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
+/*@JsonSubTypes({ Recomendable ponerlo de cara a seguridad pero no es obligatorio
+        @Type(LibroDTO.class),
+        @Type(ElectronicoDTO.class),
+        @Type(RopaDTO.class)
+        @Type(MuebleDTO.class)
+})*/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,22 +28,31 @@ public class ProductoDTO {
 
     private UUID id;
 
-    @NotBlank
-    private String nombre;
-
-    @DecimalMin("0.01")
-    private BigDecimal precio;
-
-    @NotBlank
+    @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
 
-    @NotBlank
-    private CategoriaDTO categoria;
+    @NotNull(message = "El precio es obligatorio")
+    @DecimalMin(value = "0.01", inclusive = false, message = "El precio debe ser mayor que 0")
+    private BigDecimal precio;
 
-    public ProductoDTO(String nombre, BigDecimal precio, String descripcion, CategoriaDTO categoria) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.descripcion = descripcion;
-        this.categoria = categoria;
-    }
+    private String marca;
+
+    @NotNull(message = "Las categorías son obligatorias")
+    @Size(min = 1, message = "Debe haber al menos una categoría")
+    private Set<@NotBlank(message = "El nombre de la categoría no puede estar vacío") String> categorias;
+
+    private Boolean segundaMano;
+
+    @NotNull(message = "Las unidades son obligatorias")
+    @Min(value = 1, message = "Las unidades deben ser mayores que 0")
+    private Integer unidades;
+
+    @NotNull(message = "La fecha de fabricación es obligatoria")
+    @Past(message = "La fecha de fabricación debe ser pasada")
+    private LocalDate fechaFabricacion;
+
+    @NotBlank(message = "El nombre del proveedor es obligatorio")
+    private String proveedor;
+
+
 }
