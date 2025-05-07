@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.temporal.TemporalAccessor;
 import java.util.UUID;
 
 @Repository
@@ -17,5 +18,4 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
     @Modifying
     @Query("UPDATE Nomina n SET n.totalLiquido = :nuevoTotal WHERE n.id = :idNomina")
     void updateTotalLiquido(@Param("idNomina") UUID idNomina, @Param("nuevoTotal") BigDecimal nuevoTotal);
-
 }

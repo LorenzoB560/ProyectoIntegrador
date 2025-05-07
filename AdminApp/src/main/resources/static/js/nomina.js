@@ -13,7 +13,11 @@ $(document).ready(function () {
                 location.reload();  // Actualiza la vista con los nuevos datos
             },
             error: function (xhr) {
-                alert("Error al eliminar el concepto.");
+                // Comprueba si la respuesta tiene un mensaje de error específico
+                const errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : "Error al eliminar el concepto.";  // Mensaje por defecto si no hay mensaje específico
+                alert(errorMessage);
                 console.error(xhr);
             }
         });

@@ -11,9 +11,12 @@ import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -64,6 +67,15 @@ public class NominaServiceImp implements NominaService{
     }
     @Transactional
     public void eliminarConcepto(UUID idNomina, UUID idConcepto) {
+        Optional<Nomina> nomina = nominaRepository.findById(idNomina);
+        if (nomina.isPresent()) {
+            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
+            YearMonth mesActual = YearMonth.now();
+            if (mesNomina.isBefore(mesActual)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
+            }
+        }
+
         lineaNominaRepository.deleteLineaNominaByConceptoId(idConcepto);
 
         BigDecimal totalIngresos = lineaNominaRepository.getTotalIngresos(idNomina);

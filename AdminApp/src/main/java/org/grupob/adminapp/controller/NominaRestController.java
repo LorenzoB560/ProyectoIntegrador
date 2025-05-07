@@ -23,14 +23,13 @@ public class NominaRestController {
 
     @DeleteMapping("/eliminar-concepto/{idNomina}/{idConcepto}")
     public ResponseEntity<Void> eliminarConcepto(@PathVariable UUID idNomina, @PathVariable UUID idConcepto) {
-        try {
-            nominaServiceImp.eliminarConcepto(idNomina, idConcepto);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar el concepto", e);
-        }
-    }
+//        try {
+//        } catch (EntityNotFoundException e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al eliminar el concepto", e);
 
+        nominaServiceImp.eliminarConcepto(idNomina, idConcepto);
+        return ResponseEntity.noContent().build();
+    }
 }
