@@ -20,10 +20,12 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
 
     // Elimina por categoría usando JPQL
     @Modifying
-    @Query("DELETE FROM Producto p WHERE p.categoria.id = :categoriaId")
+    @Query("DELETE FROM Producto p WHERE p IN " +
+            "(SELECT p2 FROM Producto p2 JOIN p2.categoria c WHERE c.id = :categoriaId)")
     void deleteByCategoriaId(@Param("categoriaId") Long categoriaId);
 
-; // --- Consulta Base (solo campos comunes) ---
+
+/*; // --- Consulta Base (solo campos comunes) ---
     @Query("SELECT p FROM Producto p WHERE " +
             "(:nombre IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
             "(:precio IS NULL OR p.precio = :precio)")
@@ -63,4 +65,5 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
             @Param("precio") Double precio,
             // @Param("material") String material, // <-- Ejemplo
             Pageable pageable);
+*/
 }

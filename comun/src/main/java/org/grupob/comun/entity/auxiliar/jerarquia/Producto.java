@@ -43,6 +43,9 @@ public abstract class Producto {
 
     private Integer unidades;
 
+    @JoinColumn(name="fecha_fabricacion")
+    private LocalDate fechaFabricacion;
+
     @ManyToOne
     private Proveedor proveedor;
 

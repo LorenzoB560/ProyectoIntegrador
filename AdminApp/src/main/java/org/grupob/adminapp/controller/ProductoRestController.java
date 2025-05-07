@@ -53,7 +53,7 @@ public class ProductoRestController {
                     .body("Error al obtener detalles del producto.");
         }
     }
-    @GetMapping("/listado")
+   /* @GetMapping("/listado")
     public ResponseEntity<Page<ProductoDTO>> listarProductos(
             ProductoSearchDTO searchParams, // <-- Recibe el DTO (Spring mapea params URL a campos)
             @RequestParam(defaultValue = "0") int page,
@@ -71,7 +71,7 @@ public class ProductoRestController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
+    }*/
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable UUID id) {
         // Aquí podrías añadir @PreAuthorize("hasRole('ADMIN')") si usas Spring Security

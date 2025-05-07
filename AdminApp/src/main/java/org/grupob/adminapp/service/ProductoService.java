@@ -11,8 +11,8 @@ public interface ProductoService {
     List<ProductoDTO> listarProductos();
     ProductoDTO devuelveProducto(UUID id);
 
-    Page<ProductoDTO> buscarProductosPaginados(
+    /*Page<ProductoDTO> buscarProductosPaginados(
             ProductoSearchDTO searchParams, // <-- Usar el DTO
-            int page, int size, String sortBy, String sortDir);
+            int page, int size, String sortBy, String sortDir);*/
     void eliminarProducto(UUID id);
 }

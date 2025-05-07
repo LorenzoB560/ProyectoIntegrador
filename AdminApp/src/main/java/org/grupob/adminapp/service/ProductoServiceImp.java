@@ -47,7 +47,7 @@ public class ProductoServiceImp implements ProductoService {
         return dtos;
     }
 
-    @Override
+    /*@Override
     public Page<ProductoDTO> buscarProductosPaginados(
             ProductoSearchDTO searchParams,
             int page, int size, String sortBy, String sortDir) {
@@ -71,13 +71,13 @@ public class ProductoServiceImp implements ProductoService {
         if (StringUtils.hasText(tipo) && !tipo.equalsIgnoreCase("Todos")) {
             if (tipo.equalsIgnoreCase("Libro")) {
                 // Llamar query específica para Producto1
-                productoPage = productoRepository.buscarLibroPaginado(nombre, precio, /* otros filtros específicos si hay, */ pageable);
+                productoPage = productoRepository.buscarLibroPaginado(nombre, precio, *//* otros filtros específicos si hay, *//* pageable);
             } else if (tipo.equalsIgnoreCase("Electrónico")) {
                 // Llamar query específica para Producto2
-                productoPage = productoRepository.buscarElectronicoPaginado(nombre, precio, /* otros filtros específicos si hay, */ pageable);
+                productoPage = productoRepository.buscarElectronicoPaginado(nombre, precio, *//* otros filtros específicos si hay, *//* pageable);
             } else if (tipo.equalsIgnoreCase("Ropa")) {
                 // Llamar query específica para Producto3
-                productoPage = productoRepository.buscarRopaPaginado(nombre, precio, /* otros filtros específicos si hay, */ pageable);
+                productoPage = productoRepository.buscarRopaPaginado(nombre, precio, *//* otros filtros específicos si hay, *//* pageable);
             } else {
                 // Tipo desconocido, devolver vacío o lanzar error? Devolvemos vacío.
                 productoPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
@@ -92,7 +92,7 @@ public class ProductoServiceImp implements ProductoService {
         // El converter se encarga de manejar los distintos tipos de Producto
         return productoPage.map(productoConverter::convertToDto);
     }
-
+*/
     @Override
     @Transactional // Asegura atomicidad en la operación de borrado
     public void eliminarProducto(UUID id) {

@@ -23,12 +23,11 @@ public class Ropa extends Producto {
 
     @ManyToMany
     @JoinTable(name="ropa_talla",
-            joinColumns = @JoinColumn(name = "id_ropa"),
+            joinColumns = @JoinColumn(name = "id_producto"),
             inverseJoinColumns = @JoinColumn(name = "id_talla")
     )
     private List<Talla> tallas;
     private String material;
-    @JoinColumn(name="fecha_fabricacion")
-    private LocalDate fechaFabricacion;
+
 
 }
