@@ -40,32 +40,18 @@ public class NominaRestController {
 
     @GetMapping("/descargar-pdf/{id}")
     public ResponseEntity<byte[]> descargarPdf(@PathVariable UUID id) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            NominaDTO nomina = nominaServiceImp.devolverNominaPorId(id);
-
-            Document document = new Document();
-            PdfWriter.getInstance(document, out);
-            document.open();
-            document.add(new Paragraph("Nómina de: " + nomina.getNombre()));
-            document.add(new Paragraph("Mes: " + nomina.getMes() + " / Año: " + nomina.getAnio()));
-            document.add(new Paragraph(" "));
-
-            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
-                document.add(new Paragraph(linea.getNombreConcepto() + " - " + linea.getCantidad() + " €"));
-            }
-
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("Total líquido: " + nomina.getTotalLiquido() + " €"));
-            document.close();
+            byte[] pdfBytes = nominaServiceImp.generarPdfNomina(id);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("filename", "nomina_" + id + ".pdf");
-            return new ResponseEntity<>(out.toByteArray(), headers, HttpStatus.OK);
+            headers.setContentDispositionFormData("attachment", "nomina_" + id + ".pdf");
+
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No se pudo generar el PDF", e);
         }
     }
+
 
 }

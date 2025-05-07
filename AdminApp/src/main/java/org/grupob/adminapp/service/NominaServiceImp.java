@@ -1,8 +1,12 @@
 package org.grupob.adminapp.service;
 
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.grupob.adminapp.converter.NominaConverter;
+import org.grupob.adminapp.dto.LineaNominaDTO;
 import org.grupob.adminapp.dto.NominaDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
@@ -15,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;
@@ -102,5 +107,55 @@ public class NominaServiceImp implements NominaService{
         nominaRepository.updateTotalLiquido(idNomina, totalLiquido);
     }
 
+    public byte[] generarPdfNomina(UUID idNomina) {
+        try {
+            NominaDTO nomina = devolverNominaPorId(idNomina);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            Document document = new Document();
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            // Título
+            Font tituloFont = new Font(Font.HELVETICA, 16, Font.BOLD);
+            Paragraph titulo = new Paragraph("NÓMINA", tituloFont);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo);
+            document.add(Chunk.NEWLINE);
+
+            // Datos generales
+            document.add(new Paragraph("Empleado: " + nomina.getNombre()));
+            document.add(new Paragraph("Mes: " + nomina.getMes() + " / Año: " + nomina.getAnio()));
+            document.add(Chunk.NEWLINE);
+
+            // Tabla de conceptos
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10);
+            table.setSpacingAfter(10);
+
+            Font encabezado = new Font(Font.HELVETICA, 12, Font.BOLD);
+            table.addCell(new Phrase("Concepto", encabezado));
+            table.addCell(new Phrase("Cantidad (€)", encabezado));
+
+            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
+                table.addCell(linea.getNombreConcepto());
+                table.addCell(String.format("%.2f", linea.getCantidad()));
+            }
+
+            document.add(table);
+
+            // Total
+            Paragraph total = new Paragraph("Total líquido: " + String.format("%.2f", nomina.getTotalLiquido()) + " €");
+            total.setAlignment(Element.ALIGN_RIGHT);
+            document.add(total);
+
+            document.close();
+            return out.toByteArray();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar el PDF de la nómina", e);
+        }
+    }
 
 }
