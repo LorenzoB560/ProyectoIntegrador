@@ -1,18 +1,22 @@
 package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.grupob.adminapp.converter.NominaConverter;
 import org.grupob.adminapp.dto.NominaDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
+import org.grupob.comun.repository.ConceptoRepository;
 import org.grupob.comun.repository.EmpleadoRepository;
+import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class NominaServiceImp implements NominaService{
@@ -20,11 +24,15 @@ public class NominaServiceImp implements NominaService{
     private final NominaRepository nominaRepository;
     private final NominaConverter nominaConverter;
     private final EmpleadoRepository empleadoRepository;
+    private final LineaNominaRepository lineaNominaRepository;
+    private final ConceptoRepository conceptoRepository;
 
-    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository) {
+    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository, LineaNominaRepository lineaNominaRepository, ConceptoRepository conceptoRepository) {
         this.nominaRepository = nominaRepository;
         this.nominaConverter = nominaConverter;
         this.empleadoRepository = empleadoRepository;
+        this.lineaNominaRepository = lineaNominaRepository;
+        this.conceptoRepository = conceptoRepository;
     }
     public NominaDTO devolverNominaPorId(UUID id){
         Optional<Nomina> nomina = nominaRepository.findById(id);
@@ -54,5 +62,16 @@ public class NominaServiceImp implements NominaService{
         System.out.println(nominasDTO);
         return nominasDTO;
     }
+    @Transactional
+    public void eliminarConcepto(UUID idNomina, UUID idConcepto) {
+        lineaNominaRepository.deleteLineaNominaByConceptoId(idConcepto);
+
+        BigDecimal totalIngresos = lineaNominaRepository.getTotalIngresos(idNomina);
+        BigDecimal totalDeducciones = lineaNominaRepository.getTotalDeducciones(idNomina);
+        BigDecimal totalLiquido = totalIngresos.subtract(totalDeducciones);
+
+        nominaRepository.updateTotalLiquido(idNomina, totalLiquido);
+    }
+
 
 }

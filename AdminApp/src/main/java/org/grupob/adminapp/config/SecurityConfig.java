@@ -1,4 +1,4 @@
-//package org.grupob.empapp.config;
+//package org.grupob.adminapp.config;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;

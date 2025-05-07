@@ -32,7 +32,7 @@ public class NominaController {
     }
 
     @GetMapping("/detalle/{id}")
-    public String vistaDetalleProducto(@PathVariable UUID id, Model model) {
+    public String vistaDetalleNomina(@PathVariable UUID id, Model model) {
 
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
         model.addAttribute("nominaDTO", nominaServiceImp.devolverNominaPorId(id));
