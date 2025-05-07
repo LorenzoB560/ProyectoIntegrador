@@ -36,13 +36,13 @@ public class ProductoServiceImp implements ProductoService {
     public ProductoDTO devuelveProducto(UUID id) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con ID: " + id));
-        return productoConverter.convertToDto(producto);
+        return productoConverter.entityToDTO(producto);
     }
     @Override
     public List<ProductoDTO> listarProductos() { // Cambiado a ResponseEntity<List<ProductoDTO> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
         List<ProductoDTO> dtos = productos.stream()
-                .map(productoConverter::convertToDto)
+                .map(productoConverter::entityToDTO)
                 .toList();
         return dtos;
     }

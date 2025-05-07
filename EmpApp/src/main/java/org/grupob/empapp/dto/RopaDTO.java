@@ -1,8 +1,13 @@
-package org.grupob.adminapp.dto;
+package org.grupob.empapp.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.grupob.empapp.dto.ProductoDTO;
+import org.grupob.empapp.dto.TallaDTO;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

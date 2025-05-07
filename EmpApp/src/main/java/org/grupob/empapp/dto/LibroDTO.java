@@ -1,4 +1,4 @@
-package org.grupob.adminapp.dto;
+package org.grupob.empapp.dto;
 
 
 import jakarta.validation.constraints.Min;

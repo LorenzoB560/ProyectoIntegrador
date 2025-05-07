@@ -42,23 +42,23 @@ public class ProductoRestController {
                     .body("Error al obtener detalles del producto.");
         }
     }
-    @GetMapping("/listado")
-    public ResponseEntity<Page<ProductoDTO>> listarProductos(
-            ProductoSearchDTO searchParams, // <-- Recibe el DTO (Spring mapea params URL a campos)
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "nombre") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-
-        try {
-            // Llama al servicio pasando el DTO
-            Page<ProductoDTO> productosPaginados = productoService.buscarProductosPaginados(
-                    searchParams, page, size, sortBy, sortDir);
-            return ResponseEntity.ok(productosPaginados);
-        } catch (Exception e) {
-            System.err.println("Error al listar productos: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+//    @GetMapping("/listado")
+//    public ResponseEntity<Page<ProductoDTO>> listarProductos(
+//            ProductoSearchDTO searchParams, // <-- Recibe el DTO (Spring mapea params URL a campos)
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(defaultValue = "nombre") String sortBy,
+//            @RequestParam(defaultValue = "asc") String sortDir) {
+//
+//        try {
+//            // Llama al servicio pasando el DTO
+//            Page<ProductoDTO> productosPaginados = productoService.buscarProductosPaginados(
+//                    searchParams, page, size, sortBy, sortDir);
+//            return ResponseEntity.ok(productosPaginados);
+//        } catch (Exception e) {
+//            System.err.println("Error al listar productos: " + e.getMessage());
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 }
