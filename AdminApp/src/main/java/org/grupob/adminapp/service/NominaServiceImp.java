@@ -66,6 +66,23 @@ public class NominaServiceImp implements NominaService{
         return nominasDTO;
     }
     @Transactional
+    public void eliminarNomina(UUID idNomina){
+        Optional<Nomina> nomina = nominaRepository.findById(idNomina);
+        if (nomina.isPresent()) {
+
+            //Verificar que la nómina no sea pasada
+            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
+            YearMonth mesActual = YearMonth.now();
+            if (mesNomina.isBefore(mesActual)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
+            }
+            nominaRepository.delete(nomina.get());
+        } else {
+            throw new EntityNotFoundException("La nomina seleccionada no existe");
+        }
+    }
+
+    @Transactional
     public void eliminarConcepto(UUID idNomina, UUID idConcepto) {
         Optional<Nomina> nomina = nominaRepository.findById(idNomina);
         if (nomina.isPresent()) {
