@@ -1,4 +1,4 @@
-package org.grupob.adminapp.dto;
+package org.grupob.adminapp.dto.masiva;
 
 
 import jakarta.validation.constraints.DecimalMin;
@@ -12,13 +12,12 @@ import lombok.NoArgsConstructor;
 import org.grupob.adminapp.dto.auxiliar.DimensionDTO;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ElectronicoDTO extends ProductoDTO {
+public class ElectronicoCargaDTO extends ProductoCargaDTO {
     @NotBlank(message = "El modelo es obligatorio")
     private String modelo;
 

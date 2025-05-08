@@ -1,4 +1,4 @@
-package org.grupob.adminapp.dto;
+package org.grupob.adminapp.dto.masiva;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MuebleDTO extends ProductoDTO {
+public class MuebleCargaDTO extends ProductoCargaDTO {
 
     @NotBlank(message = "El material es obligatorio")
     private String material;

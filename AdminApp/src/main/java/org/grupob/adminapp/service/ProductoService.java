@@ -1,15 +1,13 @@
 package org.grupob.adminapp.service;
-import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
-import org.springframework.data.domain.Page;
+import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ProductoService {
 
-    List<ProductoDTO> listarProductos();
-    ProductoDTO devuelveProducto(UUID id);
+    List<ProductoCargaDTO> listarProductos();
+    ProductoCargaDTO devuelveProducto(UUID id);
 
     /*Page<ProductoDTO> buscarProductosPaginados(
             ProductoSearchDTO searchParams, // <-- Usar el DTO

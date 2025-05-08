@@ -5,16 +5,11 @@ import jakarta.transaction.Transactional;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.adminapp.converter.ProductoConverter;
-import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
-import org.grupob.adminapp.service.ProductoService;
+import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,15 +28,15 @@ public class ProductoServiceImp implements ProductoService {
     }
 
     @Override
-    public ProductoDTO devuelveProducto(UUID id) {
+    public ProductoCargaDTO devuelveProducto(UUID id) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con ID: " + id));
         return productoConverter.convertToDto(producto);
     }
     @Override
-    public List<ProductoDTO> listarProductos() { // Cambiado a ResponseEntity<List<ProductoDTO> listarProductos() {
+    public List<ProductoCargaDTO> listarProductos() { // Cambiado a ResponseEntity<List<ProductoDTO> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
-        List<ProductoDTO> dtos = productos.stream()
+        List<ProductoCargaDTO> dtos = productos.stream()
                 .map(productoConverter::convertToDto)
                 .toList();
         return dtos;

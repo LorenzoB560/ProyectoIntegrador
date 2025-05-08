@@ -1,9 +1,7 @@
 package org.grupob.adminapp.converter;
 
 
-import org.grupob.adminapp.dto.LibroDTO;
-import org.grupob.adminapp.dto.MuebleDTO;
-import org.grupob.comun.entity.Libro;
+import org.grupob.adminapp.dto.masiva.MuebleCargaDTO;
 import org.grupob.comun.entity.Mueble;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -17,11 +15,11 @@ public class MuebleConverter {
     }
 
 
-    public MuebleDTO convertirADto(Mueble mueble) {
-        return modelMapper.map(mueble, MuebleDTO.class);
+    public MuebleCargaDTO convertirADto(Mueble mueble) {
+        return modelMapper.map(mueble, MuebleCargaDTO.class);
     }
 
-    public Mueble convertirAEntidad(MuebleDTO dto) {
+    public Mueble convertirAEntidad(MuebleCargaDTO dto) {
         return modelMapper.map(dto, Mueble.class);
     }
 }

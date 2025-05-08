@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grupob.adminapp.converter.ElectronicoConverter;
 import org.grupob.adminapp.converter.LibroConverter;
 import org.grupob.adminapp.converter.RopaConverter;
-import org.grupob.adminapp.dto.ElectronicoDTO;
-import org.grupob.adminapp.dto.LibroDTO;
-import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.RopaDTO;
+import org.grupob.adminapp.dto.masiva.ElectronicoCargaDTO;
+import org.grupob.adminapp.dto.masiva.LibroCargaDTO;
+import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
+import org.grupob.adminapp.dto.masiva.RopaCargaDTO;
 // Asume que CargaMasivaException está definida en otro archivo, ej. en un paquete de excepciones
 import org.grupob.comun.exception.CargaMasivaException;
 import org.grupob.comun.exception.CategoriaNoEncontradaException;
@@ -60,16 +60,16 @@ public class ProductoMasivoService {
     public void cargaMasiva(InputStream jsonInput) throws CargaMasivaException {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            ProductoDTO[] productos = mapper.readValue(jsonInput, ProductoDTO[].class);
+            ProductoCargaDTO[] productos = mapper.readValue(jsonInput, ProductoCargaDTO[].class);
 
             Arrays.stream(productos).forEach(dto -> {
                 // El try-catch interno se omite aquí para que cualquier error
                 // dentro del stream detenga la transacción completa y se propague.
-                if (dto instanceof LibroDTO libroDTO) {
+                if (dto instanceof LibroCargaDTO libroDTO) {
                     libroRepository.save(libroConverter.convertirAEntidad(libroDTO));
-                } else if (dto instanceof ElectronicoDTO electronicoDTO) {
+                } else if (dto instanceof ElectronicoCargaDTO electronicoDTO) {
                     electronicoRepository.save(electronicoConverter.convertirAEntidad(electronicoDTO));
-                } else if (dto instanceof RopaDTO ropaDTO) {
+                } else if (dto instanceof RopaCargaDTO ropaDTO) {
                     ropaRepository.save(ropaConverter.convertirAEntidad(ropaDTO));
                 } else {
                     // Si llega aquí, Jackson deserializó algo inesperado

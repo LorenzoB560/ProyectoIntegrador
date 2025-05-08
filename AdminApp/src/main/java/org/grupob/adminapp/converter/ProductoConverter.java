@@ -1,7 +1,7 @@
 package org.grupob.adminapp.converter;
 
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
-import org.grupob.adminapp.dto.ProductoDTO;
+import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +14,8 @@ public class ProductoConverter {
         this.modelMapper = modelMapper;
     }
 
-    public ProductoDTO convertToDto(Producto producto) {
-        ProductoDTO dto = modelMapper.map(producto, ProductoDTO.class);
+    public ProductoCargaDTO convertToDto(Producto producto) {
+        ProductoCargaDTO dto = modelMapper.map(producto, ProductoCargaDTO.class);
 //        if (producto instanceof Libro libro) {
 //            dto.setTipoProductoNombre("Libro");
 //            dto.setAutor(libro.getAutor());

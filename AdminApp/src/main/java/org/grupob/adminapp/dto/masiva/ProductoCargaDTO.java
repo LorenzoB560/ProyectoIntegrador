@@ -1,13 +1,10 @@
-package org.grupob.adminapp.dto;
+package org.grupob.adminapp.dto.masiva;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.adminapp.dto.grupoValidaciones.ProveedorDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,7 +21,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoDTO {
+public class ProductoCargaDTO {
 
     private UUID id;
 

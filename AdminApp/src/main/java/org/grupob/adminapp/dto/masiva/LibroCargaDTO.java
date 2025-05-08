@@ -1,4 +1,4 @@
-package org.grupob.adminapp.dto;
+package org.grupob.adminapp.dto.masiva;
 
 
 import jakarta.validation.constraints.Min;
@@ -9,16 +9,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Set;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LibroDTO extends ProductoDTO{
+public class LibroCargaDTO extends ProductoCargaDTO {
     private UUID id;
 
 

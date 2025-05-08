@@ -2,13 +2,11 @@ package org.grupob.adminapp.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.grupob.adminapp.dto.CategoriaDTO;
-import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
+import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
 import org.grupob.adminapp.service.ProductoMasivoService;
 import org.grupob.adminapp.service.ProductoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +34,14 @@ public class ProductoRestController {
         this.productoMasivoService = productoMasivoService;
     }
     @GetMapping("/listado1")
-    public ResponseEntity<List<ProductoDTO>> listarProductos() {
+    public ResponseEntity<List<ProductoCargaDTO>> listarProductos() {
         return ResponseEntity.ok(productoService.listarProductos());
     }
 
     @GetMapping("/detalle/{id}")
     public ResponseEntity<?> getDetalleProducto(@PathVariable UUID id) {
         try {
-            ProductoDTO productoDTO = productoService.devuelveProducto(id);
+            ProductoCargaDTO productoDTO = productoService.devuelveProducto(id);
             return ResponseEntity.ok(productoDTO); // Devuelve DTO como JSON
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

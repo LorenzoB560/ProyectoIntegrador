@@ -1,4 +1,4 @@
-package org.grupob.adminapp.dto;
+package org.grupob.adminapp.dto.masiva;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RopaDTO extends ProductoDTO{
+public class RopaCargaDTO extends ProductoCargaDTO {
     private UUID id;
 
     @NotNull(message = "Las tallas son obligatorias")
