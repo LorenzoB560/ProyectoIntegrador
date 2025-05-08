@@ -50,8 +50,8 @@ public class NominaController {
             @RequestParam(required = false) String filtroNombre,
             @RequestParam(required = false) Integer filtroMes,
             @RequestParam(required = false) Integer filtroAnio,
-            @RequestParam(required = false) BigDecimal totalLiquidoMinimo,
-            @RequestParam(required = false) BigDecimal totalLiquidoMaximo,
+            @RequestParam(required = false) BigDecimal totalLiquidoMin,
+            @RequestParam(required = false) BigDecimal totalLiquidoMax,
             @RequestParam(required = false) List<String> conceptosSeleccionados,
             @RequestParam(defaultValue = "0") int page,
             Model model
@@ -61,8 +61,8 @@ public class NominaController {
         filtro.setFiltroNombre(filtroNombre);
         filtro.setFiltroMes(filtroMes);
         filtro.setFiltroAnio(filtroAnio);
-        filtro.setTotalLiquidoMinimo(totalLiquidoMinimo);
-        filtro.setTotalLiquidoMaximo(totalLiquidoMaximo);
+        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
+        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
         filtro.setConceptosSeleccionados(conceptosSeleccionados);
 
         // Obtener las nóminas filtradas con paginación
@@ -78,8 +78,8 @@ public class NominaController {
         model.addAttribute("filtroNombre", filtroNombre);
         model.addAttribute("filtroMes", filtroMes);
         model.addAttribute("filtroAnio", filtroAnio);
-        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMinimo);
-        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMaximo);
+        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
+        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
         model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
         return "listados/listado-vista-nomina";
     }
