@@ -191,8 +191,9 @@ function llenarTablaProductos(productos) {
     const cuerpoTabla = document.getElementById('cuerpoTablaProd');
     cuerpoTabla.innerHTML = ''; // Limpiar contenido previo
 
+
     if (!productos || productos.length === 0) {
-        // El mensaje de tabla vacía se gestiona en la lógica de .finally() de la llamada fetch
+        asignarEventListenersAccionesProd(); // Llamar incluso si está vacío para limpiar listeners anteriores si es necesario
         return;
     }
 
@@ -225,12 +226,18 @@ function llenarTablaProductos(productos) {
         const unidadesProducto = prod.unidades ?? 'N/A'; // Usar '??' para manejar null o undefined
 
         const urlBaseAcciones = '/adminapp';
-        const nombreEscapado = productoDescripcion.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-
+        const nombreParaConfirm = productoDescripcion.replace(/["`]/g, ''); // Quitar comillas dobles y backticks para confirm
+        const nombreParaAttr = productoDescripcion.replace(/"/g, '&quot;'); // Escapar comillas dobles para atributo HTML
         const accionesHtml = `
             <div class="d-flex justify-content-end flex-nowrap">
                 <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-outline-info me-1" title="Ver Detalle"><i class="bi bi-eye"></i></a>
-                <button type="button" onclick="confirmarEliminacionProducto('${productoId}', '${nombreEscapado}')" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+                <button type="button" 
+                        class="btn btn-sm btn-outline-danger btn-eliminar-prod-js" 
+                        data-product-id="${productoId}" 
+                        data-product-name="${nombreParaAttr}" 
+                        title="Eliminar">
+                    <i class="bi bi-trash"></i>
+                </button>
             </div>`;
 
         // Construir la fila con la nueva celda para el proveedor
@@ -247,6 +254,7 @@ function llenarTablaProductos(productos) {
         `;
         cuerpoTabla.appendChild(fila);
     });
+    asignarEventListenersAccionesProd();
 }
 
 
@@ -329,18 +337,18 @@ function mostrarErrorProductos(mensaje) {
     document.getElementById('paginacionProd').innerHTML = ''; // Limpiar paginación
     document.getElementById('contadorResultadosProd').textContent = ''; // Limpiar contador
 }
-
 function asignarEventListenersAccionesProd() {
     // --- Listener para botones de Eliminar Producto ---
     document.querySelectorAll('.btn-eliminar-prod-js').forEach(button => {
         // Clonar y reemplazar para evitar listeners duplicados si esta función se llama múltiples veces
+        // (Importante si se llama repetidamente en cada recarga de tabla)
         const clone = button.cloneNode(true);
         button.parentNode.replaceChild(clone, button);
 
         clone.addEventListener('click', (event) => {
             event.preventDefault(); // Prevenir cualquier acción por defecto
-            const productId = clone.getAttribute('data-product-id');// Leer data-product-id
-            const productName = clone.getAttribute('data-product-name'); // Leer data-product-name
+            const productId = clone.getAttribute('data-product-id');
+            const productName = clone.getAttribute('data-product-name');
 
             if (!productId) {
                 console.error("ID de producto no encontrado en el botón de eliminar.");
@@ -348,19 +356,27 @@ function asignarEventListenersAccionesProd() {
                 return;
             }
 
+            // Ajustar el nombre para el 'confirm' si contiene HTML escapado
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = productName || '(Sin nombre)'; // Decodificar HTML si es necesario
+            const decodedProductName = tempDiv.textContent || tempDiv.innerText || '(Sin nombre)';
+
+
             // --- 1. Ventana de Confirmación ---
-            if (confirm(`¿Está seguro de eliminar el producto "${productName}" (ID: ${productId})? Esta acción no se puede deshacer.`)) {
+            // Usar el nombre decodificado en el mensaje
+            if (confirm(`¿Está seguro de eliminar el producto "${decodedProductName}" (ID: ${productId})? Esta acción no se puede deshacer.`)) {
 
                 // --- 2. Llamada al Endpoint DELETE ---
-                const url = `/productos/eliminar/${productId}`; // URL del endpoint DELETE en ProductoRestController de AdminApp
+                // Asegúrate que la URL base es correcta para el endpoint REST en AdminApp
+                const url = `/productos/eliminar/${productId}`;
                 const headers = {
                     // Añadir cabecera CSRF aquí si la estás usando en AdminApp con Spring Security
-                    // 'X-CSRF-TOKEN': '...'
+                    // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.content || 'TOKEN_CSRF_FALLBACK'
                 };
 
                 // Deshabilitar botón y mostrar carga (opcional)
                 clone.disabled = true;
-                const originalHtml = clone.innerHTML; // Guardar icono original
+                const originalHtml = clone.innerHTML;
                 clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
                 fetch(url, {
@@ -368,35 +384,58 @@ function asignarEventListenersAccionesProd() {
                     headers: headers
                 })
                     .then(response => {
-                        // DELETE exitoso puede devolver 200 OK o 204 No Content
-                        if (response.ok || response.status === 204) {
-                            return null; // Indicar éxito
+                        if (response.ok || response.status === 204) { // 200 OK o 204 No Content son éxito para DELETE
+                            return null;
                         } else {
-                            // Si hay error, intentar obtener el mensaje del cuerpo
+                            // Intentar obtener el mensaje del cuerpo del error
                             return response.text().then(text => {
-                                throw new Error(text || `Error ${response.status}`);
+                                let errorMsg = `Error ${response.status}`;
+                                if (text) {
+                                    try {
+                                        const errorBody = JSON.parse(text);
+                                        errorMsg = errorBody?.message || errorBody?.error || text;
+                                    } catch (e) {
+                                        errorMsg = text; // Si no es JSON, usar el texto plano
+                                    }
+                                }
+                                throw new Error(errorMsg);
                             });
                         }
                     })
                     .then(() => {
                         // --- 3. Acciones en caso de ÉXITO ---
                         console.log(`Producto ${productId} eliminado.`);
-                        alert(`Producto "${productName}" eliminado correctamente.`);
+                        // Usar el nombre decodificado en la alerta de éxito
+                        alert(`Producto "${decodedProductName}" eliminado correctamente.`);
                         // Recargar la tabla para reflejar el cambio
-                        obtenerProductos(paginaActualProd); // Llama a la función que recarga la lista
+                        // Considerar si ir a la misma página es correcto si se eliminó el último ítem de esa página
+                        // Una lógica más avanzada podría verificar si la página actual queda vacía y retroceder.
+                        obtenerProductos(paginaActualProd);
                     })
                     .catch(error => {
                         // --- 4. Acciones en caso de ERROR ---
                         console.error(`Error al eliminar producto ${productId}:`, error);
                         alert(`Error al eliminar producto: ${error.message}`);
-                        // Rehabilitar el botón
-                        clone.disabled = false;
-                        clone.innerHTML = originalHtml; // Restaurar icono/texto original
+                    })
+                    .finally(() => {
+                        // Rehabilitar el botón SIEMPRE (en caso de éxito o error)
+                        // Puede que no se encuentre el botón si la tabla se recargó completamente antes de rehabilitarlo.
+                        // Si obtenerProductos() es muy rápido, este código podría ejecutarse después de que el botón original ya no exista.
+                        // Es más seguro rehabilitar solo en el .catch si la recarga solo ocurre en .then()
+                        // Vamos a rehabilitar solo en caso de error para evitar problemas con la recarga
+                        if (!clone.disabled) return; // Ya rehabilitado o no existe
+                        try {
+                            clone.disabled = false;
+                            clone.innerHTML = originalHtml;
+                        } catch (e) {
+                            // El botón puede haber sido eliminado por la recarga de la tabla
+                            console.warn("No se pudo rehabilitar el botón de eliminar, probablemente ya fue reemplazado.");
+                        }
                     });
             } else {
-                // El usuario canceló la confirmación
                 console.log(`Eliminación cancelada para producto ${productId}.`);
             }
         });
     });
 }
+
