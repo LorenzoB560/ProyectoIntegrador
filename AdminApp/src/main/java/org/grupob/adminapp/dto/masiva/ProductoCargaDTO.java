@@ -1,5 +1,6 @@
 package org.grupob.adminapp.dto.masiva;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -8,16 +9,17 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
-/*@JsonSubTypes({ Recomendable ponerlo de cara a seguridad pero no es obligatorio
-        @Type(LibroDTO.class),
-        @Type(ElectronicoDTO.class),
-        @Type(RopaDTO.class)
-        @Type(MuebleDTO.class)
-})*/
+@JsonSubTypes({ //Recomendable ponerlo de cara a seguridad pero no es obligatorio
+        @JsonSubTypes.Type(LibroCargaDTO.class),
+        @JsonSubTypes.Type(ElectronicoCargaDTO.class),
+        @JsonSubTypes.Type(RopaCargaDTO.class),
+        @JsonSubTypes.Type(MuebleCargaDTO.class)
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +36,7 @@ public class ProductoCargaDTO {
 
     @NotNull(message = "Las categorías son obligatorias")
     @Size(min = 1, message = "Debe haber al menos una categoría")
-    private Set<@NotBlank(message = "El nombre de la categoría no puede estar vacío") String> categorias;
+    private LinkedHashSet<@NotBlank(message = "El nombre de la categoría no puede estar vacío") String> categorias;
 
     private Boolean segundaMano;
 

@@ -6,6 +6,7 @@ import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
 import org.grupob.adminapp.service.ProductoMasivoService;
 import org.grupob.adminapp.service.ProductoServiceImp;
+import org.grupob.comun.exception.CargaMasivaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -88,27 +90,35 @@ public class ProductoRestController {
     }
 
     @PostMapping("/carga-masiva")
-    public ResponseEntity<String> cargarMasivaProductos(@RequestParam(value = "archivo", required = false) MultipartFile archivo) {
+    public ResponseEntity<?> cargarMasivaProductos(@RequestParam(value = "archivo", required = false) MultipartFile archivo) {
 
         if(archivo==null){
             return ResponseEntity.badRequest().body("Debes seleccionar un archivo JSON");
         }
 
+        // 1. Validación básica del archivo
         if (archivo.isEmpty()) {
-            return ResponseEntity.badRequest().body("El archivo proporcionado está vacío.");
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "El archivo está vacío"));
         }
 
-        String contentType = archivo.getContentType();
-        if (contentType == null || !contentType.equals(MediaType.APPLICATION_JSON_VALUE)) {
-            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE) // 415 Unsupported Media Type
-                    .body("El tipo de archivo no es JSON.");
+        if (!archivo.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                    .body(Map.of("error", "Solo se admiten archivos JSON"));
         }
 
-        try (InputStream input = archivo.getInputStream()) {
-            productoMasivoService.cargaMasiva(input);
-            return ResponseEntity.ok("Carga completada correctamente.");
+        try (InputStream inputStream = archivo.getInputStream()) {
+            // 2. Procesamiento
+            productoMasivoService.cargaMasiva(inputStream);
+
+            return ResponseEntity.ok()
+                    .body(Map.of("mensaje", "Carga masiva completada",
+                            "productos", archivo.getOriginalFilename()));
+
         } catch (IOException e) {
-            return ResponseEntity.status(400).body("Error al leer el archivo: " + e.getMessage());
+            // 4. Errores de lectura del archivo
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error procesando el archivo"));
         }
     }
 
