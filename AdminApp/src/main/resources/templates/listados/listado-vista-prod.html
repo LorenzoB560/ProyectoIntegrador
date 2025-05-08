@@ -3,87 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Productos</title>
+    <title>Gestión de Productos - Admin</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice { background-color: #0d6efd; border-color: #0a58ca; color: white; margin-top: 0.3rem !important; padding-right: 25px !important; margin-right: 0.3rem !important; font-size: 0.85rem; }
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove { color: rgba(255, 255, 255, 0.7) !important; margin-left: 0.5rem !important; }
+        .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove:hover { color: white !important; }
+        .select2-container--bootstrap-5 .select2-dropdown { z-index: 1060; }
+        .btn-sort-prod.active { font-weight: bold; text-decoration: underline; background-color: #e9ecef; }
+        .btn-sort-prod { border: none; background: transparent; color: #0d6efd; cursor: pointer; padding: 0.25rem 0.5rem; font-size: 0.875rem; transition: color 0.2s ease-in-out; }
+        .btn-sort-prod:hover { color: #0b5ed7; }
+        #direccionOrdenProd { min-width: 30px; text-align: center; }
+        .filter-section { /* Mantenemos el estilo de tarjeta para agrupar */
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+        }
+        .filter-section label { font-weight: 600; color: #495057; font-size: 0.9rem; margin-bottom: 0.25rem;} /* Estilo de etiqueta más similar */
+        .form-check-label.small { font-size: 0.9rem; }
+        /* Estilos de tabla similares a los de AdminApp (si están en styles.css ya no son necesarios aquí) */
+        .table th { background-color: #e9ecef; text-transform: uppercase; font-size: 0.85rem; }
+        .table td, .table th { vertical-align: middle; }
+        #tablaProductos { border-radius: 0.5rem; overflow: hidden; }
+    </style>
 </head>
-<body th:object="${loginAdminDTO}">
-<!--<div th:replace="~{fragmentos/header :: header}"></div>-->
+<!--<body th:object="${loginAdminDTO}"> <div th:replace="~{fragmentos/header :: header}"></div>-->
 <!--<div th:replace="~{fragmentos/nav :: nav}"></div>-->
 
 <div class="container-fluid my-4">
-    <h1 class="text-center mb-4">Listado de Productos</h1>
+    <h1 class="text-center mb-4">Gestión de Productos</h1>
 
-    <div class="filter-section card p-3 mb-3">
-        <h5 class="card-title">Filtros</h5>
-        <div class="row g-2">
-            <div class="col-md-4 mb-2">
-                <label for="filtroNombreProd" class="form-label">Nombre:</label>
-                <input type="text" class="form-control form-control-sm" id="filtroNombreProd" placeholder="Filtrar por nombre">
-            </div>
+    <div class="filter-section p-3 mb-3">
+        <div th:if="${errorFiltros}" class="alert alert-warning alert-sm py-1" role="alert" th:text="${errorFiltros}"></div>
+        <div class="row"> <div class="col-md-3 mb-2">
+            <label for="filtroDescripcionProd" class="form-label">Descripción:</label>
+            <input type="text" class="form-control form-control-sm" id="filtroDescripcionProd" placeholder="Buscar en descripción...">
+        </div>
             <div class="col-md-3 mb-2">
-                <label for="filtroTipoProd" class="form-label">Tipo:</label>
-                <select id="filtroTipoProd" class="form-select form-select-sm">
-                    <option value="" selected>Todos</option>
-                    <option value="Libro">Libro</option>
-                    <option value="Electrónico">Electrónico</option>
-                    <option value="Ropa">Ropa</option>
+                <label for="filtroProveedorProd" class="form-label">Proveedor:</label>
+                <select id="filtroProveedorProd" class="form-select form-select-sm">
+                    <option value="" selected>-- Todos --</option>
+                    <option th:each="prov : ${listaProveedores}" th:value="${prov.id}" th:text="${prov.nombre}">Proveedor</option>
                 </select>
             </div>
+            <div class="col-md-4 mb-2">
+                <label for="filtroCategoriasProd" class="form-label">Categorías:</label>
+                <select id="filtroCategoriasProd" class="form-select form-select-sm" multiple="multiple" style="width: 100%;">
+                    <option th:each="cat : ${listaCategorias}" th:value="${cat.id}" th:text="${cat.nombre}">Categoría</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-2"> <label class="form-label d-block">Perecedero:</label>
+                <div class="form-check form-check-inline pt-1">
+                    <input class="form-check-input" type="radio" name="filtroPerecederoProd" id="perecederoTodos" value="" checked>
+                    <label class="form-check-label small" for="perecederoTodos">Todos</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filtroPerecederoProd" id="perecederoSi" value="true">
+                    <label class="form-check-label small" for="perecederoSi">Sí</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filtroPerecederoProd" id="perecederoNo" value="false">
+                    <label class="form-check-label small" for="perecederoNo">No</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1"> <div class="col-md-3 mb-2">
+            <label for="filtroPrecioMinProd" class="form-label">Precio Mín.:</label>
+            <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="filtroPrecioMinProd" placeholder="Ej: 10.00">
+        </div>
             <div class="col-md-3 mb-2">
-                <label for="filtroPrecioProd" class="form-label">Precio (Exacto):</label>
-                <input type="number" step="0.01" class="form-control form-control-sm" id="filtroPrecioProd" placeholder="Ej: 19.99">
+                <label for="filtroPrecioMaxProd" class="form-label">Precio Máx.:</label>
+                <input type="number" step="0.01" min="0" class="form-control form-control-sm" id="filtroPrecioMaxProd" placeholder="Ej: 100.00">
             </div>
-            <div class="col-md-2 d-flex align-items-end mb-2">
-                <button id="aplicarFiltrosProd" class="btn btn-primary btn-sm w-100 me-1">Filtrar</button>
-                <button id="limpiarFiltrosProd" class="btn btn-secondary btn-sm w-100">Limpiar</button>
+            <div class="col-md-3"></div> <div class="col-md-3 d-flex align-items-end justify-content-end mb-2">
+                <button id="aplicarFiltrosProd" class="btn btn-primary me-2">Aplicar Filtros</button>
+                <button id="limpiarFiltrosProd" class="btn btn-secondary">Limpiar Filtros</button>
             </div>
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
-        <div id="contadorResultadosProd" class="fw-bold mb-2 me-3"></div>
-        <div class="d-flex align-items-center mb-2">
-            <span class="me-2">Ordenar por:</span>
-            <button id="ordenarProdPorNombre" class="btn btn-sm btn-outline-secondary btn-sort-prod active me-1">Nombre</button>
-            <button id="ordenarProdPorPrecio" class="btn btn-sm btn-outline-secondary btn-sort-prod me-2">Precio</button>
-            <button id="direccionOrdenProd" class="btn btn-sm btn-outline-secondary btn-sort-prod">↑</button>
+    <div class="container-fluid my-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+            <div id="contadorResultadosProd" class="fw-bold mb-2 me-3 text-muted small"></div>
+            <div class="d-flex align-items-center mb-2">
+                <span class="me-2 small text-muted">Ordenar por:</span>
+                <button id="ordenarProdPorDescripcion" class="btn btn-link btn-sm text-decoration-none btn-sort-prod active me-1 p-0">Descripción</button>
+                <button id="ordenarProdPorPrecio" class="btn btn-link btn-sm text-decoration-none btn-sort-prod me-1 p-0">Precio</button>
+                <button id="ordenarProdPorProveedor" class="btn btn-link btn-sm text-decoration-none btn-sort-prod me-1 p-0">Proveedor</button>
+                <button id="ordenarProdPorCategoria" class="btn btn-link btn-sm text-decoration-none btn-sort-prod me-2 p-0">Categoría</button>
+                <button id="direccionOrdenProd" class="btn btn-link btn-sm text-decoration-none btn-sort-prod p-0">↑</button>
+            </div>
         </div>
     </div>
 
-    <div id="cargandoProd" class="loading-spinner text-center" style="display: none;">
-        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
-    </div>
+    <div id="cargandoProd" class="loading-spinner text-center py-5" style="display: none;"><div class="spinner-border text-primary" role="status"></div></div>
     <div id="errorProd" class="alert alert-danger" style="display: none;"></div>
 
-    <div class="table-responsive">
-        <table id="tablaProductos" class="table table-striped table-hover" style="display: none;">
+    <div class="table-responsive shadow-sm">
+        <table id="tablaProductos" class="table table-striped table-hover align-middle mb-0" style="display: none;">
             <thead class="table-light">
             <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Precio</th>
-                <th>Descripción (corta)</th>
-                <th>Acciones</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Proveedor</th>
+                <th scope="col">Categoría(s)</th>
+                <th scope="col" class="text-end">Precio</th>
+                <th scope="col" class="text-center">Unidades</th>
+                <th scope="col" class="text-center">Segunda mano</th>
+                <th scope="col">Descripción</th>
+                <th scope="col" class="text-end">Acciones</th>
             </tr>
             </thead>
             <tbody id="cuerpoTablaProd">
             </tbody>
         </table>
     </div>
-
-    <!-- Paginación -->
-    <div id="paginacion" class="d-flex justify-content-center mt-3">
-        <!-- Controles de paginación se generarán dinámicamente -->
+    <div id="mensajeTablaVaciaProd" class="text-center p-4 text-muted fst-italic" style="display: none;">
+        No se encontraron productos con los criterios seleccionados.
     </div>
-</div>
 
-<!--<div th:replace="~{fragmentos/footer :: footer}"></div>-->
 
-<script th:src="@{/js/listado-prod.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div id="paginacionProd" class="d-flex justify-content-center mt-4"></div> </div>
+
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> <script th:src="@{/js/listado-prod.js}"></script> <script>
+    $(document).ready(function() {
+        $('#filtroCategoriasProd').select2({
+            theme: "bootstrap-5", width: 'style', placeholder: "Seleccionar categorías...",
+            closeOnSelect: false, allowClear: true
+        });
+        // Opcional: Inicializar proveedor
+        // $('#filtroProveedorProd').select2({ theme: "bootstrap-5", placeholder: "-- Todos --", allowClear: true });
+    });
+</script>
 
 </body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -47,52 +48,43 @@ public class ProductoServiceImp implements ProductoService {
         return dtos;
     }
 
-    /*@Override
+    @Override
     public Page<ProductoDTO> buscarProductosPaginados(
-            ProductoSearchDTO searchParams,
-            int page, int size, String sortBy, String sortDir) {
+            ProductoSearchDTO searchParams, int page, int size, String sortBy, String sortDir) {
 
-        // Validar ordenación y crear Pageable (igual que antes)
-        if (!List.of("nombre", "precio", "id").contains(sortBy)) {
-            sortBy = "nombre";
+        // 1. Validar ordenación y crear Pageable (igual que antes)
+        if (!List.of("nombre", "precio", "descripcion", "fechaAlta", "id",
+                "proveedor.nombre", "categorias.nombre").contains(sortBy)) { // <-- Nuevos campos
+            sortBy = "descripcion"; // O el default que prefieras
         }
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        // Obtener filtros del DTO (con chequeo null para DTO)
-        String tipo = (searchParams != null) ? searchParams.getTipo() : null;
-        String nombre = (searchParams != null) ? searchParams.getNombre() : null;
-        Double precio = (searchParams != null) ? searchParams.getPrecio() : null;
-        // Obtener otros filtros específicos si los añadiste al DTO y a las Queries
+        // 2. Extraer parámetros del DTO (con chequeo null)
+        String descPatron = (searchParams != null) ? searchParams.getDescripcionPatron() : null;
+        Long idProv = (searchParams != null) ? searchParams.getIdProveedor() : null;
+        List<Long> idsCats = (searchParams != null) ? searchParams.getIdsCategorias() : null;
+        Boolean segM = (searchParams != null) ? searchParams.getSegundaMano() : null;
+        BigDecimal pMin = (searchParams != null) ? searchParams.getPrecioMin() : null;
+        BigDecimal pMax = (searchParams != null) ? searchParams.getPrecioMax() : null;
 
-        // --- Decidir qué query llamar ---
-        Page<? extends Producto> productoPage; // Usar wildcard para aceptar Page<Producto1>, etc.
-
-        if (StringUtils.hasText(tipo) && !tipo.equalsIgnoreCase("Todos")) {
-            if (tipo.equalsIgnoreCase("Libro")) {
-                // Llamar query específica para Producto1
-                productoPage = productoRepository.buscarLibroPaginado(nombre, precio, *//* otros filtros específicos si hay, *//* pageable);
-            } else if (tipo.equalsIgnoreCase("Electrónico")) {
-                // Llamar query específica para Producto2
-                productoPage = productoRepository.buscarElectronicoPaginado(nombre, precio, *//* otros filtros específicos si hay, *//* pageable);
-            } else if (tipo.equalsIgnoreCase("Ropa")) {
-                // Llamar query específica para Producto3
-                productoPage = productoRepository.buscarRopaPaginado(nombre, precio, *//* otros filtros específicos si hay, *//* pageable);
-            } else {
-                // Tipo desconocido, devolver vacío o lanzar error? Devolvemos vacío.
-                productoPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
-            }
-        } else {
-            // Si tipo es "Todos" o null, llamar a la consulta base
-            productoPage = productoRepository.buscarProductosBasePaginado(nombre, precio, pageable);
+        // --- Manejo especial para lista de categorías vacía ---
+        // La cláusula 'cat.id IN (:idsCats)' puede fallar o comportarse raro con listas vacías en algunas BD/JPA.
+        // Es más seguro pasar null al repositorio si la lista está vacía.
+        if (idsCats != null && idsCats.isEmpty()) {
+            idsCats = null; // JPQL/SQL maneja mejor 'param IS NULL' que 'col IN ()'
         }
-        // --------------------------------
+        // ----------------------------------------------------
 
-        // Mapear la página resultante (de Producto, Producto1, etc.) a Page<ProductoDTO>
-        // El converter se encarga de manejar los distintos tipos de Producto
-        return productoPage.map(productoConverter::convertToDto);
+
+        // 3. Llamar al método del repositorio con @Query
+        Page<Producto> productoPage = productoRepository.buscarProductosAdminPaginado(
+                descPatron, idProv, idsCats, segM, pMin, pMax, pageable
+        );
+
+        // 4. Mapear a DTO (igual que antes)
+        return productoPage.map(productoConverter::entityToDTO);
     }
-*/
     @Override
     @Transactional // Asegura atomicidad en la operación de borrado
     public void eliminarProducto(UUID id) {

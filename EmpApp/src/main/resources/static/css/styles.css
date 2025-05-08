@@ -238,3 +238,16 @@ a.boton:hover {
     margin: 1rem 0;
 }
 
+.card-body p { margin-bottom: 0.5rem; }
+.badge-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+}
+.rating-stars .bi-star-fill { color: #ffc107; }
+.rating-stars .bi-star { color: #e0e0e0; }
+/* Estilo para ocultar secciones de detalles específicos por defecto */
+.detalles-tipo-especifico { display: none; }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils; // Para verificar Strings no vacíos
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -44,5 +45,40 @@ public class ProductoServiceImp implements ProductoService {
         return dtos;
     }
 
+    @Override
+    public Page<ProductoDTO> buscarProductosPaginados(
+            ProductoSearchDTO searchParams, int page, int size, String sortBy, String sortDir) {
 
+        // 1. Validar ordenación y crear Pageable (igual que antes)
+        if (!List.of("nombre", "precio", "descripcion", "fechaAlta", "id").contains(sortBy)) {
+            sortBy = "nombre";
+        }
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // 2. Extraer parámetros del DTO (con chequeo null)
+        String descPatron = (searchParams != null) ? searchParams.getDescripcionPatron() : null;
+        Long idProv = (searchParams != null) ? searchParams.getIdProveedor() : null;
+        List<Long> idsCats = (searchParams != null) ? searchParams.getIdsCategorias() : null;
+        Boolean perec = (searchParams != null) ? searchParams.getSegundaMano() : null;
+        BigDecimal pMin = (searchParams != null) ? searchParams.getPrecioMin() : null;
+        BigDecimal pMax = (searchParams != null) ? searchParams.getPrecioMax() : null;
+
+        // --- Manejo especial para lista de categorías vacía ---
+        // La cláusula 'cat.id IN (:idsCats)' puede fallar o comportarse raro con listas vacías en algunas BD/JPA.
+        // Es más seguro pasar null al repositorio si la lista está vacía.
+        if (idsCats != null && idsCats.isEmpty()) {
+            idsCats = null; // JPQL/SQL maneja mejor 'param IS NULL' que 'col IN ()'
+        }
+        // ----------------------------------------------------
+
+
+        // 3. Llamar al método del repositorio con @Query
+        Page<Producto> productoPage = productoRepository.buscarProductosAdminPaginado(
+                descPatron, idProv, idsCats, perec, pMin, pMax, pageable
+        );
+
+        // 4. Mapear a DTO (igual que antes)
+        return productoPage.map(productoConverter::entityToDTO);
+    }
 }

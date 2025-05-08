@@ -53,25 +53,29 @@ public class ProductoRestController {
                     .body("Error al obtener detalles del producto.");
         }
     }
-   /* @GetMapping("/listado")
+    @GetMapping("/listado")
     public ResponseEntity<Page<ProductoDTO>> listarProductos(
-            ProductoSearchDTO searchParams, // <-- Recibe el DTO (Spring mapea params URL a campos)
+            ProductoSearchDTO searchParams, // Spring mapea query params a los campos de este DTO
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "nombre") String sortBy,
+            @RequestParam(defaultValue = "nombre") String sortBy, // Ordenar por nombre por defecto
             @RequestParam(defaultValue = "asc") String sortDir) {
-
         try {
-            // Llama al servicio pasando el DTO
+            // Llama al servicio pasando el DTO de búsqueda y los parámetros de paginación/ordenación
             Page<ProductoDTO> productosPaginados = productoService.buscarProductosPaginados(
                     searchParams, page, size, sortBy, sortDir);
             return ResponseEntity.ok(productosPaginados);
+        } catch (IllegalArgumentException e) {
+            // Capturar errores como un sortBy inválido
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parámetro de ordenación inválido.", e);
         } catch (Exception e) {
-            System.err.println("Error al listar productos: " + e.getMessage());
+            // Loguear el error 'e' en un sistema de logs real
+            System.err.println("Error inesperado al listar productos: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            // Devolver error genérico al cliente
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al obtener el listado de productos", e);
         }
-    }*/
+    }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable UUID id) {
         // Aquí podrías añadir @PreAuthorize("hasRole('ADMIN')") si usas Spring Security

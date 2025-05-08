@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID; // Importa UUID
 
 @Repository
@@ -25,45 +27,29 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
     void deleteByCategoriaId(@Param("categoriaId") Long categoriaId);
 
 
-/*; // --- Consulta Base (solo campos comunes) ---
-    @Query("SELECT p FROM Producto p WHERE " +
-            "(:nombre IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
-            "(:precio IS NULL OR p.precio = :precio)")
-    Page<Producto> buscarProductosBasePaginado(
-            @Param("nombre") String nombre,
-            @Param("precio") Double precio,
-            Pageable pageable);
+    @Query("SELECT DISTINCT p FROM Producto p " +
+            "LEFT JOIN p.proveedor prov " + // Join para filtrar por proveedor
+            "LEFT JOIN p.categoria cat " +  // Join para filtrar por categorías
+            "WHERE " +
+            // 1. Filtro por Descripción (LIKE)
+            "(:descPatron IS NULL OR LOWER(p.descripcion) LIKE LOWER(CONCAT('%', :descPatron, '%'))) AND " +
+            // 2. Filtro por Proveedor (ID)
+            "(:idProv IS NULL OR prov.id = :idProv) AND " +
+            // 3. Filtro por Categorías (IN lista de IDs)
+            //    Coalesce previene error si :idsCats es null/vacío. Busca productos donde AL MENOS UNA categoría esté en la lista.
+            "(:idsCats IS NULL OR cat.id IN :idsCats) AND " +
+            // 4. Filtro por segunda mano (Boolean)
+            "(:segM IS NULL OR p.segundaMano = :segM) AND " +
+            // 5. Filtro Rango Precios (Opcional, si lo mantienes)
+            "(:pMin IS NULL OR p.precio >= :pMin) AND " +
+            "(:pMax IS NULL OR p.precio <= :pMax)")
+    Page<Producto> buscarProductosAdminPaginado(
+            @Param("descPatron") String descripcionPatron,
+            @Param("idProv") Long idProveedor,
+            @Param("idsCats") List<Long> idsCategorias, // La lista de IDs
+            @Param("segM") Boolean segundaMano,
+            @Param("pMin") BigDecimal precioMin, // Parámetro para precio mínimo
+            @Param("pMax") BigDecimal precioMax, // Parámetro para precio máximo
+            Pageable pageable); // Spring aplica paginación y ordenación desde aquí
 
-    // --- Consulta Específica para Producto1 (Libro) ---
-    @Query("SELECT p1 FROM Libro p1 WHERE " +
-            "(:nombre IS NULL OR LOWER(p1.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
-            "(:precio IS NULL OR p1.precio = :precio)")
-    Page<Libro> buscarLibroPaginado(
-            @Param("nombre") String nombre,
-            @Param("precio") Double precio,
-            // @Param("autor") String autor, // <-- Ejemplo si añades filtro por autor
-            Pageable pageable);
-
-    // --- Consulta Específica para Producto2 (Electrónico) ---
-    @Query("SELECT p2 FROM Electronico p2 WHERE " +
-            "(:nombre IS NULL OR LOWER(p2.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
-            "(:precio IS NULL OR p2.precio = :precio)")
-    // Añadir filtros específicos de Producto2 si es necesario
-    Page<Electronico> buscarElectronicoPaginado(
-            @Param("nombre") String nombre,
-            @Param("precio") Double precio,
-            // @Param("marca") String marca, // <-- Ejemplo
-            Pageable pageable);
-
-    // --- Consulta Específica para Producto3 (Ropa) ---
-    @Query("SELECT p3 FROM Mueble p3 WHERE " +
-            "(:nombre IS NULL OR LOWER(p3.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
-            "(:precio IS NULL OR p3.precio = :precio)")
-    // Añadir filtros específicos de Producto3 si es necesario
-    Page<Mueble> buscarRopaPaginado(
-            @Param("nombre") String nombre,
-            @Param("precio") Double precio,
-            // @Param("material") String material, // <-- Ejemplo
-            Pageable pageable);
-*/
 }
