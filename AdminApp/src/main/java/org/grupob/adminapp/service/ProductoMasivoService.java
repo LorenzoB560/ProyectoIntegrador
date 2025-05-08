@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grupob.adminapp.converter.ElectronicoConverter;
 import org.grupob.adminapp.converter.LibroConverter;
+import org.grupob.adminapp.converter.MuebleConverter;
 import org.grupob.adminapp.converter.RopaConverter;
 import org.grupob.adminapp.dto.masiva.ElectronicoCargaDTO;
 import org.grupob.adminapp.dto.masiva.LibroCargaDTO;
 import org.grupob.adminapp.dto.masiva.ProductoCargaDTO;
 import org.grupob.adminapp.dto.masiva.RopaCargaDTO;
-// Asume que CargaMasivaException está definida en otro archivo, ej. en un paquete de excepciones
 import org.grupob.comun.exception.CargaMasivaException;
 import org.grupob.comun.exception.CategoriaNoEncontradaException;
 import org.grupob.comun.repository.ElectronicoRepository;
@@ -31,6 +31,7 @@ public class ProductoMasivoService {
     private final LibroConverter libroConverter;
     private final ElectronicoConverter electronicoConverter;
     private final RopaConverter ropaConverter;
+    private final MuebleConverter muebleConverter;
 
     private final ProductoRepository productoRepository;
     private final LibroRepository libroRepository;
@@ -41,7 +42,7 @@ public class ProductoMasivoService {
     public ProductoMasivoService(
             LibroConverter libroConverter,
             ElectronicoConverter electronicoConverter,
-            RopaConverter ropaConverter,
+            RopaConverter ropaConverter, MuebleConverter muebleConverter,
             ProductoRepository productoRepository,
             LibroRepository libroRepository,
             ElectronicoRepository electronicoRepository,
@@ -49,6 +50,7 @@ public class ProductoMasivoService {
         this.libroConverter = libroConverter;
         this.electronicoConverter = electronicoConverter;
         this.ropaConverter = ropaConverter;
+        this.muebleConverter = muebleConverter;
         this.productoRepository = productoRepository;
         this.libroRepository = libroRepository;
         this.electronicoRepository = electronicoRepository;

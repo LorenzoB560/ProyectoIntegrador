@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RopaCargaDTO extends ProductoCargaDTO {
-    private UUID id;
+
 
     @NotNull(message = "Las tallas son obligatorias")
     @Size(min = 1, message = "Debe haber al menos una talla")

@@ -23,8 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductoCargaDTO {
 
-    private UUID id;
-
     @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
 

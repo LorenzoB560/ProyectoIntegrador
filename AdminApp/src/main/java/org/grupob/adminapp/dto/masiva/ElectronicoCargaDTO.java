@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElectronicoCargaDTO extends ProductoCargaDTO {
+
     @NotBlank(message = "El modelo es obligatorio")
     private String modelo;
 

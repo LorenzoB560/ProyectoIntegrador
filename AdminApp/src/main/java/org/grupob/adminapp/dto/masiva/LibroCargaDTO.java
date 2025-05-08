@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LibroCargaDTO extends ProductoCargaDTO {
-    private UUID id;
+
 
 
     @NotBlank(message = "El título es obligatorio")
