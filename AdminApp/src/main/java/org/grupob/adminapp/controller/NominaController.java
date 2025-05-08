@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,19 +48,35 @@ public class NominaController {
     }
     @GetMapping("/busqueda-parametrizada")
     public String listarNominasConFiltros(
-            @ModelAttribute FiltroNominaDTO filtro,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Integer mes,
+            @RequestParam(required = false) Integer anio,
+            @RequestParam(required = false) BigDecimal totalLiquidoMin,
+            @RequestParam(required = false) BigDecimal totalLiquidoMax,
+            @RequestParam(required = false) List<String> conceptos,
             @RequestParam(defaultValue = "0") int page,
             Model model
     ) {
-        Page<Nomina> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
+        // Crear el filtro directamente con los parámetros recibidos
+        FiltroNominaDTO filtro = new FiltroNominaDTO();
+        filtro.setNombre(nombre);
+        filtro.setMes(mes);
+        filtro.setAnio(anio);
+        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
+        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
+        filtro.setConceptos(conceptos);
 
+        // Obtener las nóminas filtradas con paginación
+        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
+
+        // Agregar los resultados al modelo
         model.addAttribute("listaNominas", paginaNominas.getContent());
-        System.err.println("Nóminas encontradas: " + paginaNominas.getContent().size());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
         model.addAttribute("paginaActual", page);
         model.addAttribute("filtro", filtro);
 
         return "listados/listado-vista-nomina";
     }
+
 
 }

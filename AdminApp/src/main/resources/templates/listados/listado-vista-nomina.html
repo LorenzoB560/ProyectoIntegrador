@@ -19,18 +19,20 @@
   <div class="filter-section">
     <div class="row">
       <div class="col-md-3 mb-2">
-        <label for="Empleado" class="form-label">Empleado:</label>
-        <input type="text" class="form-control" id="Empleado" placeholder="Filtrar por empleado">
+        <label for="nombre" class="form-label">Empleado:</label>
+        <input type="text" class="form-control" id="nombre" placeholder="Filtrar por empleado">
       </div>
       <div class="col-md-3 mb-2">
         <label for="filtroMes" class="form-label">Mes:</label>
         <select id="filtroMes" class="form-select">
+          <option value="">Seleccione un mes</option>
           <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
         </select>
       </div>
       <div class="col-md-3 mb-2">
         <label for="filtroAnio" class="form-label">Año:</label>
         <select id="filtroAnio" class="form-select">
+          <option value="">Seleccione un año</option>
           <option th:each="anio : ${anios}" th:text="${anio}"></option>
         </select>
       </div>
@@ -113,13 +115,18 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    // Obtener los valores de la paginación y filtros desde el modelo de Thymeleaf
     const totalPaginas = /*[[${totalPaginas}]]*/ 0;
     const paginaActual = /*[[${paginaActual}]]*/ 0;
+
+    // Obtener los valores de los filtros desde el modelo de Thymeleaf
+    const filtro = /*[[${filtro}]]*/ {};
 
     if (totalPaginas > 1) {
       const paginationContainer = document.getElementById("pagination");
 
       function createPagination() {
+        // Elemento de la página anterior
         const prevPageItem = document.createElement("li");
         prevPageItem.classList.add("page-item");
         if (paginaActual === 0) {
@@ -127,11 +134,12 @@
         }
         const prevLink = document.createElement("a");
         prevLink.classList.add("page-link");
-        prevLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.empleado}&mes=${filtro.mes}&anio=${filtro.anio}&totalLiquidoMin=${filtro.totalLiquidoMinimo}&totalLiquidoMax=${filtro.totalLiquidoMaximo}&conceptos=${filtro.conceptos}&page=${paginaActual - 1}`;
+        prevLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre || ''}&mes=${filtro.mes || ''}&anio=${filtro.anio || ''}&totalLiquidoMin=${filtro.totalLiquidoMin || ''}&totalLiquidoMax=${filtro.totalLiquidoMax || ''}&conceptos=${filtro.conceptos || ''}&page=${paginaActual - 1}`;
         prevLink.textContent = "Prev";
         prevPageItem.appendChild(prevLink);
         paginationContainer.appendChild(prevPageItem);
 
+        // Elementos de las páginas
         for (let i = 0; i < totalPaginas; i++) {
           const pageItem = document.createElement("li");
           pageItem.classList.add("page-item");
@@ -142,13 +150,14 @@
 
           const pageLink = document.createElement("a");
           pageLink.classList.add("page-link");
-          pageLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre}&mes=${filtro.mes}&anio=${filtro.anio}&totalLiquidoMin=${filtro.totalLiquidoMin}&totalLiquidoMax=${filtro.totalLiquidoMax}&conceptos=${filtro.conceptos}&page=${i}`;
+          pageLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre || ''}&mes=${filtro.mes || ''}&anio=${filtro.anio || ''}&totalLiquidoMin=${filtro.totalLiquidoMin || ''}&totalLiquidoMax=${filtro.totalLiquidoMax || ''}&conceptos=${filtro.conceptos || ''}&page=${i}`;
           pageLink.textContent = i + 1;
 
           pageItem.appendChild(pageLink);
           paginationContainer.appendChild(pageItem);
         }
 
+        // Elemento de la página siguiente
         const nextPageItem = document.createElement("li");
         nextPageItem.classList.add("page-item");
         if (paginaActual === totalPaginas - 1) {
@@ -156,7 +165,7 @@
         }
         const nextLink = document.createElement("a");
         nextLink.classList.add("page-link");
-        nextLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre}&mes=${filtro.mes}&anio=${filtro.anio}&totalLiquidoMin=${filtro.totalLiquidoMin}&totalLiquidoMax=${filtro.totalLiquidoMax}&conceptos=${filtro.conceptos}&page=${paginaActual + 1}`;
+        nextLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre || ''}&mes=${filtro.mes || ''}&anio=${filtro.anio || ''}&totalLiquidoMin=${filtro.totalLiquidoMinimo || ''}&totalLiquidoMax=${filtro.totalLiquidoMaximo || ''}&conceptos=${filtro.conceptos || ''}&page=${paginaActual + 1}`;
         nextLink.textContent = "Next";
         nextPageItem.appendChild(nextLink);
         paginationContainer.appendChild(nextPageItem);
@@ -166,9 +175,6 @@
     }
   });
 </script>
-
-
-
 
 
 </body>

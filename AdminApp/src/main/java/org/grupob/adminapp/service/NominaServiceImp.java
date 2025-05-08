@@ -183,25 +183,41 @@ public class NominaServiceImp implements NominaService{
         return conceptoRepository.findAll();
     }
 
-    public Page<Nomina> obtenerNominasFiltradas(FiltroNominaDTO filtro, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "anio", "mes")); // De más reciente a más antiguo
+    public Page<NominaDTO> obtenerNominasFiltradas(FiltroNominaDTO filtro, int page) {
+        Pageable pageable = PageRequest.of(page, 10); // o el tamaño que necesites
 
-        List<String> nombresConceptos = null;
-        if (filtro.getConceptos() != null) {
-            nombresConceptos = filtro.getConceptos().stream()
-                    .map(Concepto::getNombre)
-                    .toList();
-        }
-
-        return nominaRepository.buscarNominasFiltradas(
-                filtro.getEmpleado(),
+        Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradas(
+                filtro.getNombre(),
                 filtro.getMes(),
                 filtro.getAnio(),
                 filtro.getTotalLiquidoMinimo(),
                 filtro.getTotalLiquidoMaximo(),
-                nombresConceptos,
+                filtro.getConceptos(),
                 pageable
         );
+
+        return paginaNominas.map(n -> {
+            String nombreEmpleado = n.getEmpleado().getNombre() + " " + n.getEmpleado().getApellido();
+
+            List<LineaNominaDTO> lineaDTOs = n.getLineaNominas().stream().map(ln ->
+                    new LineaNominaDTO(
+                            ln.getConcepto().getId(),
+                            ln.getConcepto().getNombre(),
+                            ln.getCantidad()
+                    )
+            ).toList();
+
+            return new NominaDTO(
+                    n.getId(),
+                    n.getEmpleado().getId(), // o n.getIdEmpleado() si tienes ese campo
+                    nombreEmpleado,
+                    n.getMes(),
+                    n.getAnio(),
+                    n.getTotalLiquido(),
+                    lineaDTOs
+            );
+        });
     }
+
 
 }

@@ -1,5 +1,9 @@
+document.addEventListener('DOMContentLoaded', function () {
+
     document.getElementById('aplicarFiltros').addEventListener('click', function () {
-        const nombre = document.getElementById('Empleado').value;
+        console.log("Botón de aplicar filtros clickeado"); // Verifica si el evento se activa
+
+        const nombre = document.getElementById('nombre').value;
         const mes = document.getElementById('filtroMes').value;
         const anio = document.getElementById('filtroAnio').value;
         const min = document.getElementById('filtroLiquidoMinimo').value;
@@ -16,3 +20,4 @@
 
         window.location.href = '/nomina/busqueda-parametrizada?' + params.toString();
     });
+});
