@@ -6,25 +6,34 @@ import com.lowagie.text.pdf.PdfWriter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.grupob.adminapp.converter.NominaConverter;
+import org.grupob.adminapp.dto.FiltroNominaDTO;
 import org.grupob.adminapp.dto.LineaNominaDTO;
 import org.grupob.adminapp.dto.NominaDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
+import org.grupob.comun.entity.maestras.Concepto;
 import org.grupob.comun.repository.ConceptoRepository;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class NominaServiceImp implements NominaService{
@@ -156,6 +165,43 @@ public class NominaServiceImp implements NominaService{
         } catch (Exception e) {
             throw new RuntimeException("Error al generar el PDF de la nómina", e);
         }
+    }
+
+    public List<String> devolverMeses(){
+        return IntStream.rangeClosed(1, 12)
+                .mapToObj(m -> String.format("%02d", m))
+                .collect(Collectors.toList());
+    }
+    public List<String> devolverAnios(){
+        int anioActual = Year.now().getValue();
+        return IntStream.range(anioActual, anioActual + 2)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.toList());
+    }
+
+    public List<Concepto> devolverConceptos(){
+        return conceptoRepository.findAll();
+    }
+
+    public Page<Nomina> obtenerNominasFiltradas(FiltroNominaDTO filtro, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "anio", "mes")); // De más reciente a más antiguo
+
+        List<String> nombresConceptos = null;
+        if (filtro.getConceptos() != null) {
+            nombresConceptos = filtro.getConceptos().stream()
+                    .map(Concepto::getNombre)
+                    .toList();
+        }
+
+        return nominaRepository.buscarNominasFiltradas(
+                filtro.getEmpleado(),
+                filtro.getMes(),
+                filtro.getAnio(),
+                filtro.getTotalLiquidoMinimo(),
+                filtro.getTotalLiquidoMaximo(),
+                nombresConceptos,
+                pageable
+        );
     }
 
 }
