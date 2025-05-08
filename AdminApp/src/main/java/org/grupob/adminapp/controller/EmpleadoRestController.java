@@ -3,10 +3,12 @@ package org.grupob.adminapp.controller;
 
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.adminapp.service.EmpleadoServiceImp;
 import org.grupob.adminapp.service.EtiquetaServiceImp;
 import org.grupob.adminapp.service.UsuarioEmpleadoServiceImp;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
@@ -47,18 +49,14 @@ public class EmpleadoRestController {
 
     @GetMapping("/listado")
     public Page<EmpleadoDTO> listarEmpleados(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) String departamento,
-            @RequestParam(required = false) String comentario,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate contratadosAntesDe,
-            @RequestParam(required = false) BigDecimal salarioMinimo,
+            @Valid @ModelAttribute EmpleadoSearchDTO searchDTO,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "ename") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
 
         return empleadoService.buscarEmpleadosPaginados(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
+                searchDTO,
                 page, size, sortBy, sortDir);
     }
 

@@ -237,9 +237,6 @@ function limpiarFiltrosProductos() {
     document.getElementById('filtroPrecioMinProd')?.value = '';
     document.getElementById('filtroPrecioMaxProd')?.value = '';
 
-    // Limpiar Select2 de categorías (requiere jQuery)
-    if (typeof $ !== 'undefined' && $.fn.select2) { $('#filtroCategoriasProd').val(null).trigger('change'); }
-    else { document.getElementById('filtroCategoriasProd')?.value = ''; }
 
     // Resetear ordenación
     ordenarPorProd = "descripcion"; // Default a descripción

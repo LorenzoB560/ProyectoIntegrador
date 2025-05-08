@@ -1,9 +1,8 @@
 package org.grupob.empapp.service;
 
-import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.dto.EmpleadoSearchDTO;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -103,29 +100,22 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // Métodos para búsqueda parametrizada
     // -----------------------------------
 
-    @Override
-    public List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams) {
-        return buscarEmpleadosAvanzado(
-                searchParams.getNombre(),
-                searchParams.getDepartamento(),
-                searchParams.getComentario(),
-                searchParams.getContratadosAntesDe(),
-                searchParams.getSalarioMinimo()
-        );
-    }
+    
+//    public List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams) {
+//        return buscarEmpleadosAvanzado(
+//                searchParams.getNombre(),
+//                searchParams.getDepartamento(),
+//                searchParams.getComentario(),
+//                searchParams.getContratadosAntesDe(),
+//                searchParams.getSalarioMinimo()
+//        );
+//    }
 
     @Override
-    public List<EmpleadoDTO> buscarEmpleadosAvanzado(
-            String nombre,
-            String departamento,
-            String comentario,
-            LocalDate contratadosAntesDe,
-            BigDecimal salarioMinimo) {
-
+    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
         Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
-                0, Integer.MAX_VALUE, "ename", "asc");
-
+                searchParams,
+                0, Integer.MAX_VALUE, "nombre", "asc");
         return page.getContent();
     }
 
@@ -151,11 +141,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 
     @Override
     public Page<EmpleadoDTO> buscarEmpleadosPaginados(
-            String nombre,
-            String departamento,
-            String comentario,
-            LocalDate contratadosAntesDe,
-            BigDecimal salarioMinimo,
+            EmpleadoSearchDTO searchParams,
             int page,
             int size,
             String sortBy,
@@ -174,9 +160,16 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         // Crear objeto Pageable
         Pageable pageable = PageRequest.of(page, size, sort);
 
+        EmpleadoSearchDTO comunSearchParams = new EmpleadoSearchDTO();
+        comunSearchParams.setNombre(searchParams.getNombre());
+        comunSearchParams.setDepartamento(searchParams.getDepartamento());
+        comunSearchParams.setComentario(searchParams.getComentario());
+        comunSearchParams.setContratadosAntesDe(searchParams.getContratadosAntesDe());
+        comunSearchParams.setSalarioMinimo(searchParams.getSalarioMinimo());
+        comunSearchParams.setSalarioMaximo(searchParams.getSalarioMaximo());
         // Ejecutar consulta paginada
-        Page<Empleado> pageEmpleados = empleadoRepository.buscarEmpleadosAvanzadoPaginado(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo, pageable);
+        Page<Empleado> pageEmpleados = empleadoRepository.buscarEmpleadosAvanzadoPaginado(comunSearchParams
+                , pageable);
 
         // Convertir a DTO preservando la información de paginación
         return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));
