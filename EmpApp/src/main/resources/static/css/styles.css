@@ -251,3 +251,45 @@ a.boton:hover {
 .rating-stars .bi-star { color: #e0e0e0; }
 /* Estilo para ocultar secciones de detalles específicos por defecto */
 .detalles-tipo-especifico { display: none; }
+
+/* Estilos para emular la apariencia del listado de empleados */
+/* Se ajusta para quitar shadow y usar tamaños normales en filtros */
+.filter-section {
+    background-color: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-radius: .5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #dee2e6;
+    /* box-shadow: none; */ /* Quitado shadow-sm para parecerse a emp */
+}
+.filter-section .form-label { font-weight: 600; margin-bottom: 0.25rem; } /* Tamaño normal de etiqueta */
+/* .filter-section .form-control, .filter-section .form-select { font-size: 1rem; } */ /* Usar tamaño normal, no -sm */
+
+.btn-sort {
+    border: 1px solid transparent; padding: 0.375rem 0.75rem; /* Tamaño normal de botón */
+    background-color: transparent; color: #0d6efd; cursor: pointer;
+    font-size: 1rem; /* Tamaño normal */
+    margin-right: 0.5rem; /* Ajustar margen si es necesario */
+}
+.btn-sort.active { font-weight: bold; text-decoration: underline; background-color: #e9ecef; }
+#direccionOrdenProd { min-width: 30px; text-align: center; display: inline-block; } /* Ajustar tamaño si es necesario */
+
+.table th { background-color: #e9ecef; /* text-transform: uppercase; */ font-size: 0.9rem; color: #212529; vertical-align: middle; } /* Ajustar tamaño/estilo cabecera si se desea */
+.table td { vertical-align: middle; font-size: 0.9rem; }
+
+.loading-spinner { /* Estilo de carga como en emp */
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#mensajeTablaVaciaProd { min-height: 150px; display: flex; align-items: center; justify-content: center; }
+
+/* Select2 styles (mantenerlos para el filtro de categoría) */
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice { background-color: #0d6efd; border-color: #0a58ca; color: white; margin-top: 0.3rem !important; padding-right: 25px !important; margin-right: 0.3rem !important; font-size: 0.85rem; }
+.select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove { color: rgba(255, 255, 255, 0.7) !important; margin-left: 0.5rem !important; }
+.select2-container--bootstrap-5 .select2-dropdown { z-index: 1060; }
+
+/* Ajuste para botones de acción en tabla (mantenerlos pequeños para espacio) */
+#cuerpoTablaProd .btn-sm { padding: 0.2rem 0.4rem; font-size: 0.75rem; }
+#cuerpoTablaProd .bi { vertical-align: text-bottom; }

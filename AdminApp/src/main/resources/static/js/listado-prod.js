@@ -231,13 +231,12 @@ function llenarTablaProductos(productos) {
         const accionesHtml = `
             <div class="d-flex justify-content-end flex-nowrap">
                 <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-outline-info me-1" title="Ver Detalle"><i class="bi bi-eye"></i></a>
-                <button type="button" 
-                        class="btn btn-sm btn-outline-danger btn-eliminar-prod-js" 
+                <a  href="#" class="btn btn-danger me-2 btn-eliminar-prod-js" 
                         data-product-id="${productoId}" 
                         data-product-name="${nombreParaAttr}" 
                         title="Eliminar">
-                    <i class="bi bi-trash"></i>
-                </button>
+                    <i class="bi bi-trash me-1"></i>
+                </a>
             </div>`;
 
         // Construir la fila con la nueva celda para el proveedor
