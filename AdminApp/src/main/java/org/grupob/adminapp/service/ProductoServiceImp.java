@@ -6,7 +6,7 @@ import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.adminapp.converter.ProductoConverter;
 import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.grupob.adminapp.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -52,38 +53,42 @@ public class ProductoServiceImp implements ProductoService {
     public Page<ProductoDTO> buscarProductosPaginados(
             ProductoSearchDTO searchParams, int page, int size, String sortBy, String sortDir) {
 
-        // 1. Validar ordenación y crear Pageable (igual que antes)
-        if (!List.of("nombre", "precio", "descripcion", "fechaAlta", "id",
-                "proveedor.nombre", "categorias.nombre").contains(sortBy)) { // <-- Nuevos campos
-            sortBy = "descripcion"; // O el default que prefieras
+        String sortProperty;
+
+        // Mapea el valor de 'sortBy' del frontend al path correcto en JPQL
+        switch (sortBy.toLowerCase()) {
+            case "descripcion":
+                sortProperty = "p.descripcion";
+                break;
+            case "categoriaprincipal":
+                sortProperty = "cat.nombre";
+                break;
+            case "preciobase":
+            case "precio":
+                sortProperty = "p.precio";
+                break;
+            // ELIMINA O COMENTA EL SIGUIENTE CASO:
+            // case "proveedor.nombre":
+            //     sortProperty = "prov.nombre";
+            //     break;
+            default:
+                List<String> camposDirectosPermitidos = Arrays.asList("id", "marca", "segundaMano", "unidades", "fechaFabricacion", "fechaAlta", "valoracion");
+                if (camposDirectosPermitidos.contains(sortBy)) {
+                    sortProperty = "p." + sortBy;
+                } else {
+                    System.err.println("Advertencia: Parámetro sortBy no soportado '" + sortBy + "'. Usando 'p.descripcion' por defecto.");
+                    sortProperty = "p.descripcion";
+                }
+                break;
         }
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(page, size, sort);
 
-        // 2. Extraer parámetros del DTO (con chequeo null)
-        String descPatron = (searchParams != null) ? searchParams.getDescripcionPatron() : null;
-        Long idProv = (searchParams != null) ? searchParams.getIdProveedor() : null;
-        List<Long> idsCats = (searchParams != null) ? searchParams.getIdsCategorias() : null;
-        Boolean segM = (searchParams != null) ? searchParams.getSegundaMano() : null;
-        BigDecimal pMin = (searchParams != null) ? searchParams.getPrecioMin() : null;
-        BigDecimal pMax = (searchParams != null) ? searchParams.getPrecioMax() : null;
+        Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortProperty));
 
-        // --- Manejo especial para lista de categorías vacía ---
-        // La cláusula 'cat.id IN (:idsCats)' puede fallar o comportarse raro con listas vacías en algunas BD/JPA.
-        // Es más seguro pasar null al repositorio si la lista está vacía.
-        if (idsCats != null && idsCats.isEmpty()) {
-            idsCats = null; // JPQL/SQL maneja mejor 'param IS NULL' que 'col IN ()'
-        }
-        // ----------------------------------------------------
+        Page<Producto> productosPage = productoRepository.buscarProductosAdminPaginado(searchParams, pageable);
 
+        return productosPage.map(productoConverter::entityToDTO);
 
-        // 3. Llamar al método del repositorio con @Query
-        Page<Producto> productoPage = productoRepository.buscarProductosAdminPaginado(
-                descPatron, idProv, idsCats, segM, pMin, pMax, pageable
-        );
-
-        // 4. Mapear a DTO (igual que antes)
-        return productoPage.map(productoConverter::entityToDTO);
     }
     @Override
     @Transactional // Asegura atomicidad en la operación de borrado

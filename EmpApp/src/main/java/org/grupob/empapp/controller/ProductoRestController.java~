@@ -48,7 +48,7 @@ public class ProductoRestController {
             ProductoSearchDTO searchParams, // Spring mapea query params a los campos de este DTO
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "descripcion") String sortBy, // Ordenar por nombre por defecto
+            @RequestParam(defaultValue = "nombre") String sortBy, // Ordenar por nombre por defecto
             @RequestParam(defaultValue = "asc") String sortDir) {
         try {
             // Llama al servicio pasando el DTO de búsqueda y los parámetros de paginación/ordenación

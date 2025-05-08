@@ -1,5 +1,6 @@
 package org.grupob.comun.repository;
 
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.grupob.comun.entity.Electronico;
 import org.grupob.comun.entity.Libro;
 import org.grupob.comun.entity.Mueble;
@@ -28,28 +29,33 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
 
 
     @Query("SELECT DISTINCT p FROM Producto p " +
-            "LEFT JOIN p.proveedor prov " + // Join para filtrar por proveedor
-            "LEFT JOIN p.categoria cat " +  // Join para filtrar por categorías
+            "LEFT JOIN p.proveedor prov " +
+            "LEFT JOIN p.categoria cat " +
             "WHERE " +
-            // 1. Filtro por Descripción (LIKE)
-            "(:descPatron IS NULL OR LOWER(p.descripcion) LIKE LOWER(CONCAT('%', :descPatron, '%'))) AND " +
-            // 2. Filtro por Proveedor (ID)
-            "(:idProv IS NULL OR prov.id = :idProv) AND " +
-            // 3. Filtro por Categorías (IN lista de IDs)
-            //    Coalesce previene error si :idsCats es null/vacío. Busca productos donde AL MENOS UNA categoría esté en la lista.
-            "(:idsCats IS NULL OR cat.id IN :idsCats) AND " +
-            // 4. Filtro por segunda mano (Boolean)
-            "(:segM IS NULL OR p.segundaMano = :segM) AND " +
-            // 5. Filtro Rango Precios (Opcional, si lo mantienes)
-            "(:pMin IS NULL OR p.precio >= :pMin) AND " +
-            "(:pMax IS NULL OR p.precio <= :pMax)")
+            // Filtro por Descripción
+            // Se añade '= true' a la comprobación de nulidad de SpEL
+            "(:#{#searchParams.descripcionPattern == null} = true OR TRIM(:#{#searchParams.descripcionPattern}) = '' OR LOWER(p.descripcion) LIKE LOWER(CONCAT('%', TRIM(:#{#searchParams.descripcionPattern}), '%'))) AND " +
+
+            // Filtro por Proveedor
+            // Se añade '= true' a la comprobación de nulidad de SpEL
+            "(:#{#searchParams.proveedorId == null} = true OR prov.id = :#{#searchParams.proveedorId}) AND " +
+
+            // Filtro por Categorías (ya estaba correcto con '= true')
+            "(:#{#searchParams.idsCategorias == null or #searchParams.idsCategorias.isEmpty()} = true OR cat.id IN (:#{#searchParams.idsCategorias})) AND " +
+
+            // Filtro por Segunda Mano
+            // Se añade '= true' a la comprobación de nulidad de SpEL
+            "(:#{#searchParams.esSegundaMano == null} = true OR p.segundaMano = :#{#searchParams.esSegundaMano}) AND " +
+
+            // Filtro por Precio Mínimo
+            // Se añade '= true' a la comprobación de nulidad de SpEL
+            "(:#{#searchParams.precioMin == null} = true OR p.precio >= :#{#searchParams.precioMin}) AND " +
+
+            // Filtro por Precio Máximo
+            // Se añade '= true' a la comprobación de nulidad de SpEL
+            "(:#{#searchParams.precioMax == null} = true OR p.precio <= :#{#searchParams.precioMax})")
     Page<Producto> buscarProductosAdminPaginado(
-            @Param("descPatron") String descripcionPatron,
-            @Param("idProv") Long idProveedor,
-            @Param("idsCats") List<Long> idsCategorias, // La lista de IDs
-            @Param("segM") Boolean segundaMano,
-            @Param("pMin") BigDecimal precioMin, // Parámetro para precio mínimo
-            @Param("pMax") BigDecimal precioMax, // Parámetro para precio máximo
-            Pageable pageable); // Spring aplica paginación y ordenación desde aquí
+            @Param("searchParams") ProductoSearchDTO searchParams,
+            Pageable pageable);
 
 }

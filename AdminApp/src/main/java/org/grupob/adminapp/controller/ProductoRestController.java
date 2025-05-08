@@ -3,7 +3,7 @@ package org.grupob.adminapp.controller;
 import jakarta.persistence.EntityNotFoundException;
 import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
 import org.grupob.adminapp.service.ProductoMasivoService;
 import org.grupob.adminapp.service.ProductoServiceImp;
@@ -58,7 +58,7 @@ public class ProductoRestController {
             ProductoSearchDTO searchParams, // Spring mapea query params a los campos de este DTO
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "nombre") String sortBy, // Ordenar por nombre por defecto
+            @RequestParam(defaultValue = "descripcion") String sortBy, // Ordenar por nombre por defecto
             @RequestParam(defaultValue = "asc") String sortDir) {
         try {
             // Llama al servicio pasando el DTO de búsqueda y los parámetros de paginación/ordenación

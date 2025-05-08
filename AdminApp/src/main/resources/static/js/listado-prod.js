@@ -1,289 +1,402 @@
-// Archivo: ProyectoIntegrador/AdminApp/src/main/resources/static/js/listado-prod.js
+// static/js/listado-prod.js
 
 // --- Variables Globales ---
 let paginaActualProd = 0;
-let tamanioPaginaProd = 10; // Puedes ajustar
+const tamañoPaginaProd = 10; // Tamaño de página por defecto
+let ordenarPorProd = "descripcion"; // Campo de ordenación por defecto ('descripcion' enviado a la API)
+let direccionOrdenProd = "asc"; // Dirección de ordenación por defecto
 let totalPaginasProd = 0;
 let totalElementosProd = 0;
-let ordenarPorProd = "descripcion"; // Default según últimos requisitos
-let direccionOrdenProd = "asc";
 
-// --- Inicialización y Listeners ---
+// --- URL del Endpoint API ---
+// ¡¡¡AJUSTA ESTA URL!!! Debe apuntar a tu @GetMapping("/listado") que devuelve JSON Page<ProductoDTO>
+const API_PRODUCTOS_URL = '/productos/listado'; // O '/empapp/productos/listado' o la ruta REST correcta
+
+// --- Event Listeners y Setup Inicial ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar Select2 para categorías (requiere jQuery)
-    if (typeof $ !== 'undefined' && $.fn.select2) {
-        $('#filtroCategoriasProd').select2({
-            theme: "bootstrap-5",
-            width: 'style',
-            placeholder: "Seleccionar categorías...",
-            closeOnSelect: false,
-            allowClear: true
-        });
-    } else {
-        console.warn("jQuery o Select2 no están cargados.");
-    }
+    $('#filtroCategoriasProd').select2({
+        theme: "bootstrap-5", width: 'style', placeholder: "Seleccionar categorías...",
+        closeOnSelect: false, allowClear: true
+    });
 
-    obtenerProductos(0); // Carga inicial
-
-    // Listeners Filtros
     document.getElementById('aplicarFiltrosProd')?.addEventListener('click', () => obtenerProductos(0));
     document.getElementById('limpiarFiltrosProd')?.addEventListener('click', limpiarFiltrosProductos);
 
-    // Listeners Ordenación
-    const btnOrdenarDescripcion = document.getElementById('ordenarProdPorDescripcion');
-    const btnOrdenarPrecio = document.getElementById('ordenarProdPorPrecio');
-    const btnDireccion = document.getElementById('direccionOrdenProd');
-    const botonesOrdenar = [btnOrdenarDescripcion, btnOrdenarPrecio];
+    // IDs de botones de ordenación deben coincidir con el HTML
+    document.getElementById('ordenarPorDescripcionProd')?.addEventListener('click', () => cambiarOrdenacionProductos("descripcion"));
+    document.getElementById('ordenarPorCategoriaProd')?.addEventListener('click', () => cambiarOrdenacionProductos("categoriaPrincipal"));
+    document.getElementById('ordenarPorPrecioProd')?.addEventListener('click', () => cambiarOrdenacionProductos("precioBase"));
 
-    const handleSortButtonClick = (button, sortByField) => {
-        if (!button) return;
-        button.addEventListener('click', () => {
-            if (ordenarPorProd !== sortByField) {
-                ordenarPorProd = sortByField;
-                direccionOrdenProd = "asc";
-                if (btnDireccion) btnDireccion.innerHTML = '↑';
-                botonesOrdenar.forEach(btn => btn?.classList.remove('active'));
-                button.classList.add('active');
-                obtenerProductos(0);
-            }
-        });
-    };
-    handleSortButtonClick(btnOrdenarDescripcion, 'descripcion');
-    handleSortButtonClick(btnOrdenarPrecio, 'precio');
 
-    if (btnDireccion) {
-        btnDireccion.addEventListener('click', () => {
-            direccionOrdenProd = (direccionOrdenProd === "asc") ? "desc" : "asc";
-            btnDireccion.innerHTML = (direccionOrdenProd === "asc") ? '↑' : '↓';
-            obtenerProductos(0);
-        });
-    }
+    document.getElementById('direccionOrdenProd')?.addEventListener('click', () => {
+        direccionOrdenProd = direccionOrdenProd === "asc" ? "desc" : "asc";
+        actualizarIconoDireccionOrdenProductos();
+        obtenerProductos(paginaActualProd);
+    });
 
-    // Cargar opciones para selects si no se hizo con Thymeleaf
-    // cargarOpcionesSelect('/api/productos/proveedores', 'filtroProveedorProd', '-- Todos --', 'id', 'nombre');
-    // cargarOpcionesSelect('/api/productos/categorias', 'filtroCategoriasProd', null, 'id', 'nombre'); // No aplica opción default a multiple
+    actualizarIconoDireccionOrdenProductos();
+    actualizarBotonActivoProductos();
+    obtenerProductos(0); // Carga inicial
 });
 
-// --- Función Principal para Obtener Productos ---
-function obtenerProductos(pagina) {
-    if (pagina < 0) pagina = 0;
-    paginaActualProd = pagina;
-
-    // Leer filtros nuevos
-    const descripcionPatron = document.getElementById('filtroDescripcionProd')?.value.trim() || '';
-    const idProveedor = document.getElementById('filtroProveedorProd')?.value || '';
-    const esPerecederoRadio = document.querySelector('input[name="filtroPerecederoProd"]:checked');
-    const esPerecedero = esPerecederoRadio ? esPerecederoRadio.value : '';
-    const precioMin = document.getElementById('filtroPrecioMinProd')?.value || '';
-    const precioMax = document.getElementById('filtroPrecioMaxProd')?.value || '';
-    const idsCategoriasSeleccionadas = $('#filtroCategoriasProd').val() || []; // Requiere jQuery
-
-    // Construir URL API AdminApp
-    let url = new URL('/api/productos/listado', window.location.origin);
-
-    // Añadir parámetros (coinciden con ProductoSearchDTO)
-    if (descripcionPatron) url.searchParams.append('descripcionPatron', descripcionPatron);
-    if (idProveedor) url.searchParams.append('idProveedor', idProveedor);
-    if (esPerecedero !== '') url.searchParams.append('esPerecedero', esPerecedero);
-    if (precioMin) url.searchParams.append('precioMin', precioMin);
-    if (precioMax) url.searchParams.append('precioMax', precioMax);
-    idsCategoriasSeleccionadas.forEach(idCat => url.searchParams.append('idsCategorias', idCat));
-
-    // Paginación y ordenación
-    url.searchParams.append('page', paginaActualProd);
-    url.searchParams.append('size', tamanioPaginaProd);
-    url.searchParams.append('sortBy', ordenarPorProd);
-    url.searchParams.append('sortDir', direccionOrdenProd);
-
-    // --- Referencias UI y Fetch ---
-    const cargandoDiv = document.getElementById('cargandoProd');
-    const tablaProductos = document.getElementById('tablaProductos');
-    const errorDiv = document.getElementById('errorProd');
-    const contadorSpan = document.getElementById('contadorResultadosProd');
-    const paginacionDiv = document.getElementById('paginacionProd');
-    const cuerpoTabla = document.getElementById('cuerpoTablaProd');
-    const mensajeVacioDiv = document.getElementById('mensajeTablaVaciaProd');
-
-    if (!cargandoDiv || !tablaProductos || !errorDiv || !contadorSpan || !paginacionDiv || !cuerpoTabla || !mensajeVacioDiv) {
-        console.error("Faltan elementos UI esenciales."); return;
+// --- Funciones de Ordenación ---
+function cambiarOrdenacionProductos(nuevoOrdenarPor) {
+    if (ordenarPorProd !== nuevoOrdenarPor) {
+        ordenarPorProd = nuevoOrdenarPor;
+        direccionOrdenProd = "asc";
+    } else {
+        direccionOrdenProd = direccionOrdenProd === "asc" ? "desc" : "asc";
     }
-
-    cargandoDiv.style.display = 'block'; tablaProductos.style.display = 'none'; errorDiv.style.display = 'none';
-    mensajeVacioDiv.style.display = 'none'; contadorSpan.textContent = ''; paginacionDiv.innerHTML = '';
-    cuerpoTabla.innerHTML = '';
-
-    fetch(url)
-        .then(respuesta => {
-            if (!respuesta.ok) { return respuesta.text().then(text => { throw new Error(text || `Error ${respuesta.status}`); }); }
-            return respuesta.json();
-        })
-        .then(datos => { // datos es Page<ProductoDTO>
-            paginaActualProd = datos.number; totalPaginasProd = datos.totalPages; totalElementosProd = datos.totalElements;
-            llenarTablaProductos(datos.content); // Llena tabla
-
-            if (datos.content && datos.content.length > 0) {
-                crearControlesPaginacionProductos(); // Crea paginación
-                tablaProductos.style.display = 'table'; // Muestra tabla
-                mensajeVacioDiv.style.display = 'none';
-            } else {
-                mensajeVacioDiv.style.display = 'block'; // Muestra mensaje vacío
-                tablaProductos.style.display = 'none';
-            }
-
-            asignarEventListenersAccionesProd(); // Asigna listeners a botones
-
-            const inicio = datos.numberOfElements > 0 ? (paginaActualProd * tamanioPaginaProd) + 1 : 0;
-            const fin = inicio + datos.numberOfElements - 1;
-            const fin_mostrar = (fin < inicio) ? inicio : fin;
-            contadorSpan.textContent = `Mostrando ${inicio}-${fin_mostrar} de ${totalElementosProd} productos - Página ${paginaActualProd + 1} de ${totalPaginasProd || 1}`;
-        })
-        .catch(error => { console.error("Error:", error); mostrarErrorProd(`Error al obtener datos: ${error.message}`); })
-        .finally(() => { cargandoDiv.style.display = 'none'; });
+    actualizarBotonActivoProductos();
+    actualizarIconoDireccionOrdenProductos();
+    obtenerProductos(0);
 }
 
-// --- Llenar Tabla (Adaptada a nuevos campos y columnas) ---
+function actualizarBotonActivoProductos() {
+    document.querySelectorAll('.btn-sort').forEach(btn => btn.classList.remove('active'));
+    let btnActivoId = '';
+    // Mapear el 'sortBy' usado en JS/API al ID del botón correspondiente
+    // Asegúrate de que el valor de ordenarPorProd (ej. 'precioBase', 'categoriaPrincipal')
+    // coincida con lo que se usa en el backend o se mapea correctamente.
+    switch (ordenarPorProd.toLowerCase()) {
+        case 'descripcion':
+            btnActivoId = 'ordenarPorDescripcionProd';
+            break;
+        case 'categoriaprincipal': // Valor que maneja el JS para categoría
+            btnActivoId = 'ordenarPorCategoriaProd';
+            break;
+        case 'preciobase': // O 'precio', según lo que uses
+            btnActivoId = 'ordenarPorPrecioProd';
+            break;
+        // ELIMINA O COMENTA EL SIGUIENTE CASO:
+        // case 'proveedor.nombre':
+        //     btnActivoId = 'ordenarPorProveedorProd';
+        //     break;
+        default:
+            // Si ordenarPorProd tiene un valor que ya no corresponde a un botón activo,
+            // podrías deseleccionar todos o seleccionar uno por defecto.
+            // Por ejemplo, si el default es descripción:
+            if (!btnActivoId && ordenarPorProd !== "descripcion") {
+                // No hacer nada o default a descripción si es necesario
+            } else if (!btnActivoId) { // Si no hay match y es el default inicial
+                document.getElementById('ordenarPorDescripcionProd')?.classList.add('active');
+            }
+            break;
+    }
+    if (btnActivoId) {
+        document.getElementById(btnActivoId)?.classList.add('active');
+    } else if (ordenarPorProd === "descripcion") { // Asegurar que el default visual se aplique
+        document.getElementById('ordenarPorDescripcionProd')?.classList.add('active');
+    }
+}
+
+function actualizarIconoDireccionOrdenProductos() {
+    const btnDireccion = document.getElementById('direccionOrdenProd');
+    if (btnDireccion) {
+        btnDireccion.innerHTML = direccionOrdenProd === "asc" ? "↑" : "↓";
+    }
+}
+
+// --- Función Principal Fetch ---
+function obtenerProductos(pagina) {
+    paginaActualProd = pagina;
+
+    // Recoger filtros
+    const descripcionPattern = document.getElementById('filtroDescripcionProd')?.value.trim() || "";
+    const proveedorId = document.getElementById('filtroProveedorProd')?.value || "";
+    const idsCategorias = $('#filtroCategoriasProd').val();
+    const precioMin = document.getElementById('filtroPrecioMinProd')?.value || "";
+    const precioMax = document.getElementById('filtroPrecioMaxProd')?.value || "";
+    let esSegundaManoValue = "";
+    // Asegúrate que el name en HTML sea "filtroEsSegundaManoProd"
+    const esSegundaManoRadios = document.getElementsByName('filtroEsSegundaManoProd');
+    for (const radio of esSegundaManoRadios) {
+        if (radio.checked) { esSegundaManoValue = radio.value; break; }
+    }
+
+    // Construir URL
+    const url = new URL(API_PRODUCTOS_URL, window.location.origin);
+    if (descripcionPattern) url.searchParams.append('descripcionPattern', descripcionPattern);
+    if (proveedorId) url.searchParams.append('proveedorId', proveedorId);
+    if (idsCategorias && idsCategorias.length > 0) {
+        idsCategorias.forEach(id => url.searchParams.append('idsCategorias', id));
+    }
+    if (esSegundaManoValue !== "") url.searchParams.append('esSegundaMano', esSegundaManoValue);
+    if (precioMin) url.searchParams.append('precioMin', precioMin);
+    if (precioMax) url.searchParams.append('precioMax', precioMax);
+
+    url.searchParams.append('page', paginaActualProd);
+    url.searchParams.append('size', tamañoPaginaProd);
+    url.searchParams.append('sortBy', ordenarPorProd); // Enviar 'descripcion' o 'categoriaPrincipal'
+    url.searchParams.append('sortDir', direccionOrdenProd);
+
+    // UI de Carga
+    document.getElementById('cargandoProd').style.display = 'block';
+    document.getElementById('tablaProductos').style.display = 'none';
+    document.getElementById('mensajeTablaVaciaProd').style.display = 'none';
+    document.getElementById('errorProd').style.display = 'none';
+    document.getElementById('contadorResultadosProd').textContent = '';
+
+    // Fetch
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().catch(() => null).then(errorBody => {
+                    const errorMessage = errorBody?.message || errorBody?.error || `Error: ${response.status}`;
+                    throw new Error(errorMessage);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            paginaActualProd = data.number;
+            totalPaginasProd = data.totalPages;
+            totalElementosProd = data.totalElements;
+            llenarTablaProductos(data.content); // Llenar tabla
+            crearControlesPaginacionProductos(); // Crear paginación
+            document.getElementById('contadorResultadosProd').textContent =
+                `Mostrando ${data.numberOfElements} de ${totalElementosProd} productos - Página ${paginaActualProd + 1} de ${totalPaginasProd || 1}`;
+        })
+        .catch(error => {
+            console.error("Error detallado:", error);
+            mostrarErrorProductos("Error al obtener productos: " + error.message);
+        })
+        .finally(() => {
+            document.getElementById('cargandoProd').style.display = 'none';
+            if (totalElementosProd > 0) {
+                document.getElementById('tablaProductos').style.display = 'table';
+            } else if (document.getElementById('errorProd').style.display !== 'block') {
+                document.getElementById('mensajeTablaVaciaProd').style.display = 'block';
+            }
+        });
+}
+
+// --- Limpiar Filtros ---
+function limpiarFiltrosProductos() {
+    document.getElementById('filtroDescripcionProd').value = "";
+    document.getElementById('filtroProveedorProd').value = "";
+    $('#filtroCategoriasProd').val(null).trigger('change');
+    document.getElementById('segundaManoTodosProd').checked = true; // Asume ID del radio "Todos"
+    document.getElementById('filtroPrecioMinProd').value = "";
+    document.getElementById('filtroPrecioMaxProd').value = "";
+    ordenarPorProd = "descripcion"; // Resetear orden
+    direccionOrdenProd = "asc";
+    actualizarBotonActivoProductos();
+    actualizarIconoDireccionOrdenProductos();
+    obtenerProductos(0);
+}
+
+// --- Llenar Tabla (Estilo innerHTML) ---
 function llenarTablaProductos(productos) {
     const cuerpoTabla = document.getElementById('cuerpoTablaProd');
-    const tabla = document.getElementById('tablaProductos');
-    if (!cuerpoTabla || !tabla) return;
-    cuerpoTabla.innerHTML = '';
+    cuerpoTabla.innerHTML = ''; // Limpiar contenido previo
 
-    if (!productos || productos.length === 0) { return; } // Mensaje vacío se controla fuera
+    if (!productos || productos.length === 0) {
+        // El mensaje de tabla vacía se gestiona en la lógica de .finally() de la llamada fetch
+        return;
+    }
 
-    productos.forEach(prod => { // prod es ProductoDTO
+    productos.forEach(prod => {
         const fila = document.createElement('tr');
-        const precioFormateado = formatearMonedaProdAdmin(prod.precio);
-        const nombreProveedor = prod.proveedor ? prod.proveedor.nombre : 'N/D';
-        const nombresCategorias = prod.categorias && prod.categorias.length > 0
-            ? prod.categorias.map(cat => `<span class="badge bg-light text-dark border me-1">${cat.nombre || ''}</span>`).join(' ')
-            : '<span class="text-muted small">N/A</span>';
-        const esPerecederoTexto = prod.esPerecedero === true ? '<i class="bi bi-check-circle-fill text-success"></i>' :
-            (prod.esPerecedero === false ? '<i class="bi bi-x-circle-fill text-danger"></i>' :
-                '<span class="text-muted">N/D</span>');
-        const descCorta = prod.descripcion ? (prod.descripcion.length > 80 ? prod.descripcion.substring(0, 80) + '...' : prod.descripcion) : 'N/A';
-        const nombreProducto = prod.nombre || '(Sin Nombre)'; // Usar nombre del producto
 
-        // HTML de la fila con las nuevas columnas
+        // Preparar datos del ProductoDTO
+        const productoId = prod.id || 'N/A';
+        const productoDescripcion = prod.descripcion || 'N/A';
+        const precioFormateado = formatearMonedaProd(prod.precio); // Asumiendo que ya tienes esta función
+
+        // Obtener nombre del proveedor (NUEVO)
+        // Se accede a través de prod.proveedor (que es ProveedorDTO) y luego a su campo .nombre
+        const nombreProveedor = (prod.proveedor && prod.proveedor.nombre) ? prod.proveedor.nombre : 'N/A';
+
+        const marcaProducto = prod.marca || 'N/A';
+
+        let categoriasHtml = 'N/A';
+        if (prod.categoria && Array.isArray(prod.categoria) && prod.categoria.length > 0) {
+            categoriasHtml = prod.categoria.map(cat => `<span class="badge bg-info text-dark me-1">${cat.nombre || ''}</span>`).join(' ');
+        } else if (prod.categoria && typeof prod.categoria === 'object' && !Array.isArray(prod.categoria) && Object.keys(prod.categoria).length > 0) {
+            // Manejo por si 'categoria' es un solo objeto en lugar de un array (aunque el DTO lo define como Set)
+            categoriasHtml = `<span class="badge bg-info text-dark me-1">${prod.categoria.nombre || ''}</span>`;
+        }
+
+        let segundaManoHtml = '<i class="bi bi-question-circle text-muted"></i>';
+        if (prod.segundaMano === true) segundaManoHtml = '<i class="bi bi-check-circle-fill text-success"></i> Sí';
+        else if (prod.segundaMano === false) segundaManoHtml = '<i class="bi bi-x-circle-fill text-danger"></i> No';
+
+        const unidadesProducto = prod.unidades ?? 'N/A'; // Usar '??' para manejar null o undefined
+
+        const urlBaseAcciones = '/adminapp';
+        const nombreEscapado = productoDescripcion.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+        const accionesHtml = `
+            <div class="d-flex justify-content-end flex-nowrap">
+                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-outline-info me-1" title="Ver Detalle"><i class="bi bi-eye"></i></a>
+                <button type="button" onclick="confirmarEliminacionProducto('${productoId}', '${nombreEscapado}')" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+            </div>`;
+
+        // Construir la fila con la nueva celda para el proveedor
         fila.innerHTML = `
-            <td>${nombreProducto}</td>
-            <td><small>${nombreProveedor}</small></td>
-            <td><small>${nombresCategorias}</small></td>
+            <td>${productoId}</td>
+            <td>${productoDescripcion}</td>
             <td class="text-end">${precioFormateado}</td>
-            <td class="text-center">${prod.unidades !== null ? prod.unidades : 'N/D'}</td>
-            <td class="text-center" title="${prod.esPerecedero === true ? 'Sí' : (prod.esPerecedero === false ? 'No' : '')}">${esPerecederoTexto}</td>
-            <td><small>${descCorta}</small></td>
-            <td class="text-end">
-                <div class="d-flex flex-nowrap justify-content-end">
-                    <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar-prod-js"
-                            data-product-id="${prod.id}"
-                            title="Eliminar Producto ${prod.id}">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    </div>
-            </td>
+            <td>${nombreProveedor}</td> 
+            <td>${marcaProducto}</td>
+            <td>${categoriasHtml}</td>
+            <td class="text-center">${segundaManoHtml}</td>
+            <td class="text-center">${unidadesProducto}</td>
+            <td>${accionesHtml}</td>
         `;
         cuerpoTabla.appendChild(fila);
     });
 }
 
-// --- Asignar Listeners (Eliminar con ID en botón y sin nombre en confirm) ---
+
+// --- Crear Paginación ---
+function crearControlesPaginacionProductos() {
+    const divPaginacion = document.getElementById('paginacionProd');
+    divPaginacion.innerHTML = '';
+    if (totalPaginasProd <= 1) return;
+    const ul = document.createElement('ul');
+    ul.className = 'pagination pagination-sm justify-content-center';
+
+    // Lógica para añadir botones << < ... números ... > >>
+    // (Usando la lógica mejorada de la versión anterior del JS de productos)
+    const maxBotones = 5;
+    let inicio = Math.max(0, paginaActualProd - Math.floor(maxBotones / 2));
+    let fin = Math.min(totalPaginasProd - 1, inicio + maxBotones - 1);
+    if (fin - inicio + 1 < maxBotones) { // Ajustar si está cerca de los bordes
+        if (inicio === 0) fin = Math.min(totalPaginasProd - 1, maxBotones - 1);
+        else if (fin === totalPaginasProd - 1) inicio = Math.max(0, totalPaginasProd - maxBotones);
+    }
+
+
+    // Primera y Anterior
+    ul.appendChild(crearBotonPaginacionProd('&laquo;', 0, paginaActualProd === 0, 'Primera página'));
+    ul.appendChild(crearBotonPaginacionProd('&lsaquo;', paginaActualProd - 1, paginaActualProd === 0, 'Página anterior'));
+
+    // Puntos iniciales
+    if (inicio > 0) ul.appendChild(crearBotonPaginacionProd('...', -1, true)); // Botón deshabilitado
+
+    // Números de página
+    for (let i = inicio; i <= fin; i++) {
+        ul.appendChild(crearBotonPaginacionProd(i + 1, i, false, `Página ${i + 1}`, i === paginaActualProd));
+    }
+
+    // Puntos finales
+    if (fin < totalPaginasProd - 1) ul.appendChild(crearBotonPaginacionProd('...', -1, true));
+
+    // Siguiente y Última
+    ul.appendChild(crearBotonPaginacionProd('&rsaquo;', paginaActualProd + 1, paginaActualProd >= totalPaginasProd - 1, 'Página siguiente'));
+    ul.appendChild(crearBotonPaginacionProd('&raquo;', totalPaginasProd - 1, paginaActualProd >= totalPaginasProd - 1, 'Última página'));
+
+    divPaginacion.appendChild(ul);
+}
+
+// Helper para crear botones de paginación
+function crearBotonPaginacionProd(texto, paginaDestino, deshabilitado, titulo = '', activo = false) {
+    const li = document.createElement('li');
+    li.className = `page-item ${deshabilitado ? 'disabled' : ''} ${activo ? 'active' : ''}`;
+    const a = document.createElement('a');
+    a.className = 'page-link';
+    a.href = '#';
+    a.innerHTML = texto;
+    if (titulo) a.title = titulo;
+    if (!deshabilitado && !activo && paginaDestino !== -1) {
+        a.addEventListener('click', (e) => { e.preventDefault(); obtenerProductos(paginaDestino); });
+    }
+    li.appendChild(a);
+    return li;
+}
+
+
+// --- Funciones Auxiliares ---
+function formatearMonedaProd(cantidad) {
+    if (cantidad === undefined || cantidad === null || isNaN(parseFloat(cantidad))) return 'N/A';
+    try {
+        return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(cantidad);
+    } catch (e) { return 'N/A'; }
+}
+
+function mostrarErrorProductos(mensaje) {
+    const elementoError = document.getElementById('errorProd');
+    if (elementoError) {
+        elementoError.textContent = mensaje;
+        elementoError.style.display = 'block';
+    }
+    // Ocultar otros elementos al mostrar error
+    document.getElementById('cargandoProd').style.display = 'none';
+    document.getElementById('tablaProductos').style.display = 'none';
+    document.getElementById('mensajeTablaVaciaProd').style.display = 'none';
+    document.getElementById('paginacionProd').innerHTML = ''; // Limpiar paginación
+    document.getElementById('contadorResultadosProd').textContent = ''; // Limpiar contador
+}
+
 function asignarEventListenersAccionesProd() {
+    // --- Listener para botones de Eliminar Producto ---
     document.querySelectorAll('.btn-eliminar-prod-js').forEach(button => {
+        // Clonar y reemplazar para evitar listeners duplicados si esta función se llama múltiples veces
         const clone = button.cloneNode(true);
         button.parentNode.replaceChild(clone, button);
+
         clone.addEventListener('click', (event) => {
-            event.preventDefault();
-            const productId = clone.dataset.productId; // Lee del botón
-            if (!productId) { console.error("ID producto no encontrado"); alert("Error ID"); return; }
-            // Confirmación genérica SIN NOMBRE
-            if (confirm(`¿Está seguro de eliminar el producto con ID: ${productId}? Esta acción no se puede deshacer.`)) {
-                const url = `/api/productos/${productId}`; // Endpoint DELETE AdminApp
+            event.preventDefault(); // Prevenir cualquier acción por defecto
+            const productId = clone.getAttribute('data-product-id');// Leer data-product-id
+            const productName = clone.getAttribute('data-product-name'); // Leer data-product-name
+
+            if (!productId) {
+                console.error("ID de producto no encontrado en el botón de eliminar.");
+                alert("Error: No se pudo obtener la ID del producto a eliminar.");
+                return;
+            }
+
+            // --- 1. Ventana de Confirmación ---
+            if (confirm(`¿Está seguro de eliminar el producto "${productName}" (ID: ${productId})? Esta acción no se puede deshacer.`)) {
+
+                // --- 2. Llamada al Endpoint DELETE ---
+                const url = `/productos/eliminar/${productId}`; // URL del endpoint DELETE en ProductoRestController de AdminApp
+                const headers = {
+                    // Añadir cabecera CSRF aquí si la estás usando en AdminApp con Spring Security
+                    // 'X-CSRF-TOKEN': '...'
+                };
+
+                // Deshabilitar botón y mostrar carga (opcional)
                 clone.disabled = true;
-                const originalHtml = clone.innerHTML;
-                clone.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
-                fetch(url, { method: 'DELETE' /*, headers: headersCSRF */ })
+                const originalHtml = clone.innerHTML; // Guardar icono original
+                clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: headers
+                })
                     .then(response => {
-                        if (response.ok || response.status === 204) { return null; }
-                        else { return response.text().then(text => { throw new Error(text || `Error ${response.status}`); }); }
+                        // DELETE exitoso puede devolver 200 OK o 204 No Content
+                        if (response.ok || response.status === 204) {
+                            return null; // Indicar éxito
+                        } else {
+                            // Si hay error, intentar obtener el mensaje del cuerpo
+                            return response.text().then(text => {
+                                throw new Error(text || `Error ${response.status}`);
+                            });
+                        }
                     })
                     .then(() => {
-                        alert(`Producto con ID: ${productId} eliminado correctamente.`); // Mensaje sin nombre
-                        obtenerProductos(paginaActualProd); // Recargar
+                        // --- 3. Acciones en caso de ÉXITO ---
+                        console.log(`Producto ${productId} eliminado.`);
+                        alert(`Producto "${productName}" eliminado correctamente.`);
+                        // Recargar la tabla para reflejar el cambio
+                        obtenerProductos(paginaActualProd); // Llama a la función que recarga la lista
                     })
                     .catch(error => {
-                        alert(`Error al eliminar: ${error.message}`);
-                        clone.disabled = false; clone.innerHTML = originalHtml;
+                        // --- 4. Acciones en caso de ERROR ---
+                        console.error(`Error al eliminar producto ${productId}:`, error);
+                        alert(`Error al eliminar producto: ${error.message}`);
+                        // Rehabilitar el botón
+                        clone.disabled = false;
+                        clone.innerHTML = originalHtml; // Restaurar icono/texto original
                     });
+            } else {
+                // El usuario canceló la confirmación
+                console.log(`Eliminación cancelada para producto ${productId}.`);
             }
         });
     });
-    // ... otros listeners ...
 }
-
-// --- Paginación ---
-function crearControlesPaginacionProductos() {
-    const divPaginacion = document.getElementById('paginacionProd'); // ID correcto
-    if (!divPaginacion) return; divPaginacion.innerHTML = ''; if (totalPaginasProd <= 1) return;
-    const crearBoton = (texto, pagina, habilitado = true, activo = false) => {
-        const li = document.createElement('li'); li.className = `page-item ${!habilitado ? 'disabled' : ''} ${activo ? 'active' : ''}`; const a = document.createElement('a'); a.className = 'page-link'; a.href = '#'; a.innerHTML = texto; if (habilitado && !activo) { a.addEventListener('click', (e) => { e.preventDefault(); obtenerProductos(pagina); }); } if (activo) { a.setAttribute('aria-current', 'page'); } li.appendChild(a); return li;
-    }; const ul = document.createElement('ul'); ul.className = 'pagination pagination-sm justify-content-center'; ul.appendChild(crearBoton('&laquo; <span class="d-none d-sm-inline">Anterior</span>', paginaActualProd - 1, paginaActualProd > 0)); const maxBotonesVisibles = 5; let inicio = Math.max(0, paginaActualProd - Math.floor(maxBotonesVisibles / 2)); let fin = Math.min(totalPaginasProd - 1, inicio + maxBotonesVisibles - 1); if(fin === totalPaginasProd - 1){ inicio = Math.max(0, fin - maxBotonesVisibles + 1); } if (inicio > 0) { ul.appendChild(crearBoton('1', 0)); } if (inicio > 1) { const liPuntos = document.createElement('li'); liPuntos.className = 'page-item disabled'; liPuntos.innerHTML = '<span class="page-link">...</span>'; ul.appendChild(liPuntos); } for (let i = inicio; i <= fin; i++) { ul.appendChild(crearBoton(i + 1, i, true, i === paginaActualProd)); } if (fin < totalPaginasProd - 1) { const liPuntos = document.createElement('li'); liPuntos.className = 'page-item disabled'; liPuntos.innerHTML = '<span class="page-link">...</span>'; ul.appendChild(liPuntos); } if (fin < totalPaginasProd - 1) { ul.appendChild(crearBoton(totalPaginasProd, totalPaginasProd - 1)); } ul.appendChild(crearBoton('<span class="d-none d-sm-inline">Siguiente</span> &raquo;', paginaActualProd + 1, paginaActualProd < totalPaginasProd - 1)); divPaginacion.appendChild(ul);
-}
-
-// --- Limpiar Filtros (Adaptado a nuevos filtros) ---
-function limpiarFiltrosProductos() {
-    document.getElementById('filtroDescripcionProd')?.value = '';
-    document.getElementById('filtroProveedorProd')?.value = '';
-    const perecederoTodos = document.getElementById('perecederoTodos'); if(perecederoTodos) perecederoTodos.checked = true;
-    document.getElementById('filtroPrecioMinProd')?.value = '';
-    document.getElementById('filtroPrecioMaxProd')?.value = '';
-
-
-    // Resetear ordenación
-    ordenarPorProd = "descripcion"; // Default a descripción
-    direccionOrdenProd = "asc";
-    document.getElementById('ordenarProdPorDescripcion')?.classList.add('active');
-    document.getElementById('ordenarProdPorPrecio')?.classList.remove('active');
-    // Quitar active de otros botones de ordenación si los hubiera
-    const btnDir = document.getElementById('direccionOrdenProd'); if(btnDir) btnDir.innerHTML = '↑';
-    obtenerProductos(0); // Recargar
-}
-
-// --- Mostrar Error ---
-function mostrarErrorProd(mensaje) {
-    const errorDiv = document.getElementById('errorProd'); const tablaProductos = document.getElementById('tablaProductos'); const paginacionDiv = document.getElementById('paginacionProd'); const msgVacio = document.getElementById('mensajeTablaVaciaProd');
-    if (errorDiv) { errorDiv.textContent = mensaje; errorDiv.style.display = 'block'; }
-    if (tablaProductos) tablaProductos.style.display = 'none'; if (paginacionDiv) paginacionDiv.innerHTML = ''; if (msgVacio) msgVacio.style.display = 'none';
-}
-
-// --- Formatear Moneda (Adaptado para posible BigDecimal object) ---
-function formatearMonedaProdAdmin(cantidad) {
-    if (cantidad === undefined || cantidad === null) return 'N/A';
-    // Intenta convertir si es objeto (como puede venir BigDecimal de Jackson) o string
-    const numCantidad = typeof cantidad === 'object' && cantidad !== null ? Number(cantidad) :
-        (typeof cantidad === 'string' ? parseFloat(cantidad.replace(',', '.')) : parseFloat(cantidad));
-    if (isNaN(numCantidad)) return 'N/A';
-    try { return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numCantidad); }
-    catch (e) { console.warn("Error formateando moneda:", numCantidad, e); return 'N/A'; }
-}
-
-// --- (Opcional) Cargar opciones para Selects dinámicamente ---
-/*
-function cargarOpcionesSelect(urlApi, selectId, opcionDefaultTexto, valorKey, textoKey) {
-    const select = document.getElementById(selectId);
-    if (!select) return;
-    fetch(urlApi) // Llama a los endpoints /api/productos/proveedores o /api/productos/categorias
-        .then(res => res.ok ? res.json() : Promise.reject(`Error cargando ${selectId}`))
-        .then(data => {
-            if(opcionDefaultTexto !== null) select.innerHTML = `<option value="">${opcionDefaultTexto}</option>`; // Opción "Todos/as" si aplica
-            else select.innerHTML = ''; // Limpiar si es multiple select sin opción default
-            data.forEach(item => {
-                select.innerHTML += `<option value="${item[valorKey]}">${item[textoKey]}</option>`;
-            });
-             // Re-inicializar Select2 si se usa para este select y ya estaba inicializado
-             if (typeof $ !== 'undefined' && $.fn.select2 && $(select).data('select2')) {
-                  $(select).trigger('change.select2'); // Notifica a Select2 que las opciones cambiaron
-             }
-        })
-        .catch(err => console.error(err));
-}
-*/

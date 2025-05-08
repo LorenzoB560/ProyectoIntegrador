@@ -1,4 +1,4 @@
-package org.grupob.empapp.dto;
+package org.grupob.comun.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +17,13 @@ public class ProductoSearchDTO {
      * Patrón a buscar dentro de la descripción del producto (usará LIKE).
      * Si es null o vacío, no se filtra por descripción.
      */
-    private String descripcionPatron;
+    private String descripcionPattern;
 
     /**
      * ID del proveedor seleccionado.
      * Si es null, se buscan productos de cualquier proveedor.
      */
-    private Long idProveedor; // Asumiendo que el ID de Proveedor es Long
+    private Long proveedorId; // Asumiendo que el ID de Proveedor es Long
 
     /**
      * Lista de IDs de las categorías seleccionadas.
@@ -37,7 +37,7 @@ public class ProductoSearchDTO {
      * Puede ser true (buscar solo segundaMano), false (buscar solo no segundaMano),
      * o null (buscar todos, sin importar si son segundaMano o no).
      */
-    private Boolean segundaMano;
+    private Boolean esSegundaMano;
 
     // --- Filtros Adicionales (Opcionales, basados en implementaciones anteriores) ---
 

@@ -1,7 +1,8 @@
-package org.grupob.adminapp.service;
+package org.grupob.empapp.service;
 
-import org.grupob.adminapp.converter.CategoriaConverter;
-import org.grupob.adminapp.dto.CategoriaDTO;
+import org.grupob.empapp.converter.CategoriaConverter;
+import org.grupob.empapp.dto.CategoriaDTO;
+import org.grupob.empapp.service.CategoriaService;
 import org.grupob.comun.entity.maestras.Categoria;
 import org.grupob.comun.repository.maestras.CategoriaRepository;
 import org.springframework.stereotype.Service;

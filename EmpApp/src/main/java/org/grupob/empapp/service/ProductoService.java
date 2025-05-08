@@ -1,6 +1,6 @@
 package org.grupob.empapp.service;
 import org.grupob.empapp.dto.ProductoDTO;
-import org.grupob.empapp.dto.ProductoSearchDTO;
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

@@ -100,7 +100,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // Métodos para búsqueda parametrizada
     // -----------------------------------
 
-    
+
 //    public List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams) {
 //        return buscarEmpleadosAvanzado(
 //                searchParams.getNombre(),
