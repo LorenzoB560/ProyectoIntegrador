@@ -17,7 +17,7 @@ public class FiltroNominaDTO {
     private String filtroNombre;
     private Integer filtroMes;
     private Integer filtroAnio;
-    private List<String> conceptos;
+    private List<String> conceptosSeleccionados;
     private BigDecimal totalLiquidoMinimo;
     private BigDecimal totalLiquidoMaximo;
 }

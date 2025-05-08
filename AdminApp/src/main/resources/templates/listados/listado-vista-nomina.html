@@ -26,20 +26,23 @@
         <label for="filtroMes" class="form-label">Mes:</label>
         <select id="filtroMes" class="form-select">
           <option value="">Seleccione un mes</option>
-          <option th:each="mes : ${meses}" th:text="${mes}" th:value="${filtroMes}"></option>
+          <option th:each="mes : ${meses}" th:text="${mes}" th:value="${mes}" th:selected="${mes == filtroMes}"></option>
         </select>
       </div>
       <div class="col-md-3 mb-2">
         <label for="filtroAnio" class="form-label">Año:</label>
         <select id="filtroAnio" class="form-select">
           <option value="">Seleccione un año</option>
-          <option th:each="anio : ${anios}" th:text="${anio}" th:value="${filtroAnio}"></option>
+          <option th:each="anio : ${anios}" th:text="${anio}" th:value="${anio}" th:selected="${anio == filtroAnio}"></option>
         </select>
       </div>
       <div class="col-md-3 mb-2">
-        <label for="conceptos" class="form-label">Conceptos:</label>
-        <select id="conceptos" class="form-select" multiple="multiple">
-          <option th:each="concepto : ${listaConceptos}" th:text="${concepto.nombre}" th:value="${filtroConceptos}"></option>
+        <label for="conceptosSeleccionados" class="form-label">Conceptos:</label>
+        <select id="conceptosSeleccionados" class="form-select" multiple="multiple">
+          <option th:each="concepto : ${listaConceptos}"
+                  th:text="${concepto.nombre}"
+                  th:value="${concepto.nombre}"
+                  th:selected="${conceptosSeleccionados != null and conceptosSeleccionados.contains(concepto.nombre)}">></option>
         </select>
       </div>
     </div>
@@ -107,8 +110,9 @@
 
 <div class="d-flex justify-content-center mt-3">
   <nav>
-    <ul id="pagination" class="pagination">
-      <!-- Los elementos de la paginación serán generados dinámicamente por JS -->
+    <ul id="pagination" class="pagination"
+        th:data-total-paginas="${totalPaginas}"
+        th:data-pagina-actual="${paginaActual}">
     </ul>
   </nav>
 </div>

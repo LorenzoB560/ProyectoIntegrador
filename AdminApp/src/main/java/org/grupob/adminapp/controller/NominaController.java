@@ -4,7 +4,6 @@ import org.grupob.adminapp.dto.FiltroNominaDTO;
 import org.grupob.adminapp.dto.NominaDTO;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
 import org.grupob.adminapp.service.NominaServiceImp;
-import org.grupob.comun.entity.Nomina;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,23 +47,23 @@ public class NominaController {
     }
     @GetMapping("/busqueda-parametrizada")
     public String listarNominasConFiltros(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) Integer mes,
-            @RequestParam(required = false) Integer anio,
+            @RequestParam(required = false) String filtroNombre,
+            @RequestParam(required = false) Integer filtroMes,
+            @RequestParam(required = false) Integer filtroAnio,
             @RequestParam(required = false) BigDecimal totalLiquidoMinimo,
             @RequestParam(required = false) BigDecimal totalLiquidoMaximo,
-            @RequestParam(required = false) List<String> conceptos,
+            @RequestParam(required = false) List<String> conceptosSeleccionados,
             @RequestParam(defaultValue = "0") int page,
             Model model
     ) {
         // Crear el filtro directamente con los parámetros recibidos
         FiltroNominaDTO filtro = new FiltroNominaDTO();
-        filtro.setFiltroNombre(nombre);
-        filtro.setFiltroMes(mes);
-        filtro.setFiltroAnio(anio);
+        filtro.setFiltroNombre(filtroNombre);
+        filtro.setFiltroMes(filtroMes);
+        filtro.setFiltroAnio(filtroAnio);
         filtro.setTotalLiquidoMinimo(totalLiquidoMinimo);
         filtro.setTotalLiquidoMaximo(totalLiquidoMaximo);
-        filtro.setConceptos(conceptos);
+        filtro.setConceptosSeleccionados(conceptosSeleccionados);
 
         // Obtener las nóminas filtradas con paginación
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
@@ -76,12 +75,12 @@ public class NominaController {
         model.addAttribute("filtro", filtro);
 
 
-        model.addAttribute("filtroNombre", nombre);
-        model.addAttribute("filtroMes", mes);
-        model.addAttribute("filtroAnio", anio);
+        model.addAttribute("filtroNombre", filtroNombre);
+        model.addAttribute("filtroMes", filtroMes);
+        model.addAttribute("filtroAnio", filtroAnio);
         model.addAttribute("filtroLiquidoMinimo", totalLiquidoMinimo);
         model.addAttribute("filtroLiquidoMaximo", totalLiquidoMaximo);
-        model.addAttribute("filtroConceptos", conceptos);
+        model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
         return "listados/listado-vista-nomina";
     }
 

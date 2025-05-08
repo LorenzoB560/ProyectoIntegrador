@@ -167,15 +167,14 @@ public class NominaServiceImp implements NominaService{
         }
     }
 
-    public List<String> devolverMeses(){
+    public List<Integer> devolverMeses(){
         return IntStream.rangeClosed(1, 12)
-                .mapToObj(m -> String.format("%02d", m))
+                .boxed()
                 .collect(Collectors.toList());
     }
-    public List<String> devolverAnios(){
-        int anioActual = Year.now().getValue();
-        return IntStream.range(anioActual, anioActual + 2)
-                .mapToObj(String::valueOf)
+    public List<Integer> devolverAnios(){
+        return IntStream.rangeClosed(2023, 2026)
+                .boxed()
                 .collect(Collectors.toList());
     }
 
@@ -192,7 +191,7 @@ public class NominaServiceImp implements NominaService{
                 filtro.getFiltroAnio(),
                 filtro.getTotalLiquidoMinimo(),
                 filtro.getTotalLiquidoMaximo(),
-                filtro.getConceptos(),
+                filtro.getConceptosSeleccionados(),
                 pageable
         );
 
