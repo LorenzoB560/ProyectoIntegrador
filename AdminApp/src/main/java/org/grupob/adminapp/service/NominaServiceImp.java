@@ -187,9 +187,9 @@ public class NominaServiceImp implements NominaService{
         Pageable pageable = PageRequest.of(page, 10); // o el tamaño que necesites
 
         Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradas(
-                filtro.getNombre(),
-                filtro.getMes(),
-                filtro.getAnio(),
+                filtro.getFiltroNombre(),
+                filtro.getFiltroMes(),
+                filtro.getFiltroAnio(),
                 filtro.getTotalLiquidoMinimo(),
                 filtro.getTotalLiquidoMaximo(),
                 filtro.getConceptos(),
@@ -209,7 +209,7 @@ public class NominaServiceImp implements NominaService{
 
             return new NominaDTO(
                     n.getId(),
-                    n.getEmpleado().getId(), // o n.getIdEmpleado() si tienes ese campo
+                    n.getEmpleado().getId(),
                     nombreEmpleado,
                     n.getMes(),
                     n.getAnio(),

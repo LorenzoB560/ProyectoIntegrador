@@ -19,38 +19,38 @@
   <div class="filter-section">
     <div class="row">
       <div class="col-md-3 mb-2">
-        <label for="nombre" class="form-label">Empleado:</label>
-        <input type="text" class="form-control" id="nombre" placeholder="Filtrar por empleado">
+        <label for="filtroNombre" class="form-label">Empleado:</label>
+        <input type="text" class="form-control" id="filtroNombre" placeholder="Filtrar por empleado" th:value="${filtroNombre}">
       </div>
       <div class="col-md-3 mb-2">
         <label for="filtroMes" class="form-label">Mes:</label>
         <select id="filtroMes" class="form-select">
           <option value="">Seleccione un mes</option>
-          <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
+          <option th:each="mes : ${meses}" th:text="${mes}" th:value="${filtroMes}"></option>
         </select>
       </div>
       <div class="col-md-3 mb-2">
         <label for="filtroAnio" class="form-label">Año:</label>
         <select id="filtroAnio" class="form-select">
           <option value="">Seleccione un año</option>
-          <option th:each="anio : ${anios}" th:text="${anio}"></option>
+          <option th:each="anio : ${anios}" th:text="${anio}" th:value="${filtroAnio}"></option>
         </select>
       </div>
       <div class="col-md-3 mb-2">
         <label for="conceptos" class="form-label">Conceptos:</label>
-        <select id="conceptos" class="form-select" multiple>
-          <option th:each="concepto : ${listaConceptos}" th:text="${concepto.nombre}"></option>
+        <select id="conceptos" class="form-select" multiple="multiple">
+          <option th:each="concepto : ${listaConceptos}" th:text="${concepto.nombre}" th:value="${filtroConceptos}"></option>
         </select>
       </div>
     </div>
     <div class="row">
       <div class="col-md-3 mb-2">
         <label for="filtroLiquidoMinimo" class="form-label">Total líquido mínimo:</label>
-        <input type="text" class="form-control" id="filtroLiquidoMinimo" placeholder="Ej: 1184">
+        <input type="text" class="form-control" id="filtroLiquidoMinimo" placeholder="Ej: 1184" th:value="${filtroLiquidoMinimo}">
       </div>
       <div class="col-md-3 mb-2">
         <label for="filtroLiquidoMaximo" class="form-label">Total líquido máximo:</label>
-        <input type="text" class="form-control" id="filtroLiquidoMaximo" placeholder="Ej: 50000">
+        <input type="text" class="form-control" id="filtroLiquidoMaximo" placeholder="Ej: 50000" th:value="${filtroLiquidoMaximo}">
       </div>
       <div class="col-md-9 d-flex align-items-end justify-content-end mb-2">
         <button id="aplicarFiltros" class="btn btn-primary me-2">Aplicar Filtros</button>
@@ -112,70 +112,5 @@
     </ul>
   </nav>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Obtener los valores de la paginación y filtros desde el modelo de Thymeleaf
-    const totalPaginas = /*[[${totalPaginas}]]*/ 0;
-    const paginaActual = /*[[${paginaActual}]]*/ 0;
-
-    // Obtener los valores de los filtros desde el modelo de Thymeleaf
-    const filtro = /*[[${filtro}]]*/ {};
-
-    if (totalPaginas > 1) {
-      const paginationContainer = document.getElementById("pagination");
-
-      function createPagination() {
-        // Elemento de la página anterior
-        const prevPageItem = document.createElement("li");
-        prevPageItem.classList.add("page-item");
-        if (paginaActual === 0) {
-          prevPageItem.classList.add("disabled");
-        }
-        const prevLink = document.createElement("a");
-        prevLink.classList.add("page-link");
-        prevLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre || ''}&mes=${filtro.mes || ''}&anio=${filtro.anio || ''}&totalLiquidoMin=${filtro.totalLiquidoMin || ''}&totalLiquidoMax=${filtro.totalLiquidoMax || ''}&conceptos=${filtro.conceptos || ''}&page=${paginaActual - 1}`;
-        prevLink.textContent = "Prev";
-        prevPageItem.appendChild(prevLink);
-        paginationContainer.appendChild(prevPageItem);
-
-        // Elementos de las páginas
-        for (let i = 0; i < totalPaginas; i++) {
-          const pageItem = document.createElement("li");
-          pageItem.classList.add("page-item");
-
-          if (i === paginaActual) {
-            pageItem.classList.add("active");
-          }
-
-          const pageLink = document.createElement("a");
-          pageLink.classList.add("page-link");
-          pageLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre || ''}&mes=${filtro.mes || ''}&anio=${filtro.anio || ''}&totalLiquidoMin=${filtro.totalLiquidoMin || ''}&totalLiquidoMax=${filtro.totalLiquidoMax || ''}&conceptos=${filtro.conceptos || ''}&page=${i}`;
-          pageLink.textContent = i + 1;
-
-          pageItem.appendChild(pageLink);
-          paginationContainer.appendChild(pageItem);
-        }
-
-        // Elemento de la página siguiente
-        const nextPageItem = document.createElement("li");
-        nextPageItem.classList.add("page-item");
-        if (paginaActual === totalPaginas - 1) {
-          nextPageItem.classList.add("disabled");
-        }
-        const nextLink = document.createElement("a");
-        nextLink.classList.add("page-link");
-        nextLink.href = `/nomina/busqueda-parametrizada?nombre=${filtro.nombre || ''}&mes=${filtro.mes || ''}&anio=${filtro.anio || ''}&totalLiquidoMin=${filtro.totalLiquidoMinimo || ''}&totalLiquidoMax=${filtro.totalLiquidoMaximo || ''}&conceptos=${filtro.conceptos || ''}&page=${paginaActual + 1}`;
-        nextLink.textContent = "Next";
-        nextPageItem.appendChild(nextLink);
-        paginationContainer.appendChild(nextPageItem);
-      }
-
-      createPagination();
-    }
-  });
-</script>
-
-
 </body>
 </html>

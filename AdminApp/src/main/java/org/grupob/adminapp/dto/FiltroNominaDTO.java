@@ -14,9 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class FiltroNominaDTO {
 
-    private String nombre;
-    private Integer mes;
-    private Integer anio;
+    private String filtroNombre;
+    private Integer filtroMes;
+    private Integer filtroAnio;
     private List<String> conceptos;
     private BigDecimal totalLiquidoMinimo;
     private BigDecimal totalLiquidoMaximo;
