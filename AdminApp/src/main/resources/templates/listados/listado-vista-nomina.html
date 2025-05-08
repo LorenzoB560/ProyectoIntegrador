@@ -13,6 +13,42 @@
 <div class="container">
   <h2 class="mb-4">Listado de Nóminas</h2>
 
+  <!-- Sección de filtros -->
+  <div class="filter-section">
+    <div class="row">
+      <div class="col-md-3 mb-2">
+        <label for="Empleado" class="form-label">Empleado:</label>
+        <input type="text" class="form-control" id="Empleado" placeholder="Filtrar por empleado">
+      </div>
+      <div class="col-md-3 mb-2">
+        <label for="filtroMes" class="form-label">Mes:</label>
+        <input type="text" class="form-control" id="filtroMes" placeholder="Filtrar por mes">
+      </div>
+      <div class="col-md-3 mb-2">
+        <label for="filtroAnio" class="form-label">Año:</label>
+        <input type="text" class="form-control" id="filtroAnio" placeholder="Filtrar por año">
+      </div>
+      <div class="col-md-3 mb-2">
+        <label for="filtroFechaAntes" class="form-label">Contratados antes de:</label>
+        <input type="text" class="form-control" id="filtroFechaAntes">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 mb-2">
+        <label for="filtroLiquidoMinimo" class="form-label">Total líquido mínimo:</label>
+        <input type="number" class="form-control" id="filtroLiquidoMinimo" placeholder="Ej: 1184">
+      </div>
+      <div class="col-md-3 mb-2">
+        <label for="filtroLiquidoMaximo" class="form-label">Total líquido máximo:</label>
+        <input type="number" class="form-control" id="filtroLiquidoMaximo" placeholder="Ej: 50000">
+      </div>
+      <div class="col-md-9 d-flex align-items-end justify-content-end mb-2">
+        <button id="aplicarFiltros" class="btn btn-primary me-2">Aplicar Filtros</button>
+        <button id="limpiarFiltros" class="btn btn-secondary">Limpiar Filtros</button>
+      </div>
+    </div>
+  </div>
+
   <table class="table table-bordered table-hover shadow-sm bg-white">
     <thead class="table-primary text-center">
     <tr>

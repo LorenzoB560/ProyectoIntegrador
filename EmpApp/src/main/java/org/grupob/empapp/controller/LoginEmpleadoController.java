@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.*;
 import org.grupob.empapp.dto.EmpleadoDTO;
@@ -195,6 +196,9 @@ public class LoginEmpleadoController {
 
              modelo.addAttribute("dto", dto);*/
 
+            dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            modelo.addAttribute("dto", dto);
+
             return "redirect:/empapp/area-personal";
 
         } catch (UsuarioNoEncontradoException e) {
@@ -241,23 +245,23 @@ public class LoginEmpleadoController {
                 ? cookieService.deserializar(usuariosCookie) : null;
 
 
-        int contador = cookieService.obtenerInicios(usuariosCookie,ultimoUsuario);
-        request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
+        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+        try {
+            request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
 
-        LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
-        modelo.addAttribute("dto", dto);
+            LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            modelo.addAttribute("dto", dto);
 
 //        modelo.addAttribute("usuario", ultimoUsuario);
-        modelo.addAttribute("contador", contador);
-        modelo.addAttribute("ultimaPagina", ultimaPagina);
+            modelo.addAttribute("contador", contador);
+            modelo.addAttribute("ultimaPagina", ultimaPagina);
 
-        try{
-//            EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
+            EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
             logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
             String id = String.valueOf(dto.getId());
             return "redirect:/empleado/detalle/" + id;
             //TODO CAMBIAR LA EXCEPCION QUE LANZA EL SERVICIO Y SE CAPTURA AQUI
-        }catch(DepartamentoNoEncontradoException e){
+        } catch (EmpleadoNoEncontradoException e) {
             return "login/area-personal";
 
         }

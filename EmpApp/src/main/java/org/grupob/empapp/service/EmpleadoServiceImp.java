@@ -56,7 +56,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     @Override
     public EmpleadoDTO devuelveEmpleado(String id) {
         Empleado empleado = empleadoRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new DepartamentoNoEncontradoException("Empleado no encontrado"));
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("Empleado no encontrado"));
         return empleadoConverter.convertToDto(empleado);
     }
 

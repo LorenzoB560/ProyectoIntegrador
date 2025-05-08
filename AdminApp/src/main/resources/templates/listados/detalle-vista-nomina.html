@@ -43,6 +43,11 @@
                         <strong th:text="${c.nombreConcepto}">Concepto</strong>
                         <span th:text="${#numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'">0,00 €</span>
                     </div>
+                    <button class="btn btn-sm btn-danger btn-eliminar"
+                            th:data-id-nomina="${nominaDTO.id}"
+                            th:data-id-concepto="${c.idConcepto}">
+                        Eliminar
+                    </button>
                 </li>
 
             </ul>
