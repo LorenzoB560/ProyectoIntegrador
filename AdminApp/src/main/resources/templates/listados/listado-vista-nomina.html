@@ -69,7 +69,11 @@
 
   </div>
 
-  <table class="table table-bordered table-hover shadow-sm bg-white">
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <span th:text="${error}"></span>
+    </div>
+
+    <table class="table table-bordered table-hover shadow-sm bg-white">
     <thead class="table-primary text-center">
     <tr>
 <!--      <th>Id</th>-->

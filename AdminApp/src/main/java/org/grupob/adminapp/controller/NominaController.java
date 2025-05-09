@@ -4,11 +4,13 @@ import org.grupob.adminapp.dto.FiltroNominaDTO;
 import org.grupob.adminapp.dto.LineaNominaDTO;
 import org.grupob.adminapp.dto.NominaDTO;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
+import org.grupob.adminapp.service.NominaPasadaException;
 import org.grupob.adminapp.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,7 +22,7 @@ public class NominaController {
 
     private final NominaServiceImp nominaServiceImp;
 
-    public NominaController(NominaServiceImp nominaServiceImp, AltaNominaServiceImp altaNominaServiceImp) {
+    public NominaController(NominaServiceImp nominaServiceImp) {
         this.nominaServiceImp = nominaServiceImp;
     }
 
@@ -60,9 +62,20 @@ public class NominaController {
         return "listados/detalle-vista-nomina";
     }
     @GetMapping("/modificar/{id}")
-    public String modificarNomina(@PathVariable UUID id, Model model) {
-        model.addAttribute("nominaDTO", nominaServiceImp.devolverNominaPorId(id));
-        return "nomina/modificar-vista-nomina";
+    public String modificarNomina(@PathVariable UUID id, RedirectAttributes redirectAttributes, Model model) {
+        try {
+            NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
+
+            // Verificar si la nómina pertenece a un mes anterior
+            nominaServiceImp.verificarNominaPasada(nominaDTO);
+
+            model.addAttribute("nominaDTO", nominaDTO);
+            return "nomina/modificar-vista-nomina";
+
+        } catch (NominaPasadaException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage()); // Envía el mensaje de error a la vista
+            return "redirect:/nomina/listado"; // Redirige al listado de nóminas
+        }
     }
     @PostMapping("/guardar-datos-modificados")
     public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO, Model model) {

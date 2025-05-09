@@ -54,18 +54,11 @@ public class AltaNominaServiceImp implements AltaNominaService {
     }
 
     public void guardarNomina(AltaNominaDTO altaNominaDTO){
-        // Verificar datos recibidos para depuración
-        System.out.println("AltaNominaDTO recibido: " + altaNominaDTO);
-        System.out.println("Líneas recibidas: " + (altaNominaDTO.getLineaNominas() != null ? altaNominaDTO.getLineaNominas().size() : "null"));
-
         // El converter se encarga de crear las entidades Nomina y LineaNomina correctamente
         Nomina nomina = nominaConverter.altaNominaDTOConvierteAEntidad(altaNominaDTO);
 
         NominaServiceImp.asignarLineasNomina(nomina, altaNominaDTO.getLineaNominas(), conceptoRepository);
 
-
-        // Para depuración, imprimir la nómina guardada
-        System.out.println("Nómina guardada con ID: " + nomina.getId());
-        System.out.println("Líneas guardadas: " + (nomina.getLineaNominas() != null ? nomina.getLineaNominas().size() : "null"));
+        nominaRepository.save(nomina);
     }
 }

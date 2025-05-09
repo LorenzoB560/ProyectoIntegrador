@@ -80,13 +80,8 @@ public class NominaServiceImp implements NominaService{
     public void eliminarNomina(UUID idNomina){
         Optional<Nomina> nomina = nominaRepository.findById(idNomina);
         if (nomina.isPresent()) {
-
             //Verificar que la nómina no sea pasada
-            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
-            YearMonth mesActual = YearMonth.now();
-            if (mesNomina.isBefore(mesActual)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
-            }
+            verificarNominaPasada(nomina);
             nominaRepository.delete(nomina.get());
         } else {
             throw new EntityNotFoundException("La nomina seleccionada no existe");
@@ -232,13 +227,17 @@ public class NominaServiceImp implements NominaService{
     }
     public void modificarNomina(NominaDTO nominaDTO){
         Nomina nomina = nominaConverter.nominaDTOConvierteAEntidad(nominaDTO);
-
         System.err.println(nominaDTO);
         asignarLineasNomina(nomina, nominaDTO.getLineaNominas(), conceptoRepository);
-
         nominaRepository.save(nomina);
     }
-
+    public void verificarNominaPasada(NominaDTO nomina){
+        YearMonth mesNomina = YearMonth.of(nomina.getAnio(), nomina.getMes());
+        YearMonth mesActual = YearMonth.now();
+        if (!mesNomina.isAfter(mesActual)) {
+            throw new NominaPasadaException("No se puede modificar una nómina de un mes pasado");
+        }
+    }
     static void asignarLineasNomina(Nomina nomina, List<LineaNominaDTO> lineaNominas, ConceptoRepository conceptoRepository) {
         Set<LineaNomina> lineas = lineaNominas.stream().map(lineaDTO -> {
             Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
@@ -273,5 +272,17 @@ public class NominaServiceImp implements NominaService{
         nominaDTO.setTotalLiquido(totalIngresos.subtract(totalDeducciones));
 
         return nominaDTO;
+    }
+
+    private void verificarNominaPasada(Optional<Nomina> nomina){
+        if (nomina.isPresent()){
+            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
+            YearMonth mesActual = YearMonth.now();
+            if (mesNomina.isBefore(mesActual)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
+            }
+        } else {
+            throw new EntityNotFoundException("La nomina seleccionada no existe");
+        }
     }
 }
