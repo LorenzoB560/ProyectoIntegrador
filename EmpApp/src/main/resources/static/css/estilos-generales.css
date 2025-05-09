@@ -101,6 +101,13 @@ nav a:hover, nav a:focus {
     color: #fff;
 }
 
+.disabled-link {
+    color: #b0bec5;
+    opacity: 0.6;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
 /* MAIN */
 main {
     flex: 1 0 auto;
