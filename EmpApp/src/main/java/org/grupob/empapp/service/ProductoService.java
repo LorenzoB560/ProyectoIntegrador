@@ -1,6 +1,6 @@
 package org.grupob.empapp.service;
 import org.grupob.empapp.dto.ProductoDTO;
-import org.grupob.empapp.dto.ProductoSearchDTO;
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -12,6 +12,5 @@ public interface ProductoService {
     ProductoDTO devuelveProducto(UUID id);
 
     Page<ProductoDTO> buscarProductosPaginados(
-            ProductoSearchDTO searchParams, // <-- Usar el DTO
-            int page, int size, String sortBy, String sortDir);
+            ProductoSearchDTO searchParams, int page, int size, String sortBy, String sortDir);
 }

@@ -1,6 +1,6 @@
 package org.grupob.adminapp.service;
 import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -12,7 +12,10 @@ public interface ProductoService {
     ProductoDTO devuelveProducto(UUID id);
 
     Page<ProductoDTO> buscarProductosPaginados(
-            ProductoSearchDTO searchParams, // <-- Usar el DTO
-            int page, int size, String sortBy, String sortDir);
+            ProductoSearchDTO searchParams, // Acepta DTO de EmpApp
+            int page,
+            int size,
+            String sortBy, // Ahora puede ser 'descripcion' o 'categoria'
+            String sortDir);
     void eliminarProducto(UUID id);
 }

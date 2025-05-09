@@ -3,7 +3,7 @@ package org.grupob.adminapp.controller;
 import jakarta.persistence.EntityNotFoundException;
 import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.adminapp.dto.ProductoDTO;
-import org.grupob.adminapp.dto.ProductoSearchDTO;
+import org.grupob.comun.dto.ProductoSearchDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
 import org.grupob.adminapp.service.ProductoMasivoService;
 import org.grupob.adminapp.service.ProductoServiceImp;
@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -55,21 +56,25 @@ public class ProductoRestController {
     }
     @GetMapping("/listado")
     public ResponseEntity<Page<ProductoDTO>> listarProductos(
-            ProductoSearchDTO searchParams, // <-- Recibe el DTO (Spring mapea params URL a campos)
+            ProductoSearchDTO searchParams, // Spring mapea query params a los campos de este DTO
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "nombre") String sortBy,
+            @RequestParam(defaultValue = "descripcion") String sortBy, // Ordenar por nombre por defecto
             @RequestParam(defaultValue = "asc") String sortDir) {
-
         try {
-            // Llama al servicio pasando el DTO
+            // Llama al servicio pasando el DTO de búsqueda y los parámetros de paginación/ordenación
             Page<ProductoDTO> productosPaginados = productoService.buscarProductosPaginados(
                     searchParams, page, size, sortBy, sortDir);
             return ResponseEntity.ok(productosPaginados);
+        } catch (IllegalArgumentException e) {
+            // Capturar errores como un sortBy inválido
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parámetro de ordenación inválido.", e);
         } catch (Exception e) {
-            System.err.println("Error al listar productos: " + e.getMessage());
+            // Loguear el error 'e' en un sistema de logs real
+            System.err.println("Error inesperado al listar productos: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            // Devolver error genérico al cliente
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al obtener el listado de productos", e);
         }
     }
     @DeleteMapping("/eliminar/{id}")
@@ -90,27 +95,35 @@ public class ProductoRestController {
     }
 
     @PostMapping("/carga-masiva")
-    public ResponseEntity<String> cargarMasivaProductos(@RequestParam(value = "archivo", required = false) MultipartFile archivo) {
+    public ResponseEntity<?> cargarMasivaProductos(@RequestParam(value = "archivo", required = false) MultipartFile archivo) {
 
         if(archivo==null){
             return ResponseEntity.badRequest().body("Debes seleccionar un archivo JSON");
         }
 
+        // 1. Validación básica del archivo
         if (archivo.isEmpty()) {
-            return ResponseEntity.badRequest().body("El archivo proporcionado está vacío.");
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "El archivo está vacío"));
         }
 
-        String contentType = archivo.getContentType();
-        if (contentType == null || !contentType.equals(MediaType.APPLICATION_JSON_VALUE)) {
-            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE) // 415 Unsupported Media Type
-                    .body("El tipo de archivo no es JSON.");
+        if (!archivo.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
+            return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                    .body(Map.of("error", "Solo se admiten archivos JSON"));
         }
 
-        try (InputStream input = archivo.getInputStream()) {
-            productoMasivoService.cargaMasiva(input);
-            return ResponseEntity.ok("Carga completada correctamente.");
+        try (InputStream inputStream = archivo.getInputStream()) {
+            // 2. Procesamiento
+            productoMasivoService.cargaMasiva(inputStream);
+
+            return ResponseEntity.ok()
+                    .body(Map.of("mensaje", "Carga masiva completada",
+                            "productos", archivo.getOriginalFilename()));
+
         } catch (IOException e) {
-            return ResponseEntity.status(400).body("Error al leer el archivo: " + e.getMessage());
+            // 4. Errores de lectura del archivo
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error procesando el archivo"));
         }
     }
 

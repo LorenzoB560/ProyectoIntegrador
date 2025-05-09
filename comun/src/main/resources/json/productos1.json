@@ -1,198 +1,62 @@
-[
-  {
-    "nombre": "El Quijote",
-    "precio": 19.99,
-    "descripcion": "Edición ilustrada del clásico de Cervantes.",
-    "categoria": {
-      "id": 1,
-      "nombre": "LIBRO"
+{
+  "proveedor": "Productalia",
+  "productos": [
+    {
+      "descripcion": "Mesa de comedor",
+      "precio": 76.43,
+      "marca": "Acme",
+      "categorias": ["MUEBLE", "Comedor"],
+      "unidades": 8,
+      "fechaFabricacion": "2018-12-13",
+      "dimension": {
+        "ancho": 100,
+        "profundo": 60,
+        "alto": 60
+      },
+      "material": "Madera de roble",
+      "colores": ["Blanco", "Nogal", "Negro"]
     },
-    "tipoProducto": "LIBRO",
-    "autor": "Miguel de Cervantes",
-    "editorial": "Planeta",
-    "numPaginas": 863
-  },
-  {
-    "nombre": "1984",
-    "precio": 12.50,
-    "descripcion": "Novela distópica influyente.",
-    "categoria": {
-      "id": 1,
-      "nombre": "LIBRO"
+    {
+      "descripcion": "Novela",
+      "precio": 12.91,
+      "marca": "Papelera",
+      "categorias": ["LIBRO", "Existencialista"],
+      "unidades": 25,
+      "fechaFabricacion": "2019-09-01",
+      "titulo": "El lobo estepario",
+      "autor": "Hermann Hesse",
+      "editorial": "Alianza",
+      "numPaginas": 321,
+      "segundaMano": true
     },
-    "tipoProducto": "LIBRO",
-    "autor": "George Orwell",
-    "editorial": "Debolsillo",
-    "numPaginas": 328
-  },
-  {
-    "nombre": "Clean Code",
-    "precio": 35.00,
-    "descripcion": "Manual de desarrollo ágil de software.",
-    "categoria": {
-      "id": 1,
-      "nombre": "LIBRO"
+    {
+      "descripcion": "Camiseta básica",
+      "precio": 15.50,
+      "marca": "TextilPro",
+      "categorias": ["ROPA", "Verano"],
+      "unidades": 40,
+      "fechaFabricacion": "2023-03-10",
+      "material": "Algodón",
+      "tallas": ["S", "M", "L"]
     },
-    "tipoProducto": "LIBRO",
-    "autor": "Robert C. Martin",
-    "editorial": "Anaya Multimedia",
-    "numPaginas": 464
-  },
-  {
-    "nombre": "Sapiens",
-    "precio": 22.90,
-    "descripcion": "Breve historia de la humanidad.",
-    "categoria": {
-      "id": 1,
-      "nombre": "LIBRO"
-    },
-    "tipoProducto": "LIBRO",
-    "autor": "Yuval Noah Harari",
-    "editorial": "Debate",
-    "numPaginas": 496
-  },
-  {
-    "nombre": "Dune",
-    "precio": 18.75,
-    "descripcion": "Épica de ciencia ficción.",
-    "categoria": {
-      "id": 1,
-      "nombre": "LIBRO"
-    },
-    "tipoProducto": "LIBRO",
-    "autor": "Frank Herbert",
-    "editorial": "Nova",
-    "numPaginas": 688
-  },
-  {
-    "nombre": "Camiseta Básica",
-    "precio": 9.99,
-    "descripcion": "Camiseta de algodón suave.",
-    "categoria": {
-      "id": 3,
-      "nombre": "ROPA"
-    },
-    "tipoProducto": "ROPA",
-    "talla": "M",
-    "color": "Blanco",
-    "material": "Algodón"
-  },
-  {
-    "nombre": "Vaqueros Slim Fit",
-    "precio": 39.95,
-    "descripcion": "Pantalones vaqueros ajustados.",
-    "categoria": {
-      "id": 3,
-      "nombre": "ROPA"
-    },
-    "tipoProducto": "ROPA",
-    "talla": "32",
-    "color": "Azul Oscuro",
-    "material": "Denim"
-  },
-  {
-    "nombre": "Sudadera con Capucha",
-    "precio": 29.99,
-    "descripcion": "Sudadera cómoda para uso diario.",
-    "categoria": {
-      "id": 3,
-      "nombre": "ROPA"
-    },
-    "tipoProducto": "ROPA",
-    "talla": "L",
-    "color": "Gris Jaspeado",
-    "material": "Poliéster/Algodón"
-  },
-  {
-    "nombre": "Vestido Verano Floral",
-    "precio": 45.50,
-    "descripcion": "Vestido ligero y fresco.",
-    "categoria": {
-      "id": 3,
-      "nombre": "ROPA"
-    },
-    "tipoProducto": "ROPA",
-    "talla": "S",
-    "color": "Estampado Floral",
-    "material": "Viscosa"
-  },
-  {
-    "nombre": "Chaqueta Impermeable",
-    "precio": 65.00,
-    "descripcion": "Chaqueta resistente al agua y viento.",
-    "categoria": {
-      "id": 3,
-      "nombre": "ROPA"
-    },
-    "tipoProducto": "ROPA",
-    "talla": "XL",
-    "color": "Negro",
-    "material": "Nylon"
-  },
-  {
-    "nombre": "Smartphone XPTO",
-    "precio": 599.99,
-    "descripcion": "Teléfono inteligente de última generación.",
-    "categoria": {
-      "id": 2,
-      "nombre": "ELECTRONICO"
-    },
-    "tipoProducto": "ELECTRONICO",
-    "marca": "TechCorp",
-    "modelo": "XPTO-11",
-    "garantia": "2 años"
-  },
-  {
-    "nombre": "Laptop Ultrabook Pro",
-    "precio": 1199.00,
-    "descripcion": "Portátil ligero y potente para profesionales.",
-    "categoria": {
-      "id": 2,
-      "nombre": "ELECTRONICO"
-    },
-    "tipoProducto": "ELECTRONICO",
-    "marca": "LapPro",
-    "modelo": "Ultra-5",
-    "garantia": "2 años"
-  },
-  {
-    "nombre": "Auriculares Bluetooth NoiseFree",
-    "precio": 79.90,
-    "descripcion": "Auriculares inalámbricos con cancelación de ruido.",
-    "categoria": {
-      "id": 2,
-      "nombre": "ELECTRONICO"
-    },
-    "tipoProducto": "ELECTRONICO",
-    "marca": "SoundMax",
-    "modelo": "NoiseFree X",
-    "garantia": "1 año"
-  },
-  {
-    "nombre": "Smartwatch FitBand 3",
-    "precio": 149.50,
-    "descripcion": "Reloj inteligente con monitor de actividad.",
-    "categoria": {
-      "id": 2,
-      "nombre": "ELECTRONICO"
-    },
-    "tipoProducto": "ELECTRONICO",
-    "marca": "WearFit",
-    "modelo": "FitBand 3",
-    "garantia": "1 año"
-  },
-  {
-    "nombre": "Tablet Tab10 HD",
-    "precio": 249.00,
-    "descripcion": "Tablet de 10 pulgadas con pantalla HD.",
-    "categoria": {
-      "id": 2,
-      "nombre": "ELECTRONICO"
-    },
-    "tipoProducto": "ELECTRONICO",
-    "marca": "TabTech",
-    "modelo": "Tab10",
-    "garantia": "1 año"
-  }
-]
-
+    {
+      "descripcion": "Smartphone gama alta",
+      "precio": 799.99,
+      "marca": "TechBrand",
+      "categorias": ["ELECTRONICO", "Movil"],
+      "unidades": 15,
+      "fechaFabricacion": "2024-01-20",
+      "modelo": "XPhone Pro",
+      "garantia": "2 años",
+      "pulgadas": 6.5,
+      "dimension": {
+        "ancho": 7.2,
+        "profundo": 0.8,
+        "alto": 15.0
+      },
+      "capacidadBateria": 4500,
+      "almacenamientoInterno": 256,
+      "ram": 12
+    }
+  ]
+}

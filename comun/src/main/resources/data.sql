@@ -775,108 +775,104 @@ VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 290.00);
 
 INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
-VALUES
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-     UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 2950.00),
+VALUES (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 2950.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-     UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 380.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 380.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-     UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 425.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 425.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-     UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 280.00);
-
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
-VALUES
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-     UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 3150.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-     UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 345.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-     UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 470.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-     UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 295.00);
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 280.00);
 
 INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
-VALUES
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-     UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 2900.00),
+VALUES (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 3150.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-     UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 375.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 345.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-     UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 420.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 470.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-     UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 275.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-     UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 3100.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-     UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 345.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-     UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 470.00),
-
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-     UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 295.00);
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 295.00);
 
 INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
-VALUES
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-     UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 2950.00),
+VALUES (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 2900.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-     UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 380.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 375.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-     UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 425.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 420.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-     UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 280.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 275.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-     UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 3150.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 3100.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-     UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 345.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 345.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-     UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 470.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 470.00),
 
-    (UNHEX(REPLACE(UUID(), '-', '')),
-     UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-     UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 295.00);
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 295.00);
+
+INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+VALUES (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 2950.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 380.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 425.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 280.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 3150.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 345.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 470.00),
+
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 295.00);
 
 
 -- Establecimiento de la estructura jerárquica de jefes (No requiere cambios en la lógica, ya que usa los IDs de empleado)
@@ -974,268 +970,176 @@ VALUES (UNHEX(REPLACE('e6e6e6e6-1111-4f4f-ffff-111111111111', '-', '')), 'Creati
         UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), NOW());
 
 
--- Insertar categorías (IDs autoincrementales)
+-- Insertar proveedores
+INSERT INTO proveedor (id, nombre)
+VALUES (1, 'Grupo Mayorista Ibérico'),
+       (2, 'Almacenes Unidos'),
+       (3, 'Distribuciones Avance'),
+       (4, 'Comercial Global S.A');
+
+-- Insertar categorías
 INSERT INTO categoria (nombre)
-VALUES ('Libros'),
-       ('Electrónicos'),
-       ('Ropa');
+VALUES ('LIBRO'),
+       ('ELECTRONICO'),
+       ('ROPA'),
+       ('MUEBLE');
 
--- Obtener IDs de categorías recién insertadas
-SET
-@libro_cat_id = (SELECT id FROM categoria WHERE nombre = 'Libros');
-SET
-@electronico_cat_id = (SELECT id FROM categoria WHERE nombre = 'Electrónicos');
-SET
-@ropa_cat_id = (SELECT id FROM categoria WHERE nombre = 'Ropa');
+-- Insertar tallas
+INSERT INTO talla (talla)
+VALUES ('XS'),
+       ('S'),
+       ('M'),
+       ('L'),
+       ('XL'),
+       ('XXL');
 
--- Libro 1
+-- ========== MUEBLES ==========
+-- Mueble 1 (3 colores, segunda mano)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid,
-        'Matar un ruiseñor',
-        18.50,
-        'Clásico sobre justicia y prejuicio racial',
-        @libro_cat_id,
-        'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid,
-        'Harper Lee',
-        'Vintage Español',
-        384);
--- Libro 2
+@mueble1 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@mueble1, 'Sillón vintage', 250.00, 'Clásicos Muebles', true, 3, 1, CURDATE(), 4, 'MUEBLE', '2018-07-12');
+
+INSERT INTO mueble (id, material, ancho, profundo, alto)
+VALUES (@mueble1, 'Cuero genuino', 90.0, 100.0, 80.0);
+-- Decimales según precisión de tu entidad
+
+-- Mueble 2 (2 colores, nuevo)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid,
-        '1984',
-        19.95,
-        'Novela distópica clásica',
-        @libro_cat_id,
-        'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid,
-        'George Orwell',
-        'Secker & Warburg',
-        328);
+@mueble2 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@mueble2, 'Escritorio moderno', 179.99, 'OficinaPlus', false, 10, 2, CURDATE(), 5, 'MUEBLE', '2024-02-20');
 
--- Electrónico 1
+INSERT INTO mueble (id, material, ancho, profundo, alto)
+VALUES (@mueble2, 'Melamina', 140.0, 70.0, 75.0);
+
+-- Mueble 3 (1 color, diseño ecológico)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid,
-        'Smartphone X',
-        799.99,
-        'Teléfono flagship 2025',
-        @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid,
-        'TechCorp',
-        'X-2025',
-        '2 años');
+@mueble3 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@mueble3, 'Estantería bambú', 89.95, 'EcoDesign', false, 15, 3, CURDATE(), 4, 'MUEBLE', '2023-11-01');
 
--- Electrónico 2
+INSERT INTO mueble (id, material, ancho, profundo, alto)
+VALUES (@mueble3, 'Bambú', 200.0, 30.0, 180.0);
+
+INSERT INTO mueble_colores (producto_id, colores)
+VALUES (@mueble3, 'Natural');
+
+-- ========== LIBROS ==========
+-- Libro 1 (Fantasía épica)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid,
-        'Tablet Pro',
-        349.99,
-        'Tablet profesional 12 pulgadas',
-        @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid,
-        'DigitalWorks',
-        'T-Pro-12',
-        '3 años');
+@libro1 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@libro1, 'El imperio final', 24.99, 'NovaLiteraria', false, 20, 2, CURDATE(), 5, 'LIBRO', '2023-05-15');
 
--- Ropa 1
+INSERT INTO libro (id, titulo, autor, editorial, num_paginas)
+VALUES (@libro1, 'El imperio final', 'Brandon Sanderson', 'Nova', 541);
+
+-- Libro 2 (Autoayuda)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid,
-        'Camisa Oxford',
-        59.95,
-        'Camisa formal 100% algodón',
-        @ropa_cat_id,
-        'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid,
-        'M',
-        'Azul marino',
-        'Algodón');
+@libro2 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@libro2, 'Hábitos atómicos', 18.50, 'Crecimiento Personal', true, 8, 1, CURDATE(), 4, 'LIBRO', '2020-09-01');
 
--- Ropa 2
+INSERT INTO libro (id, titulo, autor, editorial, num_paginas)
+VALUES (@libro2, 'Hábitos atómicos', 'James Clear', 'Paidós', 320);
+
+-- Libro 3 (Poesía)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid,
-        'Jeans Slim Fit',
-        89.99,
-        'Vaqueros ajustados',
-        @ropa_cat_id,
-        'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid,
-        '32',
-        'Azul oscuro',
-        'Denim');
--- Libro 3
+@libro3 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@libro3, 'Poemas completos', 15.00, 'Clásicos Modernos', false, 12, 3, CURDATE(), 4, 'LIBRO', '2024-01-10');
+
+INSERT INTO libro (id, titulo, autor, editorial, num_paginas)
+VALUES (@libro3, 'Poemas completos', 'Mario Benedetti', 'Alianza', 280);
+
+-- ========== ELECTRÓNICOS ==========
+-- Electrónico 1 (Gama alta)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'El Hobbit', 18.50, 'Precuela de El Señor de los Anillos', @libro_cat_id, 'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid, 'J.R.R. Tolkien', 'Minotauro', 310);
+@electro1 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@electro1, 'Smartphone flagship', 1199.00, 'TechMaster', false, 8, 3, CURDATE(), 5, 'ELECTRONICO',
+        '2024-04-01');
 
--- Libro 4
+INSERT INTO electronico (id, modelo, garantia, pulgadas, ancho, profundo, alto, capacidad_bateria,
+                         almacenamiento_interno, ram)
+VALUES (@electro1, 'X-Pro', '3 años', 6.7, 7.5, 0.8, 16.2, 5000, 1024, 16);
+
+-- Electrónico 2 (Tablet media)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Matar un ruiseñor', 17.99, 'Clásico sobre justicia y racismo', @libro_cat_id, 'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid, 'Harper Lee', 'HarperCollins', 281);
+@electro2 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@electro2, 'Tablet media', 299.00, 'MidTech', false, 15, 2, CURDATE(), 4, 'ELECTRONICO', '2024-03-15');
 
--- Libro 5
+INSERT INTO electronico (id, modelo, garantia, pulgadas, ancho, profundo, alto, capacidad_bateria,
+                         almacenamiento_interno, ram)
+VALUES (@electro2, 'TabPlus', '2 años', 10.1, 17.0, 0.7, 24.0, 8000, 256, 8);
+
+-- Electrónico 3 (Auriculares básicos)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Donde viven los monstruos', 14.50, 'Libro infantil ilustrado', @libro_cat_id, 'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid, 'Maurice Sendak', 'Kalandraka', 48);
+@electro3 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@electro3, 'Auriculares inalámbricos', 49.95, 'SoundBasic', false, 25, 1, CURDATE(), 3, 'ELECTRONICO',
+        '2024-02-28');
 
--- Libro 6
+INSERT INTO electronico (id, modelo, garantia, pulgadas, ancho, profundo, alto, capacidad_bateria,
+                         almacenamiento_interno, ram)
+VALUES (@electro3, 'Wireless-X', '1 año', NULL, 6.0, 2.5, 15.0, 300, NULL, NULL);
+
+-- ========== ROPA ==========
+-- Ropa 1 (Abrigo invierno)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Fahrenheit 451', 16.75, 'Distopía sobre la quema de libros', @libro_cat_id, 'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid, 'Ray Bradbury', 'Debolsillo', 158);
+@ropa1 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@ropa1, 'Abrigo de invierno', 129.00, 'WinterStyle', false, 10, 3, CURDATE(), 4, 'ROPA', '2023-10-01');
 
--- Libro 7
+INSERT INTO ropa (id, material)
+VALUES (@ropa1, 'Lana merino');
+
+INSERT INTO ropa_talla (id_producto, id_talla)
+VALUES (@ropa1, (SELECT id FROM talla WHERE talla = 'L')),
+       (@ropa1, (SELECT id FROM talla WHERE talla = 'XL'));
+
+-- Ropa 2 (Camiseta verano)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Orgullo y Prejuicio', 15.00, 'Clásico de la literatura inglesa', @libro_cat_id, 'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid, 'Jane Austen', 'Penguin Clásicos', 480);
+@ropa2 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@ropa2, 'Camiseta básica', 19.99, 'SummerWear', false, 30, 2, CURDATE(), 5, 'ROPA', '2024-05-01');
 
--- === Electrónicos Adicionales ===
+INSERT INTO ropa (id, material)
+VALUES (@ropa2, 'Algodón orgánico');
 
--- Electrónico 3
+INSERT INTO ropa_talla (id_producto, id_talla)
+VALUES (@ropa2, (SELECT id FROM talla WHERE talla = 'S')),
+       (@ropa2, (SELECT id FROM talla WHERE talla = 'M'));
+
+-- Ropa 3 (Pantalón formal)
 SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Auriculares NoiseFree', 129.99, 'Cancelación activa de ruido premium', @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid, 'SoundWave', 'NF-3000', '1 año');
+@ropa3 = UNHEX(REPLACE(UUID(), '-', ''));
+INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
+                      tipo_producto, fecha_fabricacion)
+VALUES (@ropa3, 'Pantalón de vestir', 79.00, 'FormalAttire', true, 5, 1, CURDATE(), 4, 'ROPA', '2022-12-15');
 
--- Electrónico 4
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Monitor Curvo 34"', 450.00, 'Monitor ultrapanorámico para gaming', @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid, 'ViewMax', 'VM-C34WQ', '3 años');
+INSERT INTO ropa (id, material)
+VALUES (@ropa3, 'Mezcla de lino');
 
--- Electrónico 5
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Teclado Mecánico RGB', 85.50, 'Teclado gaming retroiluminado', @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid, 'ClickKeys', 'MK-RGB-Pro', '2 años');
+INSERT INTO ropa_talla (id_producto, id_talla)
+VALUES (@ropa3, (SELECT id FROM talla WHERE talla = 'M'));
 
--- Electrónico 6
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Webcam ProStream', 65.00, 'Cámara web Full HD para streaming', @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid, 'CamLink', 'StreamerX', '1 año');
-
--- Electrónico 7
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Disco Duro Externo 2TB', 75.99, 'Almacenamiento portátil USB 3.0', @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid, 'DataStore', 'PortableHD-2T', '2 años');
-
--- === Ropa Adicional ===
-
--- Ropa 3
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Polo Clásico Piqué', 34.99, 'Polo de algodón piqué', @ropa_cat_id, 'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid, 'L', 'Blanco', 'Algodón Piqué');
-
--- Ropa 4
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Bermudas Cargo', 45.00, 'Pantalón corto con bolsillos laterales', @ropa_cat_id, 'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid, 'M', 'Beige', 'Algodón Ripstop');
-
--- Ropa 5
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Vestido de Lino', 69.90, 'Vestido fresco de verano', @ropa_cat_id, 'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid, 'S', 'Verde Oliva', 'Lino');
-
--- Ropa 6
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Chaqueta Bomber', 79.99, 'Chaqueta ligera estilo bomber', @ropa_cat_id, 'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid, 'XL', 'Negro', 'Nylon');
-
--- Ropa 7
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Jersey Cuello Pico Lana', 95.00, 'Jersey fino de lana merino', @ropa_cat_id, 'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid, 'M', 'Gris Jaspeado', 'Lana Merino');
-
--- === Mixto Adicional ===
-
--- Libro 8
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Crónica de una muerte anunciada', 14.00, 'Novela corta sobre un asesinato inevitable',
-        @libro_cat_id, 'LIBRO');
-INSERT INTO libro (id, autor, editorial, num_paginas)
-VALUES (@producto_uuid, 'Gabriel García Márquez', 'Bruguera', 128);
-
--- Electrónico 8
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Ratón Inalámbrico Ergo', 35.50, 'Ratón ergonómico para oficina', @electronico_cat_id,
-        'ELECTRONICO');
-INSERT INTO electronico (id, marca, modelo, garantia)
-VALUES (@producto_uuid, 'ClickWell', 'ErgoMouse-W', '18 meses');
-
--- Ropa 8
-SET
-@producto_uuid = UNHEX(REPLACE(UUID(), '-', ''));
-INSERT INTO producto (id, nombre, precio, descripcion, id_categoria, tipo_producto)
-VALUES (@producto_uuid, 'Calcetines Deportivos (Pack 3)', 12.95, 'Pack de 3 pares de calcetines técnicos', @ropa_cat_id,
-        'ROPA');
-INSERT INTO ropa (id, talla, color, material)
-VALUES (@producto_uuid, '42-45', 'Multicolor', 'Poliéster/Elastano');
+-- Insertar relaciones con categorías (ejemplo para 1 producto)
+INSERT INTO producto_categoria (id_producto, id_categoria)
+VALUES (@mueble1, (SELECT id FROM categoria WHERE nombre = 'MUEBLE')),
+       (@libro1, (SELECT id FROM categoria WHERE nombre = 'LIBRO')),
+       (@electro1, (SELECT id FROM categoria WHERE nombre = 'ELECTRONICO')),
+       (@ropa1, (SELECT id FROM categoria WHERE nombre = 'ROPA'));

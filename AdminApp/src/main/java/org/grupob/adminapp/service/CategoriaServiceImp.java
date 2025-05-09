@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoriaServiceImp {
+public class CategoriaServiceImp implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
     private final CategoriaConverter categoriaconverter;

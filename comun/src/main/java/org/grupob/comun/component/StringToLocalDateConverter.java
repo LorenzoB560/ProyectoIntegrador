@@ -1,4 +1,4 @@
-package org.grupob.empapp.component;
+package org.grupob.comun.component;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
