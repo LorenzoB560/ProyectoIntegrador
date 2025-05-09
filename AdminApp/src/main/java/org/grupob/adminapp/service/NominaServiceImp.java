@@ -9,28 +9,26 @@ import org.grupob.adminapp.converter.NominaConverter;
 import org.grupob.adminapp.dto.FiltroNominaDTO;
 import org.grupob.adminapp.dto.LineaNominaDTO;
 import org.grupob.adminapp.dto.NominaDTO;
-import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.LineaNomina;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
 import org.grupob.comun.repository.ConceptoRepository;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
-import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -56,7 +54,7 @@ public class NominaServiceImp implements NominaService{
         if (nomina.isPresent()) {
             //            Optional<Empleado> empleado = empleadoRepository.findById(nominaDTO.getIdEmpleado());
 //            empleado.ifPresent(value -> nominaDTO.setNombre(value.getNombre() + " " + value.getApellido()));
-            return nominaConverter.convierteADTO(nomina.get());
+            return nominaConverter.convierteANominaDTO(nomina.get());
         } else{
             throw new EntityNotFoundException("La nómina seleccionada no existe");
         }
@@ -65,7 +63,7 @@ public class NominaServiceImp implements NominaService{
     public List<NominaDTO> devolverNominas(){
         List<Nomina> nominas = nominaRepository.findAll();
         List<NominaDTO> nominasDTO = nominas.stream()
-                .map(nominaConverter::convierteADTO)
+                .map(nominaConverter::convierteANominaDTO)
                 .toList();
 
 
@@ -229,6 +227,27 @@ public class NominaServiceImp implements NominaService{
             );
         });
     }
+    public void modificarNomina(NominaDTO nominaDTO){
+        Nomina nomina = nominaConverter.nominaDTOConvierteAEntidad(nominaDTO);
 
+        System.err.println(nominaDTO);
+        asignarLineasNomina(nomina, nominaDTO.getLineaNominas(), conceptoRepository);
+
+        nominaRepository.save(nomina);
+    }
+
+    static void asignarLineasNomina(Nomina nomina, List<LineaNominaDTO> lineaNominas, ConceptoRepository conceptoRepository) {
+        Set<LineaNomina> lineas = lineaNominas.stream().map(lineaDTO -> {
+            Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
+                    .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));
+            LineaNomina linea = new LineaNomina();
+            linea.setConcepto(concepto);
+            linea.setCantidad(lineaDTO.getCantidad());
+            linea.setNomina(nomina);
+            return linea;
+        }).collect(Collectors.toSet());
+
+        nomina.setLineaNominas(lineas);
+    }
 
 }

@@ -3,7 +3,6 @@ package org.grupob.adminapp.service;
 import org.grupob.adminapp.converter.NominaConverter;
 import org.grupob.adminapp.dto.AltaNominaDTO;
 import org.grupob.comun.entity.Empleado;
-import org.grupob.comun.entity.LineaNomina;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
 import org.grupob.comun.repository.ConceptoRepository;
@@ -11,11 +10,9 @@ import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -62,21 +59,9 @@ public class AltaNominaServiceImp implements AltaNominaService {
         System.out.println("Líneas recibidas: " + (altaNominaDTO.getLineaNominas() != null ? altaNominaDTO.getLineaNominas().size() : "null"));
 
         // El converter se encarga de crear las entidades Nomina y LineaNomina correctamente
-        Nomina nomina = nominaConverter.convierteAEntidad(altaNominaDTO);
+        Nomina nomina = nominaConverter.altaNominaDTOConvierteAEntidad(altaNominaDTO);
 
-        Set<LineaNomina> lineas = altaNominaDTO.getLineaNominas().stream().map(lineaDTO -> {
-            Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
-                    .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));
-            LineaNomina linea = new LineaNomina();
-            linea.setConcepto(concepto);
-            linea.setCantidad(lineaDTO.getCantidad());
-            linea.setNomina(nomina);
-            return linea;
-        }).collect(Collectors.toSet());
-
-        nomina.setLineaNominas(lineas);
-
-        nominaRepository.save(nomina);
+        NominaServiceImp.asignarLineasNomina(nomina, altaNominaDTO.getLineaNominas(), conceptoRepository);
 
 
         // Para depuración, imprimir la nómina guardada

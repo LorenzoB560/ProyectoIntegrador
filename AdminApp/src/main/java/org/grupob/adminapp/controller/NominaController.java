@@ -52,7 +52,7 @@ public class NominaController {
 
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
         model.addAttribute("nominaDTO", nominaServiceImp.devolverNominaPorId(id));
-
+        System.out.println(nominaServiceImp.devolverNominaPorId(id));
         return "listados/detalle-vista-nomina";
     }
     @GetMapping("/modificar/{id}")
@@ -61,9 +61,12 @@ public class NominaController {
         return "nomina/modificar-vista-nomina";
     }
     @PostMapping("/guardar-datos-modificados")
-    public String guardarDatosModificados(){
+    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO, Model model) {
 
-        return "redirect:/nomina/detalle/{id}";
+        System.out.println(nominaDTO);
+
+        nominaServiceImp.modificarNomina(nominaDTO);
+        return "redirect:/nomina/listado";
     }
 
 

@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.empapp.converter.EmpleadoConverter;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
@@ -46,7 +47,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> devuelveTodosEmpleados() {
         List<Empleado> listaempleados = empleadoRepository.findAll();
         return listaempleados.stream()
-                .map(empleado -> empleadoConverter.convertToDto(empleado))
+                .map(empleadoConverter::convertToDto)
                 .collect(Collectors.toList());
     }
 
