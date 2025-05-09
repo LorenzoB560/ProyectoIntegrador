@@ -233,7 +233,7 @@ public class ProductoMasivoService {
     @Transactional // <-- ¡Esta anotación es obligatoria para ejecutar consultas de borrado/actualización!
     public void borradoMasivo(String opcion){
 
-        if(opcion.equals(0)){
+        if(opcion.equals("0")){
             eliminarTodos();
         }else{
             eliminarPorCategoria(opcion);
@@ -256,6 +256,9 @@ public class ProductoMasivoService {
         if (!categoriaRepository.existsById(id)) {
             throw new CategoriaNoEncontradaException("No existe esa categoria");
         }
-        productoRepository.deleteByCategoriaId(id);
+        List<UUID> productoIds = productoRepository.findIdsByCategoriaId(id);
+        if (!productoIds.isEmpty()) {
+            productoRepository.deleteByIds(productoIds);
+        }
     }
 }

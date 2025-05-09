@@ -1,14 +1,17 @@
 package org.grupob.empapp.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.dto.CategoriaDTO;
 import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ProveedorDTO;
 import org.grupob.empapp.service.CategoriaServiceImp;
+import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.ProveedorServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,25 +25,32 @@ public class ProductoController {
 
     private final ProveedorServiceImp proveedorService;
     private final CategoriaServiceImp categoriaService;
-    // Puedes inyectar otros servicios que uses aquí...
+    private final CookieService cookieService;
 
     @Autowired // Inyección por constructor recomendada
-    public ProductoController(ProveedorServiceImp proveedorService, CategoriaServiceImp categoriaService) {
+    public ProductoController(ProveedorServiceImp proveedorService, CategoriaServiceImp categoriaService, CookieService cookieService) {
         this.proveedorService = proveedorService;
         this.categoriaService = categoriaService;
+        this.cookieService = cookieService;
     }
 
 
     @GetMapping("/detalle/{id}")
-    public String vistaDetalleProducto(@PathVariable UUID id, Model model, HttpSession session) {
-//        LoginUsuarioEmpleadoDTO loginEmpDTO = (LoginUsuarioEmpleadoDTO) session.getAttribute("usuarioLogueado");
-//        if (loginEmpDTO == null) {
-//            return "redirect:/login/pedir-usuario";
-//        }
-//
-//        // --- CAMBIO AQUÍ: Añadir el objeto con ambas claves ---
-//        model.addAttribute("loginEmpDTO", loginEmpDTO); // Clave usada en th:object de detalle-vista-prod
-//        model.addAttribute("dto", loginEmpDTO);         // Clave usada en th:object de area-personal (por si el fragmento la necesita)
+    public String vistaDetalleProducto(@PathVariable UUID id, Model model, HttpServletRequest request,
+                                       @CookieValue(name = "usuario", required = false) String usuariosCookie) {
+        LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+        if(dto==null){
+            return "redirect:/empapp/login";
+        }
+
+        model.addAttribute("dto", dto);
+        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+        model.addAttribute("ultimaPagina", ultimaPagina);
+
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+        model.addAttribute("contador", contador);
 //        // -----------------------------------------------------
 //
         model.addAttribute("productoId", id);
@@ -48,14 +58,21 @@ public class ProductoController {
         return "listados/detalle-vista-prod";
     }
     @GetMapping("/lista")
-    public String vistaListaProductos(Model model, HttpSession session) {
-//        LoginUsuarioEmpleadoDTO loginEmpDTO = (LoginUsuarioEmpleadoDTO) session.getAttribute("usuarioLogueado");
-//        if (loginEmpDTO == null) {
-//            return "redirect:/login/pedir-usuario";
-//        }
-//
-//        model.addAttribute("loginEmpDTO", loginEmpDTO);
-//        model.addAttribute("dto", loginEmpDTO); // Para compatibilidad con header
+    public String vistaListaProductos(Model model, HttpServletRequest request,
+                                      @CookieValue(name = "usuario", required = false) String usuariosCookie) {
+        LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+        if(dto==null){
+            return "redirect:/empapp/login";
+        }
+
+        model.addAttribute("dto", dto);
+        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+        model.addAttribute("ultimaPagina", ultimaPagina);
+
+        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+        model.addAttribute("contador", contador);
         try {
             // Obtener lista de proveedores DTO usando el servicio
             List<ProveedorDTO> proveedores = proveedorService.findAll();

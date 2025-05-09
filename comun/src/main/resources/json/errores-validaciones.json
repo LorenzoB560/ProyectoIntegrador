@@ -2,7 +2,7 @@
   "proveedor": "Productalia",
   "productos": [
     {
-      "descripcion": "Vitrina escandinava",
+      "descripcion": "",
       "precio": 189.99,
       "marca": "NordicDesign",
       "categorias": ["MUEBLE", "Salón"],
@@ -96,7 +96,7 @@
       "titulo": "Tesla: El hombre del futuro",
       "autor": "Miguel Álvarez",
       "editorial": "Planeta",
-      "numPaginas": 410,
+      "numPaginas": 0,
       "segundaMano": false
     },
     {
@@ -258,7 +258,7 @@
 
     {
       "descripcion": "Altavoz bluetooth",
-      "precio": 49.90,
+      "precio": 0,
       "marca": "SoundWave",
       "categorias": ["ELECTRONICO", "Audio"],
       "unidades": 18,

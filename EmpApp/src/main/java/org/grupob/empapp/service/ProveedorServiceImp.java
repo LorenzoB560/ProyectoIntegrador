@@ -3,7 +3,7 @@ package org.grupob.empapp.service;
 import org.grupob.empapp.converter.ProveedorConverter;
 import org.grupob.empapp.dto.ProveedorDTO;
 import org.grupob.comun.entity.maestras.Proveedor;
-import org.grupob.comun.repository.ProveedorRepository;
+import org.grupob.comun.repository.maestras.ProveedorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

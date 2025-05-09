@@ -23,7 +23,6 @@ public class ProductoController {
 
     private final ProveedorServiceImp proveedorService;
     private final CategoriaServiceImp categoriaService;
-    // Puedes inyectar otros servicios que uses aquí...
 
     @Autowired // Inyección por constructor recomendada
     public ProductoController(ProveedorServiceImp proveedorService, CategoriaServiceImp categoriaService) {
@@ -55,13 +54,12 @@ public class ProductoController {
 
     @GetMapping("/detalle/{id}")
     public String vistaDetalleProducto(@PathVariable UUID id, Model model, HttpSession session) {
-//        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
-//        if (adminDTO == null) {
-//            return "redirect:/adminapp/login"; // Redirige si no está logueado
-//        }
-//
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login"; // Redirige si no está logueado
+        }
 //        // Aquí no cargamos datos, solo devolvemos la vista. El JS cargará los datos.
-//        model.addAttribute("loginAdminDTO", adminDTO); // Para el layout
+        model.addAttribute("loginAdminDTO", adminDTO); // Para el layout
         model.addAttribute("productoId", id); // Pasamos el ID para que JS lo use
 
         return "listados/detalle-vista-prod";
@@ -69,12 +67,12 @@ public class ProductoController {
 
     @GetMapping("/lista")
     public String vistaListaProductos(Model model, HttpSession session) {
-//        LoginUsuarioEmpleadoDTO loginEmpDTO = (LoginUsuarioEmpleadoDTO) session.getAttribute("usuarioLogueado");
-//        if (loginEmpDTO == null) {
-//            return "redirect:/login/pedir-usuario";
-//        }
-//
-//        model.addAttribute("loginEmpDTO", loginEmpDTO);
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login";
+        }
+
+        model.addAttribute("loginAdminDTO", adminDTO);
 //        model.addAttribute("dto", loginEmpDTO); // Para compatibilidad con header
         try {
             // Obtener lista de proveedores DTO usando el servicio
