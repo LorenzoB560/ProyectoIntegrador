@@ -54,10 +54,9 @@ public class NominaServiceImp implements NominaService{
     public NominaDTO devolverNominaPorId(UUID id){
         Optional<Nomina> nomina = nominaRepository.findById(id);
         if (nomina.isPresent()) {
-            NominaDTO nominaDTO = nominaConverter.convierteADTO(nomina.get());
-            Optional<Empleado> empleado = empleadoRepository.findById(nominaDTO.getIdEmpleado());
-            empleado.ifPresent(value -> nominaDTO.setNombre(value.getNombre() + " " + value.getApellido()));
-            return nominaDTO;
+            //            Optional<Empleado> empleado = empleadoRepository.findById(nominaDTO.getIdEmpleado());
+//            empleado.ifPresent(value -> nominaDTO.setNombre(value.getNombre() + " " + value.getApellido()));
+            return nominaConverter.convierteADTO(nomina.get());
         } else{
             throw new EntityNotFoundException("La nómina seleccionada no existe");
         }
@@ -70,11 +69,11 @@ public class NominaServiceImp implements NominaService{
                 .toList();
 
 
-        nominasDTO = nominasDTO.stream()
-                .peek(nomina -> {
-                    Optional<Empleado> empleado = empleadoRepository.findById(nomina.getIdEmpleado());
-                    empleado.ifPresent(value -> nomina.setNombre(value.getNombre() + " " + value.getApellido()));
-                }).toList();
+//        nominasDTO = nominasDTO.stream()
+//                .peek(nomina -> {
+//                    Optional<Empleado> empleado = empleadoRepository.findById(nomina.getIdEmpleado());
+//                    empleado.ifPresent(value -> nomina.setNombre(value.getNombre() + " " + value.getApellido()));
+//                }).toList();
 
         System.out.println(nominasDTO);
         return nominasDTO;
