@@ -3,7 +3,7 @@ package org.grupob.adminapp.service;
 import org.grupob.adminapp.converter.ProveedorConverter; // Convertidor de AdminApp
 import org.grupob.adminapp.dto.ProveedorDTO;          // DTO de AdminApp
 import org.grupob.comun.entity.maestras.Proveedor;     // Entidad de comun
-import org.grupob.comun.repository.ProveedorRepository; // Repositorio de comun
+import org.grupob.comun.repository.maestras.ProveedorRepository; // Repositorio de comun
 import org.springframework.stereotype.Service;
 
 import java.util.List;

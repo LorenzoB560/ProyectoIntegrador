@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class UsuarioEmpleadoServiceImp {
+public class UsuarioEmpleadoServiceImp implements UsuarioEmpleadoService {
 
     // Repositorio para acceso a datos de usuarios
     private final UsuarioEmpleadoRepository usuarioEmpRepo;
@@ -119,7 +119,7 @@ public class UsuarioEmpleadoServiceImp {
     /**
      * Gestiona los intentos fallidos de autenticación
      */
-    private int manejarIntentoFallido(UsuarioEmpleado usuario) {
+    public int manejarIntentoFallido(UsuarioEmpleado usuario) {
         int intentos = usuario.getIntentosSesionFallidos() +1;
         usuario.setIntentosSesionFallidos(intentos);
 
