@@ -5,7 +5,7 @@
     <title>Detalle de Nómina</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="/js/calcularTotal.js"></script>
     <style>
         label{
             font-weight: bold;
@@ -23,28 +23,34 @@
             <div class="card-body">
                 <h5 class="card-title">Información de la Nómina</h5>
                 <div class="row mb-2">
-<!--                    <div class="col-md-6"><strong>ID:</strong> <span th:text="${nominaDTO.id}"></span></div>-->
                     <input type="hidden" th:field="*{id}">
-                    <input type="hidden" th:field="*{idEmpleado}"></input>
+                    <input type="hidden" th:field="*{idEmpleado}">
+                    <input type="hidden" th:field="*{nombre}">
                     <div class="col-md-6">
-                        <label for="nombre">Empleado:</label>
-                        <input type="text" th:field="*{nombre}" id="nombre" class="form-control">
+                        <strong>Empleado:</strong>
+                        <span th:text="${nominaDTO.nombre}"></span>
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-md-6">
-                        <label for="mes">Mes</label>
-                        <input type="text" th:field="*{mes}" id="mes" class="form-control">
+                        <label for="mes" class="form-label">Mes</label>
+                        <select id="mes" name="mes" class="form-select">
+                            <option th:each="mes : ${meses}" th:field="*{mes}" th:value="${mes}" th:text="${mes}"></option>
+                        </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="anio">Año</label>
-                        <input type="text" th:field="*{anio}" id="anio" class="form-control">
+                        <label for="anio" class="form-label">Año</label>
+                        <select id="anio" name="anio" class="form-select">
+                            <option th:each="anio : ${anios}" th:field="*{anio}" th:value="${anio}" th:text="${anio}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="totalLiquido">Total líquido:</label>
-                        <input type="text" th:field="*{totalLiquido}" id="totalLiquido" class="form-control">
+                        <div class="col-md-6"><strong>Total líquido:</strong>
+                            <span th:text="${#numbers.formatDecimal(nominaDTO.totalLiquido, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
+                        </div>
+                        <input type="hidden" th:field="*{totalLiquido}">
                     </div>
                 </div>
             </div>
@@ -71,7 +77,7 @@
                 </ul>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" value="Guardar"></input>
+        <input type="submit" class="btn btn-primary" value="Guardar" onclick="actualizarTotal()">
     </form>
 </div>
 

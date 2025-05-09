@@ -104,7 +104,8 @@ public class NominaServiceImp implements NominaService{
             }
         }
 
-        lineaNominaRepository.deleteLineaNominaByConceptoId(idConcepto);
+        // Solo se eliminará el concepto dentro de la nómina específica
+        lineaNominaRepository.deleteLineaNominaByNominaIdAndConceptoId(idNomina, idConcepto);
 
         BigDecimal totalIngresos = lineaNominaRepository.getTotalIngresos(idNomina);
         BigDecimal totalDeducciones = lineaNominaRepository.getTotalDeducciones(idNomina);
@@ -112,6 +113,7 @@ public class NominaServiceImp implements NominaService{
 
         nominaRepository.updateTotalLiquido(idNomina, totalLiquido);
     }
+
 
     public byte[] generarPdfNomina(UUID idNomina) {
         try {

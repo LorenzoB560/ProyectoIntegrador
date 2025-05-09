@@ -64,9 +64,8 @@ public class NominaController {
     public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO, Model model) {
 
         System.out.println(nominaDTO);
-
         nominaServiceImp.modificarNomina(nominaDTO);
-        return "redirect:/nomina/listado";
+        return "redirect:/nomina/detalle/" + nominaDTO.getId();
     }
 
 
