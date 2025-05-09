@@ -569,6 +569,20 @@ INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
 VALUES (UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')),
         UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 10, 2025, 1100);
 
+INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+VALUES (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+        UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 1800.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+        UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 300.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+        UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 800.00),
+       (UNHEX(REPLACE(UUID(), '-', '')),
+        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+        UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 200.00);
+
 INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
 VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')),
         UNHEX(REPLACE('f63e2354-18ea-4951-be31-06d11e9d5b87', '-', '')), 12, 2025, 2500.00),
@@ -596,152 +610,9 @@ VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')),
        (UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')),
         UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 2, 2024, 2800.00),
        (UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')),
-        UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 1, 2024, 2650.00),
-
-       (UNHEX(REPLACE('a3456789-bcde-f012-3456-789abcdef012', '-', '')),
-        UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 7, 2024, 2450.00),
-       (UNHEX(REPLACE('b456789a-cdef-0123-4567-89abcdef0123', '-', '')),
-        UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 2, 2024, 2500.00),
-       (UNHEX(REPLACE('c56789ab-def0-1234-5678-9abcdef01234', '-', '')),
-        UNHEX(REPLACE('d316af5b-7c1c-4f1a-a6af-09ec51c192f1', '-', '')), 1, 2024, 2350.00);
-
-INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
-VALUES (UNHEX(REPLACE('d6789abc-ef01-2345-6789-abcdef012345', '-', '')),
-        UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 3, 2024, 2650.00),
-       (UNHEX(REPLACE('e789abcd-f012-3456-789a-bcdef0123456', '-', '')),
-        UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 8, 2024, 2700.00),
-       (UNHEX(REPLACE('f890bcde-1234-5678-9abc-def012345678', '-', '')),
-        UNHEX(REPLACE('a571ab15-ffd5-4cad-9c9a-4200a974df6a', '-', '')), 1, 2024, 2600.00),
-
-       (UNHEX(REPLACE('a901cdef-2345-6789-abcd-ef0123456789', '-', '')),
-        UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 3, 2024, 2550.00),
-       (UNHEX(REPLACE('b012def0-3456-789a-bcde-f0123456789a', '-', '')),
-        UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 2, 2024, 2600.00),
-       (UNHEX(REPLACE('c123ef01-4567-89ab-cdef-0123456789ab', '-', '')),
-        UNHEX(REPLACE('d7297cda-a3c0-4fb5-8e22-51629d90c332', '-', '')), 4, 2024, 2450.00),
-
-       (UNHEX(REPLACE('d234f012-5678-9abc-def0-123456789abc', '-', '')),
-        UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 6, 2025, 2750.00),
-       (UNHEX(REPLACE('e3450123-6789-abcd-ef01-23456789abcd', '-', '')),
-        UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 2, 2025, 2800.00),
-       (UNHEX(REPLACE('f4561234-789a-bcde-f012-3456789abcde', '-', '')),
-        UNHEX(REPLACE('8a5826f4-87c5-46ad-94e4-1806c79635f3', '-', '')), 1, 2025, 2650.00),
-
-       (UNHEX(REPLACE('a5672345-89ab-cdef-0123-456789abcdef', '-', '')),
-        UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 5, 2024, 2450.00),
-       (UNHEX(REPLACE('b6783456-9abc-def0-1234-56789abcdef0', '-', '')),
-        UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 6, 2024, 2500.00),
-       (UNHEX(REPLACE('c7894567-abcd-ef01-2345-6789abcdef01', '-', '')),
-        UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', '')), 7, 2024, 2350.00),
-
-       (UNHEX(REPLACE('d8905678-bcde-f012-3456-789abcdef012', '-', '')),
-        UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 9, 2025, 2650.00),
-       (UNHEX(REPLACE('e9016789-cdef-0123-4567-89abcdef0123', '-', '')),
-        UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 2, 2025, 2700.00),
-       (UNHEX(REPLACE('f012789a-def0-1234-5678-9abcdef01234', '-', '')),
-        UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', '')), 1, 2025, 2600.00),
-
-       (UNHEX(REPLACE('a123890b-ef01-2345-6789-abcdef012345', '-', '')),
-        UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 6, 2024, 2750.00),
-       (UNHEX(REPLACE('b234901c-f012-3456-789a-bcdef0123456', '-', '')),
-        UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 2, 2024, 2800.00),
-       (UNHEX(REPLACE('c345012d-1234-5678-9abc-def012345678', '-', '')),
-        UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 1, 2024, 2650.00);
-
-INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
-VALUES (UNHEX(REPLACE('d9012345-6789-abcd-ef01-23456789abcd', '-', '')),
-        UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 5, 2025, 2700.00),
-       (UNHEX(REPLACE('e0123456-789a-bcde-f012-3456789abcde', '-', '')),
-        UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 2, 2025, 2750.00),
-       (UNHEX(REPLACE('f1234567-89ab-cdef-0123-456789abcdef', '-', '')),
-        UNHEX(REPLACE('1cb5803b-0b28-4a91-ac42-64dd85ff9d87', '-', '')), 1, 2025, 2600.00),
-
-       (UNHEX(REPLACE('a2345678-9abc-def0-1234-56789abcdef0', '-', '')),
-        UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 6, 2024, 2500.00),
-       (UNHEX(REPLACE('b3456789-abcd-ef01-2345-6789abcdef01', '-', '')),
-        UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 2, 2024, 2550.00),
-       (UNHEX(REPLACE('c456789a-bcde-f012-3456-789abcdef012', '-', '')),
-        UNHEX(REPLACE('1e174207-06fb-4a8c-a66b-c1ae4b9672d1', '-', '')), 1, 2024, 2450.00),
-
-       (UNHEX(REPLACE('d56789ab-cdef-0123-4567-89abcdef0123', '-', '')),
-        UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 10, 2024, 2750.00),
-       (UNHEX(REPLACE('e6789abc-def0-1234-5678-9abcdef01234', '-', '')),
-        UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 2, 2024, 2800.00),
-       (UNHEX(REPLACE('f789abcd-ef01-2345-6789-abcdef012345', '-', '')),
-        UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 1, 2024, 2650.00),
-
-       (UNHEX(REPLACE('a890bcde-0123-4567-89ab-cdef01234567', '-', '')),
-        UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 3, 2024, 2500.00),
-       (UNHEX(REPLACE('b901cdef-1234-5678-9abc-def012345678', '-', '')),
-        UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 2, 2024, 2550.00),
-       (UNHEX(REPLACE('c012def0-3456-789a-bcde-f0123456789a', '-', '')),
-        UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), 1, 2024, 2450.00),
-
-       (UNHEX(REPLACE('d123ef01-4567-89ab-cdef-0123456789ab', '-', '')),
-        UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 3, 2024, 2600.00),
-       (UNHEX(REPLACE('e234f012-5678-9abc-def0-123456789abc', '-', '')),
-        UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 2, 2024, 2650.00),
-       (UNHEX(REPLACE('f3450123-6789-abcd-ef01-23456789abcd', '-', '')),
-        UNHEX(REPLACE('fbfb87a3-7ccb-47d1-a259-f35b9d66a829', '-', '')), 10, 2024, 2550.00);
-
-INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
-VALUES (UNHEX(REPLACE('a456789b-cdef-0123-4567-89abcdef0123', '-', '')),
-        UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 3, 2024, 2750.00),
-       (UNHEX(REPLACE('b56789cd-ef01-2345-6789-abcdef012345', '-', '')),
-        UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 2, 2024, 2800.00),
-       (UNHEX(REPLACE('c6789def-0123-4567-89ab-cdef01234567', '-', '')),
-        UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')), 11, 2024, 2650.00),
-
-       (UNHEX(REPLACE('d789abc0-1234-5678-9abc-def012345678', '-', '')),
-        UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 6, 2025, 2500.00),
-       (UNHEX(REPLACE('e890bcd1-2345-6789-abcd-ef0123456789', '-', '')),
-        UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 2, 2025, 2550.00),
-       (UNHEX(REPLACE('f901cde2-3456-789a-bcde-f0123456789a', '-', '')),
-        UNHEX(REPLACE('65b60a24-c9b2-418f-b57b-a01fe0b11a69', '-', '')), 1, 2025, 2450.00),
-
-       (UNHEX(REPLACE('a0123456-789a-bcde-f012-3456789abcde', '-', '')),
-        UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 5, 2024, 2600.00),
-       (UNHEX(REPLACE('b1234567-89ab-cdef-0123-456789abcdef', '-', '')),
-        UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 2, 2024, 2650.00),
-       (UNHEX(REPLACE('c2345678-9abc-def0-1234-56789abcdef0', '-', '')),
-        UNHEX(REPLACE('e0a54e04-4851-45ee-8ac6-9e6db782002d', '-', '')), 1, 2024, 2550.00),
-
-       (UNHEX(REPLACE('d3456789-abcd-ef01-2345-6789abcdef01', '-', '')),
-        UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 7, 2024, 2750.00),
-       (UNHEX(REPLACE('e456789a-bcde-f012-3456-789abcdef012', '-', '')),
-        UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 2, 2024, 2800.00),
-       (UNHEX(REPLACE('f56789ab-cdef-0123-4567-89abcdef0123', '-', '')),
-        UNHEX(REPLACE('cdd14828-85c9-45ac-8b05-61491ee2514e', '-', '')), 1, 2024, 2650.00),
-
-       (UNHEX(REPLACE('a6789abc-def0-1234-5678-9abcdef01234', '-', '')),
-        UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 9, 2024, 2500.00),
-       (UNHEX(REPLACE('b789abcd-ef01-2345-6789-abcdef012345', '-', '')),
-        UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 2, 2024, 2550.00),
-       (UNHEX(REPLACE('c890bcde-0123-4567-89ab-cdef01234567', '-', '')),
-        UNHEX(REPLACE('cda9b784-9da6-4b17-93f1-7181b9609c4a', '-', '')), 1, 2024, 2450.00);
+        UNHEX(REPLACE('a288206c-1e7d-4f20-a9c3-46a0b215b6cf', '-', '')), 1, 2024, 2650.00);
 
 
---LINEA DE NOMINA
-
--- INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
--- VALUES (UNHEX(REPLACE('00000000-0000-0000-0000-000000000000', '-', '')),
---         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a105', '-', '')),
---         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 150.00),
---        (UNHEX(REPLACE('00000000-0000-0000-0000-000000000001', '-', '')),
---         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a106', '-', '')),
---         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 25.00),
---        (UNHEX(REPLACE('00000000-0000-0000-0000-000000000002', '-', '')),
---         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a102', '-', '')),
---         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 50.00),
---        (UNHEX(REPLACE('00000000-0000-0000-0000-000000000003', '-', '')),
---         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a104', '-', '')),
---         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 500.00),
---        (UNHEX(REPLACE('00000000-0000-0000-0000-000000000004', '-', '')),
---         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a103', '-', '')),
---         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 60.00),
---        (UNHEX(REPLACE('00000000-0000-0000-0000-000000000005', '-', '')),
---         UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a101', '-', '')),
---         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 1500.00);
 
 INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE('a1f2b3c4-5678-9abc-def0-123456789abc', '-', '')),

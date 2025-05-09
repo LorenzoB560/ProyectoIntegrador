@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const prevLink = document.createElement("a");
                 prevLink.classList.add("page-link");
                 prevLink.href = `${baseUrl}?page=${paginaActual - 1}${queryString}`;
-                prevLink.textContent = "Prev";
+                prevLink.textContent = "Ant";
                 prevPageItem.appendChild(prevLink);
                 paginationContainer.appendChild(prevPageItem);
 
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const nextLink = document.createElement("a");
                 nextLink.classList.add("page-link");
                 nextLink.href = `${baseUrl}?page=${paginaActual + 1}${queryString}`;
-                nextLink.textContent = "Next";
+                nextLink.textContent = "Sig";
                 nextPageItem.appendChild(nextLink);
                 paginationContainer.appendChild(nextPageItem);
             }
