@@ -33,9 +33,19 @@ public class NominaController {
 
     //TODO AÑADIR TABLA MAESTRA MESES, PARA MOSTRARLO EN LA NÓMINA
     @GetMapping("/listado")
-    public String listarNominas() {
+    public String listarNominas(@RequestParam(defaultValue = "0") int page,
+                                Model model) {
+        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerTodasNominasPaginadas(page, 10); // 10 por página
+        model.addAttribute("listaNominas", paginaNominas.getContent());
+        model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
+        model.addAttribute("paginaActual", paginaNominas.getNumber());
+
+        model.addAttribute("modo", "listado");
+        model.addAttribute("queryString", "");
+
         return "listados/listado-vista-nomina";
     }
+
 
     @GetMapping("/detalle/{id}")
     public String vistaDetalleNomina(@PathVariable UUID id, Model model) {
@@ -45,6 +55,18 @@ public class NominaController {
 
         return "listados/detalle-vista-nomina";
     }
+    @GetMapping("/modificar/{id}")
+    public String modificarNomina(@PathVariable UUID id, Model model) {
+        model.addAttribute("nominaDTO", nominaServiceImp.devolverNominaPorId(id));
+        return "nomina/modificar-vista-nomina";
+    }
+    @PostMapping("/guardar-datos-modificados")
+    public String guardarDatosModificados(){
+
+        return "redirect:/nomina/detalle/{id}";
+    }
+
+
     @GetMapping("/busqueda-parametrizada")
     public String listarNominasConFiltros(
             @RequestParam(required = false) String filtroNombre,
@@ -56,7 +78,6 @@ public class NominaController {
             @RequestParam(defaultValue = "0") int page,
             Model model
     ) {
-        // Crear el filtro directamente con los parámetros recibidos
         FiltroNominaDTO filtro = new FiltroNominaDTO();
         filtro.setFiltroNombre(filtroNombre);
         filtro.setFiltroMes(filtroMes);
@@ -65,15 +86,12 @@ public class NominaController {
         filtro.setTotalLiquidoMaximo(totalLiquidoMax);
         filtro.setConceptosSeleccionados(conceptosSeleccionados);
 
-        // Obtener las nóminas filtradas con paginación
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
 
-        // Agregar los resultados al modelo
         model.addAttribute("listaNominas", paginaNominas.getContent());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
         model.addAttribute("paginaActual", page);
         model.addAttribute("filtro", filtro);
-
 
         model.addAttribute("filtroNombre", filtroNombre);
         model.addAttribute("filtroMes", filtroMes);
@@ -81,8 +99,26 @@ public class NominaController {
         model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
         model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
         model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
+
+        // NUEVO
+        model.addAttribute("modo", "parametrizada");
+
+        StringBuilder queryString = new StringBuilder();
+        if (filtroNombre != null && !filtroNombre.isBlank()) queryString.append("&filtroNombre=").append(filtroNombre);
+        if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
+        if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
+        if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
+        if (totalLiquidoMax != null) queryString.append("&totalLiquidoMax=").append(totalLiquidoMax);
+        if (conceptosSeleccionados != null) {
+            for (String concepto : conceptosSeleccionados) {
+                queryString.append("&conceptosSeleccionados=").append(concepto);
+            }
+        }
+        model.addAttribute("queryString", queryString.toString());
+
         return "listados/listado-vista-nomina";
     }
+
 
 
 }

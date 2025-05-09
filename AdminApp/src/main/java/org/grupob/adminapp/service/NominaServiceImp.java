@@ -194,6 +194,19 @@ public class NominaServiceImp implements NominaService{
                 pageable
         );
 
+        return getNominaDTOS(paginaNominas);
+    }
+
+
+    public Page<NominaDTO> obtenerTodasNominasPaginadas(int page, int tamanio) {
+        Pageable pageable = PageRequest.of(page, tamanio); // puedes ajustar el tamaño
+
+        Page<Nomina> paginaNominas = nominaRepository.findAll(pageable);
+
+        return getNominaDTOS(paginaNominas);
+    }
+
+    private Page<NominaDTO> getNominaDTOS(Page<Nomina> paginaNominas) {
         return paginaNominas.map(n -> {
             String nombreEmpleado = n.getEmpleado().getNombre() + " " + n.getEmpleado().getApellido();
 

@@ -65,7 +65,7 @@
   <table class="table table-bordered table-hover shadow-sm bg-white">
     <thead class="table-primary text-center">
     <tr>
-      <th>Id</th>
+<!--      <th>Id</th>-->
       <th>Empleado</th>
       <th>Mes</th>
       <th>Año</th>
@@ -76,7 +76,7 @@
     </thead>
     <tbody>
     <tr th:each="nomina : ${listaNominas}">
-      <td th:text="${nomina.id}">Id</td>
+<!--      <td th:text="${nomina.id}">Id</td>-->
       <td th:text="${nomina.nombre}">Nombre del empleado</td>
       <td th:text="${nomina.mes}">Mes</td>
       <td th:text="${nomina.anio}">Año</td>
@@ -90,17 +90,28 @@
         </ul>
       </td>
       <td class="text-center">
-        <a th:href="@{'/nomina/detalle/' + ${nomina.id}}" class="btn btn-primary me-2">Ver</a>
+
+        <!--Botón de ver-->
+        <a th:href="@{'/nomina/detalle/' + ${nomina.id}}" class="btn btn-primary me-2" title="Ver">
+          <i class="bi bi-eye"></i>
+        </a>
+
+        <!--Botón de modificar-->
+        <a th:href="@{'/nomina/modificar/' + ${nomina.id}}" class="btn btn-success me-2" title="Modificar">
+          <i class="bi bi-pencil"></i>
+        </a>
+
+        <!--Botón de eliminar-->
         <button class="btn btn-danger me-2 btn-eliminar"
-                th:data-id-nomina="${nomina.id}">
+                th:data-id-nomina="${nomina.id}" title="Eliminar">
           <i class="bi bi-trash me-1"></i>
-          Eliminar
         </button>
+
+        <!--Botón de descargar pdf-->
         <button id="descargar-pdf-btn"
                 class="btn btn-info me-2"
-                th:attr="data-id=${nomina.id}">
+                th:attr="data-id=${nomina.id}" title="Descargar PDF">
           <i class="bi bi-filetype-pdf"></i>
-          Descargar PDF
         </button>
       </td>
     </tr>
@@ -112,9 +123,12 @@
   <nav>
     <ul id="pagination" class="pagination"
         th:data-total-paginas="${totalPaginas}"
-        th:data-pagina-actual="${paginaActual}">
+        th:data-pagina-actual="${paginaActual}"
+        th:data-modo="${modo}"
+        th:data-query-string="${queryString}">
     </ul>
   </nav>
 </div>
+
 </body>
 </html>
