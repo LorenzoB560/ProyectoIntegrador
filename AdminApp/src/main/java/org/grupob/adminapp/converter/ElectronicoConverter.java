@@ -1,7 +1,7 @@
 package org.grupob.adminapp.converter;
 
 
-import org.grupob.adminapp.dto.ElectronicoDTO;
+import org.grupob.adminapp.dto.masiva.ElectronicoCargaDTO;
 import org.grupob.comun.entity.Electronico;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -15,11 +15,11 @@ public class ElectronicoConverter {
         this.modelMapper = modelMapper;
     }
 
-    public ElectronicoDTO convertirADto(Electronico entidad) {
-        return modelMapper.map(entidad, ElectronicoDTO.class);
+    public ElectronicoCargaDTO convertirADto(Electronico entidad) {
+        return modelMapper.map(entidad, ElectronicoCargaDTO.class);
     }
 
-    public Electronico convertirAEntidad(ElectronicoDTO dto) {
+    public Electronico convertirAEntidad(ElectronicoCargaDTO dto) {
         return modelMapper.map(dto, Electronico.class);
     }
 }

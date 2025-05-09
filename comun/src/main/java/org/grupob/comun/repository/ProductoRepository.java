@@ -15,11 +15,17 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID; // Importa UUID
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, UUID> {
 
+    boolean existsByDescripcionAndProveedorNombre(String descripcion, String nombreProveedor);
+    Optional<Producto> findByDescripcionAndProveedorNombre(String descripcion, String nombreProveedor);
+
+    @Query("SELECT p FROM Producto p WHERE TYPE(p) = :clase")
+    <T extends Producto> List<T> findByType(@Param("clase") Class<T> clase);
 
     // Elimina por categoría usando JPQL
     @Modifying
