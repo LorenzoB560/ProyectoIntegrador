@@ -1,32 +1,38 @@
 package org.grupob.adminapp.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+
 @Data
+@EqualsAndHashCode(callSuper = true) // Incluye campos de ProductoDTO
+@ToString(callSuper = true)      // Incluye campos de ProductoDTO
 @NoArgsConstructor
-@AllArgsConstructor
-public class RopaDTO extends ProductoDTO{
-    private UUID id;
+    public class RopaDTO extends ProductoDTO { // Extiende el DTO base actualizado
 
-    @NotBlank
-    private String talla;
+        // Hereda: id, nombre, precio, descripcion, categoria, etc. de ProductoDTO
 
-    @NotBlank
-    private String color;
+        // Campos específicos de Ropa
+        @NotEmpty(message = "Debe especificar al menos una talla") // Asegura que la lista no esté vacía
+        private List<TallaDTO> tallas = new ArrayList<>(); // Lista de DTOs de Talla
 
-    @NotBlank
-    private String material;
+        @NotBlank(message = "El material no puede estar vacío")
+        private String material;
 
-    public RopaDTO(String nombre, BigDecimal precio, String descripcion, CategoriaDTO categoria, String talla, String color, String material) {
-        super(nombre, precio, descripcion, categoria);
-        this.talla = talla;
-        this.color = color;
-        this.material = material;
+
+        // Constructor completo opcional
+        public RopaDTO(UUID id, String nombre, BigDecimal precio, String descripcion, CategoriaDTO categoria,
+                       List<TallaDTO> tallas, String material) {
+            super(id, nombre, precio, descripcion, categoria); // Llama al constructor padre
+            this.tallas = tallas != null ? tallas : new ArrayList<>();
+            this.material = material;
+
+        }
     }
-}
+

@@ -16,6 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @OnDelete(action = OnDeleteAction.CASCADE)
 public class Libro extends Producto{
 
+    private String titulo;
     private String autor;
     private String editorial;
     @Column(name = "num_paginas")

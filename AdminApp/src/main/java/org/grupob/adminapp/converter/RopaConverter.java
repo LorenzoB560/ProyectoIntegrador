@@ -2,7 +2,7 @@ package org.grupob.adminapp.converter;
 
 
 import org.grupob.adminapp.dto.RopaDTO;
-import org.grupob.comun.entity.Ropa;
+import org.grupob.comun.entity.Mueble;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +15,11 @@ public class RopaConverter {
         this.modelMapper = modelMapper;
     }
 
-    public RopaDTO convertirADto(Ropa entidad) {
+    public RopaDTO convertirADto(Mueble entidad) {
         return modelMapper.map(entidad, RopaDTO.class);
     }
 
-    public Ropa convertirAEntidad(RopaDTO dto) {
-        return modelMapper.map(dto, Ropa.class);
+    public Mueble convertirAEntidad(RopaDTO dto) {
+        return modelMapper.map(dto, Mueble.class);
     }
 }

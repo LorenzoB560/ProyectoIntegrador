@@ -2,7 +2,7 @@ package org.grupob.empapp.service;
 
 
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.dto.EmpleadoSearchDTO;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
 import org.springframework.data.domain.Page;
 
@@ -33,14 +33,10 @@ public interface EmpleadoService {
      /**
       * Métodos de búsqueda parametrizada
       */
-     List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams);
+//     List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams);
 
      List<EmpleadoDTO> buscarEmpleadosAvanzado(
-             String nombre,
-             String departamento,
-             String trabajo,
-             LocalDate contratadosAntesDe,
-             BigDecimal salarioMinimo);
+             EmpleadoSearchDTO searchParams);
 
      List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento);
 
@@ -50,11 +46,7 @@ public interface EmpleadoService {
       * Método para búsqueda paginada y ordenada
       */
      Page<EmpleadoDTO> buscarEmpleadosPaginados(
-             String nombre,
-             String departamento,
-             String comentario,
-             LocalDate contratadosAntesDe,
-             BigDecimal salarioMinimo,
+             EmpleadoSearchDTO searchParams,
              int page,
              int size,
              String sortBy,
