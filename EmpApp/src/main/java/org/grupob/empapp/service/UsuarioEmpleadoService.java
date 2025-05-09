@@ -8,6 +8,6 @@ public interface UsuarioEmpleadoService {
     Boolean validarEmail(String correo);
      Boolean validarCredenciales(LoginUsuarioEmpleadoDTO dto);
      void actualizarEstadisticasAcceso(LoginUsuarioEmpleadoDTO dto);
-     void manejarIntentoFallido(UsuarioEmpleado usuario);
+     int manejarIntentoFallido(UsuarioEmpleado usuario);
 
 }

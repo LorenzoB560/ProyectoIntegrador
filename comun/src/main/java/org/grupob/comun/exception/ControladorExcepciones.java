@@ -55,6 +55,33 @@ public class ControladorExcepciones {
 
         return new ResponseEntity<>(info, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(CargaMasivaException.class)
+    public ResponseEntity<InformacionExcepcion> manejaCargaMasivaException(CargaMasivaException ex) {
+        InformacionExcepcion info = new InformacionExcepcion();
+        info.setTimestamp(LocalDateTime.now());
+        info.setStatus(HttpStatus.BAD_REQUEST.value());
+        info.setMessage(ex.getMessage());
+        List<String> listaErrores = new ArrayList<>();
+        listaErrores.add(ex.getMessage());
+        info.setListaErrores(listaErrores);
+        info.setError(HttpStatus.BAD_REQUEST.name());
+
+        return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CategoriaNoEncontradaException.class)
+    public ResponseEntity<InformacionExcepcion> manejaCategoriaNoEncontradaExceptionException(CategoriaNoEncontradaException ex) {
+        InformacionExcepcion info = new InformacionExcepcion();
+        info.setTimestamp(LocalDateTime.now());
+        info.setStatus(HttpStatus.BAD_REQUEST.value());
+        info.setMessage(ex.getMessage());
+        List<String> listaErrores = new ArrayList<>();
+        listaErrores.add(ex.getMessage());
+        info.setListaErrores(listaErrores);
+        info.setError(HttpStatus.BAD_REQUEST.name());
+
+        return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
+    }
 
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle del Producto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+</head>
+<!--<body th:object="${dto}">-->
+<!--<div th:replace="fragmentos/header :: header"></div>-->
+<!--<div th:replace="fragmentos/nav :: nav"></div>-->
+
+<div class="container mt-4 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Detalle del Producto</h1>
+    <a href="#" onclick="history.back(); return false;" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Volver al Listado
+    </a>
+  </div>
+
+  <div id="cargandoDetalleProd" class="text-center my-5" style="display: none;">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando detalles del producto...</p>
+  </div>
+  <div id="errorDetalleProd" class="alert alert-danger" style="display: none;"></div>
+
+  <div id="detalleProductoContenedor" style="display: none;">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0" id="prod-nombre-header">Nombre del Producto</h5>
+          </div>
+          <div class="card-body">
+            <p><strong>ID:</strong> <span id="prod-id" class="text-muted"></span></p>
+            <p><strong>Descripción:</strong></p>
+            <p id="prod-descripcion" style="white-space: pre-wrap;"></p>
+            <hr>
+            <p><strong>Precio:</strong> <span id="prod-precio" class="fw-bold fs-5 text-success"></span></p>
+            <p><strong>Marca:</strong> <span id="prod-marca"></span></p> <p><strong>Material Principal:</strong> <span id="prod-material"></span></p> </div>
+        </div>
+
+        <div class="card shadow-sm mb-4" id="card-detalles-tipo-especifico" style="display: none;">
+          <div class="card-header">
+            <h5 class="mb-0">Detalles Específicos (<span id="prod-tipo-nombre-header">Tipo</span>)</h5>
+          </div>
+          <div class="card-body">
+            <div id="detalles-mueble" class="detalles-tipo-especifico">
+              <p><strong>Dimensiones (Ancho x Profundo x Alto):</strong> <span id="mueble-dimensiones"></span></p>
+              <p><strong>Material Específico:</strong> <span id="mueble-material"></span></p>
+              <p><strong>Colores Específicos:</strong> <span id="mueble-colores"></span></p>
+            </div>
+            <div id="detalles-libro" class="detalles-tipo-especifico">
+              <p><strong>Autor:</strong> <span id="libro-autor"></span></p>
+              <p><strong>Editorial:</strong> <span id="libro-editorial"></span></p>
+              <p><strong>Número de Páginas:</strong> <span id="libro-paginas"></span></p>
+            </div>
+            <div id="detalles-electronico" class="detalles-tipo-especifico">
+              <p><strong>Modelo:</strong> <span id="electronico-modelo"></span></p>
+              <p><strong>Garantía:</strong> <span id="electronico-garantia-texto"></span></p> <p><strong>Pulgadas Pantalla:</strong> <span id="electronico-pulgadas"></span></p>
+              <p><strong>Dimensiones (Ancho x Profundo x Alto):</strong> <span id="electronico-dimensiones"></span></p>
+              <p><strong>Capacidad Batería (mAh):</strong> <span id="electronico-bateria"></span></p>
+              <p><strong>Almacenamiento Interno (GB):</strong> <span id="electronico-almacenamiento"></span></p>
+              <p><strong>RAM (GB):</strong> <span id="electronico-ram"></span></p>
+            </div>
+            <div id="detalles-ropa" class="detalles-tipo-especifico">
+              <p><strong>Talla:</strong> <span id="ropa-talla"></span></p>
+              <p><strong>Composición Textil:</strong> <span id="ropa-composicion"></span></p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Otros Detalles</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Unidades en stock:</strong> <span id="prod-unidades" class="badge bg-info"></span></p>
+                <p><strong>Segunda Mano:</strong> <span id="prod-segunda-mano"></span></p>
+                <p><strong>Valoración:</strong> <span id="prod-valoracion" class="rating-stars"></span></p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Fecha de Fabricación:</strong> <span id="prod-fecha-fabricacion"></span></p>
+                <p><strong>Fecha de Alta en Sistema:</strong> <span id="prod-fecha-alta"></span></p>
+              </div>
+            </div>
+            <hr>
+            <p><strong>Colores Disponibles:</strong> <span id="prod-colores"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Proveedor</h5>
+          </div>
+          <div class="card-body">
+            <p><strong>Nombre:</strong> <span id="prov-nombre"></span></p>
+            <p><strong>ID Proveedor:</strong> <span id="prov-id" class="text-muted"></span></p>
+          </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Categorías</h5>
+          </div>
+          <div class="card-body" id="prod-categorias">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="text-center mt-3">
+    <a href="#" onclick="history.back(); return false;" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Volver al Listado
+    </a>
+  </div>
+</div>
+
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const productoId = /*[[${productoId}]]*/ null;
+  /*]]>*/
+</script>
+<script th:src="@{/js/detalle-prod.js}"></script>
+</body>
+</html>

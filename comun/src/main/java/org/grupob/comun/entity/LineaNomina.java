@@ -1,5 +1,6 @@
 package org.grupob.comun.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +8,8 @@ import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.maestras.Concepto;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
-
 
 @Data
 @NoArgsConstructor
@@ -22,13 +23,29 @@ public class LineaNomina {
 
     @ManyToOne
     @JoinColumn(name = "id_concepto", nullable = false)
-    private Concepto concepto;  // Concepto de la línea (ej: salario, impuestos, etc.)
+    private Concepto concepto;
 
-    private BigDecimal cantidad;  // Cantidad (positiva para ingresos, negativa para retenciones)
+    private BigDecimal cantidad;
 
-    public LineaNomina(Concepto concepto, BigDecimal importe) {
-        setConcepto(concepto);
-        setCantidad(importe);
+    @ManyToOne
+    @JoinColumn(name = "id_nomina")
+    private Nomina nomina;
+
+    // Constructor con parámetros útiles
+    public LineaNomina(Concepto concepto, BigDecimal cantidad) {
+        this.concepto = concepto;
+        this.cantidad = cantidad;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LineaNomina that)) return false;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
