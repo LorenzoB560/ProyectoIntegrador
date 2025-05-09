@@ -1,6 +1,7 @@
 package org.grupob.adminapp.controller;
 
 import org.grupob.adminapp.dto.FiltroNominaDTO;
+import org.grupob.adminapp.dto.LineaNominaDTO;
 import org.grupob.adminapp.dto.NominaDTO;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
 import org.grupob.adminapp.service.NominaServiceImp;
@@ -51,8 +52,11 @@ public class NominaController {
     public String vistaDetalleNomina(@PathVariable UUID id, Model model) {
 
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
-        model.addAttribute("nominaDTO", nominaServiceImp.devolverNominaPorId(id));
-        System.out.println(nominaServiceImp.devolverNominaPorId(id));
+        NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
+        nominaDTO = nominaServiceImp.actualizarLiquidoTotal(nominaDTO);
+
+        model.addAttribute("nominaDTO", nominaDTO);
+        System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina";
     }
     @GetMapping("/modificar/{id}")

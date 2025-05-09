@@ -217,16 +217,17 @@ public class NominaServiceImp implements NominaService{
                             ln.getCantidad()
                     )
             ).toList();
-
-            return new NominaDTO(
+            NominaDTO nominaDTO = new NominaDTO(
                     n.getId(),
                     n.getEmpleado().getId(),
                     nombreEmpleado,
                     n.getMes(),
                     n.getAnio(),
                     n.getTotalLiquido(),
-                    lineaDTOs
-            );
+                    lineaDTOs);
+
+            nominaDTO = actualizarLiquidoTotal(nominaDTO);
+            return nominaDTO;
         });
     }
     public void modificarNomina(NominaDTO nominaDTO){
@@ -252,4 +253,25 @@ public class NominaServiceImp implements NominaService{
         nomina.setLineaNominas(lineas);
     }
 
+    public String obtenerTipoPorIdConcepto(UUID idConcepto) {
+        return conceptoRepository.findById(idConcepto)
+                .map(Concepto::getTipo)
+                .orElseThrow(() -> new RuntimeException("Tipo no encontrado"));
+    }
+
+    public NominaDTO actualizarLiquidoTotal(NominaDTO nominaDTO) {
+        BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "INGRESO".equals(obtenerTipoPorIdConcepto(c.getIdConcepto())))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalDeducciones = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "DEDUCCION".equals(obtenerTipoPorIdConcepto(c.getIdConcepto())))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        nominaDTO.setTotalLiquido(totalIngresos.subtract(totalDeducciones));
+
+        return nominaDTO;
+    }
 }
