@@ -8,11 +8,11 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/js/eliminarNomina.js"></script>
   <script src="/js/descargarPDF.js"></script>
-  <script src="/js/consultaParametrizadaNomina.js"></script>
+  <script src="/js/consultaParametrizadaNominaEmpleado.js"></script>
   <link rel="stylesheet" th:href="@{/css/emp/estilos-generales.css}">
 
 </head>
-<body class="bg-light py-5" th:object="${usuarioDTO}">
+<body class="bg-light" th:object="${usuarioDTO}">
 <div th:replace="~{fragmentos/emp/header :: header}"></div>
 <div th:replace="fragmentos/emp/nav :: nav"></div>
 
@@ -24,25 +24,22 @@
   <!-- Sección de filtros -->
   <div class="filter-section">
     <div class="row">
-      <div class="col-md-3 mb-2">
-        <label for="filtroNombre" class="form-label">Empleado:</label>
-        <input type="text" class="form-control" id="filtroNombre" placeholder="Filtrar por empleado" th:value="${filtroNombre}">
-      </div>
-      <div class="col-md-3 mb-2">
+        <input type="hidden" id="idEmpleado" th:field="*{id}">
+      <div class="col-md-4 mb-2">
         <label for="filtroMes" class="form-label">Mes:</label>
         <select id="filtroMes" class="form-select">
           <option value="">Seleccione un mes</option>
           <option th:each="mes : ${meses}" th:text="${mes}" th:value="${mes}" th:selected="${mes == filtroMes}"></option>
         </select>
       </div>
-      <div class="col-md-3 mb-2">
+      <div class="col-md-4 mb-2">
         <label for="filtroAnio" class="form-label">Año:</label>
         <select id="filtroAnio" class="form-select">
           <option value="">Seleccione un año</option>
           <option th:each="anio : ${anios}" th:text="${anio}" th:value="${anio}" th:selected="${anio == filtroAnio}"></option>
         </select>
       </div>
-      <div class="col-md-3 mb-2">
+      <div class="col-md-4 mb-2">
         <label for="conceptosSeleccionados" class="form-label">Conceptos:</label>
         <select id="conceptosSeleccionados" class="form-select" multiple="multiple">
           <option th:each="concepto : ${listaConceptos}"
@@ -109,7 +106,7 @@
       <td class="text-center">
 
         <!--Botón de ver-->
-        <a th:href="@{'/nomina/detalle/' + ${nomina.id}}" class="btn btn-primary me-2" title="Ver">
+        <a th:href="@{'/nomina/detalle-empleado/' + ${nomina.id}}" class="btn btn-primary me-2" title="Ver">
           <i class="bi bi-eye"></i>
         </a>
 

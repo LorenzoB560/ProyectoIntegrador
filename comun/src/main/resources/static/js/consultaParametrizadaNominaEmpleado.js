@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (aplicarBtn && limpiarBtn) {
         aplicarBtn.addEventListener('click', function () {
-            const nombre = document.getElementById('filtroNombre').value;
             const mes = document.getElementById('filtroMes').value;
             const anio = document.getElementById('filtroAnio').value;
             let min = document.getElementById('filtroLiquidoMinimo').value;
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const params = new URLSearchParams();
 
-            if (nombre) params.append('filtroNombre', nombre);
             if (mes) params.append('filtroMes', mes);
             if (anio) params.append('filtroAnio', anio);
 
@@ -32,11 +30,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             conceptos.forEach(c => params.append('conceptosSeleccionados', c));
 
-            window.location.href = '/nomina/busqueda-parametrizada?' + params.toString();
+            window.location.href = '/nomina/busqueda-parametrizada-empleado?' + params.toString();
         });
 
         limpiarBtn.addEventListener('click', function () {
-            document.getElementById('filtroNombre').value = '';
+            const idEmpleado = document.getElementById("idEmpleado").value;
             document.getElementById('filtroMes').value = '';
             document.getElementById('filtroAnio').value = '';
             document.getElementById('filtroLiquidoMinimo').value = '';
@@ -46,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 conceptos.options[i].selected = false;
             }
 
-            window.location.href = '/nomina/listado';
+            window.location.href = '/nomina/listado/' + idEmpleado;
         });
     }
 
@@ -62,8 +60,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 paginationContainer.innerHTML = "";
 
                 const baseUrl = modo === "parametrizada"
-                    ? "/nomina/busqueda-parametrizada"
-                    : "/nomina/listado";
+                    ? "/nomina/busqueda-parametrizada-empleado"
+                    : "/nomina/listado-empleado";
 
                 const prevPageItem = document.createElement("li");
                 prevPageItem.classList.add("page-item");

@@ -47,4 +47,27 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
 
 
     Page<Nomina> findNominaByEmpleadoId(UUID id, Pageable pageable);
+
+    @Query("""
+    SELECT n FROM Nomina n
+    WHERE n.empleado.id = :idEmpleado
+      AND (:mes IS NULL OR n.mes = :mes)
+      AND (:anio IS NULL OR n.anio = :anio)
+      AND (:totalMin IS NULL OR n.totalLiquido >= :totalMin)
+      AND (:totalMax IS NULL OR n.totalLiquido <= :totalMax)
+      AND (:conceptos IS NULL OR EXISTS (
+            SELECT 1 FROM LineaNomina ln
+            WHERE ln.nomina = n
+              AND ln.concepto.nombre IN :conceptos
+      ))
+""")
+    Page<Nomina> buscarNominasFiltradasPorEmpleado(
+            @Param("idEmpleado") UUID idEmpleado,
+            @Param("mes") Integer mes,
+            @Param("anio") Integer anio,
+            @Param("totalMin") BigDecimal totalMin,
+            @Param("totalMax") BigDecimal totalMax,
+            @Param("conceptos") List<String> conceptos,
+            Pageable pageable
+    );
 }

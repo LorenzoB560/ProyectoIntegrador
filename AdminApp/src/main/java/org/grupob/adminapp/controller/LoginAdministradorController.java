@@ -35,7 +35,6 @@ public class LoginAdministradorController {
             return "redirect:/adminapp/login"; // protección ante acceso directo sin login
         }
 
-        sesion.setAttribute("appSource", "AdminApp");
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "redirect:/empleado/lista";
     }
