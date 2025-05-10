@@ -2,13 +2,11 @@ package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.grupob.adminapp.converter.AdministradorConverter;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.service.AdministradorServiceImp;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("adminapp")

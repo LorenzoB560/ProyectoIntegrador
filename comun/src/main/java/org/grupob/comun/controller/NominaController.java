@@ -1,7 +1,9 @@
 package org.grupob.comun.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.dto.FiltroNominaDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.dto.NominaDTO;
 import org.grupob.comun.exception.NominaPasadaException;
@@ -38,16 +40,55 @@ public class NominaController {
     @GetMapping("/listado")
     public String listarNominas(@RequestParam(defaultValue = "0") int page,
                                 Model model,
-                                HttpSession sesion) {
+                                HttpSession sesion,
+                                HttpServletRequest request) {
 
+        // Identificamos si el usuario proviene de AdminApp o EmpApp según el puerto
+        int serverPort = request.getLocalPort();
+        boolean esAdminApp = (serverPort == 9090);
+        boolean esEmpApp = (serverPort == 8080);
+
+        model.addAttribute("esAdminApp", esAdminApp);
+        model.addAttribute("esEmpApp", esEmpApp);
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        if (loginUsuarioEmpleadoDTO == null) {
+
+        // Redirección adecuada según el módulo de origen
+        if (esAdminApp && adminDTO == null) {
+            return "redirect:/adminapp/login";
+        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
             return "redirect:/empapp/login";
-        } else if (loginUsuarioEmpleadoDTO!=null){
-            return "redirect:/nomina/busqueda-parametrizada?filtroNombre=" + loginUsuarioEmpleadoDTO.getUsuario();
+        } else if (esEmpApp) {
+            return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
         }
 
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerTodasNominasPaginadas(page, 10); // 10 por página
+        model.addAttribute("listaNominas", paginaNominas.getContent());
+        model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
+        model.addAttribute("paginaActual", paginaNominas.getNumber());
+
+        model.addAttribute("modo", "listado");
+        model.addAttribute("queryString", "");
+
+        return "listados/listado-vista-nomina";
+    }
+
+    @GetMapping("/listado/{id}")
+    public String listarNominaEmpleado(@PathVariable UUID id,
+                                @RequestParam(defaultValue = "0") int page,
+                                Model model,
+                                HttpSession sesion,
+                                HttpServletRequest request) {
+
+        int serverPort = request.getLocalPort();
+        boolean esEmpApp = (serverPort == 8080);
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+
+        if (loginUsuarioEmpleadoDTO == null) {
+            return "redirect:/empapp/login";
+        }
+
+        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasEmpleado(page, 10, id); // 10 por página
         model.addAttribute("listaNominas", paginaNominas.getContent());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
         model.addAttribute("paginaActual", paginaNominas.getNumber());

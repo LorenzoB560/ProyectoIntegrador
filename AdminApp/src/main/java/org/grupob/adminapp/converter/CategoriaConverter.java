@@ -1,8 +1,6 @@
 package org.grupob.adminapp.converter;
 
 import org.grupob.adminapp.dto.CategoriaDTO;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
-import org.grupob.comun.entity.Administrador;
 import org.grupob.comun.entity.maestras.Categoria;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

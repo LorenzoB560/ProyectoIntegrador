@@ -194,10 +194,18 @@ public class NominaServiceImp implements NominaService{
     }
 
 
+
     public Page<NominaDTO> obtenerTodasNominasPaginadas(int page, int tamanio) {
         Pageable pageable = PageRequest.of(page, tamanio); // puedes ajustar el tamaño
 
         Page<Nomina> paginaNominas = nominaRepository.findAll(pageable);
+
+        return getNominaDTOS(paginaNominas);
+    }
+    public Page<NominaDTO> obtenerNominasEmpleado(int page, int tamanio, UUID id) {
+        Pageable pageable = PageRequest.of(page, tamanio); // puedes ajustar el tamaño
+
+        Page<Nomina> paginaNominas = nominaRepository.findNominaByEmpleadoId(id, pageable);
 
         return getNominaDTOS(paginaNominas);
     }

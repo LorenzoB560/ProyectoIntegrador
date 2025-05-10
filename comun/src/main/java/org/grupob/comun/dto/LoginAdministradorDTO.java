@@ -1,12 +1,10 @@
-package org.grupob.adminapp.dto;
+package org.grupob.comun.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.adminapp.validation.contrasena.ContrasenaCoincide;
 import org.grupob.comun.validation.email.EmailValidado;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;
 

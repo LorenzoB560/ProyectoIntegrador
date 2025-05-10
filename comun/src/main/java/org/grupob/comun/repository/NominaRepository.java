@@ -46,4 +46,5 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
     );
 
 
+    Page<Nomina> findNominaByEmpleadoId(UUID id, Pageable pageable);
 }

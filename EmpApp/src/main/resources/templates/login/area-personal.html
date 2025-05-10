@@ -6,7 +6,7 @@
    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
 </head>
 <body th:object="${dto}">
-<div th:replace="fragmentos/header :: header"></div>
+<div th:replace="fragmentos/emp/header :: header"></div>
 
 <a th:href="@{/datos-personales}">Registrarse como empleado</a>
 <a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
