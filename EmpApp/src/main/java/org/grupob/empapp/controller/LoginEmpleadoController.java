@@ -4,13 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.*;
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
+import org.grupob.comun.dto.grupo_validaciones.GrupoClave;
+import org.grupob.comun.dto.grupo_validaciones.GrupoUsuario;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.EmpleadoServiceImp;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
@@ -90,6 +89,7 @@ public class LoginEmpleadoController {
         String estado = cookieService.obtenerValorCookie(request, "estado");
         // Si el estado es área personal, ir directamente
         if ("/area-personal".equals(estado)) {
+
             return "redirect:/empapp/area-personal";
         }
 
@@ -187,9 +187,14 @@ public class LoginEmpleadoController {
 //            System.err.println(ultimoUsuario);
             request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
 
-//            cookieService.crearCookie(response, "usuario", ultimoUsuario, 604800);
-//            System.err.println(ultimoUsuario);
-             dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+             /*dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+             usuarioService.actualizarEstadisticasAcceso(dto);
+
+             modelo.addAttribute("dto", dto);*/
+
+            dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
             modelo.addAttribute("dto", dto);
 
             return "redirect:/empapp/area-personal";
@@ -238,23 +243,23 @@ public class LoginEmpleadoController {
                 ? cookieService.deserializar(usuariosCookie) : null;
 
 
-        int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
-        request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
+        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+        try {
+            request.getSession().setAttribute("usuarioLogeado", usuarioService.devuelveUsuarioEmpPorUsuario(ultimoUsuario));
 
-        LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
-        modelo.addAttribute("dto", dto);
+            LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+            modelo.addAttribute("dto", dto);
 
 //        modelo.addAttribute("usuario", ultimoUsuario);
-        modelo.addAttribute("contador", contador);
-        modelo.addAttribute("ultimaPagina", ultimaPagina);
+            modelo.addAttribute("contador", contador);
+            modelo.addAttribute("ultimaPagina", ultimaPagina);
 
-        try{
             EmpleadoDTO emp = empleadoServiceImp.devuelveEmpleado(String.valueOf(dto.getId()));
             logger.info("Autenticacion exitosa del usuario: {}", ultimoUsuario);
             String id = String.valueOf(dto.getId());
             return "redirect:/empleado/detalle/" + id;
             //TODO CAMBIAR LA EXCEPCION QUE LANZA EL SERVICIO Y SE CAPTURA AQUI
-        }catch(DepartamentoNoEncontradoException e){
+        } catch (EmpleadoNoEncontradoException e) {
             return "login/area-personal";
 
         }

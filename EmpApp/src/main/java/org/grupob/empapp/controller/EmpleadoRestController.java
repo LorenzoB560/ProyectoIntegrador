@@ -2,6 +2,7 @@ package org.grupob.empapp.controller;
 
 
 
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
@@ -40,18 +41,14 @@ public class EmpleadoRestController {
     }
     @GetMapping("/listado")
     public Page<EmpleadoDTO> listarEmpleados(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) String departamento,
-            @RequestParam(required = false) String comentario,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate contratadosAntesDe,
-            @RequestParam(required = false) BigDecimal salarioMinimo,
+            @ModelAttribute EmpleadoSearchDTO searchDTO,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "ename") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
 
         return empleadoService.buscarEmpleadosPaginados(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
+                searchDTO,
                 page, size, sortBy, sortDir);
     }
 

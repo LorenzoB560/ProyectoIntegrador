@@ -1,11 +1,11 @@
 package org.grupob.adminapp.service;
 
 import org.grupob.adminapp.converter.AdministradorConverter;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.entity.Administrador;
 import org.grupob.comun.exception.CredencialesInvalidasException;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
-import org.grupob.adminapp.repository.AdministradorRepository;
+import org.grupob.comun.repository.AdministradorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

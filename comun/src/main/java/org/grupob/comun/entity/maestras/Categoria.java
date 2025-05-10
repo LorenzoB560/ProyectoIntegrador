@@ -1,0 +1,26 @@
+package org.grupob.comun.entity.maestras;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(
+              name = "UQ_categoria_nombre",
+      columnNames = "nombre"
+))
+public class Categoria {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;
+
+    // Si se quiere la relación bidireccional:
+    // @OneToMany(mappedBy = "categoria")
+    // private List<Producto> productos;
+}

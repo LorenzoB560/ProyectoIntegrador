@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <title>Subir archivo JSON</title>
+
+    <!-- Estilos para el formulario   -->
+    <link rel="stylesheet" th:href="@{/css/carga-estilos.css}">
+
+    <!-- Estilos para los fragmentos   -->
+    <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
+
+
+</head>
+<body th:object="${loginAdminDTO}">
+<div th:replace="fragmentos/admin/header :: header"></div>
+<div th:replace="fragmentos/admin/nav :: nav"></div>
+<div class="carga-masiva-wrapper">
+    <div class="form-container">
+        <h1>Cargar productos desde JSON</h1>
+
+        <form method="POST" enctype="multipart/form-data">
+            <label for="archivo">Selecciona el archivo JSON:</label>
+            <input type="file" name="archivo" id="archivo"/>
+            <br><br>
+            <button type="submit">Subir</button>
+        </form>
+        <div id="mensaje" class="mensaje"></div>
+    </div>
+</div>
+<div th:replace="fragmentos/footer :: footer"></div>
+</body>
+<script th:src="@{/js/carga.js}"></script>
+
+</html>

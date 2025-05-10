@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosContacto;
+import org.grupob.comun.dto.grupo_validaciones.GrupoDatosContacto;
 import org.grupob.empapp.validation.tipo_via.ExisteTipoVia;
 
 @Data

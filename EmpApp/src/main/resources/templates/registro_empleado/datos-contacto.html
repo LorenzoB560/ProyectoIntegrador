@@ -3,30 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <title>Datos de contacto</title>
-  <link rel="stylesheet" href="/css/registro-empleado-estilos.css">
+  <link id="estilos" rel="stylesheet" href="/css/registro-empleado-estilos.css">
   <script src="/js/modificarCampos.js"></script>
+  <script src="/js/modificarCSS.js"></script>
+    <script src="/js/internacionalizacion.js"></script>
 </head>
 <body id="body-contacto">
 
 <!-- Navegación entre pasos -->
-<a href="/datos-personales" id="datos-personales">
-  <img src="/img/Paso1.png" alt="Paso 1">
-</a>
-<a href="/datos-contacto" id="datos-contacto">
-  <img src="/img/Paso2.png" alt="Paso 2">
-</a>
-<a href="/datos-profesionales" id="datos-profesionales">
-  <img src="/img/Paso3.png" alt="Paso 3">
-</a>
-<a href="/datos-economicos" id="datos-economicos">
-  <img src="/img/Paso4.png" alt="Paso 4">
-</a>
-<!--    <a  id="resumen">-->
-<img src="/img/Resumen.png" alt="Resumen" id="resumen">
-<!--    </a>-->
+<nav>
+  <a href="/datos-personales" id="datos-personales">
+    <img src="/img/Paso1.png" alt="Paso 1" width="50px" height="auto">
+  </a>
+  <a href="/datos-contacto" id="datos-contacto">
+    <img src="/img/Paso2.png" alt="Paso 2" width="50px" height="auto">
+  </a>
+  <a href="/datos-profesionales" id="datos-profesionales">
+    <img src="/img/Paso3.png" alt="Paso 3" width="50px" height="auto">
+  </a>
+  <a href="/datos-economicos" id="datos-economicos">
+    <img src="/img/Paso4.png" alt="Paso 4" width="50px" height="auto">
+  </a>
+  <!--    <a  id="resumen">-->
+  <img src="/img/Resumen.png" alt="Resumen" id="resumen" width="50px" height="auto">
+  <!--    </a>-->
+</nav>
 
-<!-- Mensaje de error general -->
-<h2 th:if="${mensajeNOK != null}" th:text="${mensajeNOK}" class="error"></h2>
+<!-- Mensaje de error a nivel general -->
+<h2 th:text="*{mensajeNOK}" class="error"></h2>
+
+<label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
+<select id="seleccionarIdioma">
+  <option value="es" th:selected="${#locale.language == 'es'}" th:text="#{registro.idioma.español}"></option>
+  <option value="en" th:selected="${#locale.language == 'en'}" th:text="#{registro.idioma.ingles}"></option>
+</select>
+
+<div style="text-align: right; margin: 10px;">
+  <label th:text="#{registro.activarCSS}" for="activarCSS"></label>
+  <input type="radio" name="modificarCSS" value="on" id="activarCSS">
+
+  <label th:text="#{registro.desactivarCSS}" for="desactivarCSS"></label>
+  <input type="radio" name="modificarCSS" value="off" id="desactivarCSS" checked>
+</div>
 
 <!-- Formulario de contacto -->
 <form action="/guardar-datos-contacto" method="POST" th:object="${datos}" id="formulario">
@@ -134,7 +152,6 @@
     <input type="text" th:field="*{direccion.codigoPostal}" id="codigoPostal">
     <div th:each="error: ${#fields.errors('direccion.codigoPostal')}" th:text="${error}" class="error"></div>
     <br><br>
-
   </fieldset>
 
   <!-- Botones de acción -->

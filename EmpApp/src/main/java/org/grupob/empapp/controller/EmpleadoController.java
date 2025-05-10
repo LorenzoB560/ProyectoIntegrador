@@ -2,7 +2,7 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.service.CookieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Map;
 
 @Controller
 @RequestMapping("empleado")
@@ -37,10 +35,18 @@ public class EmpleadoController {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
 
+        if(dto==null){
+            return "redirect:/empapp/login";
+        }
+
         modelo.addAttribute("dto", dto);
-        Map<String, Integer> usuariosAutenticados = (cookieService.validar(usuariosCookie))
-                ? cookieService.deserializar(usuariosCookie) : null;
-        int contador = usuariosAutenticados.getOrDefault(ultimoUsuario, 1);
+
+        int contador = cookieService.obtenerInicios(usuariosCookie,ultimoUsuario);
+
+        modelo.addAttribute("contador", contador);
+        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+        modelo.addAttribute("ultimaPagina", ultimaPagina);
+
         return "listados/detalle-vista-emp";
     }
 }

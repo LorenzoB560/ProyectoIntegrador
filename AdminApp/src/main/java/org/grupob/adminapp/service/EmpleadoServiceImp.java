@@ -5,7 +5,7 @@ import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.adminapp.converter.EmpleadoConverter;
 import org.grupob.adminapp.dto.EmpleadoDTO;
-import org.grupob.adminapp.dto.EmpleadoSearchDTO;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -104,30 +104,23 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // -----------------------------------
 
 
-    public List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams) {
-        return buscarEmpleadosAvanzado(
-                searchParams.getNombre(),
-                searchParams.getDepartamento(),
-                searchParams.getComentario(),
-                searchParams.getContratadosAntesDe(),
-                searchParams.getSalarioMinimo()
-        );
-    }
-
-
-    public List<EmpleadoDTO> buscarEmpleadosAvanzado(
-            String nombre,
-            String departamento,
-            String comentario,
-            LocalDate contratadosAntesDe,
-            BigDecimal salarioMinimo) {
-
+    @Override
+    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
         Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
-                0, Integer.MAX_VALUE, "ename", "asc");
-
+                searchParams,
+                0, Integer.MAX_VALUE, "nombre", "asc");
         return page.getContent();
     }
+
+
+//    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
+//
+//        Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
+//                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
+//                0, Integer.MAX_VALUE, "ename", "asc");
+//
+//        return page.getContent();
+//    }
 
     @Override
     public List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento) {
@@ -151,11 +144,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 
     @Override
     public Page<EmpleadoDTO> buscarEmpleadosPaginados(
-            String nombre,
-            String departamento,
-            String comentario,
-            LocalDate contratadosAntesDe,
-            BigDecimal salarioMinimo,
+            EmpleadoSearchDTO searchParams,
             int page,
             int size,
             String sortBy,
@@ -174,9 +163,16 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         // Crear objeto Pageable
         Pageable pageable = PageRequest.of(page, size, sort);
 
+        EmpleadoSearchDTO comunSearchParams = new EmpleadoSearchDTO();
+        comunSearchParams.setNombre(searchParams.getNombre());
+        comunSearchParams.setDepartamento(searchParams.getDepartamento());
+        comunSearchParams.setComentario(searchParams.getComentario());
+        comunSearchParams.setContratadosAntesDe(searchParams.getContratadosAntesDe());
+        comunSearchParams.setSalarioMinimo(searchParams.getSalarioMinimo());
+        comunSearchParams.setSalarioMaximo(searchParams.getSalarioMaximo());
         // Ejecutar consulta paginada
-        Page<Empleado> pageEmpleados = empleadoRepository.buscarEmpleadosAvanzadoPaginado(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo, pageable);
+        Page<Empleado> pageEmpleados = empleadoRepository.buscarEmpleadosAvanzadoPaginado(comunSearchParams
+                , pageable);
 
         // Convertir a DTO preservando la información de paginación
         return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));

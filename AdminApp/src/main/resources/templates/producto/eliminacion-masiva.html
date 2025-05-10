@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"> <!-- Asegúrate de tener el namespace de Thymeleaf si lo usas -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliminación Masiva de Productos</title> <!-- Título actualizado -->
+
+  <!-- Reutilizamos los mismos estilos CSS que en la carga masiva -->
+  <link rel="stylesheet" th:href="@{/css/carga-estilos.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
+
+</head>
+<!-- Asumiendo que necesitas el objeto DTO para los fragmentos, mantenemos th:object -->
+<body th:object="${loginAdminDTO}">
+
+<!-- Fragmentos comunes -->
+<div th:replace="~{fragmentos/admin/header :: header}"></div>
+<div th:replace="~{fragmentos/admin/nav :: nav}"></div>
+
+<!-- Wrapper principal reutilizando la clase CSS -->
+<div class="carga-masiva-wrapper">
+  <!-- Contenedor del formulario reutilizando la clase CSS -->
+  <div class="form-container">
+    <h1>Eliminación masiva de Productos</h1> <!-- Encabezado actualizado -->
+
+    <!-- Formulario de eliminación (ID referenciado en el JS) -->
+    <form id="formBorradoProductos">
+      <label for="selectCategorias" id="labelCategorySelect">Selecciona categoría a eliminar:</label>
+      <!-- El select se poblará con JavaScript -->
+      <select name="categoria" id="selectCategorias">
+        <option value="" id="optionLoading">Cargando categorías...</option>
+      </select>
+
+      <button type="submit" id="buttonDelete">Eliminar Productos</button>
+    </form>
+
+    <!-- Div para mostrar mensajes de éxito o error (referenciado en JS si es necesario) -->
+    <div id="mensaje" class="mensaje"></div>
+  </div>
+</div>
+
+<!-- Fragmento de footer -->
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+
+<!-- Biblioteca jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Script específico para la eliminación masiva -->
+<script th:src="@{/js/eliminacion-masiva.js}"></script>
+
+</body>
+</html>

@@ -1,15 +1,15 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.maestras.*;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.springframework.stereotype.Controller;
@@ -103,7 +103,8 @@ public class RegistroEmpleadoController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "El formurario tiene errores");
+//            bindingResult.rejectValue("mensajeNOK", "registro.error");
             System.out.println(bindingResult);
             return "registro_empleado/datos-personales";
         }
@@ -164,7 +165,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/datos-contacto";
         }
@@ -216,7 +217,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/datos-profesionales";
         }
@@ -271,7 +272,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/datos-economicos";
         }
@@ -336,7 +337,7 @@ public class RegistroEmpleadoController {
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {
             model.addAttribute("datos", datosFormulario);
-            model.addAttribute("mensajeNOK", "El formulario tiene errores");
+            model.addAttribute("mensajeNOK", "{registro.error}");
             System.err.println(bindingResult.toString());
             return "registro_empleado/resumen";
         }

@@ -12,12 +12,12 @@
     <!-- Tu CSS personalizado -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <!-- Estilos para los fragmentos   -->
-    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
 
 </head>
 <body th:object="${loginAdminDTO}">
-<div th:replace="fragmentos/header :: header"></div>
-<div th:replace="fragmentos/nav :: nav"></div>
+<div th:replace="fragmentos/admin/header :: header"></div>
+<div th:replace="fragmentos/admin/nav :: nav"></div>
 <div class="container-fluid my-4">
     <h1 class="text-center mb-4">Gestión de Empleados</h1>
 
@@ -38,13 +38,17 @@
             </div>
             <div class="col-md-3 mb-2">
                 <label for="filtroFechaAntes" class="form-label">Contratados antes de:</label>
-                <input type="date" class="form-control" id="filtroFechaAntes">
+                <input type="text" class="form-control" id="filtroFechaAntes">
             </div>
         </div>
         <div class="row">
             <div class="col-md-3 mb-2">
                 <label for="filtroSalarioMinimo" class="form-label">Salario mínimo:</label>
-                <input type="number" class="form-control" id="filtroSalarioMinimo" placeholder="Ej: 30000">
+                <input type="text" class="form-control" id="filtroSalarioMinimo" placeholder="Ej: 30000">
+            </div>
+            <div class="col-md-3 mb-2">
+                <label for="filtroPrecioMaximo" class="form-label">Salario máximo:</label>
+                <input type="text" step="any" class="form-control" id="filtroSalarioMaximo" placeholder="Ej: 60000">
             </div>
             <div class="col-md-9 d-flex align-items-end justify-content-end mb-2">
                 <button id="aplicarFiltros" class="btn btn-primary me-2">Aplicar Filtros</button>
