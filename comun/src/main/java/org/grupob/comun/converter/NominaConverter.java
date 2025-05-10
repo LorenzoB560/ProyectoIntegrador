@@ -1,8 +1,8 @@
-package org.grupob.adminapp.converter;
+package org.grupob.comun.converter;
 
-import org.grupob.adminapp.dto.AltaNominaDTO;
-import org.grupob.adminapp.dto.LineaNominaDTO;
-import org.grupob.adminapp.dto.NominaDTO;
+
+import org.grupob.comun.dto.LineaNominaDTO;
+import org.grupob.comun.dto.NominaDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.repository.ConceptoRepository;
@@ -26,10 +26,6 @@ public class NominaConverter {
         this.empleadoRepository = empleadoRepository;
     }
 
-    public Nomina altaNominaDTOConvierteAEntidad(AltaNominaDTO altaNominaDTO){
-        // Mapear propiedades básicas
-        return modelMapper.map(altaNominaDTO, Nomina.class);
-    }
     public Nomina nominaDTOConvierteAEntidad(NominaDTO nominaDTO){
         return modelMapper.map(nominaDTO, Nomina.class);
     }

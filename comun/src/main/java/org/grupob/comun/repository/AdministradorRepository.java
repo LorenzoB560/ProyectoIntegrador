@@ -1,4 +1,4 @@
-package org.grupob.adminapp.repository;
+package org.grupob.comun.repository;
 
 import org.grupob.comun.entity.Administrador;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -3,6 +3,7 @@ package org.grupob.adminapp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.dto.LineaNominaDTO;
 
 import java.math.BigDecimal;
 import java.util.*;

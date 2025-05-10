@@ -1,17 +1,18 @@
-package org.grupob.adminapp.service;
+package org.grupob.comun.service;
 
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.grupob.adminapp.converter.NominaConverter;
-import org.grupob.adminapp.dto.FiltroNominaDTO;
-import org.grupob.adminapp.dto.LineaNominaDTO;
-import org.grupob.adminapp.dto.NominaDTO;
+import org.grupob.comun.converter.NominaConverter;
+import org.grupob.comun.dto.FiltroNominaDTO;
+import org.grupob.comun.dto.LineaNominaDTO;
+import org.grupob.comun.dto.NominaDTO;
 import org.grupob.comun.entity.LineaNomina;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
+import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.repository.ConceptoRepository;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
@@ -238,7 +239,7 @@ public class NominaServiceImp implements NominaService{
             throw new NominaPasadaException("No se puede modificar una nómina de un mes pasado");
         }
     }
-    static void asignarLineasNomina(Nomina nomina, List<LineaNominaDTO> lineaNominas, ConceptoRepository conceptoRepository) {
+    private void asignarLineasNomina(Nomina nomina, List<LineaNominaDTO> lineaNominas, ConceptoRepository conceptoRepository) {
         Set<LineaNomina> lineas = lineaNominas.stream().map(lineaDTO -> {
             Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
                     .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));

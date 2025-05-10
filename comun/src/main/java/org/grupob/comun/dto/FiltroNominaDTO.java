@@ -1,10 +1,9 @@
-package org.grupob.adminapp.dto;
+package org.grupob.comun.dto;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.comun.entity.maestras.Concepto;
 
 import java.math.BigDecimal;
 import java.util.List;

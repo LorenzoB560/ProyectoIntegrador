@@ -1,7 +1,11 @@
 package org.grupob.adminapp.service;
 
-import org.grupob.adminapp.converter.NominaConverter;
+import org.grupob.adminapp.converter.AltaNominaConverter;
+import org.grupob.comun.converter.NominaConverter;
 import org.grupob.adminapp.dto.AltaNominaDTO;
+import org.grupob.comun.dto.LineaNominaDTO;
+import org.grupob.comun.entity.LineaNomina;
+import org.grupob.comun.service.NominaServiceImp;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,9 +28,9 @@ public class AltaNominaServiceImp implements AltaNominaService {
     private final ConceptoRepository conceptoRepository;
     private final NominaRepository nominaRepository;
     private final LineaNominaRepository lineaNominaRepository;
-    private final NominaConverter nominaConverter;
+    private final AltaNominaConverter nominaConverter;
 
-    public AltaNominaServiceImp(EmpleadoRepository empleadoRepository, ConceptoRepository conceptoRepository, NominaConverter nominaConverter, NominaRepository nominaRepository, LineaNominaRepository lineaNominaRepository) {
+    public AltaNominaServiceImp(EmpleadoRepository empleadoRepository, ConceptoRepository conceptoRepository, AltaNominaConverter nominaConverter, NominaRepository nominaRepository, LineaNominaRepository lineaNominaRepository) {
         this.empleadoRepository = empleadoRepository;
         this.conceptoRepository = conceptoRepository;
         this.nominaConverter = nominaConverter;
@@ -57,8 +62,21 @@ public class AltaNominaServiceImp implements AltaNominaService {
         // El converter se encarga de crear las entidades Nomina y LineaNomina correctamente
         Nomina nomina = nominaConverter.altaNominaDTOConvierteAEntidad(altaNominaDTO);
 
-        NominaServiceImp.asignarLineasNomina(nomina, altaNominaDTO.getLineaNominas(), conceptoRepository);
+        asignarLineasNomina(nomina, altaNominaDTO.getLineaNominas(), conceptoRepository);
 
         nominaRepository.save(nomina);
+    }
+    private void asignarLineasNomina(Nomina nomina, List<LineaNominaDTO> lineaNominas, ConceptoRepository conceptoRepository) {
+        Set<LineaNomina> lineas = lineaNominas.stream().map(lineaDTO -> {
+            Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
+                    .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));
+            LineaNomina linea = new LineaNomina();
+            linea.setConcepto(concepto);
+            linea.setCantidad(lineaDTO.getCantidad());
+            linea.setNomina(nomina);
+            return linea;
+        }).collect(Collectors.toSet());
+
+        nomina.setLineaNominas(lineas);
     }
 }

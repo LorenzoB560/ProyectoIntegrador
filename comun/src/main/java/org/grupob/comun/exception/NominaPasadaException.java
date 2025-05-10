@@ -1,6 +1,4 @@
-package org.grupob.adminapp.service;
-
-import org.springframework.http.HttpStatus;
+package org.grupob.comun.exception;
 
 public class NominaPasadaException extends RuntimeException {
     public NominaPasadaException() {

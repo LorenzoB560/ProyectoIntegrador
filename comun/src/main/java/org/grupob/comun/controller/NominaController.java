@@ -1,11 +1,9 @@
-package org.grupob.adminapp.controller;
+package org.grupob.comun.controller;
 
-import org.grupob.adminapp.dto.FiltroNominaDTO;
-import org.grupob.adminapp.dto.LineaNominaDTO;
-import org.grupob.adminapp.dto.NominaDTO;
-import org.grupob.adminapp.service.AltaNominaServiceImp;
-import org.grupob.adminapp.service.NominaPasadaException;
-import org.grupob.adminapp.service.NominaServiceImp;
+import org.grupob.comun.dto.FiltroNominaDTO;
+import org.grupob.comun.dto.NominaDTO;
+import org.grupob.comun.exception.NominaPasadaException;
+import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

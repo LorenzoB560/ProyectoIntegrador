@@ -1,12 +1,8 @@
-package org.grupob.adminapp.controller;
+package org.grupob.comun.controller;
 
 
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
-import jakarta.persistence.EntityNotFoundException;
-import org.grupob.adminapp.dto.LineaNominaDTO;
-import org.grupob.adminapp.dto.NominaDTO;
-import org.grupob.adminapp.service.NominaServiceImp;
+
+import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,8 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.lowagie.text.Document;
-import java.io.ByteArrayOutputStream;
+
 import java.util.UUID;
 
 @RestController
