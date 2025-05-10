@@ -8,7 +8,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/js/eliminarNomina.js"></script>
   <script src="/js/descargarPDF.js"></script>
-  <script src="/js/consultaParametrizadaNomina.js"></script>
+  <script src="/js/consultaParametrizadaNominaEmpleado.js"></script>
   <link rel="stylesheet" th:href="@{/css/emp/estilos-generales.css}">
 
 </head>
@@ -24,7 +24,7 @@
   <!-- Sección de filtros -->
   <div class="filter-section">
     <div class="row">
-        <input type="hidden" id="filtroNombre" th:value="${filtroNombre}">
+        <input type="hidden" id="idEmpleado" th:field="*{id}">
       <div class="col-md-4 mb-2">
         <label for="filtroMes" class="form-label">Mes:</label>
         <select id="filtroMes" class="form-select">

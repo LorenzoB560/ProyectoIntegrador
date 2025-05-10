@@ -2,10 +2,7 @@ package org.grupob.comun.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.grupob.comun.dto.FiltroNominaDTO;
-import org.grupob.comun.dto.LoginAdministradorDTO;
-import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.comun.dto.NominaDTO;
+import org.grupob.comun.dto.*;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
@@ -83,7 +80,6 @@ public class NominaControllerEmp {
 
     @GetMapping("/busqueda-parametrizada-empleado")
     public String listarNominaEmpleadoConFitlro(
-            @RequestParam(required = false) String filtroNombre,
             @RequestParam(required = false) Integer filtroMes,
             @RequestParam(required = false) Integer filtroAnio,
             @RequestParam(required = false) BigDecimal totalLiquidoMin,
@@ -101,33 +97,29 @@ public class NominaControllerEmp {
 
         model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
 
-        FiltroNominaDTO filtro = new FiltroNominaDTO();
-        filtro.setFiltroNombre(filtroNombre);
+        FiltroNominaEmpleadoDTO filtro = new FiltroNominaEmpleadoDTO();
+        filtro.setIdEmpleado(loginUsuarioEmpleadoDTO.getId()); // Agregar el ID del empleado al filtro
         filtro.setFiltroMes(filtroMes);
         filtro.setFiltroAnio(filtroAnio);
         filtro.setTotalLiquidoMinimo(totalLiquidoMin);
         filtro.setTotalLiquidoMaximo(totalLiquidoMax);
         filtro.setConceptosSeleccionados(conceptosSeleccionados);
 
-        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
+        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradasPorEmpleado(filtro, page);
 
         model.addAttribute("listaNominas", paginaNominas.getContent());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
         model.addAttribute("paginaActual", page);
         model.addAttribute("filtro", filtro);
-
-        model.addAttribute("filtroNombre", filtroNombre);
+        
         model.addAttribute("filtroMes", filtroMes);
         model.addAttribute("filtroAnio", filtroAnio);
         model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
         model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
         model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
-
-        // NUEVO
         model.addAttribute("modo", "parametrizada");
 
         StringBuilder queryString = new StringBuilder();
-        if (filtroNombre != null && !filtroNombre.isBlank()) queryString.append("&filtroNombre=").append(filtroNombre);
         if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
         if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
         if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
@@ -141,6 +133,7 @@ public class NominaControllerEmp {
 
         return "listados/listado-vista-nomina-empleado";
     }
+
 
 
 }

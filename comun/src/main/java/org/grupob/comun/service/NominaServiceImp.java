@@ -194,6 +194,23 @@ public class NominaServiceImp implements NominaService{
         return getNominaDTOS(paginaNominas);
     }
 
+    public Page<NominaDTO> obtenerNominasFiltradasPorEmpleado(FiltroNominaEmpleadoDTO filtro, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradasPorEmpleado(
+                filtro.getIdEmpleado(), // Nuevo parámetro para filtrar por empleado
+                filtro.getFiltroMes(),
+                filtro.getFiltroAnio(),
+                filtro.getTotalLiquidoMinimo(),
+                filtro.getTotalLiquidoMaximo(),
+                filtro.getConceptosSeleccionados(),
+                pageable
+        );
+
+        return getNominaDTOS(paginaNominas);
+    }
+
+
 
 
     public Page<NominaDTO> obtenerTodasNominasPaginadas(int page, int tamanio) {
