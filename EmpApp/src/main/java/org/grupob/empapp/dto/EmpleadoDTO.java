@@ -3,6 +3,7 @@ package org.grupob.empapp.dto; // O el paquete que prefieras para tus DTOs
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.GeneroDTO;
 
 // Importa otros DTOs necesarios (EspecialidadDto, DepartamentoDto, etc.)

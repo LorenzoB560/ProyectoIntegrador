@@ -2,7 +2,6 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.grupob.empapp.dto.CategoriaDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ProveedorDTO;
 import org.grupob.empapp.service.CategoriaServiceImp;
 import org.grupob.empapp.service.ProveedorServiceImp;

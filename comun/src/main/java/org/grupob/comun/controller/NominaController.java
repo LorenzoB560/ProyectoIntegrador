@@ -1,6 +1,8 @@
 package org.grupob.comun.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.dto.FiltroNominaDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.dto.NominaDTO;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.service.NominaServiceImp;
@@ -35,7 +37,16 @@ public class NominaController {
     //TODO AÑADIR TABLA MAESTRA MESES, PARA MOSTRARLO EN LA NÓMINA
     @GetMapping("/listado")
     public String listarNominas(@RequestParam(defaultValue = "0") int page,
-                                Model model) {
+                                Model model,
+                                HttpSession sesion) {
+
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        if (loginUsuarioEmpleadoDTO == null) {
+            return "redirect:/empapp/login";
+        } else if (loginUsuarioEmpleadoDTO!=null){
+            return "redirect:/nomina/busqueda-parametrizada?filtroNombre=" + loginUsuarioEmpleadoDTO.getUsuario();
+        }
+
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerTodasNominasPaginadas(page, 10); // 10 por página
         model.addAttribute("listaNominas", paginaNominas.getContent());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
@@ -59,6 +70,7 @@ public class NominaController {
         System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina";
     }
+
     @GetMapping("/modificar/{id}")
     public String modificarNomina(@PathVariable UUID id, RedirectAttributes redirectAttributes, Model model) {
         try {
@@ -75,6 +87,7 @@ public class NominaController {
             return "redirect:/nomina/listado"; // Redirige al listado de nóminas
         }
     }
+
     @PostMapping("/guardar-datos-modificados")
     public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO, Model model) {
 
@@ -135,7 +148,6 @@ public class NominaController {
 
         return "listados/listado-vista-nomina";
     }
-
 
 
 }

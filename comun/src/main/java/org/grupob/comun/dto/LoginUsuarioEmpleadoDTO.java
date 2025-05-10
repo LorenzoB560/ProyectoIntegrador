@@ -1,4 +1,4 @@
-package org.grupob.empapp.dto;
+package org.grupob.comun.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.validation.email.EmailValidado;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
+import org.grupob.comun.dto.grupo_validaciones.GrupoClave;
+import org.grupob.comun.dto.grupo_validaciones.GrupoUsuario;
 
 
 import java.time.LocalDateTime;
