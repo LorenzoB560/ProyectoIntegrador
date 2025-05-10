@@ -14,8 +14,10 @@
     <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
 
 </head>
-<!--<body> <div th:replace="~{fragmentos/header :: header}"></div>-->
-<!--<div th:replace="~{fragmentos/nav :: nav}"></div>-->
+<body th:object="${dto}">
+<div th:replace="fragmentos/header :: header"></div>
+<div th:replace="fragmentos/nav :: nav"></div>
+
 
 <div class="container-fluid my-4">
     <h1 class="text-center mb-4">Gestión de Productos</h1>

@@ -24,8 +24,17 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
     boolean existsByDescripcionAndProveedorNombre(String descripcion, String nombreProveedor);
     Optional<Producto> findByDescripcionAndProveedorNombre(String descripcion, String nombreProveedor);
 
-    @Query("SELECT p FROM Producto p WHERE TYPE(p) = :clase")
-    <T extends Producto> List<T> findByType(@Param("clase") Class<T> clase);
+//    @Query("SELECT p FROM Producto p WHERE TYPE(p) = :clase")
+//    <T extends Producto> List<T> findByType(@Param("clase") Class<T> clase);
+
+    // 1.1. Obtener los IDs de los productos asociados a una categoría
+    @Query("SELECT p.id FROM Producto p JOIN p.categoria c WHERE c.id = :categoriaId")
+    List<UUID> findIdsByCategoriaId(@Param("categoriaId") Long categoriaId);
+
+    // 1.2. Eliminar productos por una lista de IDs
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE p.id IN :ids")
+    void deleteByIds(@Param("ids") List<UUID> ids);
 
     // Elimina por categoría usando JPQL
     @Modifying

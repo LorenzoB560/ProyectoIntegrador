@@ -569,7 +569,7 @@ INSERT INTO nomina (id_nomina, id_empleado, mes, anio, total_liquido)
 VALUES (UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')),
         UNHEX(REPLACE('d27a9cc2-5743-40a1-b6e3-fdc97a6c4351', '-', '')), 10, 2025, 1100);
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('eb661f36-f938-4388-9039-c89e262e52fd', '-', '')), 1800.00),
@@ -614,7 +614,7 @@ VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')),
 
 
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE('a1f2b3c4-5678-9abc-def0-123456789abc', '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 2800.00),
@@ -628,7 +628,7 @@ VALUES (UNHEX(REPLACE('a1f2b3c4-5678-9abc-def0-123456789abc', '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
         UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 200.00);
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 3100.00),
@@ -645,7 +645,7 @@ VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
         UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 290.00);
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 2950.00),
@@ -662,7 +662,7 @@ VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
         UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 280.00);
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 3150.00),
@@ -679,7 +679,7 @@ VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
         UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 295.00);
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 2900.00),
@@ -712,7 +712,7 @@ VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
         UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 295.00);
 
-INSERT INTO LINEA_NOMINA (id, id_concepto, id_nomina, cantidad)
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
 VALUES (UNHEX(REPLACE(UUID(), '-', '')),
         UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
         UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 2950.00),
