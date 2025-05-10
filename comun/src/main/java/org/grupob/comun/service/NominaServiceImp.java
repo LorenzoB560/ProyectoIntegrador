@@ -4,11 +4,11 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.grupob.comun.converter.NominaConverter;
-import org.grupob.comun.dto.FiltroNominaDTO;
-import org.grupob.comun.dto.LineaNominaDTO;
-import org.grupob.comun.dto.NominaDTO;
+import org.grupob.comun.dto.*;
 import org.grupob.comun.entity.LineaNomina;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
@@ -294,4 +295,22 @@ public class NominaServiceImp implements NominaService{
             throw new EntityNotFoundException("La nomina seleccionada no existe");
         }
     }
+
+    public String gestionarAccesoYRedireccion(LoginAdministradorDTO adminDTO, LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO, HttpSession sesion, Model model, HttpServletRequest request) {
+        int serverPort = request.getLocalPort();
+        boolean esAdminApp = (serverPort == 9090);
+        boolean esEmpApp = (serverPort == 8080);
+
+        // Redirección adecuada según el módulo de origen
+        if (esAdminApp && adminDTO == null) {
+            return "redirect:/adminapp/login";
+        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
+            return "redirect:/empapp/login";
+        } else if (esEmpApp) {
+            return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
+        }
+
+        return null; // No hay redirección, sigue la ejecución normal
+    }
+
 }

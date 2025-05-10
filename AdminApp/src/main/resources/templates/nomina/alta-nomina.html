@@ -7,7 +7,7 @@
     <!--CSS para los fragmentos    -->
     <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
 </head>
-<body class="bg-light">
+<body class="bg-light" th:object="${loginAdminDTO}">
 <div th:replace="fragmentos/admin/header :: header"></div>
 <div th:replace="fragmentos/admin/nav :: nav"></div>
 

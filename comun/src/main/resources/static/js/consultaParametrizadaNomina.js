@@ -8,16 +8,28 @@ document.addEventListener('DOMContentLoaded', function () {
             const nombre = document.getElementById('filtroNombre').value;
             const mes = document.getElementById('filtroMes').value;
             const anio = document.getElementById('filtroAnio').value;
-            const min = document.getElementById('filtroLiquidoMinimo').value;
-            const max = document.getElementById('filtroLiquidoMaximo').value;
+            let min = document.getElementById('filtroLiquidoMinimo').value;
+            let max = document.getElementById('filtroLiquidoMaximo').value;
             const conceptos = Array.from(document.getElementById('conceptosSeleccionados').selectedOptions).map(opt => opt.text);
 
             const params = new URLSearchParams();
+
             if (nombre) params.append('filtroNombre', nombre);
             if (mes) params.append('filtroMes', mes);
             if (anio) params.append('filtroAnio', anio);
-            if (min) params.append('totalLiquidoMin', min);
-            if (max) params.append('totalLiquidoMax', max);
+
+            // ✅ Validar valores negativos en los filtros
+            min = parseFloat(min);
+            max = parseFloat(max);
+
+            if (!isNaN(min) && min >= 0) params.append('totalLiquidoMin', min);
+            if (!isNaN(max) && max >= 0) params.append('totalLiquidoMax', max);
+
+            if (!isNaN(min) && !isNaN(max) && min > max) {
+                alert("El total líquido mínimo no puede ser mayor que el máximo.");
+                return;
+            }
+
             conceptos.forEach(c => params.append('conceptosSeleccionados', c));
 
             window.location.href = '/nomina/busqueda-parametrizada?' + params.toString();
@@ -38,10 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ✅ Actualizar la paginación
     if (paginationContainer) {
         const totalPaginas = parseInt(paginationContainer.getAttribute("data-total-paginas"), 10);
         const paginaActual = parseInt(paginationContainer.getAttribute("data-pagina-actual"), 10);
-        const modo = paginationContainer.getAttribute("data-modo"); // "parametrizada" o "listado"
+        const modo = paginationContainer.getAttribute("data-modo");
         const queryString = paginationContainer.getAttribute("data-query-string") || "";
 
         if (totalPaginas > 1) {
