@@ -2,7 +2,7 @@ package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.grupob.adminapp.dto.EmpleadoDTO;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.service.EmpleadoServiceImp;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
 import org.grupob.comun.repository.maestras.MotivoBloqueoRepository;

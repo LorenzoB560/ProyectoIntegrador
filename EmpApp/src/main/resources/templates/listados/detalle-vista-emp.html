@@ -12,12 +12,12 @@
     <!-- Tu CSS personalizado -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <!--CSS para los fragmentos    -->
-    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+    <link rel="stylesheet" th:href="@{/css/emp/estilos-generales.css}">
 
 </head>
 <body th:object="${dto}">
-<div th:replace="fragmentos/header :: header"></div>
-<div th:replace="fragmentos/nav :: nav"></div>
+<div th:replace="fragmentos/emp/header :: header"></div>
+<div th:replace="fragmentos/emp/nav :: nav"></div>
 <div class="container">
     <!-- Breadcrumb navigation -->
     <nav aria-label="breadcrumb">

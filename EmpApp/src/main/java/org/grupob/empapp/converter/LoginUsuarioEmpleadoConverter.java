@@ -1,6 +1,6 @@
 package org.grupob.empapp.converter;
 
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

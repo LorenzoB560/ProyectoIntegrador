@@ -13,7 +13,7 @@ import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
 import org.springframework.stereotype.Service;

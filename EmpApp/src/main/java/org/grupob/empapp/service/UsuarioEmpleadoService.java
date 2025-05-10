@@ -1,6 +1,6 @@
 package org.grupob.empapp.service;
 
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.entity.UsuarioEmpleado;
 
 public interface UsuarioEmpleadoService {

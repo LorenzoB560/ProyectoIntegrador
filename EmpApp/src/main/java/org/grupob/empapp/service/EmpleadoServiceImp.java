@@ -47,7 +47,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> devuelveTodosEmpleados() {
         List<Empleado> listaempleados = empleadoRepository.findAll();
         return listaempleados.stream()
-                .map(empleado -> empleadoConverter.convertToDto(empleado))
+                .map(empleadoConverter::convertToDto)
                 .collect(Collectors.toList());
     }
 

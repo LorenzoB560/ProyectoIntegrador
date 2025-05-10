@@ -6,13 +6,13 @@
     <link rel="stylesheet" th:href="@{/css/carga-estilos.css}">
 
     <!-- Estilos para los fragmentos   -->
-    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
 
 
 </head>
 <body th:object="${loginAdminDTO}">
-<div th:replace="fragmentos/header :: header"></div>
-<div th:replace="fragmentos/nav :: nav"></div>
+<div th:replace="fragmentos/admin/header :: header"></div>
+<div th:replace="fragmentos/admin/nav :: nav"></div>
 <div class="carga-masiva-wrapper">
     <div class="form-container">
         <h1>Cargar productos desde JSON</h1>

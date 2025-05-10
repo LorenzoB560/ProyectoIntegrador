@@ -4,14 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.grupob.comun.entity.Departamento;
-import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.*;
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.ActualizarClaveDTO;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoClave;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoUsuario;
+import org.grupob.comun.dto.grupo_validaciones.GrupoClave;
+import org.grupob.comun.dto.grupo_validaciones.GrupoUsuario;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.EmpleadoServiceImp;
 import org.grupob.empapp.service.UsuarioEmpleadoServiceImp;
@@ -146,7 +144,8 @@ public class LoginEmpleadoController {
                                      HttpServletResponse response,
                                      @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                      @Validated(GrupoClave.class) @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
-                                     BindingResult result) {
+                                     BindingResult result,
+                                     HttpSession sesion) {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         //DEBERIA VALIDARSE LA CONTRASEÑA INTRODUCIDA? PARA MI EN PRINCIPIO NO
         //Comprobacion inecesario
@@ -198,6 +197,7 @@ public class LoginEmpleadoController {
 
             dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
             modelo.addAttribute("dto", dto);
+            sesion.setAttribute("appSource", "EmpApp");
 
             return "redirect:/empapp/area-personal";
 

@@ -1,9 +1,12 @@
 package org.grupob.adminapp.service;
 
-import org.grupob.adminapp.converter.NominaConverter;
+import org.grupob.adminapp.converter.AltaNominaConverter;
+import org.grupob.comun.converter.NominaConverter;
 import org.grupob.adminapp.dto.AltaNominaDTO;
-import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.dto.LineaNominaDTO;
 import org.grupob.comun.entity.LineaNomina;
+import org.grupob.comun.service.NominaServiceImp;
+import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
 import org.grupob.comun.repository.ConceptoRepository;
@@ -11,7 +14,6 @@ import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.List;
@@ -26,9 +28,9 @@ public class AltaNominaServiceImp implements AltaNominaService {
     private final ConceptoRepository conceptoRepository;
     private final NominaRepository nominaRepository;
     private final LineaNominaRepository lineaNominaRepository;
-    private final NominaConverter nominaConverter;
+    private final AltaNominaConverter nominaConverter;
 
-    public AltaNominaServiceImp(EmpleadoRepository empleadoRepository, ConceptoRepository conceptoRepository, NominaConverter nominaConverter, NominaRepository nominaRepository, LineaNominaRepository lineaNominaRepository) {
+    public AltaNominaServiceImp(EmpleadoRepository empleadoRepository, ConceptoRepository conceptoRepository, AltaNominaConverter nominaConverter, NominaRepository nominaRepository, LineaNominaRepository lineaNominaRepository) {
         this.empleadoRepository = empleadoRepository;
         this.conceptoRepository = conceptoRepository;
         this.nominaConverter = nominaConverter;
@@ -57,14 +59,15 @@ public class AltaNominaServiceImp implements AltaNominaService {
     }
 
     public void guardarNomina(AltaNominaDTO altaNominaDTO){
-        // Verificar datos recibidos para depuración
-        System.out.println("AltaNominaDTO recibido: " + altaNominaDTO);
-        System.out.println("Líneas recibidas: " + (altaNominaDTO.getLineaNominas() != null ? altaNominaDTO.getLineaNominas().size() : "null"));
-
         // El converter se encarga de crear las entidades Nomina y LineaNomina correctamente
-        Nomina nomina = nominaConverter.convierteAEntidad(altaNominaDTO);
+        Nomina nomina = nominaConverter.altaNominaDTOConvierteAEntidad(altaNominaDTO);
 
-        Set<LineaNomina> lineas = altaNominaDTO.getLineaNominas().stream().map(lineaDTO -> {
+        asignarLineasNomina(nomina, altaNominaDTO.getLineaNominas(), conceptoRepository);
+
+        nominaRepository.save(nomina);
+    }
+    private void asignarLineasNomina(Nomina nomina, List<LineaNominaDTO> lineaNominas, ConceptoRepository conceptoRepository) {
+        Set<LineaNomina> lineas = lineaNominas.stream().map(lineaDTO -> {
             Concepto concepto = conceptoRepository.findById(lineaDTO.getIdConcepto())
                     .orElseThrow(() -> new RuntimeException("Concepto no encontrado: " + lineaDTO.getIdConcepto()));
             LineaNomina linea = new LineaNomina();
@@ -75,12 +78,5 @@ public class AltaNominaServiceImp implements AltaNominaService {
         }).collect(Collectors.toSet());
 
         nomina.setLineaNominas(lineas);
-
-        nominaRepository.save(nomina);
-
-
-        // Para depuración, imprimir la nómina guardada
-        System.out.println("Nómina guardada con ID: " + nomina.getId());
-        System.out.println("Líneas guardadas: " + (nomina.getLineaNominas() != null ? nomina.getLineaNominas().size() : "null"));
     }
 }

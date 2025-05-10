@@ -3,12 +3,10 @@ package org.grupob.adminapp.controller;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.grupob.adminapp.converter.AdministradorConverter;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.entity.Administrador;
 import org.grupob.adminapp.service.AdministradorServiceImp;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

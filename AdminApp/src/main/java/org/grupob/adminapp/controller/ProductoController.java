@@ -2,10 +2,9 @@ package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.grupob.adminapp.dto.CategoriaDTO;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.dto.ProveedorDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
-import org.grupob.adminapp.service.ProveedorService;
 import org.grupob.adminapp.service.ProveedorServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

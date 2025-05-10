@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,4 +46,5 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
     );
 
 
+    Page<Nomina> findNominaByEmpleadoId(UUID id, Pageable pageable);
 }
