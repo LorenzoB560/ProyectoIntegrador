@@ -144,7 +144,8 @@ public class LoginEmpleadoController {
                                      HttpServletResponse response,
                                      @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                      @Validated(GrupoClave.class) @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
-                                     BindingResult result) {
+                                     BindingResult result,
+                                     HttpSession sesion) {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         //DEBERIA VALIDARSE LA CONTRASEÑA INTRODUCIDA? PARA MI EN PRINCIPIO NO
         //Comprobacion inecesario
@@ -196,6 +197,7 @@ public class LoginEmpleadoController {
 
             dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
             modelo.addAttribute("dto", dto);
+            sesion.setAttribute("appSource", "EmpApp");
 
             return "redirect:/empapp/area-personal";
 

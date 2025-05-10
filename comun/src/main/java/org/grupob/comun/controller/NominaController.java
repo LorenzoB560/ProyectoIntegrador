@@ -38,18 +38,13 @@ public class NominaController {
 
     //TODO AÑADIR TABLA MAESTRA MESES, PARA MOSTRARLO EN LA NÓMINA
     @GetMapping("/listado")
-    public String listarNominas(@RequestParam(defaultValue = "0") int page,
-                                Model model,
-                                HttpSession sesion,
-                                HttpServletRequest request) {
+    public String listarNominas(@RequestParam(defaultValue = "0") int page, Model model, HttpSession sesion, HttpServletRequest request) {
 
-        // Identificamos si el usuario proviene de AdminApp o EmpApp según el puerto
-        int serverPort = request.getLocalPort();
-        boolean esAdminApp = (serverPort == 9090);
-        boolean esEmpApp = (serverPort == 8080);
+        String appSource = (String) sesion.getAttribute("appSource");
 
-        model.addAttribute("esAdminApp", esAdminApp);
-        model.addAttribute("esEmpApp", esEmpApp);
+        boolean esAdminApp = "AdminApp".equals(appSource);
+        boolean esEmpApp = "EmpApp".equals(appSource);
+
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
 
@@ -62,11 +57,11 @@ public class NominaController {
             return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
         }
 
+        model.addAttribute("adminDTO", adminDTO);
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerTodasNominasPaginadas(page, 10); // 10 por página
         model.addAttribute("listaNominas", paginaNominas.getContent());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
         model.addAttribute("paginaActual", paginaNominas.getNumber());
-
         model.addAttribute("modo", "listado");
         model.addAttribute("queryString", "");
 
@@ -80,14 +75,15 @@ public class NominaController {
                                 HttpSession sesion,
                                 HttpServletRequest request) {
 
-        int serverPort = request.getLocalPort();
-        boolean esEmpApp = (serverPort == 8080);
+
+
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
 
         if (loginUsuarioEmpleadoDTO == null) {
             return "redirect:/empapp/login";
         }
 
+        model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasEmpleado(page, 10, id); // 10 por página
         model.addAttribute("listaNominas", paginaNominas.getContent());
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
@@ -96,7 +92,7 @@ public class NominaController {
         model.addAttribute("modo", "listado");
         model.addAttribute("queryString", "");
 
-        return "listados/listado-vista-nomina";
+        return "listados/listado-vista-nomina-empleado";
     }
 
 
