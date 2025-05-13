@@ -70,7 +70,6 @@ function mostrarDatosEmpleado(empleado) {
     }
 
     // Información personal
-    document.getElementById('idEmpleado').textContent = empleado.id;
     document.getElementById('nombreEmpleado').textContent = empleado.nombre || 'No especificado';
 
     const apellidos = [empleado.apellido]
@@ -79,7 +78,7 @@ function mostrarDatosEmpleado(empleado) {
     document.getElementById('apellidoEmpleado').textContent = apellidos || 'No especificado';
 
     document.getElementById('fechaNacimientoEmpleado').textContent = formatearFecha(empleado.fechaNacimiento);
-    document.getElementById('emailEmpleado').textContent = empleado.correo || 'No especificado';
+    document.getElementById('emailEmpleado').textContent = empleado.usuario?.usuario || 'No especificado';
 
     // Información laboral
     document.getElementById('departamentoDetalle').innerHTML = formatearDepartamento(empleado.departamento);
@@ -137,7 +136,7 @@ function mostrarDatosEmpleado(empleado) {
             'No especificada';
 
     document.getElementById('ibanEmpleado').textContent =
-        empleado.cuentaCorriente?.iban || 'No especificado';
+        empleado.cuentaBancaria?.iban || 'No especificado';
 
     document.getElementById('tipoTarjetaEmpleado').textContent =
         empleado.tipoTarjetaCredito?.tipoTarjetaCredito || 'No especificado';
