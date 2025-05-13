@@ -9,8 +9,7 @@ function agregarConcepto() {
         </select>
 
         <label>Cantidad:</label>
-        <input type="number" step="0.01" name="cantidad" value="0" oninput="actualizarTotal()">
-
+        <input type="text" name="cantidad" oninput="actualizarTotal()">
         <button type="button" onclick="this.parentElement.remove(); actualizarTotal()">Eliminar</button>
         <br><br>
     `;

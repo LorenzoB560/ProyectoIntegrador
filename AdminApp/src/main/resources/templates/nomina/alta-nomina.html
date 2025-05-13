@@ -61,6 +61,7 @@
         <!-- Template oculto para los conceptos -->
         <select id="concepto-template" class="d-none">
             <option th:each="c : ${listaConceptos}" th:value="${c.id}" th:data-tipo="${c.tipo}"
+                    th:data-porcentaje = "${c.porcentaje}"
                     th:text="${c.nombre + ' (' + c.tipo + ')'}"></option>
         </select>
 

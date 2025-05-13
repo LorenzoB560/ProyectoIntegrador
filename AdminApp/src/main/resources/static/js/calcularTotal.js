@@ -2,7 +2,8 @@ function actualizarTotal() {
     const template = document.getElementById("concepto-template");
     const opciones = Array.from(template.options).map(opt => ({
         id: opt.value,
-        tipo: opt.dataset.tipo
+        tipo: opt.dataset.tipo,
+        porcentaje: opt.dataset.porcentaje
     }));
 
     let total = 0;
@@ -13,6 +14,7 @@ function actualizarTotal() {
         const input = div.querySelector("input[type='number']");
         const idConcepto = select.value;
         const cantidad = parseFloat(input.value) || 0;
+        const porcentaje = parseFloat(input.value) || 0;
 
         const concepto = opciones.find(opt => opt.id === idConcepto);
         if (concepto) {
