@@ -333,6 +333,8 @@ public class RegistroEmpleadoController {
         if (datosAnteriores != null) {
             altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
+        System.out.println("ID tipo tarjeta: " + datosFormulario.getIdTipoTarjeta());
+
 
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {

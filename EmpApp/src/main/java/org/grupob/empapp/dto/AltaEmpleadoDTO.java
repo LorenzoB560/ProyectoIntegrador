@@ -42,6 +42,7 @@ public class AltaEmpleadoDTO {
         this.paisNacimiento = "España";
         this.tipoDocumento = "DNI";
         this.prefijoTelefono = "+34";
+        this.idTipoTarjeta = 1L;
     }
 
     private UUID id;

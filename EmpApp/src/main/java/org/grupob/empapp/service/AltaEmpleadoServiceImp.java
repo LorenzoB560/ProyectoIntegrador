@@ -101,9 +101,8 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
                 especialidadRepository.save(especialidad);  // Guardar la especialidad
             }
         }
-
+        empleado.setIdTipoTarjeta(tipoTarjetaRepository.findById(altaEmpleadoDTO.getIdTipoTarjeta()).orElseThrow());
         CuentaBancaria cuentaBancaria = CuentaBancaria.of(altaEmpleadoDTO.getCuentaBancaria().getIban());
-
         empleado.setCuentaCorriente(cuentaBancaria);
         
         // Asignar las especialidades al empleado
