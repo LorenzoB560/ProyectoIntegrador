@@ -41,34 +41,55 @@
                 </select>
             </div>
         </div>
+        <h4 class="mt-4">Conceptos de la nómina</h4>
 
-        <!-- Conceptos -->
-        <h4 class="mt-4">Conceptos</h4>
-        <div id="conceptos-container" class="mb-3">
-            <!-- Aquí se insertan dinámicamente los conceptos -->
+        <!-- Salario base (no removible) -->
+        <div id="salario-base-container"
+             th:data-salario-base-id="${salarioBase.id}"
+             th:data-salario-base-valor="1184.00">
+            <!-- Se llenará mediante JavaScript -->
         </div>
 
-        <div class="mb-4">
-            <button type="button" class="btn btn-outline-primary" onclick="agregarConcepto()">+ Añadir Concepto</button>
+        <!-- Lista de conceptos adicionales -->
+        <div id="conceptos-container">
+            <!-- Los conceptos se añadirán dinámicamente -->
         </div>
 
-        <!-- Total -->
-        <div class="mb-3">
-            <h5>Total líquido: <span id="totalLiquido">0.00</span> €</h5>
-            <input type="hidden" name="totalLiquido" id="totalLiquidoHidden">
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary" onclick="agregarConcepto()">Añadir Concepto</button>
         </div>
 
-        <!-- Template oculto para los conceptos -->
-        <select id="concepto-template" class="d-none">
-            <option th:each="c : ${listaConceptos}" th:value="${c.id}" th:data-tipo="${c.tipo}"
-                    th:data-porcentaje = "${c.porcentaje}"
-                    th:text="${c.nombre + ' (' + c.tipo + ')'}"></option>
-        </select>
+        <!-- Total líquido -->
+        <div class="total-section mt-4 text-end">
+            <h4>Total Líquido: <span id="totalLiquido">0.00</span> €</h4>
+            <input type="hidden" id="totalLiquidoHidden" name="totalLiquido" value="0.00">
+        </div>
 
-        <!-- Botón enviar -->
-        <div class="d-grid">
+        <div class="mt-4 text-center">
             <button type="submit" class="btn btn-success">Guardar Nómina</button>
+            <a href="/adminapp/nominas/listado" class="btn btn-secondary ms-2">Cancelar</a>
         </div>
+    </form>
+</div>
+
+<!-- Template oculto para los conceptos disponibles (excluyendo Salario base) -->
+<select id="concepto-template" style="display: none;">
+    <option th:each="concepto : ${listaConceptos}"
+            th:value="${concepto.id}"
+            th:text="${concepto.nombre}"
+            th:data-tipo="${concepto.tipo}"
+            th:data-porcentaje="${concepto.porcentaje}"></option>
+</select>
+
+<!-- Template oculto para conceptos restantes (sin Salario base) -->
+<select id="conceptos-restantes" style="display: none;">
+    <option th:each="concepto : ${conceptosRestantes}"
+            th:value="${concepto.id}"
+            th:text="${concepto.nombre}"
+            th:data-tipo="${concepto.tipo}"
+            th:data-porcentaje="${concepto.porcentaje}"></option>
+</select>
+
     </form>
 </div>
 
