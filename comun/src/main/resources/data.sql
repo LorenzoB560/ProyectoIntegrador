@@ -1,6 +1,14 @@
 -- data.sql Modificado
 
---IDIOMAS
+# --PROPIEDADES
+
+INSERT INTO propiedad (id, clave, valor)
+VALUES (1, 'nombre_empresa', 'Grupo B - Proyecto Integrador'),
+       (2, 'cif_empresa', 'B19972005'),
+       (3, 'direccion_empresa', 'C/ Falsa 123'),
+       (4, 'clave-cifrador', 'M1Cl@v3D3Prueb45');
+
+# --IDIOMAS
 
 INSERT INTO idioma (siglas, idioma)
 VALUES ('es', 'Español'),
@@ -776,7 +784,8 @@ WHERE id_departamento = UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-
 UPDATE empleado
 SET id_jefe = UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', ''))
 WHERE id_departamento = UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d480', '-', ''))
-  AND id != UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', '')) AND id != UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', ''));
+  AND id != UNHEX(REPLACE('2cfbb0e5-7923-476d-bd6d-4d750e5a87ab', '-', ''))
+  AND id != UNHEX(REPLACE('53cddfc5-96ab-4a2e-9f3d-8208f9cee76a', '-', ''));
 -- Empleados de Ventas reportando a Marisol Valenciano
 UPDATE empleado
 SET id_jefe = UNHEX(REPLACE('f16de5d1-0c78-4616-87d5-3045ff2fe8b0', '-', ''))
@@ -879,7 +888,7 @@ VALUES ('XS'),
 -- ========== MUEBLES ==========
 -- Mueble 1 (3 colores, segunda mano)
 SET
-@mueble1 = UNHEX(REPLACE(UUID(), '-', ''));
+    @mueble1 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@mueble1, 'Sillón vintage', 250.00, 'Clásicos Muebles', true, 3, 1, CURDATE(), 4, 'MUEBLE', '2018-07-12');
@@ -890,7 +899,7 @@ VALUES (@mueble1, 'Cuero genuino', 90.0, 100.0, 80.0);
 
 -- Mueble 2 (2 colores, nuevo)
 SET
-@mueble2 = UNHEX(REPLACE(UUID(), '-', ''));
+    @mueble2 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@mueble2, 'Escritorio moderno', 179.99, 'OficinaPlus', false, 10, 2, CURDATE(), 5, 'MUEBLE', '2024-02-20');
@@ -900,7 +909,7 @@ VALUES (@mueble2, 'Melamina', 140.0, 70.0, 75.0);
 
 -- Mueble 3 (1 color, diseño ecológico)
 SET
-@mueble3 = UNHEX(REPLACE(UUID(), '-', ''));
+    @mueble3 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@mueble3, 'Estantería bambú', 89.95, 'EcoDesign', false, 15, 3, CURDATE(), 4, 'MUEBLE', '2023-11-01');
@@ -914,7 +923,7 @@ VALUES (@mueble3, 'Natural');
 -- ========== LIBROS ==========
 -- Libro 1 (Fantasía épica)
 SET
-@libro1 = UNHEX(REPLACE(UUID(), '-', ''));
+    @libro1 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@libro1, 'El imperio final', 24.99, 'NovaLiteraria', false, 20, 2, CURDATE(), 5, 'LIBRO', '2023-05-15');
@@ -924,7 +933,7 @@ VALUES (@libro1, 'El imperio final', 'Brandon Sanderson', 'Nova', 541);
 
 -- Libro 2 (Autoayuda)
 SET
-@libro2 = UNHEX(REPLACE(UUID(), '-', ''));
+    @libro2 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@libro2, 'Hábitos atómicos', 18.50, 'Crecimiento Personal', true, 8, 1, CURDATE(), 4, 'LIBRO', '2020-09-01');
@@ -934,7 +943,7 @@ VALUES (@libro2, 'Hábitos atómicos', 'James Clear', 'Paidós', 320);
 
 -- Libro 3 (Poesía)
 SET
-@libro3 = UNHEX(REPLACE(UUID(), '-', ''));
+    @libro3 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@libro3, 'Poemas completos', 15.00, 'Clásicos Modernos', false, 12, 3, CURDATE(), 4, 'LIBRO', '2024-01-10');
@@ -945,7 +954,7 @@ VALUES (@libro3, 'Poemas completos', 'Mario Benedetti', 'Alianza', 280);
 -- ========== ELECTRÓNICOS ==========
 -- Electrónico 1 (Gama alta)
 SET
-@electro1 = UNHEX(REPLACE(UUID(), '-', ''));
+    @electro1 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@electro1, 'Smartphone flagship', 1199.00, 'TechMaster', false, 8, 3, CURDATE(), 5, 'ELECTRONICO',
@@ -957,7 +966,7 @@ VALUES (@electro1, 'X-Pro', '3 años', 6.7, 7.5, 0.8, 16.2, 5000, 1024, 16);
 
 -- Electrónico 2 (Tablet media)
 SET
-@electro2 = UNHEX(REPLACE(UUID(), '-', ''));
+    @electro2 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@electro2, 'Tablet media', 299.00, 'MidTech', false, 15, 2, CURDATE(), 4, 'ELECTRONICO', '2024-03-15');
@@ -968,7 +977,7 @@ VALUES (@electro2, 'TabPlus', '2 años', 10.1, 17.0, 0.7, 24.0, 8000, 256, 8);
 
 -- Electrónico 3 (Auriculares básicos)
 SET
-@electro3 = UNHEX(REPLACE(UUID(), '-', ''));
+    @electro3 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@electro3, 'Auriculares inalámbricos', 49.95, 'SoundBasic', false, 25, 1, CURDATE(), 3, 'ELECTRONICO',
@@ -981,7 +990,7 @@ VALUES (@electro3, 'Wireless-X', '1 año', NULL, 6.0, 2.5, 15.0, 300, NULL, NULL
 -- ========== ROPA ==========
 -- Ropa 1 (Abrigo invierno)
 SET
-@ropa1 = UNHEX(REPLACE(UUID(), '-', ''));
+    @ropa1 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@ropa1, 'Abrigo de invierno', 129.00, 'WinterStyle', false, 10, 3, CURDATE(), 4, 'ROPA', '2023-10-01');
@@ -995,7 +1004,7 @@ VALUES (@ropa1, (SELECT id FROM talla WHERE talla = 'L')),
 
 -- Ropa 2 (Camiseta verano)
 SET
-@ropa2 = UNHEX(REPLACE(UUID(), '-', ''));
+    @ropa2 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@ropa2, 'Camiseta básica', 19.99, 'SummerWear', false, 30, 2, CURDATE(), 5, 'ROPA', '2024-05-01');
@@ -1009,7 +1018,7 @@ VALUES (@ropa2, (SELECT id FROM talla WHERE talla = 'S')),
 
 -- Ropa 3 (Pantalón formal)
 SET
-@ropa3 = UNHEX(REPLACE(UUID(), '-', ''));
+    @ropa3 = UNHEX(REPLACE(UUID(), '-', ''));
 INSERT INTO producto (id, descripcion, precio, marca, segunda_mano, unidades, proveedor_id, fecha_alta, valoracion,
                       tipo_producto, fecha_fabricacion)
 VALUES (@ropa3, 'Pantalón de vestir', 79.00, 'FormalAttire', true, 5, 1, CURDATE(), 4, 'ROPA', '2022-12-15');
