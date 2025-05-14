@@ -146,12 +146,7 @@ public class LoginEmpleadoController {
                                      @Validated(GrupoClave.class) @ModelAttribute("dto") LoginUsuarioEmpleadoDTO dto,
                                      BindingResult result) {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
-        //DEBERIA VALIDARSE LA CONTRASEÑA INTRODUCIDA? PARA MI EN PRINCIPIO NO
-        //Comprobacion inecesario
-        /* if (result.hasErrors()) {
-            modelo.addAttribute("usuario", ultimoUsuario);
-            return "login/pedir-clave";
-        }*/
+
 
         // 1. Verificar nulidad del usuario antes de cualquier operación
         if (ultimoUsuario == null) {

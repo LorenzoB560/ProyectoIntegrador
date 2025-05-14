@@ -44,7 +44,7 @@ public class LoginAdministradorController {
     public String desconectarUsuario(HttpSession sesion) {
 
 
-        sesion.removeAttribute("loginAdminDTO");
+        sesion.removeAttribute("adminLogueado");
         // Redirige al inicio
         return "redirect:/adminapp/login";
     }
