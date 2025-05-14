@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.auxiliar.Periodo;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -23,8 +24,13 @@ public class Nomina {
     @Column(name = "id_nomina")
     private UUID id;
 
-    private Integer mes;
-    private Integer anio;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "fechaInicio", column = @Column(name = "fecha_inicio")),
+            @AttributeOverride(name = "fechaFin", column = @Column(name = "fecha_fin")),
+    })
+    private Periodo periodo;
     private BigDecimal totalLiquido;
 
     @OneToMany(mappedBy = "nomina", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -27,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
@@ -94,9 +95,7 @@ public class NominaServiceImp implements NominaService{
     public void eliminarConcepto(UUID idNomina, UUID idConcepto) {
         Optional<Nomina> nomina = nominaRepository.findById(idNomina);
         if (nomina.isPresent()) {
-            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
-            YearMonth mesActual = YearMonth.now();
-            if (mesNomina.isBefore(mesActual)) {
+            if (nomina.get().getPeriodo().getFechaFin().isBefore(LocalDate.now())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
             }
         }
@@ -130,7 +129,8 @@ public class NominaServiceImp implements NominaService{
 
             // Datos generales
             document.add(new Paragraph("Empleado: " + nomina.getNombre()));
-            document.add(new Paragraph("Mes: " + nomina.getMes() + " / Año: " + nomina.getAnio()));
+            document.add(new Paragraph("Periodo de inicio: " + nomina.getPeriodo().getFechaInicio()));
+            document.add(new Paragraph("Periodo de finalización: " + nomina.getPeriodo().getFechaFin()));
             document.add(Chunk.NEWLINE);
 
             // Tabla de conceptos
@@ -183,10 +183,8 @@ public class NominaServiceImp implements NominaService{
 
         Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradas(
                 filtro.getFiltroNombre(),
-                filtro.getFiltroMes(),
-                filtro.getFiltroAnio(),
-                filtro.getTotalLiquidoMinimo(),
-                filtro.getTotalLiquidoMaximo(),
+                filtro.getFechaInicio(),
+                filtro.getFechaFin(),
                 filtro.getConceptosSeleccionados(),
                 pageable
         );
@@ -194,21 +192,21 @@ public class NominaServiceImp implements NominaService{
         return getNominaDTOS(paginaNominas);
     }
 
-    public Page<NominaDTO> obtenerNominasFiltradasPorEmpleado(FiltroNominaEmpleadoDTO filtro, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-
-        Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradasPorEmpleado(
-                filtro.getIdEmpleado(), // Nuevo parámetro para filtrar por empleado
-                filtro.getFiltroMes(),
-                filtro.getFiltroAnio(),
-                filtro.getTotalLiquidoMinimo(),
-                filtro.getTotalLiquidoMaximo(),
-                filtro.getConceptosSeleccionados(),
-                pageable
-        );
-
-        return getNominaDTOS(paginaNominas);
-    }
+//    public Page<NominaDTO> obtenerNominasFiltradasPorEmpleado(FiltroNominaEmpleadoDTO filtro, int page) {
+//        Pageable pageable = PageRequest.of(page, 10);
+//
+//        Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradasPorEmpleado(
+//                filtro.getIdEmpleado(), // Nuevo parámetro para filtrar por empleado
+//                filtro.getFiltroMes(),
+//                filtro.getFiltroAnio(),
+//                filtro.getTotalLiquidoMinimo(),
+//                filtro.getTotalLiquidoMaximo(),
+//                filtro.getConceptosSeleccionados(),
+//                pageable
+//        );
+//
+//        return getNominaDTOS(paginaNominas);
+//    }
 
 
 
@@ -239,12 +237,12 @@ public class NominaServiceImp implements NominaService{
                             ln.getCantidad()
                     )
             ).toList();
+            PeriodoDTO periodoDTO = new PeriodoDTO(n.getPeriodo().getFechaInicio(), n.getPeriodo().getFechaFin());
             NominaDTO nominaDTO = new NominaDTO(
                     n.getId(),
                     n.getEmpleado().getId(),
                     nombreEmpleado,
-                    n.getMes(),
-                    n.getAnio(),
+                    periodoDTO,
                     n.getTotalLiquido(),
                     lineaDTOs);
 
@@ -259,9 +257,7 @@ public class NominaServiceImp implements NominaService{
         nominaRepository.save(nomina);
     }
     public void verificarNominaPasada(NominaDTO nomina){
-        YearMonth mesNomina = YearMonth.of(nomina.getAnio(), nomina.getMes());
-        YearMonth mesActual = YearMonth.now();
-        if (!mesNomina.isAfter(mesActual)) {
+        if (nomina.getPeriodo().getFechaFin().isBefore(LocalDate.now())) {
             throw new NominaPasadaException("No se puede modificar una nómina de un mes pasado");
         }
     }
@@ -303,9 +299,7 @@ public class NominaServiceImp implements NominaService{
 
     private void verificarNominaPasada(Optional<Nomina> nomina){
         if (nomina.isPresent()){
-            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
-            YearMonth mesActual = YearMonth.now();
-            if (mesNomina.isBefore(mesActual)) {
+            if (nomina.get().getPeriodo().getFechaFin().isBefore(LocalDate.now())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
             }
         } else {

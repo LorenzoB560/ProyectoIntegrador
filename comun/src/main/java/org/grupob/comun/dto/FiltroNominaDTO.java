@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -14,9 +15,7 @@ import java.util.List;
 public class FiltroNominaDTO {
 
     private String filtroNombre;
-    private Integer filtroMes;
-    private Integer filtroAnio;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private List<String> conceptosSeleccionados;
-    private BigDecimal totalLiquidoMinimo;
-    private BigDecimal totalLiquidoMaximo;
 }
