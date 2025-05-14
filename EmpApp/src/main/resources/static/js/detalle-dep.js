@@ -33,7 +33,6 @@ function cargarDetalleDepartamento() {
 
 // Función para mostrar los datos del departamento
 function mostrarDetalleDepartamento(departamento) {
-    document.getElementById('id').textContent = departamento.id;
     document.getElementById('codigo').textContent = departamento.codigo;
     document.getElementById('nombre').textContent = departamento.nombre;
     document.getElementById('localizacion').textContent = departamento.localidad;

@@ -48,10 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- Proveedor ---
             if (data.proveedor) {
                 rellenarTexto('prov-nombre', data.proveedor.nombre);
+                rellenarTexto('prov-id', data.proveedor.id);
 
             } else {
                 rellenarTexto('prov-nombre', 'N/A');
-
+                rellenarTexto('prov-id', 'N/A');
             }
 
             // --- Categorías ---
