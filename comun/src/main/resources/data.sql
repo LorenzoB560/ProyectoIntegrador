@@ -1,5 +1,17 @@
 -- data.sql Modificado
 
+--IDIOMAS
+
+INSERT INTO idioma (siglas, idioma)
+VALUES ('es', 'Español'),
+       ('en', 'Inglés');
+
+INSERT INTO motivo_bloqueo(motivo, minutos)
+VALUES ('Intentos fallidos', 15),
+       ('Falta leve', 30),
+       ('Falta media', 45),
+       ('Falta grave', 60);
+
 -- Administradores
 INSERT INTO administrador (id, usuario, clave, num_accesos)
 VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a201', '-', '')), 'admin1@gmail.com', 'admin123', 0);

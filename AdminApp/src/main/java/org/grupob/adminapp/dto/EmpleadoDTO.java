@@ -3,7 +3,11 @@ package org.grupob.adminapp.dto; // O el paquete que prefieras para tus DTOs
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.adminapp.dto.*;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.adminapp.dto.auxiliar.GeneroDTO;
+
+// Importa otros DTOs necesarios (EspecialidadDto, DepartamentoDto, etc.)
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,9 +42,10 @@ public class EmpleadoDTO {
     // Campos de informacion_economica
     private BigDecimal salario;
     private BigDecimal comision;
+
     private CuentaBancariaDTO cuentaCorriente;
     private EntidadBancariaDTO entidadBancaria; // Asume que tienes un EntidadBancariaDto
-    private TipoTarjetaCreditoDTO tipoTarjetaCredito; // Asume que tienes un TipoTarjetaCreditoDto
+    private TipoTarjetaCreditoDTO idTipoTarjeta; // Asume que tienes un TipoTarjetaCreditoDto
     private TarjetaCreditoDTO tarjetaCredito;
 
     // La foto (byte[]) podría no ser ideal para un DTO estándar.

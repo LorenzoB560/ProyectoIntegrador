@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detalleContenedor) detalleContenedor.style.display = 'block';
 
             // --- Información General del Producto ---
-            rellenarTexto('prod-id', data.id);
+
             rellenarTexto('prod-nombre-header', data.nombre || data.descripcion || 'Producto sin nombre');
             rellenarTexto('prod-descripcion', data.descripcion);
             rellenarTexto('prod-precio', formatearMoneda(data.precio));

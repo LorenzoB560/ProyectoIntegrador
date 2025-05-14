@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detalleContenedor) detalleContenedor.style.display = 'block';
 
             // --- Información General del Producto ---
-            rellenarTexto('prod-id', data.id);
             rellenarTexto('prod-nombre-header', data.nombre || data.descripcion || 'Producto sin nombre');
             rellenarTexto('prod-descripcion', data.descripcion);
             rellenarTexto('prod-precio', formatearMoneda(data.precio));
@@ -66,10 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- Proveedor ---
             if (data.proveedor) {
                 rellenarTexto('prov-nombre', data.proveedor.nombre);
-                rellenarTexto('prov-id', data.proveedor.id);
+
             } else {
                 rellenarTexto('prov-nombre', 'N/A');
-                rellenarTexto('prov-id', 'N/A');
+
             }
 
             // --- Categorías ---

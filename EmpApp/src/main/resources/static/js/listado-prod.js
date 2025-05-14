@@ -234,7 +234,6 @@ function llenarTablaProductos(productos) {
 
         // Construir la fila con la nueva celda para el proveedor
         fila.innerHTML = `
-            <td>${productoId}</td>
             <td>${productoDescripcion}</td>
             <td class="text-end">${precioFormateado}</td>
             <td>${nombreProveedor}</td> 
