@@ -16,12 +16,12 @@ function agregarConcepto() {
                 </select>
             </div>
             <div class="col-md-3">
-                <label>Cantidad (€):</label>
-                <input type="number" name="cantidad" class="form-control" step="0.01" oninput="actualizarPorcentajeSiNecesario(this)">
+                <label>Porcentaje (%):</label>
+                <input type="text" name="porcentaje" class="form-control" oninput="actualizarCantidadSiNecesario(this)">
             </div>
             <div class="col-md-3">
-                <label>Porcentaje (%):</label>
-                <input type="number" name="porcentaje" class="form-control" step="0.01" oninput="actualizarCantidadSiNecesario(this)">
+                <label>Cantidad (€):</label>
+                <input type="text" name="cantidad" class="form-control" oninput="actualizarPorcentajeSiNecesario(this)">
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.concepto-item').remove(); actualizarTotal()">Eliminar</button>
@@ -38,7 +38,7 @@ function agregarConcepto() {
     });
 }
 
-// función para actualizar los campos según el tipo de concepto
+// Función para actualizar los campos según el tipo de concepto
 function actualizarCamposPorTipo(selectElement) {
     const div = selectElement.closest(".concepto-item");
     const tipoConcepto = selectElement.options[selectElement.selectedIndex].dataset.tipo;
@@ -79,7 +79,7 @@ function actualizarPorcentajeSiNecesario(cantidadInput) {
         // Obtener el salario base
         const salarioBase = obtenerSalarioBase();
         if (salarioBase > 0 && cantidadInput.value) {
-            const cantidad = parseFloat(cantidadInput.value);
+            const cantidad = parseFloat(cantidadInput.value.replace(',', '.'));
             const porcentaje = (cantidad / salarioBase) * 100;
             porcentajeInput.value = porcentaje.toFixed(2);
         }
@@ -105,7 +105,7 @@ function calcularCantidadDesdeProcentaje(porcentajeInput) {
         // Obtener el salario base
         const salarioBase = obtenerSalarioBase();
         if (salarioBase > 0 && porcentajeInput.value) {
-            const porcentaje = parseFloat(porcentajeInput.value);
+            const porcentaje = parseFloat(porcentajeInput.value.replace(',', '.'));
             const cantidad = (porcentaje / 100) * salarioBase;
             cantidadInput.value = cantidad.toFixed(2);
         }
@@ -117,7 +117,7 @@ function obtenerSalarioBase() {
     const salarioBaseDiv = document.querySelector("#salario-base-container");
     if (salarioBaseDiv) {
         const cantidadInput = salarioBaseDiv.querySelector("input[name='cantidad']");
-        return parseFloat(cantidadInput.value) || 0;
+        return parseFloat(cantidadInput.value.replace(',', '.')) || 0;
     }
     return 0;
 }
@@ -140,12 +140,13 @@ function inicializarSalarioBase() {
                 <input type="hidden" name="conceptoId" value="${salarioBaseId}">
             </div>
             <div class="col-md-3">
-                <label>Cantidad (€):</label>
-                <input type="number" name="cantidad" class="form-control" value="${salarioBaseValor.toFixed(2)}" readonly>
-            </div>
-            <div class="col-md-3">
                 <label>Porcentaje (%):</label>
-                <input type="number" name="porcentaje" class="form-control" value="0" disabled>
+                <input type="text" name="porcentaje" class="form-control" value="0" disabled>
+            </div>
+            
+            <div class="col-md-3">
+                <label>Cantidad (€):</label>
+                <input type="text" name="cantidad" class="form-control" value="${salarioBaseValor.toFixed(2)}" readonly>
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <!-- No hay botón de eliminar para salario base -->

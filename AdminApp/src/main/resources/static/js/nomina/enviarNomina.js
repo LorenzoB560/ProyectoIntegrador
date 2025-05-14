@@ -1,17 +1,18 @@
 document.getElementById("formulario").addEventListener("submit", function (e) {
     e.preventDefault();
 
+    //Obtengo todos los valores de
     const idEmpleado = document.getElementById("idEmpleado").value;
     const mes = document.getElementById("mes").value;
     const anio = document.getElementById("anio").value;
-    const totalLiquido = parseFloat(document.getElementById("totalLiquidoHidden").value || "0");
+    const totalLiquido = parseFloat(document.getElementById("totalLiquidoHidden").value.replace(',', '.')) || 0;
 
     const lineaNominas = [];
 
     // Primero añadimos el salario base
     const salarioBaseDiv = document.querySelector("#salario-base-container");
     const salarioBaseConceptoId = salarioBaseDiv.querySelector("input[type='hidden'][name='conceptoId']").value;
-    const salarioBaseCantidad = parseFloat(salarioBaseDiv.querySelector("input[name='cantidad']").value);
+    const salarioBaseCantidad = parseFloat(salarioBaseDiv.querySelector("input[name='cantidad']").value.replace(',', '.'));
 
     lineaNominas.push({
         idConcepto: salarioBaseConceptoId,
@@ -21,15 +22,16 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
     // Luego añadimos los demás conceptos
     document.querySelectorAll("#conceptos-container > div.concepto-item").forEach(div => {
-        const conceptoId = div.querySelector("select[name='conceptoId']").value;
-        const cantidad = div.querySelector("input[name='cantidad']").value;
-        const porcentaje = div.querySelector("input[name='porcentaje']").value;
+        const selectElement = div.querySelector("select[name='conceptoId']");
+        if (selectElement && selectElement.value) {
+            const conceptoId = selectElement.value;
+            const cantidadValue = div.querySelector("input[name='cantidad']").value.replace(',', '.');
+            const porcentajeValue = div.querySelector("input[name='porcentaje']").value.replace(',', '.');
 
-        if (conceptoId && cantidad) {
             lineaNominas.push({
                 idConcepto: conceptoId,
-                cantidad: parseFloat(cantidad),
-                porcentaje: parseFloat(porcentaje) || 0
+                cantidad: parseFloat(cantidadValue) || 0,
+                porcentaje: parseFloat(porcentajeValue) || 0
             });
         }
     });
@@ -52,7 +54,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
         .then(res => {
             if (res.ok) {
                 alert("Nómina guardada correctamente");
-                window.location.href = "/adminapp/nomina/listado"; // Redirigir al listado después de guardar
+                window.location.href = "/nomina/listado";
             } else {
                 return res.text().then(text => { throw new Error(text); });
             }
