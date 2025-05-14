@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@RequiredArgsConstructor
 public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
 
     private final GeneroRepository generoRepository;
@@ -36,23 +38,22 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final EspecialidadRepository especialidadRepository;
     private final EntidadBancariaRepository entidadBancariaRepository;
     private final TipoTarjetaRepository tipoTarjetaRepository;
-
     private final EmpleadoConverter empleadoConverter;
     private final CuentaBancariaConverter cuentaBancariaConverter;
 
-    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository, CuentaBancariaConverter cuentaBancariaConverter) {
-        this.generoRepository = generoRepository;
-        this.empleadoRepository = empleadoRepository;
-        this.paisRepository = paisRepository;
-        this.tipoViaRepository = tipoViaRepository;
-        this.empleadoConverter = empleadoConverter;
-        this.departamentoRepository = departamentoRepository;
-        this.tipoDocumentoRepository = tipoDocumentoRepository1;
-        this.especialidadRepository = especialidadRepository;
-        this.entidadBancariaRepository = entidadBancariaRepository;
-        this.tipoTarjetaRepository = tipoTarjetaRepository;
-        this.cuentaBancariaConverter = cuentaBancariaConverter;
-    }
+//    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository, CuentaBancariaConverter cuentaBancariaConverter) {
+//        this.generoRepository = generoRepository;
+//        this.empleadoRepository = empleadoRepository;
+//        this.paisRepository = paisRepository;
+//        this.tipoViaRepository = tipoViaRepository;
+//        this.empleadoConverter = empleadoConverter;
+//        this.departamentoRepository = departamentoRepository;
+//        this.tipoDocumentoRepository = tipoDocumentoRepository1;
+//        this.especialidadRepository = especialidadRepository;
+//        this.entidadBancariaRepository = entidadBancariaRepository;
+//        this.tipoTarjetaRepository = tipoTarjetaRepository;
+//        this.cuentaBancariaConverter = cuentaBancariaConverter;
+//    }
 
     public List<Genero> devolverGeneros() {
         return generoRepository.findAll();
@@ -101,9 +102,8 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
                 especialidadRepository.save(especialidad);  // Guardar la especialidad
             }
         }
-
+        empleado.setIdTipoTarjeta(tipoTarjetaRepository.findById(altaEmpleadoDTO.getIdTipoTarjeta()).orElseThrow());
         CuentaBancaria cuentaBancaria = CuentaBancaria.of(altaEmpleadoDTO.getCuentaBancaria().getIban());
-
         empleado.setCuentaCorriente(cuentaBancaria);
         
         // Asignar las especialidades al empleado

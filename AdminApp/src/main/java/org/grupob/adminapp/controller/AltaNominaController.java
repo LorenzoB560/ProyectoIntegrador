@@ -7,6 +7,7 @@ import org.grupob.adminapp.service.AltaNominaServiceImp;
 import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.maestras.Concepto;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,11 +30,16 @@ public class AltaNominaController {
 
     @ModelAttribute
     public void cargaModelo(Model modelo) {
+        List<Concepto> conceptos = altaNominaServiceImp.devolverConcepto();
 
-        modelo.addAttribute("listaEmpleados", altaNominaServiceImp.devuelveEmpleados());
+
         modelo.addAttribute("meses", altaNominaServiceImp.devolverMeses());
         modelo.addAttribute("anios", altaNominaServiceImp.devolverAnios());
-        modelo.addAttribute("listaConceptos", altaNominaServiceImp.devolverConcepto());
+        modelo.addAttribute("listaEmpleados", altaNominaServiceImp.devuelveEmpleados());
+
+        modelo.addAttribute("listaConceptos", conceptos);
+        modelo.addAttribute("salarioBase", altaNominaServiceImp.devolverSalarioBase(conceptos));
+        modelo.addAttribute("conceptosRestantes", altaNominaServiceImp.devolverConceptosRestantes(conceptos));
     }
 
     @GetMapping("/alta")

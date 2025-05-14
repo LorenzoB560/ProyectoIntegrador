@@ -31,7 +31,7 @@
 </nav>
 
 <!-- Mensaje de error a nivel general -->
-<h2 th:text="*{mensajeNOK}" class="error"></h2>
+<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
 
 <label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
 <select id="seleccionarIdioma">
@@ -116,6 +116,7 @@
     <span class="asterisco">*</span>
     <label for="idTipoTarjeta" th:text="#{registro.tipoTarjeta}"></label>
     <select id="idTipoTarjeta" th:field="*{idTipoTarjeta}">
+      <option value="">Seleccione una opción</option>
       <option th:each="tarjeta : ${listaTipoTarjetas}"
               th:value="${tarjeta.id}"
               th:text="${tarjeta.tipoTarjetaCredito}"></option>
