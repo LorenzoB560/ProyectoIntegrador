@@ -68,10 +68,6 @@ function actualizarBotonActivoProductos() {
         case 'preciobase': // O 'precio', según lo que uses
             btnActivoId = 'ordenarPorPrecioProd';
             break;
-        // ELIMINA O COMENTA EL SIGUIENTE CASO:
-        // case 'proveedor.nombre':
-        //     btnActivoId = 'ordenarPorProveedorProd';
-        //     break;
         default:
             // Si ordenarPorProd tiene un valor que ya no corresponde a un botón activo,
             // podrías deseleccionar todos o seleccionar uno por defecto.
@@ -367,10 +363,7 @@ function asignarEventListenersAccionesProd() {
                 // --- 2. Llamada al Endpoint DELETE ---
                 // Asegúrate que la URL base es correcta para el endpoint REST en AdminApp
                 const url = `/productos/eliminar/${productId}`;
-                const headers = {
-                    // Añadir cabecera CSRF aquí si la estás usando en AdminApp con Spring Security
-                    // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.content || 'TOKEN_CSRF_FALLBACK'
-                };
+
 
                 // Deshabilitar botón y mostrar carga (opcional)
                 clone.disabled = true;
@@ -378,8 +371,7 @@ function asignarEventListenersAccionesProd() {
                 clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
                 fetch(url, {
-                    method: 'DELETE',
-                    headers: headers
+                    method: 'DELETE'
                 })
                     .then(response => {
                         if (response.ok || response.status === 204) { // 200 OK o 204 No Content son éxito para DELETE
@@ -402,13 +394,65 @@ function asignarEventListenersAccionesProd() {
                     })
                     .then(() => {
                         // --- 3. Acciones en caso de ÉXITO ---
-                        console.log(`Producto ${productId} eliminado.`);
-                        // Usar el nombre decodificado en la alerta de éxito
+                        console.log(`Producto ${productId} eliminado del servidor.`);
                         alert(`Producto "${decodedProductName}" eliminado correctamente.`);
-                        // Recargar la tabla para reflejar el cambio
-                        // Considerar si ir a la misma página es correcto si se eliminó el último ítem de esa página
-                        // Una lógica más avanzada podría verificar si la página actual queda vacía y retroceder.
-                        obtenerProductos(paginaActualProd);
+
+                        // --- INICIO: Eliminación dinámica del DOM ---
+                        const filaParaEliminar = clone.closest('tr'); // 'clone' es el botón de eliminar que se presionó
+                        if (filaParaEliminar) {
+                            filaParaEliminar.remove();
+                            totalElementosProd--; // Decrementar el contador total de productos
+
+                            // Actualizar el texto del contador de resultados
+                            // (Esto es una simplificación, necesitarías recalcular numberOfElements en la página actual)
+                            const elementosEnPaginaActual = document.getElementById('cuerpoTablaProd').rows.length;
+                            document.getElementById('contadorResultadosProd').textContent =
+                                `Mostrando ${elementosEnPaginaActual} de ${totalElementosProd} productos - Página ${paginaActualProd + 1} de ${totalPaginasProd || 1}`;
+
+                            // Si la tabla queda vacía en la página actual
+                            if (elementosEnPaginaActual === 0) {
+                                // Si hay más páginas en total, y esta no era la primera página, podrías ir a la anterior
+                                if (totalElementosProd > 0 && paginaActualProd > 0) {
+                                    // Opción 1: Recargar la página anterior (más simple si la lógica de paginación es compleja)
+                                    obtenerProductos(paginaActualProd - 1);
+                                    // Opción 2: O intentar una lógica más compleja para no recargar todo,
+                                    // pero esto implicaría recalcular totalPaginasProd y regenerar la paginación si es necesario.
+                                    // Por simplicidad, recargar la página actual (o anterior si se prefiere) suele ser un buen compromiso.
+                                    // obtenerProductos(Math.max(0, paginaActualProd -1)); // Recarga la anterior o la 0 si la actual era 0
+                                } else if (totalElementosProd === 0) {
+                                    // No quedan productos en ninguna página
+                                    document.getElementById('tablaProductos').style.display = 'none';
+                                    document.getElementById('mensajeTablaVaciaProd').style.display = 'block';
+                                    document.getElementById('paginacionProd').innerHTML = ''; // Limpiar paginación
+                                    totalPaginasProd = 0;
+                                    document.getElementById('contadorResultadosProd').textContent = "No hay productos para mostrar.";
+                                } else {
+                                    // Quedan productos, pero esta página se vació y era la primera.
+                                    // Esto podría pasar si borras todos los elementos de la primera página y hay más páginas.
+                                    // En este caso, obtenerProductos(0) recargaría la "nueva" primera página.
+                                    obtenerProductos(0);
+                                }
+                            } else {
+                                // Si aún quedan filas, solo actualizamos contadores, pero la paginación podría necesitar re-evaluación
+                                // si el número total de páginas cambia. Para evitar complejidad, podrías omitir
+                                // la regeneración de la paginación aquí si el cambio de `totalPaginasProd` es mínimo
+                                // o aceptar que la paginación se corregirá en la próxima recarga completa (ej. cambio de página o filtro).
+                                // Una solución más robusta requeriría recalcular totalPaginasProd y llamar a crearControlesPaginacionProductos()
+                                // si totalPaginasProd ha cambiado.
+                                const nuevoTotalPaginas = Math.ceil(totalElementosProd / tamañoPaginaProd);
+                                if (nuevoTotalPaginas !== totalPaginasProd) {
+                                    totalPaginasProd = nuevoTotalPaginas;
+                                    crearControlesPaginacionProductos();
+                                }
+                            }
+                        } else {
+                            // Si no se encontró la fila, por si acaso, recargar.
+                            obtenerProductos(paginaActualProd);
+                        }
+                        // --- FIN: Eliminación dinámica del DOM ---
+
+                        // YA NO SERÍA NECESARIO SI LA ELIMINACIÓN DEL DOM FUNCIONA BIEN Y MANEJA LOS CASOS BORDE
+                        // obtenerProductos(paginaActualProd);
                     })
                     .catch(error => {
                         // --- 4. Acciones en caso de ERROR ---
