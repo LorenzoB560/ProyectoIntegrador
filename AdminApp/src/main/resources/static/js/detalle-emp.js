@@ -136,7 +136,7 @@ function mostrarDatosEmpleado(empleado) {
             'No especificada';
 
     document.getElementById('ibanEmpleado').textContent =
-        empleado.cuentaBancaria?.iban || 'No especificado';
+        empleado.cuentaCorriente?.iban || 'No especificado';
 
     document.getElementById('tipoTarjetaEmpleado').textContent =
         empleado.tipoTarjetaCredito?.tipoTarjetaCredito || 'No especificado';

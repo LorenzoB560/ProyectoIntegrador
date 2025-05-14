@@ -42,6 +42,7 @@ public class EmpleadoDTO {
     // Campos de informacion_economica
     private BigDecimal salario;
     private BigDecimal comision;
+
     private CuentaBancariaDTO cuentaCorriente;
     private EntidadBancariaDTO entidadBancaria; // Asume que tienes un EntidadBancariaDto
     private TipoTarjetaCreditoDTO tipoTarjetaCredito; // Asume que tienes un TipoTarjetaCreditoDto
