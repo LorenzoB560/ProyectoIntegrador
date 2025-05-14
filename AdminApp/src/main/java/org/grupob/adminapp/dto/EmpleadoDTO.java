@@ -45,7 +45,7 @@ public class EmpleadoDTO {
 
     private CuentaBancariaDTO cuentaCorriente;
     private EntidadBancariaDTO entidadBancaria; // Asume que tienes un EntidadBancariaDto
-    private TipoTarjetaCreditoDTO tipoTarjetaCredito; // Asume que tienes un TipoTarjetaCreditoDto
+    private TipoTarjetaCreditoDTO idTipoTarjeta; // Asume que tienes un TipoTarjetaCreditoDto
     private TarjetaCreditoDTO tarjetaCredito;
 
     // La foto (byte[]) podría no ser ideal para un DTO estándar.
