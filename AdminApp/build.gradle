@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.4.4'
     id 'io.spring.dependency-management' version '1.1.7'
     id("io.freefair.lombok") version "8.12.2.1"
+    id 'war'
 }
 
 group = 'org.grupo-b'
@@ -38,6 +39,8 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // ✅ EXCLUYE el Tomcat embebido
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
