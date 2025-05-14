@@ -3,6 +3,7 @@ package org.grupob.empapp.dto; // O el paquete que prefieras para tus DTOs
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.empapp.dto.*;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.GeneroDTO;
 
@@ -41,7 +42,8 @@ public class EmpleadoDTO {
     // Campos de informacion_economica
     private BigDecimal salario;
     private BigDecimal comision;
-    private CuentaBancariaDTO cuentaCorriente;
+
+    private CuentaBancariaEmpleadoDTO cuentaCorriente;
     private EntidadBancariaDTO entidadBancaria; // Asume que tienes un EntidadBancariaDto
     private TipoTarjetaCreditoDTO tipoTarjetaCredito; // Asume que tienes un TipoTarjetaCreditoDto
     private TarjetaCreditoDTO tarjetaCredito;
