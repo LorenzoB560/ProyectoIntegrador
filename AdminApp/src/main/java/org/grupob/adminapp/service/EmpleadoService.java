@@ -56,6 +56,9 @@ public interface EmpleadoService {
              String sortDir);
 
 
+     List<EmpleadoDTO> devuelveTodosEmpleadosInactivos();
+
+     List<EmpleadoDTO> devuelveTodosEmpleadosActivos();
      // Métodos de gestión de jefes
      EmpleadoDTO asignarJefe(String empleadoId, String jefeId);
      EmpleadoDTO quitarJefe(String empleadoId);

@@ -47,6 +47,14 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // -----------------------------------
 
     @Override
+    public List<EmpleadoDTO> devuelveTodosEmpleadosActivos() {
+        List<Empleado> empleadosActivos = empleadoRepository.findByActivoTrue(); // Usando el nuevo método
+        return empleadosActivos.stream()
+                .map(empleadoConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<EmpleadoDTO> devuelveTodosEmpleados() {
         List<Empleado> listaempleados = empleadoRepository.findAll();
         return listaempleados.stream()
@@ -273,6 +281,14 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         // Opcional: empleado.getPeriodo().setFechaFin(null);
         Empleado empleadoActualizado = empleadoRepository.save(empleado);
         return empleadoConverter.convertToDto(empleadoActualizado);
+    }
+
+    public List<EmpleadoDTO> devuelveTodosEmpleadosInactivos() {
+        // Llama al método del repositorio sin el Sort
+        List<Empleado> empleadosInactivos = empleadoRepository.findByActivoFalse();
+        return empleadosInactivos.stream()
+                .map(empleadoConverter::convertToDto)
+                .collect(Collectors.toList());
     }
 
     // -----------------------------------

@@ -36,8 +36,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
             @Param("searchParams") EmpleadoSearchDTO searchParams,
             Pageable pageable);
 
-    // Métodos de búsqueda individuales - adaptados a la nueva estructura
-    List<Empleado> findByNombreContainingIgnoreCase(String nombre);
+    List<Empleado> findByActivoFalse();
 
     @Query("SELECT e FROM Empleado e JOIN e.departamento d WHERE LOWER(d.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     List<Empleado> findByDepartamentoNombreContaining(@Param("nombre") String nombre);

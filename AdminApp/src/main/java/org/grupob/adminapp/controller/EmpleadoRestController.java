@@ -60,6 +60,24 @@ public class EmpleadoRestController {
                 page, size, sortBy, sortDir);
     }
 
+    @GetMapping("/todos-inactivos")
+    public ResponseEntity<List<EmpleadoDTO>> listarTodosEmpleadosInactivos() {
+        // Llama al servicio sin parámetros de ordenación
+        List<EmpleadoDTO> empleadosInactivos = empleadoService.devuelveTodosEmpleadosInactivos();
+        if (empleadosInactivos == null || empleadosInactivos.isEmpty()) { // Verificar null también
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(empleadosInactivos);
+    }
+
+    @GetMapping("/todos-activos")
+    public ResponseEntity<List<EmpleadoDTO>> listarTodosEmpleadosActivos() {
+        List<EmpleadoDTO> empleadosActivos = empleadoService.devuelveTodosEmpleadosActivos();
+        if (empleadosActivos == null || empleadosActivos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(empleadosActivos);
+    }
 
     @GetMapping("detalle/{id}")
     public EmpleadoDTO devuelveEmpleado(@PathVariable String id){
