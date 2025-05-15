@@ -2,10 +2,7 @@ package org.grupob.comun.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.grupob.comun.dto.FiltroNominaDTO;
-import org.grupob.comun.dto.LoginAdministradorDTO;
-import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.comun.dto.NominaDTO;
+import org.grupob.comun.dto.*;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
@@ -76,6 +73,22 @@ public class NominaControllerAdmin {
         nominaDTO = nominaServiceImp.actualizarLiquidoTotal(nominaDTO);
 
         model.addAttribute("nominaDTO", nominaDTO);
+
+        BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "INGRESO".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalDeducciones = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "DEDUCCION".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+// Agregar estos valores al modelo que envías a Thymeleaf
+        model.addAttribute("totalIngresos", totalIngresos);
+        model.addAttribute("totalDeducciones", totalDeducciones);
+
+
         System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina-admin";
     }
@@ -134,7 +147,6 @@ public class NominaControllerAdmin {
         if (redireccion != null) {
             return redireccion;
         }
-
         model.addAttribute("adminDTO", adminDTO);
 
         FiltroNominaDTO filtro = new FiltroNominaDTO();
@@ -155,7 +167,6 @@ public class NominaControllerAdmin {
         model.addAttribute("fechaFin", fechaFin);
         model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
 
-        // NUEVO
         model.addAttribute("modo", "parametrizada");
 
         StringBuilder queryString = new StringBuilder();
@@ -168,7 +179,6 @@ public class NominaControllerAdmin {
             }
         }
         model.addAttribute("queryString", queryString.toString());
-
         return "listados/listado-vista-nomina";
     }
 

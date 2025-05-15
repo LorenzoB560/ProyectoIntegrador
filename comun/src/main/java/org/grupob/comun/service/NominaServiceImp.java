@@ -230,10 +230,13 @@ public class NominaServiceImp implements NominaService{
         return paginaNominas.map(n -> {
             String nombreEmpleado = n.getEmpleado().getNombre() + " " + n.getEmpleado().getApellido();
 
+
+
             List<LineaNominaDTO> lineaDTOs = n.getLineaNominas().stream().map(ln ->
                     new LineaNominaDTO(
                             ln.getConcepto().getId(),
                             ln.getConcepto().getNombre(),
+                            ln.getConcepto().getTipo(),
                             ln.getCantidad(),
                             ln.getPorcentaje()
                     )

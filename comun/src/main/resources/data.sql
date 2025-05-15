@@ -626,136 +626,114 @@ VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')),
 
 
 
-INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
-VALUES (UNHEX(REPLACE('a1f2b3c4-5678-9abc-def0-123456789abc', '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 2800.00),
-       (UNHEX(REPLACE('b2f3c4d5-6789-abcd-ef01-23456789abcd', '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 300.00),
-       (UNHEX(REPLACE('c3f4d5e6-789a-bcde-0123-456789abcdef', '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 400.00),
-       (UNHEX(REPLACE('d4f5e678-9abc-de01-2345-6789abcdef01', '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 200.00);
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad, porcentaje)
+VALUES
+-- INGRESOS (Sin porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 2800.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000001', '-', '')),
+ UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 300.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 400.00, NULL),
 
-INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
-VALUES (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 3100.00),
+-- DEDUCCIONES (Con porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 200.00, 15),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 300.00, 7),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000005', '-', '')),
+ UNHEX(REPLACE('a1b2c3d4-e5f6-789a-bcde-0123456789ab', '-', '')), 150.00, 5),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 340.00),
+-- INGRESOS SIN PORCENTAJE
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 3100.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 340.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 460.00),
+-- MÁS DEDUCCIONES
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 460.00, 16),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 290.00, 8);
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('b2c3d4e5-f678-9abc-de01-23456789abcd', '-', '')), 290.00);
 
-INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
-VALUES (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 2950.00),
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad, porcentaje)
+VALUES
+-- INGRESOS (Sin porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 2950.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 380.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 380.00),
+-- DEDUCCIONES (Con porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 425.00, 16),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 280.00, 8);
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 425.00),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('c3d4e5f6-789a-bcde-0123-456789abcdef', '-', '')), 280.00);
 
-INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
-VALUES (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 3150.00),
+INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad, porcentaje)
+VALUES
+-- INGRESOS (Sin porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 3150.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 345.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 345.00),
+-- DEDUCCIONES (Con porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 470.00, 17),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 295.00, 10),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 470.00),
+-- SIGUIENDO LA MISMA LÓGICA...
+-- INGRESOS SIN PORCENTAJE
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 2900.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 375.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('d4e5f678-9abc-de01-2345-6789abcdef01', '-', '')), 295.00);
+-- DEDUCCIONES (Con porcentaje)
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 420.00, 14),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 275.00, 8),
 
-INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
-VALUES (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 2900.00),
+-- MÁS INGRESOS SIN PORCENTAJE
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 3100.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 345.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('e5f6789a-bcde-0123-4567-89abcdef0123', '-', '')), 375.00),
+-- MÁS DEDUCCIONES CON PORCENTAJE
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 470.00, 16),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 295.00, 9),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 420.00),
+-- Y FINALMENTE...
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 2950.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 380.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('f6789abc-de01-2345-6789-abcdef012345', '-', '')), 275.00),
+-- ÚLTIMAS DEDUCCIONES
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 425.00, 15),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 280.00, 7),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 3100.00),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
+ UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 3150.00, NULL),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
+ UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 345.00, NULL),
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('a789bcde-0123-4567-89ab-cdef01234567', '-', '')), 345.00),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
+ UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 470.00, 17),
+(UNHEX(REPLACE(UUID(), '-', '')), UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
+ UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 295.00, 10);
 
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 470.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('b89cdef0-1234-5678-9abc-def012345678', '-', '')), 295.00);
-
-INSERT INTO linea_nomina (id, id_concepto, id_nomina, cantidad)
-VALUES (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 2950.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('c9def012-3456-789a-bcde-f0123456789a', '-', '')), 380.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 425.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('d0123456-789a-bcde-f012-3456789abcde', '-', '')), 280.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')),
-        UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 3150.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')),
-        UNHEX(REPLACE('e1234567-89ab-cdef-0123-456789abcdef', '-', '')), 345.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')),
-        UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 470.00),
-
-       (UNHEX(REPLACE(UUID(), '-', '')),
-        UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')),
-        UNHEX(REPLACE('f2345678-9abc-def0-1234-56789abcdef0', '-', '')), 295.00);
 
 
 -- Establecimiento de la estructura jerárquica de jefes (No requiere cambios en la lógica, ya que usa los IDs de empleado)

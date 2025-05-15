@@ -29,8 +29,8 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
             lineaNominas.push({
                 idConcepto: conceptoId,
-                cantidad: parseFloat(cantidadValue) || 0,
-                porcentaje: parseFloat(porcentajeValue) || 0
+                cantidad: parseFloat(cantidadValue),
+                porcentaje: parseFloat(porcentajeValue)
             });
         }
     });
