@@ -208,7 +208,68 @@ public class EmpleadoRestController {
                     .body("Error interno al intentar bloquear el empleado: " + e.getMessage());
         }
     }
+    @PostMapping("/{id}/desactivar") // O @PostMapping("/{id}/desactivar")
+    public ResponseEntity<?> desactivarEmpleado(@PathVariable String id) {
+        try {
+            // Lógica para encontrar y actualizar el empleado
+            UUID empleadoUuid = UUID.fromString(id);
+            Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
 
+            if (!empleado.isActivo()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El empleado ya se encuentra desactivado.");
+            }
+
+            empleado.setActivo(false);
+            // Opcional: si tienes una fecha de cese o similar, podrías establecerla aquí.
+            // empleado.getPeriodo().setFechaFin(LocalDate.now());
+            empleadoRepository.save(empleado);
+
+            return ResponseEntity.ok().body("Empleado desactivado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID proporcionado no es válido: " + id);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            // Loggear el error
+            System.err.println("Error al desactivar empleado: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al intentar desactivar el empleado: " + e.getMessage());
+        }
+    }
+
+    // Opcional: Endpoint para reactivar
+    @PostMapping("/{id}/activar")
+    public ResponseEntity<?> activarEmpleado(@PathVariable String id) {
+        try {
+            UUID empleadoUuid = UUID.fromString(id);
+            Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
+
+            if (empleado.isActivo()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El empleado ya se encuentra activo.");
+            }
+
+            empleado.setActivo(true);
+            // Opcional: si tienes una fecha de cese, podrías ponerla a null.
+            // empleado.getPeriodo().setFechaFin(null);
+            empleadoRepository.save(empleado);
+            return ResponseEntity.ok().body("Empleado activado correctamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID proporcionado no es válido: " + id);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error al activar empleado: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al intentar activar el empleado: " + e.getMessage());
+        }
+    }
 //    @PutMapping("/{id}/etiquetas/{etiquetaId}")
 //    public EmpleadoDTO asignarEtiqueta(@PathVariable String id, @PathVariable String etiquetaId) {
 //        return empleadoService.asignarEtiqueta(id, etiquetaId);

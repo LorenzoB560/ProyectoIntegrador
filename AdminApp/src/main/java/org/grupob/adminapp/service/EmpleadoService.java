@@ -42,6 +42,9 @@ public interface EmpleadoService {
 
      List<EmpleadoDTO> buscarEmpleadosPorComentario(String Comentario);
 
+     EmpleadoDTO desactivarEmpleado(String id);
+     EmpleadoDTO activarEmpleado(String id);
+
      /**
       * Método para búsqueda paginada y ordenada
       */

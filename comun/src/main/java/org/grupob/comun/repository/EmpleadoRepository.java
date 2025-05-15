@@ -30,7 +30,8 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
             "(:#{#searchParams.comentario} IS NULL OR LOWER(e.comentarios) LIKE LOWER(CONCAT('%', :#{#searchParams.comentario}, '%'))) AND " +
             "(:#{#searchParams.contratadosAntesDe} IS NULL OR e.periodo.fechaInicio < :#{#searchParams.contratadosAntesDe}) AND " +
             "(:#{#searchParams.salarioMinimo} IS NULL OR e.salario >= :#{#searchParams.salarioMinimo}) AND " +
-            "(:#{#searchParams.salarioMaximo} IS NULL OR e.salario <= :#{#searchParams.salarioMaximo})")
+            "(:#{#searchParams.salarioMaximo} IS NULL OR e.salario <= :#{#searchParams.salarioMaximo}) AND " +
+            "e.activo = true")
     Page<Empleado> buscarEmpleadosAvanzadoPaginado(
             @Param("searchParams") EmpleadoSearchDTO searchParams,
             Pageable pageable);
