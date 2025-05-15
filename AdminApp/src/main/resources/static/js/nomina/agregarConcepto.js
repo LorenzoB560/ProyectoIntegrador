@@ -134,7 +134,7 @@ function inicializarSalarioBase() {
         <div class="row mb-3">
             <div class="col-md-3">
                 <label>Concepto:</label>
-                <select name="conceptoId" class="form-control" disabled>
+                <select name="conceptoId" class="form-control" disabled >
                     <option value="${salarioBaseId}" data-tipo="INGRESO" selected>Salario base</option>
                 </select>
                 <input type="hidden" name="conceptoId" value="${salarioBaseId}">
@@ -146,7 +146,7 @@ function inicializarSalarioBase() {
             
             <div class="col-md-3">
                 <label>Cantidad (€):</label>
-                <input type="text" name="cantidad" class="form-control" value="${salarioBaseValor.toFixed(2)}" readonly>
+                <input type="text" name="cantidad" class="form-control" value="${salarioBaseValor.toFixed(2)}" oninput="actualizarTotal()">
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <!-- No hay botón de eliminar para salario base -->

@@ -1,5 +1,6 @@
 package org.grupob.comun.repository;
 
+import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,4 +64,6 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
             @Param("conceptos") List<String> conceptos,
             Pageable pageable
     );
+
+    List<Nomina> findNominasByEmpleadoId(UUID id);
 }

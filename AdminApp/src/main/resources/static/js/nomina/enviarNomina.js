@@ -3,11 +3,8 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
     //Obtengo todos los valores que se han introducido
     const idEmpleado = document.getElementById("idEmpleado").value;
-    const fechaInicioString = document.getElementById("fechaInicio").value;
-    const fechaFinString = document.getElementById("fechaFin").value;
-
-    const fechaInicio = fechaInicioString.trim() !== "" ? fechaInicioString : null;
-    const fechaFin = fechaFinString.trim() !== "" ? fechaFinString : null;
+    const fechaInicio = document.getElementById("fechaInicio").value;
+    const fechaFin = document.getElementById("fechaFin").value;
 
     const totalLiquido = parseFloat(document.getElementById("totalLiquidoHidden").value.replace(',', '.')) || 0;
 
@@ -43,8 +40,8 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     const dto = {
         idEmpleado: idEmpleado,
         periodo: {
-            fechaInicio: fechaInicioString, // Mantener como string en formato YYYY-MM-DD
-            fechaFin: fechaFinString
+            fechaInicio: fechaInicio,
+            fechaFin: fechaFin
         },
         totalLiquido: totalLiquido,
         lineaNominas: lineaNominas
@@ -61,15 +58,28 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
             if (res.ok) {
                 alert("Nómina guardada correctamente");
                 console.log(JSON.stringify(dto, null, 2));
-                window.location.href = "/nomina/listado";
             } else {
                 return res.text().then(text => { throw new Error(text); });
             }
         })
         .catch(err => {
             console.error("Error al guardar la nómina:", err);
-            alert("Error al guardar la nómina: " + err.message);
+
+            try {
+                const errorJson = JSON.parse(err.message);
+
+                // Si contiene una lista de errores, los mostramos en el alert
+                if (errorJson.listaErrores && Array.isArray(errorJson.listaErrores)) {
+                    const mensajePersonalizado = "Se encontraron los siguientes errores:\n- " + errorJson.listaErrores.join("\n- ");
+                    alert(mensajePersonalizado);
+                } else if (errorJson.message) {
+                    alert("Error al guardar la nómina: " + errorJson.message);
+                }
+            } catch (e) {
+                alert("Error inesperado al guardar la nómina: " + err.message);
+            }
         });
+
 });
 
 // Inicializar cuando se carga la página

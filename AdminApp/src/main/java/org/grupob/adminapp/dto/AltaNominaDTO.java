@@ -1,5 +1,6 @@
 package org.grupob.adminapp.dto;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class AltaNominaDTO {
 
     private UUID id;
     private UUID idEmpleado;
+
+    @Valid
     private PeriodoDTO periodo;
     private BigDecimal totalLiquido;
     private List<LineaNominaDTO> lineaNominas;

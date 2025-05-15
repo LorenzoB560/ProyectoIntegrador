@@ -14,10 +14,13 @@ import org.grupob.comun.repository.ConceptoRepository;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.LineaNominaRepository;
 import org.grupob.comun.repository.NominaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -92,4 +95,5 @@ public class AltaNominaServiceImp implements AltaNominaService {
 
         nomina.setLineaNominas(lineas);
     }
+
 }

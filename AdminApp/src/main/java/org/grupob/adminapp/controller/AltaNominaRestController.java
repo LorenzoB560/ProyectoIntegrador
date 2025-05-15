@@ -1,13 +1,22 @@
 package org.grupob.adminapp.controller;
 
+import jakarta.validation.Valid;
 import org.grupob.adminapp.dto.AltaNominaDTO;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
+import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
+import org.grupob.comun.repository.EmpleadoRepository;
+import org.grupob.comun.repository.NominaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -15,14 +24,18 @@ import java.util.Map;
 public class AltaNominaRestController {
 
     private final AltaNominaServiceImp altaNominaServiceImp;
+    private final NominaRepository nominaRepository;
+    private final EmpleadoRepository empleadoRepository;
 
-    public AltaNominaRestController(AltaNominaServiceImp altaNominaServiceImp) {
+    public AltaNominaRestController(AltaNominaServiceImp altaNominaServiceImp, NominaRepository nominaRepository, EmpleadoRepository empleadoRepository) {
         this.altaNominaServiceImp = altaNominaServiceImp;
+        this.nominaRepository = nominaRepository;
+        this.empleadoRepository = empleadoRepository;
     }
 
     @PostMapping("/guardar-nomina")
     @ResponseBody
-    public ResponseEntity<?> guardarNomina(@RequestBody AltaNominaDTO altaNominaDTO) {
+    public ResponseEntity<?> guardarNomina(@RequestBody @Valid AltaNominaDTO altaNominaDTO) {
         try {
             // Validar que existan elementos en la nómina
             if (altaNominaDTO.getLineaNominas() == null || altaNominaDTO.getLineaNominas().isEmpty()) {
@@ -40,6 +53,45 @@ public class AltaNominaRestController {
                 return ResponseEntity.badRequest().body("La nómina debe incluir el concepto 'Salario base'");
             }
 
+
+            // Validación para que la fecha de fin sea posterior a la fecha de inicio
+            LocalDate fechaInicio = altaNominaDTO.getPeriodo().getFechaInicio();
+            LocalDate fechaFin = altaNominaDTO.getPeriodo().getFechaFin();
+
+            if (fechaInicio.isAfter(fechaFin) || fechaInicio.isEqual(fechaFin)) {
+                //Añado el error al controlador de errores
+                return ResponseEntity.badRequest().body(Map.of("listaErrores", List.of("La fecha de inicio debe ser anterior a la fecha de fin")));
+            }
+
+            // Obtener nóminas anteriores del empleado
+            List<Nomina> nominasExistentes = nominaRepository.findNominasByEmpleadoId(altaNominaDTO.getIdEmpleado());
+
+            for (Nomina n : nominasExistentes) {
+                LocalDate existenteInicio = n.getPeriodo().getFechaInicio();
+                LocalDate existenteFin = n.getPeriodo().getFechaFin();
+
+                // Validar solapamiento
+                boolean seSolapan = !(fechaFin.isBefore(existenteInicio) || fechaInicio.isAfter(existenteFin));
+                if (seSolapan) {
+                    //Devuelvo la lista de errores
+                    return ResponseEntity.badRequest().body(Map.of("listaErrores", List.of(
+                            "El período de la nueva nómina se solapa con una ya existente: " +
+                                    existenteInicio + " - " + existenteFin)));
+                }
+            }
+
+            // Validar que sea posterior a la última nómina
+            Optional<Nomina> ultimaNomina = nominasExistentes.stream()
+                    .max(Comparator.comparing(n -> n.getPeriodo().getFechaFin()));
+
+            if (ultimaNomina.isPresent()) {
+                LocalDate ultimaFin = ultimaNomina.get().getPeriodo().getFechaFin();
+
+                if (!fechaInicio.isAfter(ultimaFin) || !fechaFin.isAfter(ultimaFin)) {
+                    return ResponseEntity.badRequest().body(Map.of("listaErrores", List.of(
+                            "La fecha de inicio y fin deben ser posteriores a la fecha de fin de la última nómina: " + ultimaFin)));
+                }
+            }
             // Guardar la nómina
 
             System.out.println(altaNominaDTO);
