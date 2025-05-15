@@ -25,6 +25,7 @@ public class LineaNomina {
     @JoinColumn(name = "id_concepto", nullable = false)
     private Concepto concepto;
 
+    private BigDecimal porcentaje;
     private BigDecimal cantidad;
 
     @ManyToOne

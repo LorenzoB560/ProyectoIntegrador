@@ -15,5 +15,6 @@ public class LineaNominaDTO {
     private UUID idConcepto;
     private String nombreConcepto;
     private BigDecimal cantidad;
+    private BigDecimal porcentaje;
 
 }

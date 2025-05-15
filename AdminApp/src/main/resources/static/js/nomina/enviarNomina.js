@@ -5,9 +5,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     const idEmpleado = document.getElementById("idEmpleado").value;
     const fechaInicio = document.getElementById("fechaInicio").value;
     const fechaFin = document.getElementById("fechaFin").value;
-
     const totalLiquido = parseFloat(document.getElementById("totalLiquidoHidden").value.replace(',', '.')) || 0;
-
     const lineaNominas = [];
 
     // Primero añadimos el salario base

@@ -50,8 +50,8 @@
                 <div class="col-md-6"><strong>Empleado:</strong> <span th:text="${nominaDTO.nombre}"></span></div>
             </div>
             <div class="row mb-2">
-                <div class="col-md-6"><strong>Mes:</strong> <span th:text="${nominaDTO.mes}"></span></div>
-                <div class="col-md-6"><strong>Año:</strong> <span th:text="${nominaDTO.anio}"></span></div>
+<!--                <div class="col-md-6"><strong>Mes:</strong> <span th:text="${nominaDTO.mes}"></span></div>-->
+<!--                <div class="col-md-6"><strong>Año:</strong> <span th:text="${nominaDTO.anio}"></span></div>-->
             </div>
             <div class="row">
                 <div class="col-md-6"><strong>Total líquido:</strong>
@@ -64,24 +64,35 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="card-title">Conceptos</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center"
-                    th:each="c : ${nominaDTO.lineaNominas}"
-                    th:attr="data-id-concepto=${c.idConcepto}">
-                    <div>
-                        <label th:text="${c.nombreConcepto}"></label>
-                        <span th:text="${#numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'">0,00 €</span>
-                    </div>
-                    <button class="btn btn-sm btn-danger btn-eliminar"
-                            th:data-id-nomina="${nominaDTO.id}"
-                            th:data-id-concepto="${c.idConcepto}">
-                        Eliminar
-                    </button>
-                </li>
-
-            </ul>
+<!--            <ul class="list-group list-group-flush">-->
+<!--                <li class="list-group-item d-flex justify-content-between align-items-center"-->
+<!--                    th:each="c : ${nominaDTO.lineaNominas}"-->
+<!--                    th:attr="data-id-concepto=${c.idConcepto}">-->
+<!--                    <div>-->
+<!--                        <label th:text="${c.nombreConcepto}"></label>-->
+<!--                        <span th:text="${#numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'">0,00 €</span>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </ul>-->
+            <table>
+                <tr>
+                    <td>Concepto</td>
+                    <td>Porcentaje</td>
+                    <td>Ingreso</td>
+                    <td>Retención</td>
+                </tr>
+                <tr th:each="c : ${nominaDTO.lineaNominas}">
+                    <td th:text="${c.nombreConcepto}"></td>
+                    <td th:text="${c.nombrePorcentaje}"></td>
+                </tr>
+            </table>
         </div>
     </div>
+<!--                    <button class="btn btn-sm btn-danger btn-eliminar"-->
+<!--                            th:data-id-nomina="${nominaDTO.id}"-->
+<!--                            th:data-id-concepto="${c.idConcepto}">-->
+<!--                        Eliminar-->
+<!--                    </button>-->
 
 </div>
 <div th:replace="fragmentos/footer :: footer"></div>

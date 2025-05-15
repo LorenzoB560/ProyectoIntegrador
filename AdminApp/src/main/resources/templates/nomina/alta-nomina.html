@@ -73,8 +73,7 @@
     <option th:each="concepto : ${listaConceptos}"
             th:value="${concepto.id}"
             th:text="${concepto.nombre}"
-            th:data-tipo="${concepto.tipo}"
-            th:data-porcentaje="${concepto.porcentaje}"></option>
+            th:data-tipo="${concepto.tipo}"></option>
 </select>
 
 <!-- Template oculto para conceptos restantes (sin Salario base) -->
@@ -82,8 +81,7 @@
     <option th:each="concepto : ${conceptosRestantes}"
             th:value="${concepto.id}"
             th:text="${concepto.nombre}"
-            th:data-tipo="${concepto.tipo}"
-            th:data-porcentaje="${concepto.porcentaje}"></option>
+            th:data-tipo="${concepto.tipo}"></option>
 </select>
 
 <!-- Scripts -->

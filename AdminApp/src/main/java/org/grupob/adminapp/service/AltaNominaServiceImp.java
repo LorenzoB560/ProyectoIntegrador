@@ -90,6 +90,7 @@ public class AltaNominaServiceImp implements AltaNominaService {
             linea.setConcepto(concepto);
             linea.setCantidad(lineaDTO.getCantidad());
             linea.setNomina(nomina);
+            linea.setPorcentaje(lineaDTO.getPorcentaje());
             return linea;
         }).collect(Collectors.toSet());
 

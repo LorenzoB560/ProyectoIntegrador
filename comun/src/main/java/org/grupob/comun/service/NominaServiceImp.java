@@ -234,7 +234,8 @@ public class NominaServiceImp implements NominaService{
                     new LineaNominaDTO(
                             ln.getConcepto().getId(),
                             ln.getConcepto().getNombre(),
-                            ln.getCantidad()
+                            ln.getCantidad(),
+                            ln.getPorcentaje()
                     )
             ).toList();
             PeriodoDTO periodoDTO = new PeriodoDTO(n.getPeriodo().getFechaInicio(), n.getPeriodo().getFechaFin());
@@ -269,6 +270,7 @@ public class NominaServiceImp implements NominaService{
             linea.setConcepto(concepto);
             linea.setCantidad(lineaDTO.getCantidad());
             linea.setNomina(nomina);
+            linea.setPorcentaje(lineaDTO.getPorcentaje());
             return linea;
         }).collect(Collectors.toSet());
 
@@ -282,6 +284,7 @@ public class NominaServiceImp implements NominaService{
     }
 
     public NominaDTO actualizarLiquidoTotal(NominaDTO nominaDTO) {
+        nominaDTO.getLineaNominas().forEach(c -> System.out.println("Concepto: " + c.getIdConcepto() + ", Cantidad: " + c.getCantidad() + "Porcentaje:" + c.getPorcentaje()));
         BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
                 .filter(c -> "INGRESO".equals(obtenerTipoPorIdConcepto(c.getIdConcepto())))
                 .map(LineaNominaDTO::getCantidad)
