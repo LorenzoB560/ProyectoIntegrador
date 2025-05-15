@@ -180,6 +180,25 @@ function llenarTabla(datos) {
             // Mostrar especialidades
             const especialidades = formatearEspecialidades(emp.especialidades);
 
+            //
+            const usuarioBloqueado= emp.usuario.motivoBloqueo!=null;
+
+            let botonesAccionLoginHTML = '';
+            if (usuarioBloqueado) {
+                // Usuario BLOQUEADO: Mostrar botón para DESBLOQUEAR
+                botonesAccionLoginHTML = `
+                    <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
+                        <i class="bi bi-unlock-fill me-1"></i>
+                    </a>
+                `;
+            } else {
+                // Usuario NO BLOQUEADO: Mostrar botón para BLOQUEAR (redirige a página de motivos)
+                botonesAccionLoginHTML = `
+                    <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-warning " title="bloquear Empleado">
+                        <i class="bi bi-lock-fill me-1"></i> 
+                    </a>
+                `;
+            }
             fila.innerHTML = `
                         <td>${nombreConEnlace}</td>
                         <td>${emp.comentarios || 'N/A'}</td>
@@ -196,14 +215,9 @@ function llenarTabla(datos) {
                                     <i class="bi bi-pencil me-1"></i>
                                 </a>
                                 <a href="#" class="btn btn-danger me-2 btn-eliminar-empleado-js" data-employee-id="${emp.id}" data-employee-name="${emp.nombre}" title="Desactivar Empleado">
-                                    <i class="bi bi-trash me-1"></i>
+                                    <i class="bi bi-person-x"></i>
                                 </a>
-                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">
-                                <i class="bi bi-lock-fill me-1"></i> 
-                                </a>
-                                <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
-                                    <i class="bi bi-unlock-fill me-1"></i>
-                                </a>
+                                ${botonesAccionLoginHTML}
                             </div>
                             
                         </td>
@@ -313,10 +327,13 @@ function asignarEventListenersAcciones() {
                         console.log('Empleado desbloqueado con éxito');
                         alert('Empleado desbloqueado.');
                         // Cambiar botón visualmente (opcional)
-                        clone.innerHTML = '<i class="bi bi-unlock-fill me-1"></i> Desbloqueado';
-                        clone.classList.remove('btn-success');
-                        clone.classList.add('btn-secondary', 'disabled'); // Ya está 'disabled' por la clase
-                        // NO RECARGAR: // obtenerEmpleados(paginaActual);
+                        // clone.outerHTML = '<a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">\n' +
+                        //     '                                <i class="bi bi-lock-fill me-1"></i> \n' +
+                        //     '                                </a>';
+                        // clone.classList.remove('btn-success');
+                        // clone.classList.add('btn-secondary', 'disabled'); // Ya está 'disabled' por la clase
+                        // // NO RECARGAR: //
+                        obtenerEmpleados(paginaActual);
                     })
                     .catch(error => {
                         // --- ERROR ---
@@ -350,7 +367,7 @@ function asignarEventListenersAcciones() {
                 // URL del endpoint para desactivar
                 const url = `/empleados/${employeeId}/desactivar`; // Ajusta si usaste PostMapping o el servicio
 
-                
+                // --- Cabeceras (si usas CSRF, necesitarías el token) ---
 
 
                 // Deshabilitar botón temporalmente y mostrar spinner
