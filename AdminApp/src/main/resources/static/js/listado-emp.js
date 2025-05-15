@@ -181,7 +181,6 @@ function llenarTabla(datos) {
             const especialidades = formatearEspecialidades(emp.especialidades);
 
             fila.innerHTML = `
-                        <td>${emp.id || ''}</td>
                         <td>${nombreConEnlace}</td>
                         <td>${emp.comentarios || 'N/A'}</td>
                         <td>${formatearFecha(emp.periodo?.fechaInicio)}</td>
@@ -190,19 +189,19 @@ function llenarTabla(datos) {
                         <td>${formatearDepartamento(emp.departamento)}</td>
                         <td>${infoJefe}</td>
                         <td>${especialidades}</td>
-                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary">Ver</a></td>
+                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
                         <td>
                             <div> 
-                                <a id="btnEditar" href="#" class="btn btn-primary me-2">
-                                    <i class="bi bi-pencil me-1"></i> Editar
+                                <a id="btnEditar" href="#" class="btn btn-primary me-2" title="Editar Empleado">
+                                    <i class="bi bi-pencil me-1"></i>
                                 </a>
-                                <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
+                                <a id="btnEliminar" href="#" class="btn btn-danger me-2" title="Eliminar Empleado"> <i class="bi bi-trash me-1"></i>
                                 </a>
-                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos"" class="btn btn-primary me-2">
-                                <i class="bi bi-lock-fill me-1"></i> Bloquear
+                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">
+                                <i class="bi bi-lock-fill me-1"></i> 
                                 </a>
                                 <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
-                                    <i class="bi bi-unlock-fill me-1"></i> Desbloquear
+                                    <i class="bi bi-unlock-fill me-1"></i>
                                 </a>
                             </div>
                             
@@ -244,8 +243,7 @@ function formatearDepartamento(departamento) {
     if (!departamento) return 'N/A';
     return `
                 <div>
-                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a><br>
-                    Código: ${departamento.codigo || '-'}, ${departamento.localidad || '-'}
+                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
                 </div>
             `;
 }

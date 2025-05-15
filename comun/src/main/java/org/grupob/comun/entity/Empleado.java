@@ -94,7 +94,7 @@ public class Empleado extends Persona {
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_tarjeta", foreignKey = @ForeignKey(name = "FK_empleado_tipo_tarjeta_id"), table = "informacion_economica")
-    private TipoTarjetaCredito tipoTarjetaCredito;
+    private TipoTarjetaCredito idTipoTarjeta;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nomina> listaNominas;

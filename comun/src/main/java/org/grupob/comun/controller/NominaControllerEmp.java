@@ -78,61 +78,61 @@ public class NominaControllerEmp {
         return "listados/detalle-vista-nomina-emp";
     }
 
-    @GetMapping("/busqueda-parametrizada-empleado")
-    public String listarNominaEmpleadoConFitlro(
-            @RequestParam(required = false) Integer filtroMes,
-            @RequestParam(required = false) Integer filtroAnio,
-            @RequestParam(required = false) BigDecimal totalLiquidoMin,
-            @RequestParam(required = false) BigDecimal totalLiquidoMax,
-            @RequestParam(required = false) List<String> conceptosSeleccionados,
-            @RequestParam(defaultValue = "0") int page,
-            Model model,
-            HttpSession sesion
-    ) {
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-
-        if (loginUsuarioEmpleadoDTO == null) {
-            return "redirect:/empapp/login";
-        }
-
-        model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
-
-        FiltroNominaEmpleadoDTO filtro = new FiltroNominaEmpleadoDTO();
-        filtro.setIdEmpleado(loginUsuarioEmpleadoDTO.getId()); // Agregar el ID del empleado al filtro
-        filtro.setFiltroMes(filtroMes);
-        filtro.setFiltroAnio(filtroAnio);
-        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
-        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
-        filtro.setConceptosSeleccionados(conceptosSeleccionados);
-
-        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradasPorEmpleado(filtro, page);
-
-        model.addAttribute("listaNominas", paginaNominas.getContent());
-        model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
-        model.addAttribute("paginaActual", page);
-        model.addAttribute("filtro", filtro);
-        
-        model.addAttribute("filtroMes", filtroMes);
-        model.addAttribute("filtroAnio", filtroAnio);
-        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
-        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
-        model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
-        model.addAttribute("modo", "parametrizada");
-
-        StringBuilder queryString = new StringBuilder();
-        if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
-        if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
-        if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
-        if (totalLiquidoMax != null) queryString.append("&totalLiquidoMax=").append(totalLiquidoMax);
-        if (conceptosSeleccionados != null) {
-            for (String concepto : conceptosSeleccionados) {
-                queryString.append("&conceptosSeleccionados=").append(concepto);
-            }
-        }
-        model.addAttribute("queryString", queryString.toString());
-
-        return "listados/listado-vista-nomina-empleado";
-    }
+//    @GetMapping("/busqueda-parametrizada-empleado")
+//    public String listarNominaEmpleadoConFitlro(
+//            @RequestParam(required = false) Integer filtroMes,
+//            @RequestParam(required = false) Integer filtroAnio,
+//            @RequestParam(required = false) BigDecimal totalLiquidoMin,
+//            @RequestParam(required = false) BigDecimal totalLiquidoMax,
+//            @RequestParam(required = false) List<String> conceptosSeleccionados,
+//            @RequestParam(defaultValue = "0") int page,
+//            Model model,
+//            HttpSession sesion
+//    ) {
+//        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+//
+//        if (loginUsuarioEmpleadoDTO == null) {
+//            return "redirect:/empapp/login";
+//        }
+//
+//        model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
+//
+//        FiltroNominaEmpleadoDTO filtro = new FiltroNominaEmpleadoDTO();
+//        filtro.setIdEmpleado(loginUsuarioEmpleadoDTO.getId()); // Agregar el ID del empleado al filtro
+//        filtro.setFiltroMes(filtroMes);
+//        filtro.setFiltroAnio(filtroAnio);
+//        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
+//        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
+//        filtro.setConceptosSeleccionados(conceptosSeleccionados);
+//
+//        Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradasPorEmpleado(filtro, page);
+//
+//        model.addAttribute("listaNominas", paginaNominas.getContent());
+//        model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
+//        model.addAttribute("paginaActual", page);
+//        model.addAttribute("filtro", filtro);
+//
+//        model.addAttribute("filtroMes", filtroMes);
+//        model.addAttribute("filtroAnio", filtroAnio);
+//        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
+//        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
+//        model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
+//        model.addAttribute("modo", "parametrizada");
+//
+//        StringBuilder queryString = new StringBuilder();
+//        if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
+//        if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
+//        if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
+//        if (totalLiquidoMax != null) queryString.append("&totalLiquidoMax=").append(totalLiquidoMax);
+//        if (conceptosSeleccionados != null) {
+//            for (String concepto : conceptosSeleccionados) {
+//                queryString.append("&conceptosSeleccionados=").append(concepto);
+//            }
+//        }
+//        model.addAttribute("queryString", queryString.toString());
+//
+//        return "listados/listado-vista-nomina-empleado";
+//    }
 
 
 

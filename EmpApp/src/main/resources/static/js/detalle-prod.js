@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detalleContenedor) detalleContenedor.style.display = 'block';
 
             // --- Información General del Producto ---
-            rellenarTexto('prod-id', data.id);
+
             rellenarTexto('prod-nombre-header', data.nombre || data.descripcion || 'Producto sin nombre');
             rellenarTexto('prod-descripcion', data.descripcion);
             rellenarTexto('prod-precio', formatearMoneda(data.precio));
@@ -45,23 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rellenarTexto('prod-fecha-fabricacion', formatearFecha(data.fechaFabricacion));
             rellenarTexto('prod-fecha-alta', formatearFecha(data.fechaAlta));
 
-            const coloresSpan = document.getElementById('prod-colores');
-            if (coloresSpan) {
-                if (data.colores && data.colores.length > 0) {
-                    coloresSpan.innerHTML = data.colores.map(color => {
-                        if (typeof color === 'string') {
-                            return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; color: ${getContrastingTextColor(color.toLowerCase())};">${color}</span>`;
-                        } else if (typeof color === 'object' && color !== null) {
-                            const bgColor = color.hex || color.codigo || 'grey';
-                            const textColor = getContrastingTextColor(bgColor);
-                            return `<span class="badge me-1" style="background-color:${bgColor}; color: ${textColor};">${color.nombre || bgColor}</span>`;
-                        }
-                        return '';
-                    }).join(' ');
-                } else {
-                    coloresSpan.textContent = 'No especificados';
-                }
-            }
 
             // --- Proveedor ---
             if (data.proveedor) {
