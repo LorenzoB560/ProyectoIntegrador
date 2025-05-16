@@ -24,43 +24,20 @@
   <!-- Sección de filtros -->
   <div class="filter-section">
     <div class="row">
-      <div class="col-md-3 mb-2">
+      <div class="col-md-4 mb-2">
         <label for="filtroNombre" class="form-label">Empleado:</label>
         <input type="text" class="form-control" id="filtroNombre" placeholder="Filtrar por empleado" th:value="${filtroNombre}">
       </div>
-      <div class="col-md-3 mb-2">
-        <label for="filtroMes" class="form-label">Mes:</label>
-        <select id="filtroMes" class="form-select">
-          <option value="">Seleccione un mes</option>
-          <option th:each="mes : ${meses}" th:text="${mes}" th:value="${mes}" th:selected="${mes == filtroMes}"></option>
-        </select>
+      <div class="col-md-4 mb-2">
+          <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+          <input type="text" class="form-control" id="fechaInicio" th:value="${fechaInicio}" placeholder="Fecha de inicio">
       </div>
-      <div class="col-md-3 mb-2">
-        <label for="filtroAnio" class="form-label">Año:</label>
-        <select id="filtroAnio" class="form-select">
-          <option value="">Seleccione un año</option>
-          <option th:each="anio : ${anios}" th:text="${anio}" th:value="${anio}" th:selected="${anio == filtroAnio}"></option>
-        </select>
-      </div>
-      <div class="col-md-3 mb-2">
-        <label for="conceptosSeleccionados" class="form-label">Conceptos:</label>
-        <select id="conceptosSeleccionados" class="form-select" multiple="multiple">
-          <option th:each="concepto : ${listaConceptos}"
-                  th:text="${concepto.nombre}"
-                  th:value="${concepto.nombre}"
-                  th:selected="${conceptosSeleccionados != null and conceptosSeleccionados.contains(concepto.nombre)}">></option>
-        </select>
+      <div class="col-md-4 mb-2">
+          <label for="fechaFin" class="form-label">Fecha de finalización</label>
+          <input type="text" class="form-control" id="fechaFin" th:value="${fechaFin}" placeholder="Fecha de finalizacion">
       </div>
     </div>
       <div class="row">
-          <div class="col-md-3 mb-2">
-              <label for="filtroLiquidoMinimo" class="form-label">Total líquido mínimo:</label>
-              <input type="text" class="form-control" id="filtroLiquidoMinimo" placeholder="Ej: 1184" th:value="${filtroLiquidoMinimo}">
-          </div>
-          <div class="col-md-3 mb-2">
-              <label for="filtroLiquidoMaximo" class="form-label">Total líquido máximo:</label>
-              <input type="text" class="form-control" id="filtroLiquidoMaximo" placeholder="Ej: 50000" th:value="${filtroLiquidoMaximo}">
-          </div>
           <div class="col-md-6 mb-2 d-flex align-items-center justify-content-end">
               <button id="aplicarFiltros" class="btn btn-primary me-2">
                   <i class="bi bi-funnel-fill me-1"></i>
@@ -84,10 +61,9 @@
     <tr>
 <!--      <th>Id</th>-->
       <th>Empleado</th>
-      <th>Mes</th>
-      <th>Año</th>
+      <th>Fecha Inicio</th>
+      <th>Fecha fin</th>
       <th>Total líquido</th>
-      <th>Conceptos</th>
       <th>Acciones</th>
     </tr>
     </thead>
@@ -95,17 +71,9 @@
     <tr th:each="nomina : ${listaNominas}">
 <!--      <td th:text="${nomina.id}">Id</td>-->
       <td th:text="${nomina.nombre}">Nombre del empleado</td>
-      <td th:text="${nomina.mes}">Mes</td>
-      <td th:text="${nomina.anio}">Año</td>
+      <td th:text="${nomina.periodo.fechaInicio}">Fecha de inicio</td>
+      <td th:text="${nomina.periodo.fechaFin}">Fecha de fin</td>
       <td th:text="${#numbers.formatDecimal(nomina.totalLiquido, 1, 'COMMA', 2, 'POINT')} + ' €'">0,00 €</td>
-      <td>
-        <ul class="mb-0">
-          <li th:each="c : ${nomina.lineaNominas}">
-            <span th:text="${c.nombreConcepto}"></span>
-            <span th:text="${' =' + #numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
-          </li>
-        </ul>
-      </td>
       <td class="text-center">
 
         <!--Botón de ver-->

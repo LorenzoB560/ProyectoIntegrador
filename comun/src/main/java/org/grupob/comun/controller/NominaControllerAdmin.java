@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,10 +119,8 @@ public class NominaControllerAdmin {
     @GetMapping("/busqueda-parametrizada")
     public String listarNominasConFiltros(
             @RequestParam(required = false) String filtroNombre,
-            @RequestParam(required = false) Integer filtroMes,
-            @RequestParam(required = false) Integer filtroAnio,
-            @RequestParam(required = false) BigDecimal totalLiquidoMin,
-            @RequestParam(required = false) BigDecimal totalLiquidoMax,
+            @RequestParam(required = false) LocalDate fechaInicio,
+            @RequestParam(required = false) LocalDate fechaFin,
             @RequestParam(required = false) List<String> conceptosSeleccionados,
             @RequestParam(defaultValue = "0") int page,
             Model model,
@@ -140,10 +139,8 @@ public class NominaControllerAdmin {
 
         FiltroNominaDTO filtro = new FiltroNominaDTO();
         filtro.setFiltroNombre(filtroNombre);
-        filtro.setFiltroMes(filtroMes);
-        filtro.setFiltroAnio(filtroAnio);
-        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
-        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
+        filtro.setFechaInicio(fechaInicio);
+        filtro.setFechaFin(fechaFin);
         filtro.setConceptosSeleccionados(conceptosSeleccionados);
 
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
@@ -154,10 +151,8 @@ public class NominaControllerAdmin {
         model.addAttribute("filtro", filtro);
 
         model.addAttribute("filtroNombre", filtroNombre);
-        model.addAttribute("filtroMes", filtroMes);
-        model.addAttribute("filtroAnio", filtroAnio);
-        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
-        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
+        model.addAttribute("fechaInicio", fechaInicio);
+        model.addAttribute("fechaFin", fechaFin);
         model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
 
         // NUEVO
@@ -165,10 +160,8 @@ public class NominaControllerAdmin {
 
         StringBuilder queryString = new StringBuilder();
         if (filtroNombre != null && !filtroNombre.isBlank()) queryString.append("&filtroNombre=").append(filtroNombre);
-        if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
-        if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
-        if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
-        if (totalLiquidoMax != null) queryString.append("&totalLiquidoMax=").append(totalLiquidoMax);
+        if (fechaInicio != null) queryString.append("&fechaInicio=").append(fechaInicio);
+        if (fechaFin != null) queryString.append("&fechaFin=").append(fechaFin);
         if (conceptosSeleccionados != null) {
             for (String concepto : conceptosSeleccionados) {
                 queryString.append("&conceptosSeleccionados=").append(concepto);

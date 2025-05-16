@@ -1,10 +1,14 @@
 document.getElementById("formulario").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    //Obtengo todos los valores de
+    //Obtengo todos los valores que se han introducido
     const idEmpleado = document.getElementById("idEmpleado").value;
-    const mes = document.getElementById("mes").value;
-    const anio = document.getElementById("anio").value;
+    const fechaInicioString = document.getElementById("fechaInicio").value;
+    const fechaFinString = document.getElementById("fechaFin").value;
+
+    const fechaInicio = fechaInicioString.trim() !== "" ? fechaInicioString : null;
+    const fechaFin = fechaFinString.trim() !== "" ? fechaFinString : null;
+
     const totalLiquido = parseFloat(document.getElementById("totalLiquidoHidden").value.replace(',', '.')) || 0;
 
     const lineaNominas = [];
@@ -38,8 +42,10 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
 
     const dto = {
         idEmpleado: idEmpleado,
-        mes: parseInt(mes),
-        anio: parseInt(anio),
+        periodo: {
+            fechaInicio: fechaInicioString, // Mantener como string en formato YYYY-MM-DD
+            fechaFin: fechaFinString
+        },
         totalLiquido: totalLiquido,
         lineaNominas: lineaNominas
     };
@@ -54,6 +60,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
         .then(res => {
             if (res.ok) {
                 alert("Nómina guardada correctamente");
+                console.log(JSON.stringify(dto, null, 2));
                 window.location.href = "/nomina/listado";
             } else {
                 return res.text().then(text => { throw new Error(text); });

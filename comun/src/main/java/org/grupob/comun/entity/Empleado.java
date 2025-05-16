@@ -108,6 +108,15 @@ public class Empleado extends Persona {
     })
     private TarjetaCredito tarjetaCredito;
 
+    @OneToMany(mappedBy = "solicitante")
+    private List<SolicitudColaboracion> solicitudesEnviadas;
+
+    @OneToMany(mappedBy = "receptor")
+    private List<SolicitudColaboracion> solicitudesRecibidas;
+
+    @ManyToMany
+    private List<Colaboracion> colaboraciones;
+
     @Override
     public boolean equals(Object o) {
         // 1. Comparación de identidad rápida

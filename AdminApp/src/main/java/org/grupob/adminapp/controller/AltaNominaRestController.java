@@ -41,6 +41,8 @@ public class AltaNominaRestController {
             }
 
             // Guardar la nómina
+
+            System.out.println(altaNominaDTO);
             altaNominaServiceImp.guardarNomina(altaNominaDTO);
             return ResponseEntity.ok().body(Map.of("mensaje", "Nómina guardada correctamente"));
         } catch (Exception e) {

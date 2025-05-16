@@ -29,16 +29,12 @@
         <!-- Mes y Año -->
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="mes" class="form-label">Mes de nómina</label>
-                <select id="mes" name="mes" class="form-select">
-                    <option th:each="mes : ${meses}" th:value="${mes}" th:text="${mes}"></option>
-                </select>
+                <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                <input type="text" class="form-control" id="fechaInicio" placeholder="Fecha de inicio">
             </div>
             <div class="col-md-6 mb-3">
-                <label for="anio" class="form-label">Año de nómina</label>
-                <select id="anio" name="anio" class="form-select">
-                    <option th:each="anio : ${anios}" th:value="${anio}" th:text="${anio}"></option>
-                </select>
+                <label for="fechaFin" class="form-label">Fecha de finalización</label>
+                <input type="text" class="form-control" id="fechaFin" name="fechaFin" placeholder="Fecha de finalizacion">
             </div>
         </div>
         <h4 class="mt-4">Conceptos de la nómina</h4>

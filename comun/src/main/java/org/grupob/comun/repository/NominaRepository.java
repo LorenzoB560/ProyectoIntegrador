@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,10 +26,8 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
     SELECT n FROM Nomina n
     WHERE (:nombre IS NULL OR 
            LOWER(CONCAT(n.empleado.nombre, ' ', n.empleado.apellido)) LIKE LOWER(CONCAT('%', :nombre, '%')))
-      AND (:mes IS NULL OR n.mes = :mes)
-      AND (:anio IS NULL OR n.anio = :anio)
-      AND (:totalMin IS NULL OR n.totalLiquido >= :totalMin)
-      AND (:totalMax IS NULL OR n.totalLiquido <= :totalMax)
+      AND (:fechaInicio IS NULL OR n.periodo.fechaInicio = :fechaInicio)
+      AND (:fechaFin IS NULL OR n.periodo.fechaFin = :fechaFin)
       AND (:conceptos IS NULL OR EXISTS (
             SELECT 1 FROM LineaNomina ln
             WHERE ln.nomina = n
@@ -37,10 +36,8 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
 """)
     Page<Nomina> buscarNominasFiltradas(
             @Param("nombre") String nombre,
-            @Param("mes") Integer mes,
-            @Param("anio") Integer anio,
-            @Param("totalMin") BigDecimal totalMin,
-            @Param("totalMax") BigDecimal totalMax,
+            @Param("fechaInicio") LocalDate fechaInicio,
+            @Param("fechaFin") LocalDate fechaFin,
             @Param("conceptos") List<String> conceptos,
             Pageable pageable
     );
@@ -51,10 +48,8 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
     @Query("""
     SELECT n FROM Nomina n
     WHERE n.empleado.id = :idEmpleado
-      AND (:mes IS NULL OR n.mes = :mes)
-      AND (:anio IS NULL OR n.anio = :anio)
-      AND (:totalMin IS NULL OR n.totalLiquido >= :totalMin)
-      AND (:totalMax IS NULL OR n.totalLiquido <= :totalMax)
+      AND (:fechaInicio IS NULL OR n.periodo.fechaInicio = :fechaInicio)
+      AND (:fechaFin IS NULL OR n.periodo.fechaFin = :fechaFin)
       AND (:conceptos IS NULL OR EXISTS (
             SELECT 1 FROM LineaNomina ln
             WHERE ln.nomina = n
@@ -63,10 +58,8 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
 """)
     Page<Nomina> buscarNominasFiltradasPorEmpleado(
             @Param("idEmpleado") UUID idEmpleado,
-            @Param("mes") Integer mes,
-            @Param("anio") Integer anio,
-            @Param("totalMin") BigDecimal totalMin,
-            @Param("totalMax") BigDecimal totalMax,
+            @Param("fechaInicio") LocalDate fechaInicio,
+            @Param("fechaFin") LocalDate fechaFin,
             @Param("conceptos") List<String> conceptos,
             Pageable pageable
     );
