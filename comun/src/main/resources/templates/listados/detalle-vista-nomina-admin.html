@@ -44,69 +44,83 @@
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h4 class="card-title">Información de la Nómina</h4>
-            <div class="row-md-2">
+            <h4 class="card-title text-center mb-4">Información de la Nómina</h4>
+
+            <div class="mb-3">
                 <strong>Periodo:</strong>
-                <span th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
+                <span class="text-muted" th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
             </div>
-            <div class="row mb-2">
-                <!--                <div class="col-md-6"><strong>ID:</strong> <span th:text="${nominaDTO.id}"></span></div>-->
-                <h5>Información de la empresa</h5>
+
+            <hr>
+
+            <h5 class="mt-3"><strong>Información de la Empresa</strong></h5>
+            <div class="row">
                 <div class="col-md-4">
                     <strong>Empresa:</strong>
-                    <span th:text="${listaPropiedades.get(0).valor}"></span>
+                    <span class="text-muted" th:text="${listaPropiedades.get(0).valor}"></span>
                 </div>
                 <div class="col-md-4">
                     <strong>CIF de la empresa:</strong>
-                    <span th:text="${listaPropiedades.get(1).valor}"></span>
+                    <span class="text-muted" th:text="${listaPropiedades.get(1).valor}"></span>
                 </div>
                 <div class="col-md-4">
                     <strong>Dirección de la empresa:</strong>
-                    <span th:text="${listaPropiedades.get(2).valor}"></span>
+                    <span class="text-muted" th:text="${listaPropiedades.get(2).valor}"></span>
                 </div>
             </div>
-            <h5>Información del empleado</h5>
-            <div class="row md-2">
-                <div class="col-md-3">
+
+            <hr>
+
+            <h5 class="mt-4">Información del Empleado</h5>
+            <div class="row">
+                <div class="col-md-4">
                     <strong>Empleado:</strong>
-                    <span th:text="${nominaDTO.nombre}"></span>
+                    <span class="text-muted" th:text="${nominaDTO.nombre}"></span>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <strong>Documento:</strong>
-                    <span th:text="${empleadoNominaDTO.numDocumento}"></span>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.numDocumento}"></span>
                 </div>
-                <div class="col-md-3">
-                    <strong>Dirección</strong>
-                    <span th:text="${empleadoNominaDTO.getDireccion().tipoVia} + ' ' +
+                <div class="col-md-4">
+                    <strong>Dirección:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.getDireccion().tipoVia} + ' ' +
                     ${empleadoNominaDTO.getDireccion().via} + ' ' +
                     ${empleadoNominaDTO.getDireccion().numero}"></span>
                 </div>
-                <div>
-                    <strong>Departamento</strong>
-                    <span th:text="${empleadoNominaDTO.departamento.nombre}"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Fecha de alta:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.periodoContratacion.fechaInicio}"></span>
                 </div>
-                <div>
-                    <strong>Fecha de alta</strong>
-                    <span th:text="${empleadoNominaDTO.periodoContratacion.fechaInicio}"></span>
+                <div class="col-md-4">
+                    <strong>Departamento:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.departamento.nombre}"></span>
                 </div>
             </div>
-            <h4>Cantidades acumuladas</h4>
-            <div class="row-md-2">
-                <div>
+
+
+            <hr>
+
+            <h5 class="mt-3">Cantidades Acumuladas</h5>
+            <div class="row">
+                <div class="col-md-4">
                     <strong>Cantidad bruta acumulada:</strong>
-                    <span th:text="${brutoTotal}"></span>
+                    <span class="text-muted" th:text="${brutoTotal}"></span>
                 </div>
-                <div>
+                <div class="col-md-4">
                     <strong>Retenciones acumuladas:</strong>
-                    <span th:text="${retencionesTotales}"></span>
+                    <span class="text-muted" th:text="${retencionesTotales}"></span>
                 </div>
-                <div>
+                <div class="col-md-4">
                     <strong>Liquidez acumulada hasta este mes:</strong>
-                    <span th:text="${sumaLiquidoTotal}"></span>
+                    <span class="text-muted" th:text="${sumaLiquidoTotal}"></span>
                 </div>
             </div>
         </div>
     </div>
+
+
 
     <div class="card shadow-sm">
         <div class="card-body">
