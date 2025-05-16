@@ -6,8 +6,14 @@ plugins {
 	id 'war'
 }
 
+war {
+	archiveFileName = 'empapp.war'
+}
+
 group = 'org.grupo-b'
-version = '0.0.1-SNAPSHOT'
+version = ''
+
+bootWar {archiveFileName="emp.war"}
 
 java {
 	toolchain {
@@ -37,7 +43,7 @@ dependencies {
 	//Mapper DTO-Entity
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	// ✅ EXCLUYE el Tomcat embebido
+	//  EXCLUYE el Tomcat embebido
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'

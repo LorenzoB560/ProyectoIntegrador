@@ -6,6 +6,8 @@ plugins {
     id 'war'
 }
 
+bootWar {archiveFileName="admin.war"}
+
 group = 'org.grupo-b'
 version = '0.0.1-SNAPSHOT'
 
@@ -39,7 +41,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'com.mysql:mysql-connector-j'
-    // ✅ EXCLUYE el Tomcat embebido
+    // EXCLUYE el Tomcat embebido
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

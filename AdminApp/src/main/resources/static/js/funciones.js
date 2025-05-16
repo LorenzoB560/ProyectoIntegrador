@@ -1,4 +1,10 @@
 // funciones-admin-login.js
+/*
+const ADMIN_WAR= "/admin"
+const url = new URL(ADMIN_WAR, window.location.origin);
+
+const contextPath = '/' + window.location.pathname.split('/')[1];
+*/
 
 // Mostrar u ocultar la contraseña
 function mostrarOcultarClave() {
@@ -13,6 +19,7 @@ function mostrarOcultarClave() {
     }
 }
 
+
 $(document).ready(function () {
     // Recuperar contraseña (solo para pruebas, en producción solo por email)
     $("#recordarContraseña").click(function (event) {
@@ -25,6 +32,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
+            // url: `${contextPath}/devuelve-clave`,
             url: "/adminapp/devuelve-clave",
             type: "GET",
             data: { correo: correo },
