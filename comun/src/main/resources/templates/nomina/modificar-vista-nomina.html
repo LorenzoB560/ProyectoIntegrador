@@ -40,6 +40,11 @@
                     <span class="text-muted"
                           th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
                 </div>
+                <!-- Formato ISO (YYYY-MM-DD) que Spring puede convertir automáticamente -->
+                <input type="text" class="form-control" th:field="*{periodo.fechaInicio}" th:value="${#temporals.format(nominaDTO.periodo.fechaInicio, 'yyyy-MM-dd')}" hidden>
+                <input type="text" class="form-control" th:field="*{periodo.fechaFin}" th:value="${#temporals.format(nominaDTO.periodo.fechaFin, 'yyyy-MM-dd')}" hidden>
+
+
 
                 <hr>
 
@@ -65,6 +70,9 @@
                 <div class="row">
                     <div class="col-md-4">
                         <strong>Empleado:</strong>
+                        <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{idEmpleado}">
+                        <input type="hidden" th:field="*{nombre}">
                         <span class="text-muted" th:text="${nominaDTO.nombre}"></span>
                     </div>
                     <div class="col-md-4">
@@ -119,20 +127,17 @@
                         <thead class="table-dark">
                         <tr>
                             <th>Concepto</th>
-                            <th>Porcentaje</th>
                             <th>Ingreso</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="c, iterStat : *{lineaNominas}"
+                            th:if="${!c.nombreConcepto.equalsIgnoreCase('Salario base')}"
                             th:attr="data-id-concepto=${c.idConcepto}">
                             <td>
                                 <input type="hidden" th:field="*{lineaNominas[__${iterStat.index}__].idConcepto}">
                                 <input type="hidden" th:field="*{lineaNominas[__${iterStat.index}__].nombreConcepto}">
                                 <label th:text="${c.nombreConcepto}" th:for="|concepto_${iterStat.index}|"></label>
-                            </td>
-                            <td>
-                                <input type="text" th:field="*{lineaNominas[__${iterStat.index}__].porcentaje}" class="form-control">
                             </td>
                             <td>
                                 <input type="text" th:field="*{lineaNominas[__${iterStat.index}__].cantidad}" class="form-control">
@@ -148,6 +153,7 @@
             <strong>Total líquido:</strong>
             <span class="fw-bold text-success"
                   th:text="${nominaDTO.totalLiquido} + ' €'"></span>
+            <input type="hidden" th:field="*{totalLiquido}">
         </div>
 
         <div class="d-flex justify-content-end mt-3">

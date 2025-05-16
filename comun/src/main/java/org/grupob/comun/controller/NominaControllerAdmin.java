@@ -13,7 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -122,7 +124,44 @@ public class NominaControllerAdmin {
 
 
     @PostMapping("/guardar-datos-modificados")
-    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO) {
+    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO,
+                                          @RequestParam("periodo.fechaInicio") String fechaInicioStr,
+                                          @RequestParam("periodo.fechaFin") String fechaFinStr) {
+
+        List<LineaNominaDTO> lineaNominaDTOS = nominaDTO.getLineaNominas();
+
+        if (lineaNominaDTOS != null && !lineaNominaDTOS.isEmpty()) {
+            LineaNominaDTO salarioBase = lineaNominaDTOS.getFirst();
+            salarioBase.setIdConcepto(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+            salarioBase.setNombreConcepto("Salario base");
+            salarioBase.setTipoConcepto("INGRESO");
+            salarioBase.setCantidad(BigDecimal.valueOf(2800.00));
+            salarioBase.setPorcentaje(null);
+        } else {
+            throw new IllegalStateException("No existen líneas de nómina en la lista.");
+        }
+
+        // Convertir las fechas manualmente
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yy");
+            LocalDate fechaInicio = LocalDate.parse(fechaInicioStr, formatter);
+            LocalDate fechaFin = LocalDate.parse(fechaFinStr, formatter);
+
+            if (nominaDTO.getPeriodo() == null) {
+                // Crear un nuevo objeto periodo si es null
+                PeriodoDTO periodoDTO = new PeriodoDTO();
+                periodoDTO.setFechaInicio(fechaInicio);
+                periodoDTO.setFechaFin(fechaFin);
+                nominaDTO.setPeriodo(periodoDTO);
+            } else {
+                nominaDTO.getPeriodo().setFechaInicio(fechaInicio);
+                nominaDTO.getPeriodo().setFechaFin(fechaFin);
+            }
+        } catch (Exception e) {
+            // Manejar errores de formato de fecha
+            e.printStackTrace();
+            // Redirigir a una página de error o volver al formulario con mensaje de error
+        }
 
         System.out.println(nominaDTO);
         nominaServiceImp.modificarNomina(nominaDTO);
