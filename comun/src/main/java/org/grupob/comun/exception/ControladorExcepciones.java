@@ -98,9 +98,9 @@ public class ControladorExcepciones {
     }
 
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public String manejaHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-        InformacionExcepcion info = new InformacionExcepcion();
-        return "redirect:/empapp/login";
-    }
+//    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+//    public String manejaHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+//        InformacionExcepcion info = new InformacionExcepcion();
+//        return "redirect:/empapp/login";
+//    }
 }

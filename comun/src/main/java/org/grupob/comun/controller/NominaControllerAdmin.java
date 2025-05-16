@@ -6,7 +6,6 @@ import org.grupob.comun.dto.*;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -64,10 +62,8 @@ public class NominaControllerAdmin {
     public String vistaDetalleNominaAdmin(@PathVariable UUID id, Model model, HttpSession sesion, HttpServletRequest request) {
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+        if (adminDTO == null){
+            return "redirect:/adminapp/login";
         }
 
         model.addAttribute("adminDTO", adminDTO);
@@ -89,12 +85,7 @@ public class NominaControllerAdmin {
 
         model.addAttribute("totalIngresos", totalIngresos);
         model.addAttribute("totalDeducciones", totalDeducciones);
-        model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorIdNomina(id));
-        BigDecimal brutoTotal = nominaServiceImp.devolverCantidadBrutaAcumulada(id);
-        BigDecimal retencionesTotales = nominaServiceImp.devolverRetencionesAcumuladas(id);
-        model.addAttribute("brutoTotal", brutoTotal);
-        model.addAttribute("retencionesTotales", retencionesTotales);
-        model.addAttribute("sumaLiquidoTotal", brutoTotal.subtract(retencionesTotales));
+        asignarDatosComunesNomina(id, model);
 
 
         System.err.println(nominaDTO);
@@ -106,13 +97,14 @@ public class NominaControllerAdmin {
 
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login";
         }
 
         model.addAttribute("adminDTO", adminDTO);
+        asignarDatosComunesNomina(id, model);
+
         try {
             NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
 
@@ -128,8 +120,9 @@ public class NominaControllerAdmin {
         }
     }
 
+
     @PostMapping("/guardar-datos-modificados")
-    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO, Model model) {
+    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO) {
 
         System.out.println(nominaDTO);
         nominaServiceImp.modificarNomina(nominaDTO);
@@ -190,6 +183,15 @@ public class NominaControllerAdmin {
         if (fechaFin != null && !fechaFin.isEmpty()) queryString.append("&fechaFin=").append(fechaFin);
         model.addAttribute("queryString", queryString.toString());
         return "listados/listado-vista-nomina";
+    }
+
+    private void asignarDatosComunesNomina(@PathVariable UUID id, Model model) {
+        model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorIdNomina(id));
+        BigDecimal brutoTotal = nominaServiceImp.devolverCantidadBrutaAcumulada(id);
+        BigDecimal retencionesTotales = nominaServiceImp.devolverRetencionesAcumuladas(id);
+        model.addAttribute("brutoTotal", brutoTotal);
+        model.addAttribute("retencionesTotales", retencionesTotales);
+        model.addAttribute("sumaLiquidoTotal", brutoTotal.subtract(retencionesTotales));
     }
 
 }
