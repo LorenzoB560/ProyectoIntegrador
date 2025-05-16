@@ -1,6 +1,7 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.dto.AltaNominaDTO;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
 import org.grupob.comun.entity.Empleado;
@@ -21,17 +22,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/adminapp")
+@RequiredArgsConstructor
 public class AltaNominaRestController {
 
     private final AltaNominaServiceImp altaNominaServiceImp;
     private final NominaRepository nominaRepository;
-    private final EmpleadoRepository empleadoRepository;
 
-    public AltaNominaRestController(AltaNominaServiceImp altaNominaServiceImp, NominaRepository nominaRepository, EmpleadoRepository empleadoRepository) {
-        this.altaNominaServiceImp = altaNominaServiceImp;
-        this.nominaRepository = nominaRepository;
-        this.empleadoRepository = empleadoRepository;
-    }
 
     @PostMapping("/guardar-nomina")
     @ResponseBody

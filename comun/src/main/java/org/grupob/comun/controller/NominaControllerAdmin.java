@@ -32,6 +32,7 @@ public class NominaControllerAdmin {
         modelo.addAttribute("anios", nominaServiceImp.devolverAnios());
         modelo.addAttribute("listaNominas", nominaServiceImp.devolverNominas());
         modelo.addAttribute("listaConceptos", nominaServiceImp.devolverConceptos());
+        modelo.addAttribute("listaPropiedades", nominaServiceImp.devolverPropiedades());
     }
 
     //TODO AÑADIR TABLA MAESTRA MESES, PARA MOSTRARLO EN LA NÓMINA
@@ -78,6 +79,7 @@ public class NominaControllerAdmin {
                 .map(LineaNominaDTO::getCantidad)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+
         BigDecimal totalDeducciones = nominaDTO.getLineaNominas().stream()
                 .filter(c -> "DEDUCCION".equals(c.getTipoConcepto()))
                 .map(LineaNominaDTO::getCantidad)
@@ -85,7 +87,9 @@ public class NominaControllerAdmin {
 
         model.addAttribute("totalIngresos", totalIngresos);
         model.addAttribute("totalDeducciones", totalDeducciones);
-        model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorId(id));
+        model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorIdNomina(id));
+
+        System.err.println(nominaServiceImp.devolverEmpleadoPorIdNomina(id));
 
         System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina-admin";

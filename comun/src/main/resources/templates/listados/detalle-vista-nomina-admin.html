@@ -10,7 +10,7 @@
     <script src="/js/eliminarConcepto.js"></script>
     <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
     <style>
-        label{
+        label {
             font-weight: bold;
         }
     </style>
@@ -44,25 +44,58 @@
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h5 class="card-title">Información de la Nómina</h5>
+            <h4 class="card-title">Información de la Nómina</h4>
+            <div class="row-md-2">
+                <strong>Periodo:</strong>
+                <span th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
+            </div>
             <div class="row mb-2">
-<!--                <div class="col-md-6"><strong>ID:</strong> <span th:text="${nominaDTO.id}"></span></div>-->
+                <!--                <div class="col-md-6"><strong>ID:</strong> <span th:text="${nominaDTO.id}"></span></div>-->
+                <h5>Información de la empresa</h5>
                 <div class="col-md-4">
+                    <strong>Empresa:</strong>
+                    <span th:text="${listaPropiedades.get(0).valor}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>CIF de la empresa:</strong>
+                    <span th:text="${listaPropiedades.get(1).valor}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Dirección de la empresa:</strong>
+                    <span th:text="${listaPropiedades.get(2).valor}"></span>
+                </div>
+            </div>
+            <h5>Información del empleado</h5>
+            <div class="row md-2">
+                <div class="col-md-3">
                     <strong>Empleado:</strong>
                     <span th:text="${nominaDTO.nombre}"></span>
                 </div>
-                <div class="col-md-4">
-                    <strong>Periodo:</strong>
-                    <span th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
+                <div class="col-md-3">
+                    <strong>Documento:</strong>
+                    <span th:text="${empleadoNominaDTO.numDocumento}"></span>
                 </div>
-                <div class="col-md-4">
-                    <strong>Nº SS:</strong>
-                    <span th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
+                <div class="col-md-3">
+                    <strong>Dirección</strong>
+                    <span th:text="${empleadoNominaDTO.getDireccion().tipoVia} + ' ' +
+                    ${empleadoNominaDTO.getDireccion().via} + ' ' +
+                    ${empleadoNominaDTO.getDireccion().numero}"></span>
+                </div>
+                <div>
+                    <strong>Departamento</strong>
+                    <span th:text="${empleadoNominaDTO.departamento.nombre}"></span>
+                </div>
+                <div>
+                    <strong>Fecha de alta</strong>
+                    <span th:text="${empleadoNominaDTO.periodoContratacion.fechaInicio}"></span>
                 </div>
             </div>
-            <div class="row mb-2">
-<!--                <div class="col-md-6"><strong>Mes:</strong> <span th:text="${nominaDTO.mes}"></span></div>-->
-<!--                <div class="col-md-6"><strong>Año:</strong> <span th:text="${nominaDTO.anio}"></span></div>-->
+            <h4>Cantidades acumuladas</h4>
+            <div class="row-md-2">
+                <div>
+                    <strong>Cantidad:</strong>
+                    <span th:text="${cantidad}"></span>
+                </div>
             </div>
         </div>
     </div>
