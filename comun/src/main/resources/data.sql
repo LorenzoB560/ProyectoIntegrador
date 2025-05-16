@@ -1035,3 +1035,8 @@ VALUES (@mueble1, (SELECT id FROM categoria WHERE nombre = 'MUEBLE')),
        (@libro1, (SELECT id FROM categoria WHERE nombre = 'LIBRO')),
        (@electro1, (SELECT id FROM categoria WHERE nombre = 'ELECTRONICO')),
        (@ropa1, (SELECT id FROM categoria WHERE nombre = 'ROPA'));
+
+-- Estados para Solicitudes de Colaboración
+INSERT INTO estado (nombre) VALUES ('PENDIENTE');
+INSERT INTO estado (nombre) VALUES ('ACEPTADA');
+INSERT INTO estado (nombre) VALUES ('RECHAZADA');
