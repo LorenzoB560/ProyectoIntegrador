@@ -29,17 +29,11 @@ public interface NominaRepository extends JpaRepository<Nomina, UUID> {
            LOWER(CONCAT(n.empleado.nombre, ' ', n.empleado.apellido)) LIKE LOWER(CONCAT('%', :nombre, '%')))
       AND (:fechaInicio IS NULL OR n.periodo.fechaInicio = :fechaInicio)
       AND (:fechaFin IS NULL OR n.periodo.fechaFin = :fechaFin)
-      AND (:conceptos IS NULL OR EXISTS (
-            SELECT 1 FROM LineaNomina ln
-            WHERE ln.nomina = n
-              AND ln.concepto.nombre IN :conceptos
-      ))
 """)
     Page<Nomina> buscarNominasFiltradas(
             @Param("nombre") String nombre,
             @Param("fechaInicio") LocalDate fechaInicio,
             @Param("fechaFin") LocalDate fechaFin,
-            @Param("conceptos") List<String> conceptos,
             Pageable pageable
     );
 

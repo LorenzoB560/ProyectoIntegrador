@@ -187,7 +187,6 @@ public class NominaServiceImp implements NominaService{
                 filtro.getFiltroNombre(),
                 filtro.getFechaInicio(),
                 filtro.getFechaFin(),
-                filtro.getConceptosSeleccionados(),
                 pageable
         );
 

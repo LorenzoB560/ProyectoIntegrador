@@ -17,5 +17,4 @@ public class FiltroNominaDTO {
     private String filtroNombre;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private List<String> conceptosSeleccionados;
 }

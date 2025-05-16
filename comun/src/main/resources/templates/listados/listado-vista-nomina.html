@@ -38,8 +38,8 @@
       </div>
     </div>
       <div class="row">
-          <div class="col-md-6 mb-2 d-flex align-items-center justify-content-end">
-              <button id="aplicarFiltros" class="btn btn-primary me-2">
+          <div class="col-md-12 d-flex justify-content-end gap-2">
+              <button id="aplicarFiltros" class="btn btn-primary">
                   <i class="bi bi-funnel-fill me-1"></i>
                   Aplicar Filtros
               </button>
@@ -49,9 +49,7 @@
               </button>
           </div>
       </div>
-
   </div>
-
     <div th:if="${error}" class="alert alert-danger" role="alert">
         <span th:text="${error}"></span>
     </div>

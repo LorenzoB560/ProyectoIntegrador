@@ -6,6 +6,7 @@ import org.grupob.comun.dto.*;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -138,15 +140,13 @@ public class NominaControllerAdmin {
     @GetMapping("/busqueda-parametrizada")
     public String listarNominasConFiltros(
             @RequestParam(required = false) String filtroNombre,
-            @RequestParam(required = false) LocalDate fechaInicio,
-            @RequestParam(required = false) LocalDate fechaFin,
-            @RequestParam(required = false) List<String> conceptosSeleccionados,
+            @RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
             @RequestParam(defaultValue = "0") int page,
             Model model,
             HttpSession sesion,
             HttpServletRequest request
     ) {
-
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
         String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
@@ -157,9 +157,19 @@ public class NominaControllerAdmin {
 
         FiltroNominaDTO filtro = new FiltroNominaDTO();
         filtro.setFiltroNombre(filtroNombre);
-        filtro.setFechaInicio(fechaInicio);
-        filtro.setFechaFin(fechaFin);
-        filtro.setConceptosSeleccionados(conceptosSeleccionados);
+
+        // Convertir fechas manualmente
+        try {
+            if (fechaInicio != null && !fechaInicio.isEmpty()) {
+                filtro.setFechaInicio(LocalDate.parse(fechaInicio));
+            }
+            if (fechaFin != null && !fechaFin.isEmpty()) {
+                filtro.setFechaFin(LocalDate.parse(fechaFin));
+            }
+        } catch (DateTimeParseException e) {
+            // Si hay error de formato, continuar sin fechas
+            model.addAttribute("errorFecha", "Formato de fecha incorrecto. Use YYYY-MM-DD");
+        }
 
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
 
@@ -171,19 +181,13 @@ public class NominaControllerAdmin {
         model.addAttribute("filtroNombre", filtroNombre);
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
-        model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
 
         model.addAttribute("modo", "parametrizada");
 
         StringBuilder queryString = new StringBuilder();
         if (filtroNombre != null && !filtroNombre.isBlank()) queryString.append("&filtroNombre=").append(filtroNombre);
-        if (fechaInicio != null) queryString.append("&fechaInicio=").append(fechaInicio);
-        if (fechaFin != null) queryString.append("&fechaFin=").append(fechaFin);
-        if (conceptosSeleccionados != null) {
-            for (String concepto : conceptosSeleccionados) {
-                queryString.append("&conceptosSeleccionados=").append(concepto);
-            }
-        }
+        if (fechaInicio != null && !fechaInicio.isEmpty()) queryString.append("&fechaInicio=").append(fechaInicio);
+        if (fechaFin != null && !fechaFin.isEmpty()) queryString.append("&fechaFin=").append(fechaFin);
         model.addAttribute("queryString", queryString.toString());
         return "listados/listado-vista-nomina";
     }
