@@ -3,7 +3,7 @@ package org.grupob.adminapp.service;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
-import org.grupob.adminapp.converter.EmpleadoConverter;
+import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.springframework.data.domain.Page;
@@ -12,9 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,13 +24,13 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     private final EmpleadoRepository empleadoRepository;
 //    private final EtiquetaRepository etiquetaRepository;
 //    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
-    private final EmpleadoConverter empleadoConverter;
+    private final EmpleadoConverterAdmin empleadoConverter;
 
     public EmpleadoServiceImp(
             EmpleadoRepository empleadoRepository,
 //            EtiquetaRepository etiquetaRepository,
 //            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverter empleadoConverter) {
+            EmpleadoConverterAdmin empleadoConverter) {
 
         this.empleadoRepository = empleadoRepository;
 //        this.etiquetaRepository = etiquetaRepository;
@@ -175,7 +172,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 , pageable);
 
         // Convertir a DTO preservando la información de paginación
-        return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));
+        return pageEmpleados.map(empleadoConverter::convertToDto);
     }
 
     // -----------------------------------

@@ -1,7 +1,7 @@
 package org.grupob.empapp.service;
 
 
-import org.grupob.empapp.dto.DepartamentoDTO;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.grupob.comun.entity.Departamento;
 
 

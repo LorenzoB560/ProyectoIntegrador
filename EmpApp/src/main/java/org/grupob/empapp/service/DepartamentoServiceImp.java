@@ -2,7 +2,7 @@ package org.grupob.empapp.service;
 
 
 import org.grupob.empapp.converter.DepartamentoConverter;
-import org.grupob.empapp.dto.DepartamentoDTO;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.DepartamentoRepository;

@@ -1,7 +1,7 @@
 package org.grupob.empapp.service;
 
 import org.grupob.comun.exception.EmpleadoNoEncontradoException;
-import org.grupob.empapp.converter.EmpleadoConverter;
+import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
@@ -25,18 +25,18 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     private final EmpleadoRepository empleadoRepository;
 //    private final EtiquetaRepository etiquetaRepository;
 //    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
-    private final EmpleadoConverter empleadoConverter;
+    private final EmpleadoConverterEmp empleadoConverterEmp;
 
     public EmpleadoServiceImp(
             EmpleadoRepository empleadoRepository,
 //            EtiquetaRepository etiquetaRepository,
 //            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverter empleadoConverter) {
+            EmpleadoConverterEmp empleadoConverterEmp) {
 
         this.empleadoRepository = empleadoRepository;
 //        this.etiquetaRepository = etiquetaRepository;
 //        this.empleadoEtiquetaRepository = empleadoEtiquetaRepository;
-        this.empleadoConverter = empleadoConverter;
+        this.empleadoConverterEmp = empleadoConverterEmp;
     }
 
     // -----------------------------------
@@ -47,7 +47,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> devuelveTodosEmpleados() {
         List<Empleado> listaempleados = empleadoRepository.findAll();
         return listaempleados.stream()
-                .map(empleadoConverter::convertToDto)
+                .map(empleadoConverterEmp::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public EmpleadoDTO devuelveEmpleado(String id) {
         Empleado empleado = empleadoRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new EmpleadoNoEncontradoException("Empleado no encontrado"));
-        return empleadoConverter.convertToDto(empleado);
+        return empleadoConverterEmp.convertToDto(empleado);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento) {
         List<Empleado> empleados = empleadoRepository.findByDepartamentoNombreContaining(departamento);
         return empleados.stream()
-                .map(empleado -> empleadoConverter.convertToDto(empleado))
+                .map(empleado -> empleadoConverterEmp.convertToDto(empleado))
                 .collect(Collectors.toList());
     }
 
@@ -132,7 +132,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> buscarEmpleadosPorComentario(String Comentario) {
         List<Empleado> empleados = empleadoRepository.findByComentariosContainingIgnoreCase(Comentario);
         return empleados.stream()
-                .map(empleado -> empleadoConverter.convertToDto(empleado))
+                .map(empleado -> empleadoConverterEmp.convertToDto(empleado))
                 .collect(Collectors.toList());
     }
 
@@ -173,7 +173,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 , pageable);
 
         // Convertir a DTO preservando la información de paginación
-        return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));
+        return pageEmpleados.map(empleado -> empleadoConverterEmp.convertToDto(empleado));
     }
 
     // -----------------------------------
@@ -210,7 +210,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         empleado.setJefe(jefe);
         empleado = empleadoRepository.save(empleado);
 
-        return empleadoConverter.convertToDto(empleado);
+        return empleadoConverterEmp.convertToDto(empleado);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         empleado.setJefe(null);
         empleado = empleadoRepository.save(empleado);
 
-        return empleadoConverter.convertToDto(empleado);
+        return empleadoConverterEmp.convertToDto(empleado);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         List<Empleado> subordinados = empleadoRepository.findByJefe_Id(jefeUuid);
 
         return subordinados.stream()
-                .map(empleado -> empleadoConverter.convertToDto(empleado))
+                .map(empleado -> empleadoConverterEmp.convertToDto(empleado))
                 .collect(Collectors.toList());
     }
 

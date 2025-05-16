@@ -9,7 +9,7 @@ import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.maestras.*;
 import org.grupob.comun.repository.*;
 import org.grupob.empapp.converter.CuentaBancariaConverter;
-import org.grupob.empapp.converter.EmpleadoConverter;
+import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.repository.maestras.GeneroRepository;
@@ -38,7 +38,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final EspecialidadRepository especialidadRepository;
     private final EntidadBancariaRepository entidadBancariaRepository;
     private final TipoTarjetaRepository tipoTarjetaRepository;
-    private final EmpleadoConverter empleadoConverter;
+    private final EmpleadoConverterEmp empleadoConverterEmp;
     private final CuentaBancariaConverter cuentaBancariaConverter;
 
 //    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository, CuentaBancariaConverter cuentaBancariaConverter) {
@@ -95,7 +95,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO, String id){
 
 
-        Empleado empleado = empleadoConverter.convertirAEntidad(altaEmpleadoDTO);
+        Empleado empleado = empleadoConverterEmp.convertirAEntidad(altaEmpleadoDTO);
         empleado.setGenero(generoRepository.findById(altaEmpleadoDTO.getIdGeneroSeleccionado()).orElseThrow());
         for (Especialidad especialidad : altaEmpleadoDTO.getEspecialidades()) {
             if (especialidad.getId() == null) {  // Verificar si la especialidad aún no tiene ID (si es nueva)

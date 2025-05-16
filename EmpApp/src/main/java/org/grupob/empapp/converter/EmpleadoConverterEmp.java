@@ -1,22 +1,18 @@
-package org.grupob.adminapp.converter;
+package org.grupob.empapp.converter;
 
-import org.grupob.adminapp.dto.TipoTarjetaCreditoDTO;
+import org.grupob.empapp.dto.AltaEmpleadoDTO;
+import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
-import org.grupob.adminapp.dto.AltaEmpleadoDTO;
-import org.grupob.adminapp.dto.EmpleadoDTO;
-import org.grupob.comun.repository.TipoTarjetaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmpleadoConverter {
-    private final TipoTarjetaRepository tipoTarjetaRepository;
+public class EmpleadoConverterEmp {
     ModelMapper modelMapper;
 
 
-    public EmpleadoConverter(ModelMapper modelMapper, TipoTarjetaRepository tipoTarjetaRepository) {
+    public EmpleadoConverterEmp(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        this.tipoTarjetaRepository = tipoTarjetaRepository;
     }
 
     public Empleado convertirAEntidad(AltaEmpleadoDTO altaEmpleadoDTO){
@@ -26,8 +22,8 @@ public class EmpleadoConverter {
     public EmpleadoDTO convertToDto(Empleado empleado) {
 //     Crear DTO base
         EmpleadoDTO empleadoDto = modelMapper.map(empleado, EmpleadoDTO.class);
-//        Long idTipoTarjetaCredito = empleado.get
-//        empleadoDto.setTarjetaCredito(tipoTarjetaRepository.findById(idTipoTarjetaCredito));
+//        CuentaBancariaDTO cuentaBancariaDto = modelMapper.map(empleado.getCuentaCorriente(), CuentaBancariaDTO.class);
+//        empleadoDto.setCuentaCorriente();
 //        EmpleadoDTO empleadoDto = new EmpleadoDTO();
 //
 //        // Mapear propiedades bÃ¡sicas

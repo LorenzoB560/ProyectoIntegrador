@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.grupob.empapp.dto.*;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.auxiliar.GeneroDTO;
 
