@@ -1,6 +1,6 @@
 -- data.sql Modificado
 
-# --PROPIEDADES
+ --PROPIEDADES
 
 INSERT INTO propiedad (id, clave, valor)
 VALUES (1, 'nombre_empresa', 'Grupo B - Proyecto Integrador'),
@@ -8,7 +8,7 @@ VALUES (1, 'nombre_empresa', 'Grupo B - Proyecto Integrador'),
        (3, 'direccion_empresa', 'C/ Falsa 123'),
        (4, 'clave-cifrador', 'M1Cl@v3D3Prueb45');
 
-# --IDIOMAS
+ --IDIOMAS
 
 INSERT INTO idioma (siglas, idioma)
 VALUES ('es', 'Español'),
