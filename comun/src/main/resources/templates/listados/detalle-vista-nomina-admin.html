@@ -93,8 +93,16 @@
             <h4>Cantidades acumuladas</h4>
             <div class="row-md-2">
                 <div>
-                    <strong>Cantidad:</strong>
-                    <span th:text="${cantidad}"></span>
+                    <strong>Cantidad bruta acumulada:</strong>
+                    <span th:text="${brutoTotal}"></span>
+                </div>
+                <div>
+                    <strong>Retenciones acumuladas:</strong>
+                    <span th:text="${retencionesTotales}"></span>
+                </div>
+                <div>
+                    <strong>Liquidez acumulada hasta este mes:</strong>
+                    <span th:text="${sumaLiquidoTotal}"></span>
                 </div>
             </div>
         </div>

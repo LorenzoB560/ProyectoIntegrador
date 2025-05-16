@@ -88,8 +88,12 @@ public class NominaControllerAdmin {
         model.addAttribute("totalIngresos", totalIngresos);
         model.addAttribute("totalDeducciones", totalDeducciones);
         model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorIdNomina(id));
+        BigDecimal brutoTotal = nominaServiceImp.devolverCantidadBrutaAcumulada(id);
+        BigDecimal retencionesTotales = nominaServiceImp.devolverRetencionesAcumuladas(id);
+        model.addAttribute("brutoTotal", brutoTotal);
+        model.addAttribute("retencionesTotales", retencionesTotales);
+        model.addAttribute("sumaLiquidoTotal", brutoTotal.subtract(retencionesTotales));
 
-        System.err.println(nominaServiceImp.devolverEmpleadoPorIdNomina(id));
 
         System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina-admin";

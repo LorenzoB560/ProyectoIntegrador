@@ -29,10 +29,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -351,7 +349,27 @@ public class NominaServiceImp implements NominaService{
         return propiedadRepository.findAll();
     }
 
-//    public BigDecimal devolverCantidadBrutaAcumulada(UUID idNomina){
-//
-//    }
+    public BigDecimal devolverCantidadBrutaAcumulada(UUID idNomina){
+        List<Nomina> listaNominas = nominaRepository.findNominasByEmpleadoId(devolverIdEmpleadoPorNomina(idNomina));
+        return listaNominas.stream()
+                // Convierto a cada nómina en una lista de sus nóminas
+                .flatMap(nomina -> nomina.getLineaNominas().stream())
+                //Busco por el tipo de concepto, en este caso si es ingreso
+                .filter(linea -> linea.getConcepto().getTipo().equalsIgnoreCase("INGRESO"))
+                .map(LineaNomina::getCantidad)
+                //Sumo todas las cantidades una vez obtenidas
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal devolverRetencionesAcumuladas(UUID idNomina){
+        List<Nomina> listaNominas = nominaRepository.findNominasByEmpleadoId(devolverIdEmpleadoPorNomina(idNomina));
+        return listaNominas.stream()
+                // Convierto a cada nómina en una lista de sus nóminas
+                .flatMap(nomina -> nomina.getLineaNominas().stream())
+                //Busco por el tipo de concepto, en este caso si es una deducción/retención
+                .filter(linea -> linea.getConcepto().getTipo().equalsIgnoreCase("DEDUCCION"))
+                .map(LineaNomina::getCantidad)
+                //Sumo todas las cantidades una vez obtenidas
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
