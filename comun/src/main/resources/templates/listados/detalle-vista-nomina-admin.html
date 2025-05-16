@@ -47,7 +47,18 @@
             <h5 class="card-title">Información de la Nómina</h5>
             <div class="row mb-2">
 <!--                <div class="col-md-6"><strong>ID:</strong> <span th:text="${nominaDTO.id}"></span></div>-->
-                <div class="col-md-6"><strong>Empleado:</strong> <span th:text="${nominaDTO.nombre}"></span></div>
+                <div class="col-md-4">
+                    <strong>Empleado:</strong>
+                    <span th:text="${nominaDTO.nombre}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Periodo:</strong>
+                    <span th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Nº SS:</strong>
+                    <span th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
+                </div>
             </div>
             <div class="row mb-2">
 <!--                <div class="col-md-6"><strong>Mes:</strong> <span th:text="${nominaDTO.mes}"></span></div>-->
@@ -94,6 +105,7 @@
                         <td></td>
                         <td th:text="${totalIngresos}"></td>
                         <td th:text="${totalDeducciones} + ' €'"></td>
+                        <td></td>
                     </tr>
                     </tfoot>
                 </table>

@@ -1,7 +1,7 @@
 package org.grupob.adminapp.controller;
 
 
-import org.grupob.adminapp.dto.DepartamentoDTO;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.grupob.adminapp.service.DepartamentoServiceImp;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.repository.DepartamentoRepository;

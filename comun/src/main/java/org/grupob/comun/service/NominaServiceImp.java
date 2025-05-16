@@ -7,11 +7,14 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.grupob.comun.converter.EmpleadoConverter;
 import org.grupob.comun.converter.NominaConverter;
 import org.grupob.comun.dto.*;
+import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.LineaNomina;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.repository.ConceptoRepository;
 import org.grupob.comun.repository.EmpleadoRepository;
@@ -44,13 +47,15 @@ public class NominaServiceImp implements NominaService{
     private final EmpleadoRepository empleadoRepository;
     private final LineaNominaRepository lineaNominaRepository;
     private final ConceptoRepository conceptoRepository;
+    private final EmpleadoConverter empleadoConverter;
 
-    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository, LineaNominaRepository lineaNominaRepository, ConceptoRepository conceptoRepository) {
+    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository, LineaNominaRepository lineaNominaRepository, ConceptoRepository conceptoRepository, EmpleadoConverter empleadoConverter) {
         this.nominaRepository = nominaRepository;
         this.nominaConverter = nominaConverter;
         this.empleadoRepository = empleadoRepository;
         this.lineaNominaRepository = lineaNominaRepository;
         this.conceptoRepository = conceptoRepository;
+        this.empleadoConverter = empleadoConverter;
     }
     public NominaDTO devolverNominaPorId(UUID id){
         Optional<Nomina> nomina = nominaRepository.findById(id);
@@ -328,6 +333,11 @@ public class NominaServiceImp implements NominaService{
         }
 
         return null; // No hay redirección, sigue la ejecución normal
+    }
+    public EmpleadoNominaDTO devolverEmpleadoPorId(UUID id){
+        return empleadoRepository.findById(id)
+                .map(empleadoConverter::convierteAEmpleadoNominaDTO)
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("Empleado no encontrado con id: " + id));
     }
 
 }

@@ -71,7 +71,6 @@ public class NominaControllerAdmin {
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
         NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
         nominaDTO = nominaServiceImp.actualizarLiquidoTotal(nominaDTO);
-
         model.addAttribute("nominaDTO", nominaDTO);
 
         BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
@@ -84,10 +83,9 @@ public class NominaControllerAdmin {
                 .map(LineaNominaDTO::getCantidad)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-// Agregar estos valores al modelo que envías a Thymeleaf
         model.addAttribute("totalIngresos", totalIngresos);
         model.addAttribute("totalDeducciones", totalDeducciones);
-
+        model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorId(id));
 
         System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina-admin";

@@ -66,19 +66,27 @@ public class AltaNominaRestController {
             // Obtener nóminas anteriores del empleado
             List<Nomina> nominasExistentes = nominaRepository.findNominasByEmpleadoId(altaNominaDTO.getIdEmpleado());
 
-            for (Nomina n : nominasExistentes) {
-                LocalDate existenteInicio = n.getPeriodo().getFechaInicio();
-                LocalDate existenteFin = n.getPeriodo().getFechaFin();
+            Optional<Nomina> solapada = nominasExistentes.stream()
+                    .filter(n -> {
+                        LocalDate fechaAnteriorInicio = n.getPeriodo().getFechaInicio();
+                        LocalDate fechaPosteriorFin = n.getPeriodo().getFechaFin();
+                        //Con esto verifico que las fechas no se solapen
+                        // Verifico si la fecha de fin se solapa con la fecha anterior de fin, devuelvo true
+                        // Sila fecha de inicio se solapa con la fecha anterior de fin, devuelvo true
+                        return !(fechaFin.isBefore(fechaAnteriorInicio) || fechaInicio.isAfter(fechaPosteriorFin));
+                    })
+                    .findFirst();
 
-                // Validar solapamiento
-                boolean seSolapan = !(fechaFin.isBefore(existenteInicio) || fechaInicio.isAfter(existenteFin));
-                if (seSolapan) {
-                    //Devuelvo la lista de errores
-                    return ResponseEntity.badRequest().body(Map.of("listaErrores", List.of(
-                            "El período de la nueva nómina se solapa con una ya existente: " +
-                                    existenteInicio + " - " + existenteFin)));
-                }
+            //Obtengo la nómina sacada del stream, y envío el mensaje
+            if (solapada.isPresent()) {
+                Nomina n = solapada.get();
+                LocalDate fechaAnteriorInicio = n.getPeriodo().getFechaInicio();
+                LocalDate fechaPosteriorFin = n.getPeriodo().getFechaFin();
+                return ResponseEntity.badRequest().body(Map.of("listaErrores", List.of(
+                        "El período de la nueva nómina se solapa con una ya existente: " +
+                                fechaAnteriorInicio + " - " + fechaPosteriorFin)));
             }
+
 
             // Validar que sea posterior a la última nómina
             Optional<Nomina> ultimaNomina = nominasExistentes.stream()
