@@ -136,19 +136,31 @@ public class NominaServiceImp implements NominaService{
             document.add(Chunk.NEWLINE);
 
             // Tabla de conceptos
-            PdfPTable table = new PdfPTable(2);
+            PdfPTable table = new PdfPTable(3);
             table.setWidthPercentage(100);
             table.setSpacingBefore(10);
             table.setSpacingAfter(10);
 
             Font encabezado = new Font(Font.HELVETICA, 12, Font.BOLD);
             table.addCell(new Phrase("Concepto", encabezado));
+            table.addCell(new Phrase("Porcentaje (%)", encabezado));
             table.addCell(new Phrase("Cantidad (€)", encabezado));
 
-            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
-                table.addCell(linea.getNombreConcepto());
-                table.addCell(String.format("%.2f", linea.getCantidad()));
-            }
+//            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
+//                table.addCell(linea.getNombreConcepto());
+//                if (linea.getPorcentaje()!= null){
+//                table.addCell(String.format("%.2f", linea.getPorcentaje()));
+//                } else{
+//                    table.addCell("");
+//                }
+//                table.addCell(String.format("%.2f", linea.getCantidad()));
+//            }
+            nomina.getLineaNominas()
+                            .forEach(n -> {
+                                table.addCell(n.getNombreConcepto());
+                                table.addCell(n.getPorcentaje() != null ? String.format("%.2f", n.getPorcentaje()) : "");
+                                table.addCell(String.format("%.2f", n.getCantidad()));
+                            });
 
             document.add(table);
 
