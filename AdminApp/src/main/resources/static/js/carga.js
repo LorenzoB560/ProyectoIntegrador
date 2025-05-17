@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData();
         formData.append("archivo", archivo);
 
-        fetch("/productos/carga-masiva", {
+        fetch("/adminapp/productos/carga-masiva", {
             method: "POST",
             body: formData
         })

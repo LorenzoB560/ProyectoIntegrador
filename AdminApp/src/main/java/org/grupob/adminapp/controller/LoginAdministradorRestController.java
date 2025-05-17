@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("adminapp")
+//@RequestMapping("adminapp")
 public class LoginAdministradorRestController {
 
     private final AdministradorServiceImp adminServicio;
@@ -24,7 +24,6 @@ public class LoginAdministradorRestController {
 
     @PostMapping("login")
     public ResponseEntity<LoginAdministradorDTO> comprobrarCredenciales(HttpSession sesion,
-
                                                     @RequestBody @Valid LoginAdministradorDTO loginAdminDTO) {
        LoginAdministradorDTO adminDTO = adminServicio.comprobarCredenciales(loginAdminDTO);
         sesion.setAttribute("adminLogueado", adminDTO);

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (errorDiv) errorDiv.style.display = 'none';
     if (detalleContenedor) detalleContenedor.style.display = 'none';
 
-    const url = `/productos/detalle/${productoId}`;
+    const url = `/adminapp/productos/detalle/${productoId}`;
 
     fetch(url)
         .then(response => {

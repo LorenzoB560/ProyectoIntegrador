@@ -19,7 +19,7 @@ public class DepartamentoController {
     public String listadoDepartamentoVista(@PathVariable String id, Model modelo, HttpSession sesion){
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+            return "redirect:/login"; // protección ante acceso directo sin login
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "listados/detalle-vista-dep";

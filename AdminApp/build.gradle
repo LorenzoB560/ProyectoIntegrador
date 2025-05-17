@@ -6,7 +6,7 @@ plugins {
     id 'war'
 }
 
-bootWar {archiveFileName="admin.war"}
+bootWar {archiveFileName="adminapp.war"}
 
 group = 'org.grupo-b'
 version = '0.0.1-SNAPSHOT'

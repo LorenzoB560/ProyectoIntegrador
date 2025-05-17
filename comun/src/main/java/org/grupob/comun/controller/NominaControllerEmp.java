@@ -44,7 +44,7 @@ public class NominaControllerEmp {
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
 
         if (loginUsuarioEmpleadoDTO == null) {
-            return "redirect:/empapp/login";
+            return "redirect:/login";
         }
 
         model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
@@ -65,7 +65,7 @@ public class NominaControllerEmp {
 
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
         if (loginUsuarioEmpleadoDTO == null) {
-            return "redirect:/empapp/login";
+            return "redirect:/login";
         }
         model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
 

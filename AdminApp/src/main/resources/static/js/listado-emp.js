@@ -51,7 +51,7 @@ function obtenerEmpleados(pagina) {
     paginaActual = pagina;
 
     // Construir URL con todos los parámetros
-    let url = new URL('http://localhost:9090/empleados/listado');
+    let url = new URL('http://localhost:8080/adminapp/empleados/listado');
 
     // Parámetros de filtro
     if (nombre) url.searchParams.append('nombre', nombre);
@@ -170,11 +170,11 @@ function llenarTabla(datos) {
 
             // Crear enlace en el nombre
             const nombreConEnlace = emp.nombre ?
-                `<a href="/empleado/detalle/${emp.id}" class="employee-link">${emp.nombre}</a>` : 'N/A';
+                `<a href="/adminapp/empleado/detalle/${emp.id}" class="employee-link">${emp.nombre}</a>` : 'N/A';
 
             // Mostrar jefe si existe
             const infoJefe = emp.nombreJefe ?
-                `<a href="/empleado/detalle/${emp.idJefe}" class="employee-link">${emp.nombreJefe}</a>` :
+                `<a href="/adminapp/empleado/detalle/${emp.idJefe}" class="employee-link">${emp.nombreJefe}</a>` :
                 'N/A';
 
             // Mostrar especialidades
@@ -189,7 +189,7 @@ function llenarTabla(datos) {
                         <td>${formatearDepartamento(emp.departamento)}</td>
                         <td>${infoJefe}</td>
                         <td>${especialidades}</td>
-                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
+                        <td><a href="/adminapp/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
                         <td>
                             <div> 
                                 <a id="btnEditar" href="#" class="btn btn-primary me-2" title="Editar Empleado">
@@ -197,7 +197,7 @@ function llenarTabla(datos) {
                                 </a>
                                 <a id="btnEliminar" href="#" class="btn btn-danger me-2" title="Eliminar Empleado"> <i class="bi bi-trash me-1"></i>
                                 </a>
-                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">
+                                <a id="btnBloquear" href="/adminapp/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">
                                 <i class="bi bi-lock-fill me-1"></i> 
                                 </a>
                                 <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
@@ -243,7 +243,7 @@ function formatearDepartamento(departamento) {
     if (!departamento) return 'N/A';
     return `
                 <div>
-                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
+                    <a href="/adminapp/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
                 </div>
             `;
 }
@@ -276,7 +276,7 @@ function asignarEventListenersAcciones() {
 
             if (confirm(`¿Está seguro de desbloquear al empleado ${employeeName}?`)) {
                 // URL del endpoint (¡Asegúrate que sea la correcta! Probablemente /empleados/...)
-                const url = `/empleados/${employeeId}/desbloquear`;
+                const url = `/adminapp/empleados/${employeeId}/desbloquear`;
 
                 // --- Cabeceras (si usas CSRF) ---
                 const headers = {

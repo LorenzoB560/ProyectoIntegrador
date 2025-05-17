@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("empapp")
+//@RequestMapping("empapp")
 public class LoginEmpleadoController {
 
     private final Logger logger = LoggerFactory.getLogger(LoginEmpleadoController.class);

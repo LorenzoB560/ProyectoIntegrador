@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/adminapp")
+//@RequestMapping("/adminapp")
 public class ProductoController {
 
     private final ProveedorServiceImp proveedorService;
@@ -33,7 +33,7 @@ public class ProductoController {
     public String cargarMasivaProductos(Model modelo, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+            return "redirect:/login"; // protección ante acceso directo sin login
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
 
@@ -45,7 +45,7 @@ public class ProductoController {
     public String eliminacionMasivaProductos(Model modelo, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+            return "redirect:/login"; // protección ante acceso directo sin login
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "producto/eliminacion-masiva";
@@ -55,7 +55,7 @@ public class ProductoController {
     public String vistaDetalleProducto(@PathVariable UUID id, Model model, HttpSession session) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // Redirige si no está logueado
+            return "redirect:/login"; // Redirige si no está logueado
         }
 //        // Aquí no cargamos datos, solo devolvemos la vista. El JS cargará los datos.
         model.addAttribute("loginAdminDTO", adminDTO); // Para el layout
@@ -68,7 +68,7 @@ public class ProductoController {
     public String vistaListaProductos(Model model, HttpSession session) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
 
         model.addAttribute("loginAdminDTO", adminDTO);

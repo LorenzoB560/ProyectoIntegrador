@@ -6,14 +6,11 @@ plugins {
 	id 'war'
 }
 
-war {
-	archiveFileName = 'empapp.war'
-}
 
 group = 'org.grupo-b'
 version = ''
 
-bootWar {archiveFileName="emp.war"}
+bootWar {archiveFileName="empapp.war"}
 
 java {
 	toolchain {
