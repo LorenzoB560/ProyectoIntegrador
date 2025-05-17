@@ -225,8 +225,10 @@ function llenarTablaProductos(productos) {
         const nombreParaConfirm = productoDescripcion.replace(/["`]/g, ''); // Quitar comillas dobles y backticks para confirm
         const nombreParaAttr = productoDescripcion.replace(/"/g, '&quot;'); // Escapar comillas dobles para atributo HTML
         const accionesHtml = `
-            <div class="d-flex justify-content-end flex-nowrap">
-                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-outline-info me-1" title="Ver Detalle"><i class="bi bi-eye"></i></a>
+            <div>
+                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-primary me-2" title="Ver Detalle">
+                    <i class="bi bi-eye"></i>
+                </a>
                 <a  href="#" class="btn btn-danger me-2 btn-eliminar-prod-js" 
                         data-product-id="${productoId}" 
                         data-product-name="${nombreParaAttr}" 
@@ -238,12 +240,12 @@ function llenarTablaProductos(productos) {
         // Construir la fila con la nueva celda para el proveedor
         fila.innerHTML = `
             <td>${productoDescripcion}</td>
-            <td class="text-end">${precioFormateado}</td>
+            <td>${precioFormateado}</td>
             <td>${nombreProveedor}</td> 
             <td>${marcaProducto}</td>
             <td>${categoriasHtml}</td>
-            <td class="text-center">${segundaManoHtml}</td>
-            <td class="text-center">${unidadesProducto}</td>
+            <td>${segundaManoHtml}</td>
+            <td>${unidadesProducto}</td>
             <td>${accionesHtml}</td>
         `;
         cuerpoTabla.appendChild(fila);

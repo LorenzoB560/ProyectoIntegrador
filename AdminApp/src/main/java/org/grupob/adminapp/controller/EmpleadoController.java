@@ -63,4 +63,24 @@ public class EmpleadoController {
         }
     }
 
+    @GetMapping("/reactivacion-masiva")
+    public String vistaReactivacionMasiva(Model model, HttpSession sesion) {
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login";
+        }
+        model.addAttribute("loginAdminDTO", adminDTO);
+        // No cargamos los empleados aquí, se hará vía AJAX para mejor rendimiento si son muchos
+        return "listados/reactivacion-empleados"; // Nuevo template HTML
+    }
+    @GetMapping("/desactivacion-masiva")
+    public String vistadesactivacionMasiva(Model model, HttpSession sesion) {
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login";
+        }
+        model.addAttribute("loginAdminDTO", adminDTO);
+        // No cargamos los empleados aquí, se hará vía AJAX para mejor rendimiento si son muchos
+        return "listados/desactivacion-empleados";
+    }
 }

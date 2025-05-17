@@ -30,13 +30,13 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
             "(:#{#searchParams.comentario} IS NULL OR LOWER(e.comentarios) LIKE LOWER(CONCAT('%', :#{#searchParams.comentario}, '%'))) AND " +
             "(:#{#searchParams.contratadosAntesDe} IS NULL OR e.periodo.fechaInicio < :#{#searchParams.contratadosAntesDe}) AND " +
             "(:#{#searchParams.salarioMinimo} IS NULL OR e.salario >= :#{#searchParams.salarioMinimo}) AND " +
-            "(:#{#searchParams.salarioMaximo} IS NULL OR e.salario <= :#{#searchParams.salarioMaximo})")
+            "(:#{#searchParams.salarioMaximo} IS NULL OR e.salario <= :#{#searchParams.salarioMaximo}) AND " +
+            "e.activo = true")
     Page<Empleado> buscarEmpleadosAvanzadoPaginado(
             @Param("searchParams") EmpleadoSearchDTO searchParams,
             Pageable pageable);
 
-    // Métodos de búsqueda individuales - adaptados a la nueva estructura
-    List<Empleado> findByNombreContainingIgnoreCase(String nombre);
+    List<Empleado> findByActivoFalse();
 
     @Query("SELECT e FROM Empleado e JOIN e.departamento d WHERE LOWER(d.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     List<Empleado> findByDepartamentoNombreContaining(@Param("nombre") String nombre);
