@@ -33,6 +33,7 @@ public class NominaControllerEmp {
         modelo.addAttribute("anios", nominaServiceImp.devolverAnios());
         modelo.addAttribute("listaNominas", nominaServiceImp.devolverNominas());
         modelo.addAttribute("listaConceptos", nominaServiceImp.devolverConceptos());
+        modelo.addAttribute("listaPropiedades", nominaServiceImp.devolverPropiedades());
     }
 
     @GetMapping("/listado/{id}")
@@ -73,6 +74,22 @@ public class NominaControllerEmp {
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
         NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
         nominaDTO = nominaServiceImp.actualizarLiquidoTotal(nominaDTO);
+        model.addAttribute("nominaDTO", nominaDTO);
+
+        BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "INGRESO".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+        BigDecimal totalDeducciones = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "DEDUCCION".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        model.addAttribute("totalIngresos", totalIngresos);
+        model.addAttribute("totalDeducciones", totalDeducciones);
+        nominaServiceImp.asignarDatosComunesNomina(id, model);
 
         model.addAttribute("nominaDTO", nominaDTO);
         System.err.println(nominaDTO);

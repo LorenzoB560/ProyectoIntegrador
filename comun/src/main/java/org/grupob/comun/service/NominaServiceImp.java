@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
@@ -379,5 +380,13 @@ public class NominaServiceImp implements NominaService{
                 .map(LineaNomina::getCantidad)
                 //Sumo todas las cantidades una vez obtenidas
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    public void asignarDatosComunesNomina(UUID id, Model model) {
+        model.addAttribute("empleadoNominaDTO", devolverEmpleadoPorIdNomina(id));
+        BigDecimal brutoTotal = devolverCantidadBrutaAcumulada(id);
+        BigDecimal retencionesTotales = devolverRetencionesAcumuladas(id);
+        model.addAttribute("brutoTotal", brutoTotal);
+        model.addAttribute("retencionesTotales", retencionesTotales);
+        model.addAttribute("sumaLiquidoTotal", brutoTotal.subtract(retencionesTotales));
     }
 }

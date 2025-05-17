@@ -85,7 +85,7 @@ public class NominaControllerAdmin {
 
         model.addAttribute("totalIngresos", totalIngresos);
         model.addAttribute("totalDeducciones", totalDeducciones);
-        asignarDatosComunesNomina(id, model);
+        nominaServiceImp.asignarDatosComunesNomina(id, model);
 
 
         System.err.println(nominaDTO);
@@ -103,7 +103,7 @@ public class NominaControllerAdmin {
         }
 
         model.addAttribute("adminDTO", adminDTO);
-        asignarDatosComunesNomina(id, model);
+        nominaServiceImp.asignarDatosComunesNomina(id, model);
 
         try {
             NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
@@ -219,14 +219,4 @@ public class NominaControllerAdmin {
         model.addAttribute("queryString", queryString.toString());
         return "listados/listado-vista-nomina";
     }
-
-    private void asignarDatosComunesNomina(@PathVariable UUID id, Model model) {
-        model.addAttribute("empleadoNominaDTO", nominaServiceImp.devolverEmpleadoPorIdNomina(id));
-        BigDecimal brutoTotal = nominaServiceImp.devolverCantidadBrutaAcumulada(id);
-        BigDecimal retencionesTotales = nominaServiceImp.devolverRetencionesAcumuladas(id);
-        model.addAttribute("brutoTotal", brutoTotal);
-        model.addAttribute("retencionesTotales", retencionesTotales);
-        model.addAttribute("sumaLiquidoTotal", brutoTotal.subtract(retencionesTotales));
-    }
-
 }
