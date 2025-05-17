@@ -2,53 +2,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const aplicarBtn = document.getElementById('aplicarFiltros');
     const limpiarBtn = document.getElementById('limpiarFiltros');
     const paginationContainer = document.getElementById("pagination");
+    const idEmpleado = document.getElementById('idEmpleado').value;
 
     if (aplicarBtn && limpiarBtn) {
         aplicarBtn.addEventListener('click', function () {
-            const mes = document.getElementById('filtroMes').value;
-            const anio = document.getElementById('filtroAnio').value;
-            let min = document.getElementById('filtroLiquidoMinimo').value;
-            let max = document.getElementById('filtroLiquidoMaximo').value;
-            const conceptos = Array.from(document.getElementById('conceptosSeleccionados').selectedOptions).map(opt => opt.text);
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
 
             const params = new URLSearchParams();
 
-            if (mes) params.append('filtroMes', mes);
-            if (anio) params.append('filtroAnio', anio);
-
-            // ✅ Validar valores negativos en los filtros
-            min = parseFloat(min);
-            max = parseFloat(max);
-
-            if (!isNaN(min) && min >= 0) params.append('totalLiquidoMin', min);
-            if (!isNaN(max) && max >= 0) params.append('totalLiquidoMax', max);
-
-            if (!isNaN(min) && !isNaN(max) && min > max) {
-                alert("El total líquido mínimo no puede ser mayor que el máximo.");
-                return;
-            }
-
-            conceptos.forEach(c => params.append('conceptosSeleccionados', c));
+            if (fechaInicio) params.append('fechaInicio', fechaInicio);
+            if (fechaFin) params.append('fechaFin', fechaFin);
 
             window.location.href = '/nomina/busqueda-parametrizada-empleado?' + params.toString();
         });
 
         limpiarBtn.addEventListener('click', function () {
-            const idEmpleado = document.getElementById("idEmpleado").value;
-            document.getElementById('filtroMes').value = '';
-            document.getElementById('filtroAnio').value = '';
-            document.getElementById('filtroLiquidoMinimo').value = '';
-            document.getElementById('filtroLiquidoMaximo').value = '';
-            const conceptos = document.getElementById('conceptosSeleccionados');
-            for (let i = 0; i < conceptos.options.length; i++) {
-                conceptos.options[i].selected = false;
-            }
+            document.getElementById('fechaInicio').value = '';
+            document.getElementById('fechaFin').value = '';
 
             window.location.href = '/nomina/listado/' + idEmpleado;
         });
     }
 
-    // ✅ Actualizar la paginación
+    // Paginación
     if (paginationContainer) {
         const totalPaginas = parseInt(paginationContainer.getAttribute("data-total-paginas"), 10);
         const paginaActual = parseInt(paginationContainer.getAttribute("data-pagina-actual"), 10);

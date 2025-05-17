@@ -205,21 +205,18 @@ public class NominaServiceImp implements NominaService{
         return getNominaDTOS(paginaNominas);
     }
 
-//    public Page<NominaDTO> obtenerNominasFiltradasPorEmpleado(FiltroNominaEmpleadoDTO filtro, int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//
-//        Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradasPorEmpleado(
-//                filtro.getIdEmpleado(), // Nuevo parámetro para filtrar por empleado
-//                filtro.getFiltroMes(),
-//                filtro.getFiltroAnio(),
-//                filtro.getTotalLiquidoMinimo(),
-//                filtro.getTotalLiquidoMaximo(),
-//                filtro.getConceptosSeleccionados(),
-//                pageable
-//        );
-//
-//        return getNominaDTOS(paginaNominas);
-//    }
+    public Page<NominaDTO> obtenerNominasFiltradasPorEmpleado(FiltroNominaEmpleadoDTO filtro, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradasPorEmpleado(
+                filtro.getIdEmpleado(),
+                filtro.getFechaInicio(),
+                filtro.getFechaFin(),
+                pageable
+        );
+
+        return getNominaDTOS(paginaNominas);
+    }
 
 
 
@@ -326,22 +323,22 @@ public class NominaServiceImp implements NominaService{
         }
     }
 
-    public String gestionarAccesoYRedireccion(LoginAdministradorDTO adminDTO, LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO, HttpSession sesion, Model model, HttpServletRequest request) {
-        int serverPort = request.getLocalPort();
-        boolean esAdminApp = (serverPort == 9090);
-        boolean esEmpApp = (serverPort == 8080);
-
-        // Redirección adecuada según el módulo de origen
-        if (esAdminApp && adminDTO == null) {
-            return "redirect:/adminapp/login";
-        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
-            return "redirect:/empapp/login";
-        } else if (esEmpApp) {
-            return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
-        }
-
-        return null; // No hay redirección, sigue la ejecución normal
-    }
+//    public String gestionarAccesoYRedireccion(LoginAdministradorDTO adminDTO, LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO, HttpSession sesion, Model model, HttpServletRequest request) {
+//        int serverPort = request.getLocalPort();
+//        boolean esAdminApp = (serverPort == 9090);
+//        boolean esEmpApp = (serverPort == 8080);
+//
+//        // Redirección adecuada según el módulo de origen
+//        if (esAdminApp && adminDTO == null) {
+//            return "redirect:/adminapp/login";
+//        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
+//            return "redirect:/empapp/login";
+//        } else if (esEmpApp) {
+//            return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
+//        }
+//
+//        return null; // No hay redirección, sigue la ejecución normal
+//    }
     public UUID devolverIdEmpleadoPorNomina(UUID id){
         Optional<Nomina> nomina = nominaRepository.findById(id);
         if (nomina.isPresent()) {

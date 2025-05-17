@@ -42,10 +42,8 @@ public class NominaControllerAdmin {
     public String listarNominas(@RequestParam(defaultValue = "0") int page, Model model, HttpSession sesion, HttpServletRequest request) {
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+        if (adminDTO == null){
+            return "redirect:/adminapp/login";
         }
 
         model.addAttribute("adminDTO", adminDTO);
@@ -180,10 +178,8 @@ public class NominaControllerAdmin {
             HttpServletRequest request
     ) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+        if (adminDTO == null){
+            return "redirect:/adminapp/login";
         }
         model.addAttribute("adminDTO", adminDTO);
 
