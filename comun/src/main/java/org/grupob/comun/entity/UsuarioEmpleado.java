@@ -3,14 +3,16 @@ package org.grupob.comun.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
- @AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="usuario_empleado", uniqueConstraints = {

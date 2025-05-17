@@ -8,17 +8,17 @@ VALUES (1, 'nombre_empresa', 'Grupo B - Proyecto Integrador'),
        (3, 'direccion_empresa', 'C/ Falsa 123'),
        (4, 'clave-cifrador', 'M1Cl@v3D3Prueb45');
 
- --IDIOMAS
+/* --IDIOMAS
 
 INSERT INTO idioma (siglas, idioma)
 VALUES ('es', 'Español'),
-       ('en', 'Inglés');
+       ('en', 'Inglés');*/
 
-INSERT INTO motivo_bloqueo(motivo, minutos)
+/*INSERT INTO motivo_bloqueo(motivo, minutos)
 VALUES ('Intentos fallidos', 15),
        ('Falta leve', 30),
        ('Falta media', 45),
-       ('Falta grave', 60);
+       ('Falta grave', 60);*/
 
 -- Administradores
 INSERT INTO administrador (id, usuario, clave, num_accesos)
@@ -43,15 +43,15 @@ VALUES (UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')), 'Salario
        (UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')), 'Seguridad Social', 'DEDUCCION'),
        (UNHEX(REPLACE('00000000-00000000-00000000-00000005', '-', '')), 'Descuento transporte', 'DEDUCCION');
 
--- Géneros
+/*-- Géneros
 INSERT INTO genero (id, genero)
 VALUES (1, 'Masculino');
 INSERT INTO genero (id, genero)
 VALUES (2, 'Femenino');
 INSERT INTO genero (id, genero)
-VALUES (3, 'Otro');
+VALUES (3, 'Otro');*/
 
--- Países
+/*-- Países
 INSERT INTO pais (id, pais, prefijo, codigo)
 VALUES (1, 'España', '+34', 'ES');
 INSERT INTO pais (id, pais, prefijo, codigo)
@@ -61,9 +61,9 @@ VALUES (3, 'Alemania', '+49', 'DE');
 INSERT INTO pais (id, pais, prefijo, codigo)
 VALUES (4, 'Italia', '+39', 'IT');
 INSERT INTO pais (id, pais, prefijo, codigo)
-VALUES (5, 'Rumanía', '+40', 'RO');
+VALUES (5, 'Rumanía', '+40', 'RO');*/
 
--- Tipos de vía
+/*-- Tipos de vía
 INSERT INTO tipo_via (id, tipo_via)
 VALUES (1, 'Calle');
 INSERT INTO tipo_via (id, tipo_via)
@@ -83,17 +83,17 @@ VALUES (8, 'Travesía');
 INSERT INTO tipo_via (id, tipo_via)
 VALUES (9, 'Glorieta');
 INSERT INTO tipo_via (id, tipo_via)
-VALUES (10, 'Vía');
+VALUES (10, 'Vía');*/
 
---Tipo de documento
+/*--Tipo de documento
 INSERT INTO tipo_documento (id, documento)
 VALUES (1, 'DNI');
 INSERT INTO tipo_documento (id, documento)
 VALUES (2, 'NIE');
 INSERT INTO tipo_documento (id, documento)
-VALUES (3, 'Pasaporte');
+VALUES (3, 'Pasaporte');*/
 
--- Departamentos
+/*-- Departamentos
 INSERT INTO departamento (id, nombre, codigo, localidad)
 VALUES (UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d479', '-', '')), 'Recursos Humanos', 'RRHH', 'Madrid');
 INSERT INTO departamento (id, nombre, codigo, localidad)
@@ -104,7 +104,7 @@ INSERT INTO departamento (id, nombre, codigo, localidad)
 VALUES (UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d482', '-', '')), 'Marketing', 'MKT', 'Sevilla');
 INSERT INTO departamento (id, nombre, codigo, localidad)
 VALUES (UNHEX(REPLACE('f47ac10b-58cc-4372-a567-0e02b2c3d483', '-', '')), 'Finanzas', 'FIN', 'Bilbao');
-
+*/
 -- Especialidades
 INSERT INTO especialidad (id, codigo, nombre)
 VALUES (UNHEX(REPLACE('a1b2c3d4-e5f6-4a5b-8c7d-9e8f7a6b5c4d', '-', '')), '1', 'Programación Java');
@@ -136,7 +136,7 @@ VALUES (UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')), '02008'
 INSERT INTO entidad_bancaria (id, codigo, nombre, id_pais)
 VALUES (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), '03002', 'Banca Transilvania', 5);
 
--- Tipos de Tarjetas de Crédito
+/*-- Tipos de Tarjetas de Crédito
 INSERT INTO tipo_tarjeta_credito (id, tipo_tarjeta)
 VALUES (1, 'Visa Classic');
 INSERT INTO tipo_tarjeta_credito (id, tipo_tarjeta)
@@ -144,7 +144,7 @@ VALUES (2, 'Mastercard Gold');
 INSERT INTO tipo_tarjeta_credito (id, tipo_tarjeta)
 VALUES (3, 'American Express');
 INSERT INTO tipo_tarjeta_credito (id, tipo_tarjeta)
-VALUES (4, 'Visa Platinum');
+VALUES (4, 'Visa Platinum');*/
 
 -- USUARIOS EMPLEADOS (El ID ahora es el mismo que el del empleado asociado)
 INSERT INTO usuario_empleado (id, usuario, clave, ultima_conexion, activo, intentos_sesion_fallidos, num_accesos)
@@ -840,28 +840,28 @@ VALUES (UNHEX(REPLACE('e6e6e6e6-1111-4f4f-ffff-111111111111', '-', '')), 'Creati
         UNHEX(REPLACE('8d8a9bc1-6068-4da6-bada-176c40e1bea2', '-', '')), NOW());
 
 
--- Insertar proveedores
+/*-- Insertar proveedores
 INSERT INTO proveedor (id, nombre)
 VALUES (1, 'Grupo Mayorista Ibérico'),
        (2, 'Almacenes Unidos'),
        (3, 'Distribuciones Avance'),
-       (4, 'Comercial Global S.A');
+       (4, 'Comercial Global S.A');*/
 
--- Insertar categorías
+/*-- Insertar categorías
 INSERT INTO categoria (nombre)
 VALUES ('LIBRO'),
        ('ELECTRONICO'),
        ('ROPA'),
        ('MUEBLE');
-
--- Insertar tallas
+*/
+/*-- Insertar tallas
 INSERT INTO talla (talla)
 VALUES ('XS'),
        ('S'),
        ('M'),
        ('L'),
        ('XL'),
-       ('XXL');
+       ('XXL');*/
 
 -- ========== MUEBLES ==========
 -- Mueble 1 (3 colores, segunda mano)
