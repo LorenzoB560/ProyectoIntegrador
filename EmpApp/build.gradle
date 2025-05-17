@@ -10,7 +10,7 @@ plugins {
 group = 'org.grupo-b'
 version = ''
 
-bootWar {archiveFileName="empapp.war"}
+bootWar {archiveFileName="ROOT.war"}
 
 java {
 	toolchain {
