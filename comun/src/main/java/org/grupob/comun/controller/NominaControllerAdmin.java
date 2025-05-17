@@ -42,8 +42,10 @@ public class NominaControllerAdmin {
     public String listarNominas(@RequestParam(defaultValue = "0") int page, Model model, HttpSession sesion, HttpServletRequest request) {
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        if (adminDTO == null){
-            return "redirect:/adminapp/login";
+        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
+        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
+        if (redireccion != null) {
+            return redireccion;
         }
 
         model.addAttribute("adminDTO", adminDTO);

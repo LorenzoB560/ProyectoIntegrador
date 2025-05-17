@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const aplicarBtn = document.getElementById('aplicarFiltros');
     const limpiarBtn = document.getElementById('limpiarFiltros');
     const paginationContainer = document.getElementById("pagination");
-    const idEmpleado = document.getElementById('idEmpleado').value;
 
     if (aplicarBtn && limpiarBtn) {
         aplicarBtn.addEventListener('click', function () {
@@ -21,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('fechaInicio').value = '';
             document.getElementById('fechaFin').value = '';
 
-            window.location.href = '/nomina/listado/' + idEmpleado;
+            window.location.href = '/nomina/listado';
         });
     }
 
