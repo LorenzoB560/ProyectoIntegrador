@@ -51,7 +51,7 @@ public class AltaNominaController {
 
         // Redirección adecuada según el módulo de origen
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
 
         model.addAttribute("loginAdminDTO", adminDTO);

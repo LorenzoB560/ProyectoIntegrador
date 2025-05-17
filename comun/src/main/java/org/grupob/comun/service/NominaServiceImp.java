@@ -325,18 +325,19 @@ public class NominaServiceImp implements NominaService{
     }
 
     public String gestionarAccesoYRedireccion(LoginAdministradorDTO adminDTO, LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO, HttpSession sesion, Model model, HttpServletRequest request) {
-        int serverPort = request.getLocalPort();
-        boolean esAdminApp = (serverPort == 9090);
-        boolean esEmpApp = (serverPort == 8080);
+//        int serverPort = request.getLocalPort();
+//        boolean esAdminApp = (serverPort == 9090);
+//        boolean esEmpApp = (serverPort == 8080);
 
         // Redirección adecuada según el módulo de origen
-        if (esAdminApp && adminDTO == null) {
-            return "redirect:/adminapp/login";
-        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
-            return "redirect:/empapp/login";
-        } else if (esEmpApp) {
-            return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
+        if (adminDTO == null) {
+            return "redirect:/login";
         }
+//        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
+//            return "redirect:/empapp/login";
+//        } else if (esEmpApp) {
+//            return "redirect:/empapp/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
+//        }
 
         return null; // No hay redirección, sigue la ejecución normal
     }

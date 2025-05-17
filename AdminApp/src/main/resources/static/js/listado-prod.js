@@ -10,7 +10,7 @@ let totalElementosProd = 0;
 
 // --- URL del Endpoint API ---
 // ¡¡¡AJUSTA ESTA URL!!! Debe apuntar a tu @GetMapping("/listado") que devuelve JSON Page<ProductoDTO>
-const API_PRODUCTOS_URL = '/productos/listado'; // O '/empapp/productos/listado' o la ruta REST correcta
+const API_PRODUCTOS_URL = '/adminapp/productos/listado'; // O '/empapp/productos/listado' o la ruta REST correcta
 
 // --- Event Listeners y Setup Inicial ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -364,7 +364,7 @@ function asignarEventListenersAccionesProd() {
 
                 // --- 2. Llamada al Endpoint DELETE ---
                 // Asegúrate que la URL base es correcta para el endpoint REST en AdminApp
-                const url = `/productos/eliminar/${productId}`;
+                const url = `/adminapp/productos/eliminar/${productId}`;
 
 
                 // Deshabilitar botón y mostrar carga (opcional)

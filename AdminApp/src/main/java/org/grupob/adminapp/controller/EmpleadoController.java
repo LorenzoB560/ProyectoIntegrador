@@ -29,7 +29,7 @@ public class EmpleadoController {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
 
         if(adminDTO==null){
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "listados/listado-vista-emp";
@@ -39,7 +39,7 @@ public class EmpleadoController {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
 
         if(adminDTO==null){
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "listados/detalle-vista-emp";
@@ -48,7 +48,7 @@ public class EmpleadoController {
     public String mostrarFormularioBloqueo(@PathVariable String id, Model model, HttpSession session) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         try {
             EmpleadoDTO empleado = empleadoService.devuelveEmpleado(id);

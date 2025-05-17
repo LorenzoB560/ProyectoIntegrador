@@ -21,7 +21,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/adminapp")
+//@RequestMapping("/adminapp")
 @RequiredArgsConstructor
 public class AltaNominaRestController {
 

@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("adminapp")
+//@RequestMapping("adminapp")
 public class LoginAdministradorController {
 
     private final AdministradorServiceImp adminServicio;
@@ -32,7 +32,7 @@ public class LoginAdministradorController {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
 
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+            return "redirect:/login"; // protección ante acceso directo sin login
         }
 
         modelo.addAttribute("loginAdminDTO", adminDTO);
@@ -43,10 +43,9 @@ public class LoginAdministradorController {
     @GetMapping("/desconectar")
     public String desconectarUsuario(HttpSession sesion) {
 
-
-        sesion.removeAttribute("loginAdminDTO");
+        sesion.removeAttribute("adminLogueado");
         // Redirige al inicio
-        return "redirect:/adminapp/login";
+        return "redirect:/login";
     }
 
 

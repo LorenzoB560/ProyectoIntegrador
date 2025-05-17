@@ -51,7 +51,7 @@ function obtenerEmpleados(pagina) {
     paginaActual = pagina;
 
     // Construir URL con todos los parámetros
-    let url = new URL('http://localhost:9090/empleados/listado');
+    let url = new URL('http://localhost:8080/adminapp/empleados/listado');
 
     // Parámetros de filtro
     if (nombre) url.searchParams.append('nombre', nombre);
@@ -170,11 +170,11 @@ function llenarTabla(datos) {
 
             // Crear enlace en el nombre
             const nombreConEnlace = emp.nombre ?
-                `<a href="/empleado/detalle/${emp.id}" class="employee-link">${emp.nombre}</a>` : 'N/A';
+                `<a href="/adminapp/empleado/detalle/${emp.id}" class="employee-link">${emp.nombre}</a>` : 'N/A';
 
             // Mostrar jefe si existe
             const infoJefe = emp.nombreJefe ?
-                `<a href="/empleado/detalle/${emp.idJefe}" class="employee-link">${emp.nombreJefe}</a>` :
+                `<a href="/adminapp/empleado/detalle/${emp.idJefe}" class="employee-link">${emp.nombreJefe}</a>` :
                 'N/A';
 
             // Mostrar especialidades
@@ -194,7 +194,7 @@ function llenarTabla(datos) {
             } else {
                 // Usuario NO BLOQUEADO: Mostrar botón para BLOQUEAR (redirige a página de motivos)
                 botonesAccionLoginHTML = `
-                    <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-warning " title="bloquear Empleado">
+                    <a id="btnBloquear" href="/adminapp/empleado/${emp.id}/bloquear/motivos" class="btn btn-warning " title="bloquear Empleado">
                         <i class="bi bi-lock-fill me-1"></i> 
                     </a>
                 `;
@@ -258,7 +258,7 @@ function formatearDepartamento(departamento) {
     if (!departamento) return 'N/A';
     return `
                 <div>
-                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
+                    <a href="/adminapp/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
                 </div>
             `;
 }
@@ -291,7 +291,7 @@ function asignarEventListenersAcciones() {
 
             if (confirm(`¿Está seguro de desbloquear al empleado ${employeeName}?`)) {
                 // URL del endpoint (¡Asegúrate que sea la correcta! Probablemente /empleados/...)
-                const url = `/empleados/${employeeId}/desbloquear`;
+                const url = `/adminapp/empleados/${employeeId}/desbloquear`;
 
                 // --- Cabeceras (si usas CSRF) ---
                 const headers = {
@@ -365,7 +365,7 @@ function asignarEventListenersAcciones() {
 
             if (confirm(`¿Está seguro de que desea desactivar al empleado ${employeeName}? Esta acción cambiará su estado a inactivo.`)) {
                 // URL del endpoint para desactivar
-                const url = `/empleados/${employeeId}/desactivar`; // Ajusta si usaste PostMapping o el servicio
+                const url = `/adminapp/empleados/${employeeId}/desactivar`; // Ajusta si usaste PostMapping o el servicio
 
                 // --- Cabeceras (si usas CSRF, necesitarías el token) ---
 

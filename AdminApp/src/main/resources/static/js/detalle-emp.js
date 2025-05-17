@@ -22,7 +22,7 @@ function cargarDetalleEmpleado() {
 
     mostrarCargando();
 
-    fetch(`http://localhost:9090/empleados/detalle/${empleadoId}`)
+    fetch(`http://localhost:8080/adminapp/empleados/detalle/${empleadoId}`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
@@ -94,7 +94,7 @@ function mostrarDatosEmpleado(empleado) {
     const jefeElement = document.getElementById('jefeEmpleado');
     if (empleado.nombreJefe) {
         jefeElement.innerHTML = `
-                    <a href="/empleado/detalle/${empleado.idJefe}" class="text-decoration-none">
+                    <a href="/adminapp/empleado/detalle/${empleado.idJefe}" class="text-decoration-none">
                         ${empleado.nombreJefe}
                     </a>`;
     } else {
@@ -203,7 +203,7 @@ function formatearMoneda(cantidad) {
 function formatearDepartamento(departamento) {
     if (!departamento) return 'No especificado';
     return `
-                <a href="/departamento/detalle/${departamento.id}" class="text-decoration-none">
+                <a href="/adminapp/departamento/detalle/${departamento.id}" class="text-decoration-none">
                     ${departamento.nombre}
                 </a>
                 <div class="text-muted small">
@@ -240,7 +240,7 @@ function cargarSubordinados(idJefe) {
     const subordinadosContainer = document.getElementById('subordinadosEmpleado');
     subordinadosContainer.innerHTML = '<p class="text-muted">Cargando subordinados...</p>';
 
-    fetch(`http://localhost:9090/empleados/${idJefe}/subordinados`)
+    fetch(`http://localhost:8080/adminapp/empleados/${idJefe}/subordinados`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
@@ -277,7 +277,7 @@ function mostrarSubordinados(subordinados, container) {
 
         item.innerHTML = `
             <div>
-                <a href="/empleado/detalle/${subordinado.id}" class="text-decoration-none">
+                <a href="/adminapp/empleado/detalle/${subordinado.id}" class="text-decoration-none">
                     ${nombreCompleto}
                 </a>
                 <small class="d-block text-muted">${subordinado.departamento?.nombre || 'Sin departamento'}</small>
