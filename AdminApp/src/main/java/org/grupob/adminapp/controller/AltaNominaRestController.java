@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/adminapp")
+//@RequestMapping("/adminapp")
 public class AltaNominaRestController {
 
     private final AltaNominaServiceImp altaNominaServiceImp;

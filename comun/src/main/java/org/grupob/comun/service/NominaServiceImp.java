@@ -313,13 +313,13 @@ public class NominaServiceImp implements NominaService{
         boolean esEmpApp = (serverPort == 8080);
 
         // Redirección adecuada según el módulo de origen
-        if (esAdminApp && adminDTO == null) {
-            return "redirect:/adminapp/login";
+      /*  if (esAdminApp && adminDTO == null) {
+            return "redirect:/login";
         } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
             return "redirect:/empapp/login";
         } else if (esEmpApp) {
-            return "redirect:/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
-        }
+            return "redirect:/empapp/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
+        }*/
 
         return null; // No hay redirección, sigue la ejecución normal
     }
