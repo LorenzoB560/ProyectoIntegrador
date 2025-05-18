@@ -81,4 +81,19 @@ public class ColaboracionController {
         }
         return "colaboraciones/listado-solicitudes";
     }
+    @GetMapping("/historial")
+    public String mostrarPaginaHistorialColaboraciones(Model model, HttpServletRequest request) {
+//        logger.debug("Accediendo a mostrarPaginaHistorialColaboraciones");
+        UUID empleadoIdActual = getEmpleadoIdActual(request);
+        if (empleadoIdActual == null) {
+//            logger.warn("Usuario no autenticado intentando acceder a /empapp/colaboraciones/historial. Redirigiendo a login.");
+            return "redirect:/empapp/login"; // Redirigir si no hay usuario en sesión
+        }
+
+        // Ya no se cargan los datos aquí. Solo se sirve la plantilla.
+        // El título de la página se puede manejar directamente en el HTML o pasarlo si se desea.
+        // model.addAttribute("pageTitle", "Historial de Colaboraciones");
+//        logger.info("Sirviendo plantilla base para historial de colaboraciones del empleado ID: {}", empleadoIdActual);
+        return "colaboraciones/historial-colaboraciones"; // Ruta a tu archivo Thymeleaf
+    }
 }

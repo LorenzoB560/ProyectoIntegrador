@@ -1,6 +1,8 @@
 package org.grupob.empapp.service;
 
 import org.grupob.comun.entity.Empleado;
+import org.grupob.empapp.dto.ColaboracionEstablecidaDTO;
+import org.grupob.empapp.dto.HistorialColaboracionItemDTO;
 import org.grupob.empapp.dto.SolicitudColaboracionDTO;
 
 import java.util.List;
@@ -15,6 +17,9 @@ public interface ColaboracionService {
 
     void rechazarSolicitud(UUID idSolicitud, UUID idReceptorActual)throws Exception;
 
+    public List<HistorialColaboracionItemDTO> getHistorialCompletoColaboraciones(UUID idEmpleadoActual);
+
+    public List<ColaboracionEstablecidaDTO> getColaboracionesEstablecidas(UUID idEmpleadoActual);
 
     List<Empleado> getOtrosEmpleados(UUID idEmpleadoActual);
 }

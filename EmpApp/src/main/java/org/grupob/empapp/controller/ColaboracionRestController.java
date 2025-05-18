@@ -3,7 +3,9 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.dto.ColaboracionEstablecidaDTO;
 import org.grupob.empapp.dto.EmpleadoSimpleDTO;
+import org.grupob.empapp.dto.HistorialColaboracionItemDTO;
 import org.grupob.empapp.dto.SolicitudColaboracionDTO;
 import org.grupob.empapp.service.ColaboracionService; // Cambiado a interfaz
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -139,4 +142,25 @@ public class ColaboracionRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/historial")
+    public ResponseEntity<?> getHistorialColaboraciones(HttpServletRequest request) {
+        UUID empleadoIdActual = getEmpleadoIdActual(request);
+        if (empleadoIdActual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Usuario no autenticado."));
+        }
+
+        try {
+            List<HistorialColaboracionItemDTO> historial = colaboracionService.getHistorialCompletoColaboraciones(empleadoIdActual);
+            if (historial.isEmpty()) {
+                return ResponseEntity.ok(Collections.emptyList()); // Devolver lista vacía si no hay historial
+            }
+            return ResponseEntity.ok(historial);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al cargar el historial de colaboraciones: " + e.getMessage()));
+        }
+    }
+
+
 }

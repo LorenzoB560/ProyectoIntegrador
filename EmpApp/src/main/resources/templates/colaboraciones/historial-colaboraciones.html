@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Historial de Colaboraciones</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Tu CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!--CSS para los fragmentos    -->
+    <link rel="stylesheet" th:href="@{/css/emp/estilos-generales.css}">
+    <style>
+        .colaboracion-card {
+            border-left: 5px solid #0d6efd; /* Azul primario de Bootstrap */
+        }
+        .colaboracion-card.inactiva {
+            border-left-color: #6c757d; /* Gris secundario para inactivas */
+        }
+        .periodo-item {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+        .periodo-item:last-child {
+            border-bottom: none;
+        }
+        .badge.bg-success { /* Para periodos activos */
+            font-size: 0.85em;
+        }
+        /* Estilo para el spinner de carga */
+        #loadingSpinnerHistorial {
+            display: none; /* Oculto por defecto */
+            text-align: center;
+            padding: 2rem;
+        }
+        /* ... (estilos existentes para .colaboracion-card, .periodo-item, etc.) ... */
+
+        .solicitud-card { /* Estilo base para cards de solicitud */
+            border-left: 5px solid #0dcaf0; /* Color info de Bootstrap para solicitudes */
+        }
+        .solicitud-card.estado-pendiente { /* Si quieres un borde específico para pendientes */
+            border-left-color: #ffc107; /* Amarillo */
+        }
+        .solicitud-card.estado-rechazada {
+            border-left-color: #dc3545; /* Rojo */
+        }
+        .solicitud-card.estado-aceptada {
+            border-left-color: #198754; /* Verde */
+        }
+
+
+        /* Badges para estados de solicitud (asegúrate que los nombres coincidan con los valores de tu entidad Estado) */
+        .badge.estado-PENDIENTE { background-color: #ffc107; color: #000; }
+        .badge.estado-ACEPTADA { background-color: #198754; color: white; }
+        .badge.estado-RECHAZADA { background-color: #dc3545; color: white; }
+        .badge.estado-CANCELADA { background-color: #6c757d; color: white; } /* Si tienes este estado */
+        .badge.estado-ACTIVA { background-color: #0d6efd; color: white; } /* Para colaboraciones */
+        .badge.estado-FINALIZADA { background-color: #6c757d; color: white; } /* Para colaboraciones */
+        /* ... otros estilos ... */
+    </style>
+</head>
+<body>
+<main role="main" class="container mt-4 mb-5"> <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0 h2"><i class="fas fa-history me-2"></i>Historial de Colaboraciones</h1>
+    <div>
+        <a th:href="@{/empapp/colaboraciones/solicitar}" class="btn btn-outline-primary">
+            <i class="fas fa-plus-circle me-2"></i>Nueva Solicitud
+        </a>
+        <a th:href="@{/empapp/colaboraciones/listado}" class="btn btn-outline-secondary ms-2">
+            <i class="fas fa-tasks me-2"></i>Ver Solicitudes
+        </a>
+    </div>
+</div>
+
+    <div id="mensajeAlertaHistorial" class="mb-3"></div>
+
+    <div id="loadingSpinnerHistorial" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Cargando historial...</span> </div>
+        <p class="mt-2">Cargando historial...</p>
+    </div>
+
+    <div id="historialColaboracionesContainer">
+    </div>
+
+</main>
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+
+<script th:src="@{/js/historialColaboraciones.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>
