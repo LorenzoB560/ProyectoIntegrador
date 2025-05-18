@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnReactivarSeleccionados.disabled = true;
 
         // Llamada al endpoint que devuelve una LISTA, SIN parámetros de ordenación
-        const url = new URL('http://localhost:9090/empleados/todos-inactivos');
+        const url = new URL('http://localhost:8080/adminapp/empleados/todos-inactivos');
         // YA NO SE AÑADEN sortBy NI sortDir
         // url.searchParams.append('sortBy', 'apellido');
         // url.searchParams.append('sortDir', 'asc');
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const empleadoData = todosLosEmpleadosCargados.find(emp => emp.id === id);
             const nombreEmpleado = empleadoData ? `${empleadoData.nombre || ''} ${empleadoData.apellido || ''}`.trim() : `ID ${id}`;
 
-            const promesa = fetch(`/empleados/${id}/activar`, { // Endpoint individual
+            const promesa = fetch(`/adminapp/empleados/${id}/activar`, { // Endpoint individual
                 method: 'POST', // O PATCH, según tu endpoint
                 headers: {
                     'Content-Type': 'application/json',

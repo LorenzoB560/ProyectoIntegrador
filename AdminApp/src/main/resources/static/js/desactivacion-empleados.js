@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         noHayActivosDiv.style.display = 'none';
         btnDesactivarSeleccionados.disabled = true;
 
-        const url = new URL('http://localhost:9090/empleados/todos-activos'); // ENDPOINT PARA ACTIVOS
+        const url = new URL('http://localhost:8080/adminapp/empleados/todos-activos'); // ENDPOINT PARA ACTIVOS
         // Opcional: parámetros de orden si los implementaste en el backend
         // url.searchParams.append('sortBy', 'apellido');
         // url.searchParams.append('sortDir', 'asc');
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const empleadoData = todosLosEmpleadosCargados.find(emp => emp.id === id);
             const nombreEmpleado = empleadoData ? `${empleadoData.nombre || ''} ${empleadoData.apellido || ''}`.trim() : `ID ${id}`;
 
-            const promesa = fetch(`/empleados/${id}/desactivar`, { // ENDPOINT PARA DESACTIVAR
+            const promesa = fetch(`/adminapp/empleados/${id}/desactivar`, { // ENDPOINT PARA DESACTIVAR
                 method: 'POST', // O PATCH, según tu endpoint
                 headers: {
                     'Content-Type': 'application/json',

@@ -67,7 +67,7 @@ public class EmpleadoController {
     public String vistaReactivacionMasiva(Model model, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         model.addAttribute("loginAdminDTO", adminDTO);
         // No cargamos los empleados aquí, se hará vía AJAX para mejor rendimiento si son muchos
@@ -77,7 +77,7 @@ public class EmpleadoController {
     public String vistadesactivacionMasiva(Model model, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         model.addAttribute("loginAdminDTO", adminDTO);
         // No cargamos los empleados aquí, se hará vía AJAX para mejor rendimiento si son muchos

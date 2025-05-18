@@ -2,11 +2,11 @@
 
  --PROPIEDADES
 
-INSERT INTO propiedad (id, clave, valor)
+/*INSERT INTO propiedad (id, clave, valor)
 VALUES (1, 'nombre_empresa', 'Grupo B - Proyecto Integrador'),
        (2, 'cif_empresa', 'B19972005'),
        (3, 'direccion_empresa', 'C/ Falsa 123'),
-       (4, 'clave-cifrador', 'M1Cl@v3D3Prueb45');
+       (4, 'clave-cifrador', 'M1Cl@v3D3Prueb45');*/
 
 /* --IDIOMAS
 
@@ -34,14 +34,14 @@ INSERT INTO usuario_empleado (id, usuario, clave, intentos_sesion_fallidos, num_
 VALUES (UNHEX(REPLACE('ea27576c-7bb1-493c-8397-0a727ec7a204', '-', '')), 'emp2@gmail.com',
         '$2a$12$vSD6k7P81SrWI6Ivim0SaOkZjEPY3CEX12wwAxY49nGw3YMdQ/ba2', 0, 0);
 
--- CONCEPTO
+/*-- CONCEPTO
 INSERT INTO concepto (id, nombre, tipo)
 VALUES (UNHEX(REPLACE('00000000-00000000-00000000-00000000', '-', '')), 'Salario base', 'INGRESO'),
        (UNHEX(REPLACE('00000000-00000000-00000000-00000001', '-', '')), 'Horas extras', 'INGRESO'),
        (UNHEX(REPLACE('00000000-00000000-00000000-00000002', '-', '')), 'Bonus productividad', 'INGRESO'),
        (UNHEX(REPLACE('00000000-00000000-00000000-00000003', '-', '')), 'IRPF', 'DEDUCCION'),
        (UNHEX(REPLACE('00000000-00000000-00000000-00000004', '-', '')), 'Seguridad Social', 'DEDUCCION'),
-       (UNHEX(REPLACE('00000000-00000000-00000000-00000005', '-', '')), 'Descuento transporte', 'DEDUCCION');
+       (UNHEX(REPLACE('00000000-00000000-00000000-00000005', '-', '')), 'Descuento transporte', 'DEDUCCION');*/
 
 /*-- Géneros
 INSERT INTO genero (id, genero)
@@ -1014,7 +1014,7 @@ VALUES (@mueble1, (SELECT id FROM categoria WHERE nombre = 'MUEBLE')),
        (@electro1, (SELECT id FROM categoria WHERE nombre = 'ELECTRONICO')),
        (@ropa1, (SELECT id FROM categoria WHERE nombre = 'ROPA'));
 
--- Estados para Solicitudes de Colaboración
+/*-- Estados para Solicitudes de Colaboración
 INSERT INTO estado (nombre) VALUES ('PENDIENTE');
 INSERT INTO estado (nombre) VALUES ('ACEPTADA');
-INSERT INTO estado (nombre) VALUES ('RECHAZADA');
+INSERT INTO estado (nombre) VALUES ('RECHAZADA');*/
