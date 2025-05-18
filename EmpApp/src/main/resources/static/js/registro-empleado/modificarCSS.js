@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const hojaEstilo = document.getElementById("estilos");
 
     // Cargar estado guardado en sessionStorage
-    const estadoGuardado = sessionStorage.getItem("cssActivo");
+    const estadoGuardado = localStorage.getItem("cssActivo");
 
     // Determinar cuál hoja de estilo usar al estar guardado en el sessionStorage
     if (estadoGuardado === "true") {
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             // Guardar el estado en sessionStorage
-            sessionStorage.setItem("cssActivo", activo);
+            localStorage.setItem("cssActivo", activo);
         });
     });
 });
