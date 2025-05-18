@@ -33,7 +33,7 @@ $(document).ready(function () {
 
         $.ajax({
             // url: `${contextPath}/devuelve-clave`,
-            url: "/adminapp/devuelve-clave",
+            url: "/devuelve-clave",
             type: "GET",
             data: { correo: correo },
             success: function (clave) {
@@ -65,12 +65,12 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "/adminapp/login",
+            url: "/login",
             contentType: "application/json",
             data: JSON.stringify(loginData),
             success: function () {
                 // Login exitoso: redirigir al área personal
-                window.location.href = "/adminapp/area-personal";
+                window.location.href = "/area-personal";
             },
             error: function (xhr) {
                 let response = {};

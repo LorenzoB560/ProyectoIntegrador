@@ -4,7 +4,7 @@
     <li><a th:href="@{/etiquetado/limitado/{jefeId}(jefeId=*{id})}">Etiquetado</a></li>
     <li><a th:href="@{/etiquetado/masivo/{jefeId}(jefeId=*{id})}">Etiquetado Masivo</a></li>
     <li><a th:href="@{/etiquetado/eliminar/{jefeId}(jefeId=*{id})}">Eliminar Etiqueta</a></li>
-    <li><a class="disabled-link">Colaboración</a></li>
+    <li><a th:href="@{/empapp/colaboraciones/listado}">Colaboración</a></li>
     <li><a th:href="@{/producto/lista}">Productos</a></li>
 
     <li><a th:href="@{/nomina/listado/{id}(id=*{id})}">Nóminas</a></li>

@@ -45,7 +45,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
         lineaNominas: lineaNominas
     };
 
-    fetch("/adminapp/guardar-nomina", {
+    fetch("/guardar-nomina", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
