@@ -1,7 +1,7 @@
 package org.grupob.empapp.service;
 
 import org.grupob.empapp.converter.LoginUsuarioEmpleadoConverter;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.exception.ClaveIncorrectaException;
 import org.grupob.comun.exception.CuentaBloqueadaException;
 import org.grupob.comun.entity.UsuarioEmpleado;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class UsuarioEmpleadoServiceImp {
+public class UsuarioEmpleadoServiceImp implements UsuarioEmpleadoService {
 
     // Repositorio para acceso a datos de usuarios
     private final UsuarioEmpleadoRepository usuarioEmpRepo;
@@ -100,14 +100,16 @@ public class UsuarioEmpleadoServiceImp {
             throw new ClaveIncorrectaException("Contraseña incorrecta", restantes > 0 ? restantes : 0);
         }
 
-        actualizarEstadisticasAcceso(usuarioEmp);
+        actualizarEstadisticasAcceso(dto);
         return true;
     }
 
     /**
      * Actualiza las estadísticas de acceso del usuario
      */
-    private void actualizarEstadisticasAcceso(UsuarioEmpleado usuario) {
+    public void actualizarEstadisticasAcceso(LoginUsuarioEmpleadoDTO dto) {
+        UsuarioEmpleado usuario =  usuarioEmpRepo.findByUsuario(dto.getUsuario())
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         usuario.setUltimaConexion(LocalDateTime.now());
         usuario.setNumeroAccesos(usuario.getNumeroAccesos() + 1);
         usuario.setIntentosSesionFallidos(0); // Resetear contador de fallos
@@ -117,7 +119,7 @@ public class UsuarioEmpleadoServiceImp {
     /**
      * Gestiona los intentos fallidos de autenticación
      */
-    private int manejarIntentoFallido(UsuarioEmpleado usuario) {
+    public int manejarIntentoFallido(UsuarioEmpleado usuario) {
         int intentos = usuario.getIntentosSesionFallidos() +1;
         usuario.setIntentosSesionFallidos(intentos);
 

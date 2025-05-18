@@ -4,21 +4,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.grupob.comun.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.Especialidad;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.validation.fechas.LocalDateNotBlank;
 import org.grupob.comun.validation.fechas.MayorDe18;
-import org.grupob.empapp.service.AltaEmpleadoService;
-import org.grupob.empapp.service.AltaEmpleadoServiceImp;
 import org.grupob.empapp.validation.departamento.ExisteDepartamento;
 import org.grupob.empapp.validation.documento_valido.DocumentoValido;
 import org.grupob.empapp.validation.edad.EdadCoincideConFechaNacimiento;
 import org.grupob.empapp.validation.edad.EdadNotBlank;
 import org.grupob.empapp.validation.especialidades.EspecialidadesMinimas;
 import org.grupob.empapp.validation.especialidades.ExisteEspecialidad;
-import org.grupob.empapp.validation.foto.ImagenValida;
 import org.grupob.empapp.validation.genero.ExisteGenero;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
@@ -29,11 +25,9 @@ import org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta.ExisteTipoTarj
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.beans.Transient;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Data
 @AllArgsConstructor
@@ -48,6 +42,7 @@ public class AltaEmpleadoDTO {
         this.paisNacimiento = "España";
         this.tipoDocumento = "DNI";
         this.prefijoTelefono = "+34";
+        this.idTipoTarjeta = 1L;
     }
 
     private UUID id;

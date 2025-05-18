@@ -3,7 +3,7 @@ package org.grupob.adminapp.service;
 
 import org.grupob.comun.entity.Empleado;
 import org.grupob.adminapp.dto.EmpleadoDTO;
-import org.grupob.adminapp.dto.EmpleadoSearchDTO;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
@@ -33,34 +33,32 @@ public interface EmpleadoService {
      /**
       * Métodos de búsqueda parametrizada
       */
-     List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams);
+//     List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams);
 
      List<EmpleadoDTO> buscarEmpleadosAvanzado(
-             String nombre,
-             String departamento,
-             String trabajo,
-             LocalDate contratadosAntesDe,
-             BigDecimal salarioMinimo);
+             EmpleadoSearchDTO searchParams);
 
      List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento);
 
      List<EmpleadoDTO> buscarEmpleadosPorComentario(String Comentario);
 
+     EmpleadoDTO desactivarEmpleado(String id);
+     EmpleadoDTO activarEmpleado(String id);
+
      /**
       * Método para búsqueda paginada y ordenada
       */
      Page<EmpleadoDTO> buscarEmpleadosPaginados(
-             String nombre,
-             String departamento,
-             String comentario,
-             LocalDate contratadosAntesDe,
-             BigDecimal salarioMinimo,
+             EmpleadoSearchDTO searchParams,
              int page,
              int size,
              String sortBy,
              String sortDir);
 
 
+     List<EmpleadoDTO> devuelveTodosEmpleadosInactivos();
+
+     List<EmpleadoDTO> devuelveTodosEmpleadosActivos();
      // Métodos de gestión de jefes
      EmpleadoDTO asignarJefe(String empleadoId, String jefeId);
      EmpleadoDTO quitarJefe(String empleadoId);

@@ -1,6 +1,6 @@
 package org.grupob.adminapp.service;
 
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.entity.Administrador;
 
 public interface AdministradorService {

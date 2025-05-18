@@ -1,7 +1,7 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

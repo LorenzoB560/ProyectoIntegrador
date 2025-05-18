@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Alta de Nómina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--CSS para los fragmentos    -->
+    <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
+</head>
+<body class="bg-light" th:object="${loginAdminDTO}">
+<div th:replace="fragmentos/admin/header :: header"></div>
+<div th:replace="fragmentos/admin/nav :: nav"></div>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Alta de Nómina</h1>
+
+    <form id="formulario" class="card shadow p-4 bg-white rounded">
+        <!-- Empleado -->
+        <div class="mb-3">
+            <label for="idEmpleado" class="form-label">Empleado:</label>
+            <select id="idEmpleado" name="idEmpleado" class="form-select">
+                <option th:each="emp : ${listaEmpleados}"
+                        th:value="${emp.id}"
+                        th:text="${emp.nombre} + ' ' + ${emp.apellido}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Mes y Año -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                <input type="text" class="form-control" id="fechaInicio" placeholder="Fecha de inicio">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="fechaFin" class="form-label">Fecha de finalización</label>
+                <input type="text" class="form-control" id="fechaFin" name="fechaFin" placeholder="Fecha de finalizacion">
+            </div>
+        </div>
+        <h4 class="mt-4">Conceptos de la nómina</h4>
+
+        <!-- Salario base (no removible) -->
+        <div id="salario-base-container"
+             th:data-salario-base-id="${salarioBase.id}"
+             th:data-salario-base-valor="1184.00">
+            <!-- Se llenará mediante JavaScript -->
+        </div>
+
+        <!-- Lista de conceptos adicionales -->
+        <div id="conceptos-container">
+            <!-- Los conceptos se añadirán dinámicamente -->
+        </div>
+
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary" onclick="agregarConcepto()">Añadir Concepto</button>
+        </div>
+
+        <!-- Total líquido -->
+        <div class="total-section mt-4 text-end">
+            <h4>Total Líquido: <span id="totalLiquido">0.00</span> €</h4>
+            <input type="hidden" id="totalLiquidoHidden" name="totalLiquido" value="0.00">
+        </div>
+
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-success">Guardar Nómina</button>
+            <a href="/nomina/listado" class="btn btn-secondary ms-2">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Template oculto para los conceptos disponibles (excluyendo Salario base) -->
+<select id="concepto-template" style="display: none;">
+    <option th:each="concepto : ${listaConceptos}"
+            th:value="${concepto.id}"
+            th:text="${concepto.nombre}"
+            th:data-tipo="${concepto.tipo}"></option>
+</select>
+
+<!-- Template oculto para conceptos restantes (sin Salario base) -->
+<select id="conceptos-restantes" style="display: none;">
+    <option th:each="concepto : ${conceptosRestantes}"
+            th:value="${concepto.id}"
+            th:text="${concepto.nombre}"
+            th:data-tipo="${concepto.tipo}"></option>
+</select>
+
+<!-- Scripts -->
+<script src="/js/nomina/calcularTotal.js"></script>
+<script src="/js/nomina/agregarConcepto.js"></script>
+<script src="/js/nomina/enviarNomina.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<div th:replace="fragmentos/footer :: footer"></div>
+</body>
+</html>

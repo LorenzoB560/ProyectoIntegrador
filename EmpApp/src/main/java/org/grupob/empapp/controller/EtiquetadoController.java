@@ -1,12 +1,13 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.EmpleadoServiceImp; // Necesario para validar que el jefe existe
 import org.grupob.comun.exception.DepartamentoNoEncontradoException; // O la excepción que uses para 'no encontrado'
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,10 @@ import java.util.UUID;
 public class EtiquetadoController {
 
     private final EmpleadoServiceImp empleadoService; // Inyectamos EmpleadoService para validar al jefe
-
-    public EtiquetadoController(EmpleadoServiceImp empleadoService) {
+    private final CookieService cookieService;
+    public EtiquetadoController(EmpleadoServiceImp empleadoService, CookieService cookieService) {
         this.empleadoService = empleadoService;
+        this.cookieService = cookieService;
     }
 
     /**
@@ -31,7 +33,10 @@ public class EtiquetadoController {
      * @return El nombre de la plantilla Thymeleaf.
      */
     @GetMapping("/masivo/{jefeId}")
-    public String mostrarEtiquetadoMasivo(@PathVariable String jefeId, Model model, HttpServletRequest request, HttpSession sesion) {
+    public String mostrarEtiquetadoMasivo(@PathVariable String jefeId,
+                                          Model model,
+                                          @CookieValue(name = "usuario", required = false) String usuariosCookie,
+                                          HttpServletRequest request) {
         // --- Validación Opcional ---
         // Es buena práctica validar que el jefe existe antes de mostrar la página.
         // También, en una aplicación real, verificarías si el usuario logueado
@@ -44,7 +49,19 @@ public class EtiquetadoController {
             model.addAttribute("jefeId", jefeId); // Pasa el ID del jefe a la vista
             // Asegúrate de que la plantilla exista en la ruta correcta
             LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+            if(dto==null){
+                return "redirect:/empapp/login";
+            }
+
             model.addAttribute("dto", dto);
+            String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+            model.addAttribute("ultimaPagina", ultimaPagina);
+
+            String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+            int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+            model.addAttribute("contador", contador);
+
             return "etiquetado/etiquetado-masivo";
 
         } catch (IllegalArgumentException e) {
@@ -75,7 +92,10 @@ public class EtiquetadoController {
     // public String mostrarEtiquetadoSimple(...) { ... }
     // --- NUEVO MÉTODO ---
     @GetMapping("/limitado/{jefeId}")
-    public String mostrarNuevoEtiquetado(@PathVariable String jefeId, Model model, HttpServletRequest request, HttpSession sesion) {
+    public String mostrarNuevoEtiquetado(@PathVariable String jefeId,
+                                         Model model,
+                                         @CookieValue(name = "usuario", required = false) String usuariosCookie,
+                                         HttpServletRequest request) {
         try {
             // Validación opcional del jefe (recomendado)
             UUID.fromString(jefeId);
@@ -84,7 +104,19 @@ public class EtiquetadoController {
             model.addAttribute("jefeId", jefeId); // Pasar ID a la vista
 
             LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+            if(dto==null){
+                return "redirect:/empapp/login";
+            }
+
             model.addAttribute("dto", dto);
+            String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+            model.addAttribute("ultimaPagina", ultimaPagina);
+
+            String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+            int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+            model.addAttribute("contador", contador);
+
             return "etiquetado/limitado-etiquetado"; // Nombre de la nueva plantilla HTML
 
         } catch (IllegalArgumentException e) {
@@ -101,15 +133,31 @@ public class EtiquetadoController {
     }
     // --- NUEVO MÉTODO PARA LA VISTA DE ELIMINAR ---
     @GetMapping("/eliminar/{jefeId}")
-    public String mostrarEliminarEtiquetas(@PathVariable String jefeId, Model model, HttpServletRequest request, HttpSession sesion) {
+    public String mostrarEliminarEtiquetas(@PathVariable String jefeId,
+                                           Model model,
+                                           @CookieValue(name = "usuario", required = false) String usuariosCookie,
+                                           HttpServletRequest request) {
         try {
             // Validación opcional del jefe (recomendado)
             UUID.fromString(jefeId);
             empleadoService.devuelveEmpleado(jefeId); // Lanza excepción si no existe
 
             model.addAttribute("jefeId", jefeId); // Pasar ID a la vista
+
             LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
+
+            if(dto==null){
+                return "redirect:/empapp/login";
+            }
+
             model.addAttribute("dto", dto);
+
+            String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
+            model.addAttribute("ultimaPagina", ultimaPagina);
+            String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
+            int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
+            model.addAttribute("contador", contador);
+
             return "etiquetado/eliminar-etiquetas"; // Nombre de la nueva plantilla HTML
 
         } catch (IllegalArgumentException e) {

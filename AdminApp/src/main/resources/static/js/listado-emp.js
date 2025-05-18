@@ -45,6 +45,7 @@ function obtenerEmpleados(pagina) {
     const comentario = document.getElementById('filtroComentario').value.trim();
     const fechaLimite = document.getElementById('filtroFechaAntes').value;
     const salarioMinimo = document.getElementById('filtroSalarioMinimo').value;
+    const salarioMaximo = document.getElementById('filtroSalarioMaximo').value;
 
     // Actualizar página actual
     paginaActual = pagina;
@@ -58,6 +59,7 @@ function obtenerEmpleados(pagina) {
     if (comentario) url.searchParams.append('comentario', comentario);
     if (fechaLimite) url.searchParams.append('contratadosAntesDe', fechaLimite);
     if (salarioMinimo) url.searchParams.append('salarioMinimo', salarioMinimo);
+    if (salarioMaximo) url.searchParams.append('salarioMaximo', salarioMaximo);
 
     // Parámetros de paginación y ordenación
     url.searchParams.append('page', pagina);
@@ -106,6 +108,7 @@ function limpiarFiltros() {
     document.getElementById('filtroComentario').value = "";
     document.getElementById('filtroFechaAntes').value = "";
     document.getElementById('filtroSalarioMinimo').value = "";
+    document.getElementById('filtroSalarioMaximo').value = "";
     obtenerEmpleados(0); // Resetear a primera página
 }
 
@@ -177,8 +180,26 @@ function llenarTabla(datos) {
             // Mostrar especialidades
             const especialidades = formatearEspecialidades(emp.especialidades);
 
+            //
+            const usuarioBloqueado= emp.usuario.motivoBloqueo!=null;
+
+            let botonesAccionLoginHTML = '';
+            if (usuarioBloqueado) {
+                // Usuario BLOQUEADO: Mostrar botón para DESBLOQUEAR
+                botonesAccionLoginHTML = `
+                    <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
+                        <i class="bi bi-unlock-fill me-1"></i>
+                    </a>
+                `;
+            } else {
+                // Usuario NO BLOQUEADO: Mostrar botón para BLOQUEAR (redirige a página de motivos)
+                botonesAccionLoginHTML = `
+                    <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-warning " title="bloquear Empleado">
+                        <i class="bi bi-lock-fill me-1"></i> 
+                    </a>
+                `;
+            }
             fila.innerHTML = `
-                        <td>${emp.id || ''}</td>
                         <td>${nombreConEnlace}</td>
                         <td>${emp.comentarios || 'N/A'}</td>
                         <td>${formatearFecha(emp.periodo?.fechaInicio)}</td>
@@ -187,20 +208,16 @@ function llenarTabla(datos) {
                         <td>${formatearDepartamento(emp.departamento)}</td>
                         <td>${infoJefe}</td>
                         <td>${especialidades}</td>
-                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary">Ver</a></td>
+                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
                         <td>
                             <div> 
-                                <a id="btnEditar" href="#" class="btn btn-primary me-2">
-                                    <i class="bi bi-pencil me-1"></i> Editar
+                                <a id="btnEditar" href="#" class="btn btn-primary me-2" title="Editar Empleado">
+                                    <i class="bi bi-pencil me-1"></i>
                                 </a>
-                                <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
+                                <a href="#" class="btn btn-danger me-2 btn-eliminar-empleado-js" data-employee-id="${emp.id}" data-employee-name="${emp.nombre}" title="Desactivar Empleado">
+                                    <i class="bi bi-person-x"></i>
                                 </a>
-                                <a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos"" class="btn btn-primary me-2">
-                                <i class="bi bi-lock-fill me-1"></i> Bloquear
-                                </a>
-                                <a href="#" class="btn btn-success btn-desbloquear-js" data-employee-id="${emp.id}" title="Desbloquear Empleado">
-                                    <i class="bi bi-unlock-fill me-1"></i> Desbloquear
-                                </a>
+                                ${botonesAccionLoginHTML}
                             </div>
                             
                         </td>
@@ -241,8 +258,7 @@ function formatearDepartamento(departamento) {
     if (!departamento) return 'N/A';
     return `
                 <div>
-                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a><br>
-                    Código: ${departamento.codigo || '-'}, ${departamento.localidad || '-'}
+                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
                 </div>
             `;
 }
@@ -311,10 +327,13 @@ function asignarEventListenersAcciones() {
                         console.log('Empleado desbloqueado con éxito');
                         alert('Empleado desbloqueado.');
                         // Cambiar botón visualmente (opcional)
-                        clone.innerHTML = '<i class="bi bi-unlock-fill me-1"></i> Desbloqueado';
-                        clone.classList.remove('btn-success');
-                        clone.classList.add('btn-secondary', 'disabled'); // Ya está 'disabled' por la clase
-                        // NO RECARGAR: // obtenerEmpleados(paginaActual);
+                        // clone.outerHTML = '<a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">\n' +
+                        //     '                                <i class="bi bi-lock-fill me-1"></i> \n' +
+                        //     '                                </a>';
+                        // clone.classList.remove('btn-success');
+                        // clone.classList.add('btn-secondary', 'disabled'); // Ya está 'disabled' por la clase
+                        // // NO RECARGAR: //
+                        obtenerEmpleados(paginaActual);
                     })
                     .catch(error => {
                         // --- ERROR ---
@@ -323,6 +342,83 @@ function asignarEventListenersAcciones() {
                         // Rehabilitar botón en caso de error
                         clone.classList.remove('disabled');
                         clone.innerHTML = originalText;
+                    });
+            }
+        });
+    });
+
+    document.querySelectorAll('.btn-eliminar-empleado-js').forEach(button => {
+        // Clonar y reemplazar para evitar listeners duplicados
+        const clone = button.cloneNode(true);
+        button.parentNode.replaceChild(clone, button);
+
+        clone.addEventListener('click', (event) => {
+            event.preventDefault(); // Evitar comportamiento por defecto del enlace '#'
+            const employeeId = clone.getAttribute('data-employee-id');
+            const employeeName = clone.getAttribute('data-employee-name') || 'este empleado'; // Nombre para el mensaje
+
+            if (!employeeId) {
+                console.error("No se encontró el ID del empleado en el botón de desactivar.");
+                alert("Error: No se pudo obtener el ID del empleado.");
+                return;
+            }
+
+            if (confirm(`¿Está seguro de que desea desactivar al empleado ${employeeName}? Esta acción cambiará su estado a inactivo.`)) {
+                // URL del endpoint para desactivar
+                const url = `/empleados/${employeeId}/desactivar`; // Ajusta si usaste PostMapping o el servicio
+
+                // --- Cabeceras (si usas CSRF, necesitarías el token) ---
+
+
+                // Deshabilitar botón temporalmente y mostrar spinner
+                clone.classList.add('disabled');
+                const originalIconHTML = clone.innerHTML; // Guardar el ícono original
+                clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Desactivando...';
+
+
+                fetch(url, {
+                    method: 'POST', // o 'POST' si así lo definiste en el backend
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text().then(text => text || "Empleado desactivado con éxito"); // O response.json() si devuelve un DTO
+                        } else {
+                            // Intentar leer el cuerpo del error para un mensaje más específico
+                            return response.text().then(text => {
+                                const errorMsg = text || `Error del servidor: ${response.status}`;
+                                throw new Error(errorMsg);
+                            });
+                        }
+                    })
+                    .then(successMessage => {
+                        // --- ÉXITO ---
+                        console.log(successMessage);
+                        alert(successMessage); // O un mensaje más amigable: `Empleado ${employeeName} desactivado correctamente.`
+
+                        // Actualizar la UI:
+                        // 1. Recargar los datos de la página actual para reflejar el cambio.
+                        //    Esto es lo más simple si tu vista por defecto ya filtra por activos.
+                        obtenerEmpleados(paginaActual);
+
+                        // Alternativa: Si no quieres recargar toda la tabla, puedes intentar
+                        // modificar la fila directamente o eliminarla si el filtro actual es "solo activos".
+                        // Por ejemplo, si estás mostrando "Solo Activos", la fila desaparecerá.
+                        // const filaEmpleado = clone.closest('tr');
+                        // if (filaEmpleado && document.getElementById('filtroActivo').value === "true") {
+                        //     filaEmpleado.remove();
+                        //     // Actualizar contador de resultados si es necesario
+                        // } else if (filaEmpleado) {
+                        //     // Cambiar visualmente el estado en la fila (más complejo)
+                        //     // Por ejemplo, podrías añadir un badge "Inactivo"
+                        // }
+                    })
+                    .catch(error => {
+                        // --- ERROR ---
+                        console.error('Error al desactivar empleado:', error);
+                        alert(`Error al desactivar empleado: ${error.message}`);
+                        // Rehabilitar botón en caso de error
+                        clone.classList.remove('disabled');
+                        clone.innerHTML = originalIconHTML; // Restaurar el ícono original
                     });
             }
         });

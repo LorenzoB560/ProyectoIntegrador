@@ -11,12 +11,12 @@
     <!-- Tu CSS personalizado -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <!--CSS para los fragmentos    -->
-    <link rel="stylesheet" th:href="@{/css/estilos-generales.css}">
+    <link rel="stylesheet" th:href="@{/css/emp/estilos-generales.css}">
 
 </head>
 <body th:object="${dto}">
-<div th:replace="fragmentos/header :: header"></div>
-<div th:replace="fragmentos/nav :: nav"></div>
+<div th:replace="fragmentos/emp/header :: header"></div>
+<div th:replace="fragmentos/emp/nav :: nav"></div>
 <div class="contenedor">
     <h1>Detalle del Departamento</h1>
     <a href="http://localhost:8080/empleado/lista" class="boton">Volver al Listado</a>
@@ -24,10 +24,7 @@
     <div id="error" class="error"></div>
     <div id="detalleDepartamento" class="detalle-seccion" style="display: none;">
         <h2>Información del Departamento</h2>
-        <div class="elemento-detalle">
-            <span class="etiqueta">ID:</span>
-            <span class="valor" id="id"></span>
-        </div>
+
         <div class="elemento-detalle">
             <span class="etiqueta">Código:</span>
             <span class="valor" id="codigo"></span>

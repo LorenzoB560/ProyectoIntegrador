@@ -1,0 +1,112 @@
+{
+  "proveedor": "Distribuciones Globales",
+  "productos": [
+    {
+      "descripcion": "Mesa de comedor extensible",
+      "precio": 120.00,
+      "marca": "Acme",
+      "categorias": ["MUEBLE", "Comedor", "Madera", "Hogar", "Premium"],
+      "unidades": 8,
+      "fechaFabricacion": "2018-12-13",
+      "dimension": { "ancho": 100, "profundo": 60, "alto": 60 },
+      "material": "Madera de roble",
+      "colores": ["Blanco", "Nogal", "Negro"],
+      "segundaMano": false
+    },
+    {
+      "descripcion": "Armario empotrado moderno",
+      "precio": 350.00,
+      "marca": "Acme",
+      "categorias": ["MUEBLE", "Dormitorio", "Hogar", "Blanco", "Premium"],
+      "unidades": 5,
+      "fechaFabricacion": "2021-05-10",
+      "dimension": { "ancho": 180, "profundo": 60, "alto": 220 },
+      "material": "Madera lacada",
+      "colores": ["Blanco", "Gris", "Nogal"],
+      "segundaMano": true
+    },
+
+    {
+      "descripcion": "Novela histórica",
+      "precio": 15.99,
+      "marca": "Papelera",
+      "categorias": ["LIBRO", "Histórica", "Narrativa", "Bestseller", "Premium"],
+      "unidades": 25,
+      "fechaFabricacion": "2019-09-01",
+      "titulo": "El legado del tiempo",
+      "autor": "Ana Martínez",
+      "editorial": "Alianza",
+      "numPaginas": 400,
+      "segundaMano": true
+    },
+    {
+      "descripcion": "Ensayo filosófico",
+      "precio": 17.50,
+      "marca": "Papelera",
+      "categorias": ["LIBRO", "Filosofía", "Ensayo", "Premium", "Narrativa"],
+      "unidades": 12,
+      "fechaFabricacion": "2017-04-21",
+      "titulo": "Pensar el mundo",
+      "autor": "Luis Gómez",
+      "editorial": "Alianza",
+      "numPaginas": 250,
+      "segundaMano": false
+    },
+
+    {
+      "descripcion": "Camiseta básica algodón",
+      "precio": 15.50,
+      "marca": "TextilPro",
+      "categorias": ["ROPA", "Verano", "Básico", "Juvenil", "Premium"],
+      "unidades": 40,
+      "fechaFabricacion": "2023-03-10",
+      "material": "Algodón",
+      "tallas": ["S", "M", "L", "XL", "XXL"],
+      "segundaMano": false
+    },
+    {
+      "descripcion": "Sudadera con capucha",
+      "precio": 25.00,
+      "marca": "TextilPro",
+      "categorias": ["ROPA", "Deporte", "Juvenil", "Premium", "Básico"],
+      "unidades": 30,
+      "fechaFabricacion": "2022-11-15",
+      "material": "Poliéster",
+      "tallas": ["M", "L", "XL", "XXL"],
+      "segundaMano": true
+    },
+
+    {
+      "descripcion": "Smartphone gama alta",
+      "precio": 799.99,
+      "marca": "TechBrand",
+      "categorias": ["ELECTRONICO", "Movil", "Premium", "Tecnología", "PantallaGrande"],
+      "unidades": 15,
+      "fechaFabricacion": "2024-01-20",
+      "modelo": "XPhone Pro",
+      "garantia": "2 años",
+      "pulgadas": 6.5,
+      "dimension": { "ancho": 7.2, "profundo": 0.8, "alto": 15.0 },
+      "capacidadBateria": 4500,
+      "almacenamientoInterno": 256,
+      "ram": 12,
+      "segundaMano": false
+    },
+    {
+      "descripcion": "Tablet profesional",
+      "precio": 650.00,
+      "marca": "TechBrand",
+      "categorias": ["ELECTRONICO", "Tablet", "Premium", "Tecnología", "PantallaGrande"],
+      "unidades": 10,
+      "fechaFabricacion": "2023-09-15",
+      "modelo": "TabMaster 10",
+      "garantia": "1 año",
+      "pulgadas": 10.1,
+      "dimension": { "ancho": 17.0, "profundo": 0.7, "alto": 24.0 },
+      "capacidadBateria": 8000,
+      "almacenamientoInterno": 128,
+      "ram": 8,
+      "segundaMano": true
+    }
+  ]
+}

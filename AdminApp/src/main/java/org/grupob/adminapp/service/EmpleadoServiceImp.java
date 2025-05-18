@@ -1,20 +1,18 @@
 package org.grupob.adminapp.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
-import org.grupob.adminapp.converter.EmpleadoConverter;
+import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
-import org.grupob.adminapp.dto.EmpleadoSearchDTO;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,13 +25,13 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     private final EmpleadoRepository empleadoRepository;
 //    private final EtiquetaRepository etiquetaRepository;
 //    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
-    private final EmpleadoConverter empleadoConverter;
+    private final EmpleadoConverterAdmin empleadoConverter;
 
     public EmpleadoServiceImp(
             EmpleadoRepository empleadoRepository,
 //            EtiquetaRepository etiquetaRepository,
 //            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverter empleadoConverter) {
+            EmpleadoConverterAdmin empleadoConverter) {
 
         this.empleadoRepository = empleadoRepository;
 //        this.etiquetaRepository = etiquetaRepository;
@@ -44,6 +42,14 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // -----------------------------------
     // Métodos CRUD básicos existentes
     // -----------------------------------
+
+    @Override
+    public List<EmpleadoDTO> devuelveTodosEmpleadosActivos() {
+        List<Empleado> empleadosActivos = empleadoRepository.findByActivoTrue(); // Usando el nuevo método
+        return empleadosActivos.stream()
+                .map(empleadoConverter::convertToDto)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<EmpleadoDTO> devuelveTodosEmpleados() {
@@ -104,30 +110,23 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // -----------------------------------
 
 
-    public List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams) {
-        return buscarEmpleadosAvanzado(
-                searchParams.getNombre(),
-                searchParams.getDepartamento(),
-                searchParams.getComentario(),
-                searchParams.getContratadosAntesDe(),
-                searchParams.getSalarioMinimo()
-        );
-    }
-
-
-    public List<EmpleadoDTO> buscarEmpleadosAvanzado(
-            String nombre,
-            String departamento,
-            String comentario,
-            LocalDate contratadosAntesDe,
-            BigDecimal salarioMinimo) {
-
+    @Override
+    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
         Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
-                0, Integer.MAX_VALUE, "ename", "asc");
-
+                searchParams,
+                0, Integer.MAX_VALUE, "nombre", "asc");
         return page.getContent();
     }
+
+
+//    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
+//
+//        Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
+//                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
+//                0, Integer.MAX_VALUE, "ename", "asc");
+//
+//        return page.getContent();
+//    }
 
     @Override
     public List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento) {
@@ -151,11 +150,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 
     @Override
     public Page<EmpleadoDTO> buscarEmpleadosPaginados(
-            String nombre,
-            String departamento,
-            String comentario,
-            LocalDate contratadosAntesDe,
-            BigDecimal salarioMinimo,
+            EmpleadoSearchDTO searchParams,
             int page,
             int size,
             String sortBy,
@@ -174,12 +169,19 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         // Crear objeto Pageable
         Pageable pageable = PageRequest.of(page, size, sort);
 
+        EmpleadoSearchDTO comunSearchParams = new EmpleadoSearchDTO();
+        comunSearchParams.setNombre(searchParams.getNombre());
+        comunSearchParams.setDepartamento(searchParams.getDepartamento());
+        comunSearchParams.setComentario(searchParams.getComentario());
+        comunSearchParams.setContratadosAntesDe(searchParams.getContratadosAntesDe());
+        comunSearchParams.setSalarioMinimo(searchParams.getSalarioMinimo());
+        comunSearchParams.setSalarioMaximo(searchParams.getSalarioMaximo());
         // Ejecutar consulta paginada
-        Page<Empleado> pageEmpleados = empleadoRepository.buscarEmpleadosAvanzadoPaginado(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo, pageable);
+        Page<Empleado> pageEmpleados = empleadoRepository.buscarEmpleadosAvanzadoPaginado(comunSearchParams
+                , pageable);
 
         // Convertir a DTO preservando la información de paginación
-        return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));
+        return pageEmpleados.map(empleadoConverter::convertToDto);
     }
 
     // -----------------------------------
@@ -241,6 +243,48 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 
         return subordinados.stream()
                 .map(empleado -> empleadoConverter.convertToDto(empleado))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public EmpleadoDTO desactivarEmpleado(String id) {
+        UUID empleadoUuid = UUID.fromString(id);
+        Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
+
+        if (!empleado.isActivo()) {
+            // Podrías lanzar una excepción personalizada o manejarlo como prefieras
+            throw new IllegalStateException("El empleado ya se encuentra desactivado.");
+        }
+
+        empleado.setActivo(false);
+        // Opcional: empleado.getPeriodo().setFechaFin(LocalDate.now());
+        Empleado empleadoActualizado = empleadoRepository.save(empleado);
+        return empleadoConverter.convertToDto(empleadoActualizado);
+    }
+
+    @Override
+    @Transactional
+    public EmpleadoDTO activarEmpleado(String id) {
+        UUID empleadoUuid = UUID.fromString(id);
+        Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
+
+        if (empleado.isActivo()) {
+            throw new IllegalStateException("El empleado ya se encuentra activo.");
+        }
+        empleado.setActivo(true);
+        // Opcional: empleado.getPeriodo().setFechaFin(null);
+        Empleado empleadoActualizado = empleadoRepository.save(empleado);
+        return empleadoConverter.convertToDto(empleadoActualizado);
+    }
+
+    public List<EmpleadoDTO> devuelveTodosEmpleadosInactivos() {
+        // Llama al método del repositorio sin el Sort
+        List<Empleado> empleadosInactivos = empleadoRepository.findByActivoFalse();
+        return empleadosInactivos.stream()
+                .map(empleadoConverter::convertToDto)
                 .collect(Collectors.toList());
     }
 

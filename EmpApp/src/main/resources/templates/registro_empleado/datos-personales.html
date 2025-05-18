@@ -30,7 +30,7 @@
 </nav>
 
 <!-- Mensaje de error a nivel general -->
-<h2 th:text="*{mensajeNOK}" class="error"></h2>
+<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
 
 <label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
 <select id="seleccionarIdioma">
@@ -74,7 +74,7 @@
                 <span class="asterisco">*</span>
                 <label th:text="#{registro.foto}"></label><br>
                 <input type="file" th:field="*{archivoFoto}" />
-                <div th:if="${#fields.hasErrors('archivoFoto')}" th:errors="*{foto}" class="error"></div>
+                <div th:if="${#fields.hasErrors('archivoFoto')}" th:errors="*{archivoFoto}" class="error"></div>
             </article>
             <br>
         </section>

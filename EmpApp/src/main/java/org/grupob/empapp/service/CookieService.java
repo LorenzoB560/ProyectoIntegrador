@@ -4,10 +4,14 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.maestras.Propiedad;
+import org.grupob.comun.repository.PropiedadRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -15,6 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 /*@AllArgsConstructor
@@ -22,21 +27,44 @@ import java.util.Map;
 @Service
 public class CookieService {
 
-    @Value("${app.cookie.secret}")
-    private  String claveSecreta;
+    private final PropiedadRepository propiedadRepository;
+
+//    @Value("${app.cookie.secret}")
+    private String claveSecreta;
 
     private  SecretKeySpec secretKeySpec;
 
-    @PostConstruct
-    private void init() {
-        // Inicializa la clave después de inyectar la propiedad
-        secretKeySpec = new SecretKeySpec(claveSecreta.getBytes(), "AES");
+
+    public SecretKeySpec getSecretKey() {
+        if (secretKeySpec == null) {
+            //Si está null, obtengo la contraseña desde la base de datos, y la asigno.
+            String claveSecreta = propiedadRepository.findById(4L)
+                    .map(Propiedad::getValor)
+                    .orElseThrow(() -> new RuntimeException("Clave no encontrada"));
+            // le asigno a secretKeySpec los bytes de la clave secreta y su algoritmo.
+            secretKeySpec = new SecretKeySpec(claveSecreta.getBytes(), "AES");
+        }
+        return secretKeySpec;
     }
+//    @PostConstruct
+//    @Transactional
+//    void init() {
+//        // Inicializa la clave después de inyectar la propiedad
+//        claveSecreta = devuelveClaveCifrada();
+//        secretKeySpec = new SecretKeySpec(claveSecreta.getBytes(), "AES");
+//    }
+//    private String devuelveClaveCifrada(){
+//        System.out.println(propiedadRepository.findAll());
+//        Optional<Propiedad> propiedad = propiedadRepository.findById(4L);
+//        if (propiedad.isPresent()) {
+//            return propiedad.get().getValor();
+//        } else throw new RuntimeException("Clave no encontrada");
+//    }
 
     private  String cifrar(String valorClaro) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey());
             byte[] cifrado = cipher.doFinal(valorClaro.getBytes());
             return Base64.getEncoder().encodeToString(cifrado);
         } catch (Exception e) {
@@ -47,7 +75,7 @@ public class CookieService {
     private  String descifrar(String valorCifrado) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            cipher.init(Cipher.DECRYPT_MODE, getSecretKey());
             byte[] descifrado = cipher.doFinal(Base64.getDecoder().decode(valorCifrado));
             return new String(descifrado);
         } catch (Exception e) {
@@ -86,7 +114,6 @@ public class CookieService {
 
 /**
  * Convierte el valor de la cookie en un mapa de usuarios con sus contadores
- *
  * @param cookieValue Valor de la cookie a deserializar
  * @return Mapa de <Usuario, Contador> o mapa vacío si es inválido
  */
@@ -103,7 +130,6 @@ public  Map<String, Integer> deserializar(String cookieValue) {
 
 /**
  * Serializa un mapa de usuarios a formato de cadena para cookies
- *
  * @param usuarios Mapa con usuarios y contadores
  * @return Cadena en formato "usuario!contador[/usuario!contador]*"
  */
@@ -121,7 +147,6 @@ public  String serializar(Map<String, Integer> usuarios) {
 
 /**
  * Actualiza el contador de accesos para un usuario específico
- *
  * @param usuarios      Mapa actual de usuarios
  * @param valor         Valor actual de la cookie
  * @param usuarioActual Usuario a actualizar
@@ -214,6 +239,13 @@ public void actualizarCookieHistorial(HttpServletResponse response, String email
     Map<String, Integer> usuarios = deserializar(valorActual);
     String nuevoValor = actualizar(usuarios, valorActual, email);
     crearCookie(response, "historialLogins", nuevoValor, 604800); // 7 días
+}
+
+public int obtenerInicios(String cookie, String usuario){
+    if (cookie == null || usuario == null) return 0;
+
+    Map<String, Integer> usuarios = deserializar(cookie);
+    return usuarios.getOrDefault(usuario, 1);
 }
 
 /**

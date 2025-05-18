@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
+import org.grupob.comun.dto.grupo_validaciones.GrupoDatosEconomicos;
 import org.grupob.empapp.validation.IBAN.*;
 import org.grupob.empapp.validation.entidad_bancaria.ExisteEntidadBancaria;
 

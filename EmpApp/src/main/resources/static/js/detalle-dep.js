@@ -33,32 +33,14 @@ function cargarDetalleDepartamento() {
 
 // Función para mostrar los datos del departamento
 function mostrarDetalleDepartamento(departamento) {
-    document.getElementById('id').textContent = departamento.id;
     document.getElementById('codigo').textContent = departamento.codigo;
     document.getElementById('nombre').textContent = departamento.nombre;
-    document.getElementById('localizacion').textContent = departamento.localizacion;
-    document.getElementById('direccion').innerHTML = formatearDireccion(departamento.direccion);
+    document.getElementById('localizacion').textContent = departamento.localidad;
 
     ocultarCargando();
     document.getElementById('detalleDepartamento').style.display = 'block';
 }
 
-// Función para formatear la dirección
-function formatearDireccion(direccion) {
-    if (!direccion) return 'No hay información de dirección';
-
-    return `
-                <div class="direccion-detalle">
-                    ${direccion.calle ? `${direccion.calle} ${direccion.numero}` : ''}<br>
-                    ${direccion.escalera ? `Escalera ${direccion.escalera}` : ''}
-                    ${direccion.piso ? `Piso ${direccion.piso}` : ''}
-                    ${direccion.letra ? `Letra ${direccion.letra}` : ''}<br>
-                    ${direccion.cp ? `CP: ${direccion.cp}` : ''}
-                    ${direccion.localidad ? `${direccion.localidad}, ` : ''}
-                    ${direccion.pais || ''}
-                </div>
-            `;
-}
 
 // Funciones de control de UI
 function mostrarCargando() {

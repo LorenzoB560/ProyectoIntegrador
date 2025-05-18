@@ -45,6 +45,7 @@ function obtenerEmpleados(pagina) {
     const comentario = document.getElementById('filtroComentario').value.trim();
     const fechaLimite = document.getElementById('filtroFechaAntes').value;
     const salarioMinimo = document.getElementById('filtroSalarioMinimo').value;
+    const salarioMaximo = document.getElementById('filtroSalarioMaximo').value;
 
     // Actualizar página actual
     paginaActual = pagina;
@@ -58,6 +59,7 @@ function obtenerEmpleados(pagina) {
     if (comentario) url.searchParams.append('comentario', comentario);
     if (fechaLimite) url.searchParams.append('contratadosAntesDe', fechaLimite);
     if (salarioMinimo) url.searchParams.append('salarioMinimo', salarioMinimo);
+    if (salarioMaximo) url.searchParams.append('salarioMaximo', salarioMaximo);
 
     // Parámetros de paginación y ordenación
     url.searchParams.append('page', pagina);
@@ -104,6 +106,7 @@ function limpiarFiltros() {
     document.getElementById('filtroComentario').value = "";
     document.getElementById('filtroFechaAntes').value = "";
     document.getElementById('filtroSalarioMinimo').value = "";
+    document.getElementById('filtroSalarioMaximo').value = "";
     obtenerEmpleados(0); // Resetear a primera página
 }
 
@@ -237,8 +240,7 @@ function formatearDepartamento(departamento) {
     if (!departamento) return 'N/A';
     return `
                 <div>
-                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a><br>
-                    Código: ${departamento.codigo || '-'}, ${departamento.localidad || '-'}
+                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
                 </div>
             `;
 }

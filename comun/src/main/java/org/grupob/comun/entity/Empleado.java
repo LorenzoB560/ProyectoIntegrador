@@ -94,7 +94,7 @@ public class Empleado extends Persona {
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_tarjeta", foreignKey = @ForeignKey(name = "FK_empleado_tipo_tarjeta_id"), table = "informacion_economica")
-    private TipoTarjetaCredito tipoTarjetaCredito;
+    private TipoTarjetaCredito idTipoTarjeta;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nomina> listaNominas;
@@ -107,6 +107,15 @@ public class Empleado extends Persona {
             @AttributeOverride(name = "CVC", column = @Column(name = "CVC", table = "informacion_economica"))
     })
     private TarjetaCredito tarjetaCredito;
+
+    @OneToMany(mappedBy = "solicitante")
+    private List<SolicitudColaboracion> solicitudesEnviadas;
+
+    @OneToMany(mappedBy = "receptor")
+    private List<SolicitudColaboracion> solicitudesRecibidas;
+
+    @ManyToMany
+    private List<Colaboracion> colaboraciones;
 
     @Override
     public boolean equals(Object o) {

@@ -10,7 +10,7 @@ import org.grupob.comun.entity.maestras.MotivoBloqueo;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
+ @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="usuario_empleado", uniqueConstraints = {

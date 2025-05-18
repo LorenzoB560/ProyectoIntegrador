@@ -1,31 +1,26 @@
 package org.grupob.empapp.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.grupob.comun.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.maestras.*;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.TarjetaCreditoDTO;
 import org.grupob.empapp.dto.auxiliar.DireccionPostalDTO;
-import org.grupob.empapp.dto.grupo_validaciones.*;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.empapp.service.AltaEmpleadoServiceImp;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Controller
 //@RequestMapping("/empapp")
@@ -338,6 +333,8 @@ public class RegistroEmpleadoController {
         if (datosAnteriores != null) {
             altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
+        System.out.println("ID tipo tarjeta: " + datosFormulario.getIdTipoTarjeta());
+
 
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {

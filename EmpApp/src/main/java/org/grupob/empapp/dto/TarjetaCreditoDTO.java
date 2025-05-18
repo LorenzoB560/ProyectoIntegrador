@@ -6,10 +6,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.empapp.dto.grupo_validaciones.GrupoDatosEconomicos;
+import org.grupob.comun.dto.grupo_validaciones.GrupoDatosEconomicos;
 import org.grupob.empapp.validation.tarjeta_bancaria.anio_caducidad.AnioValido;
 import org.grupob.empapp.validation.tarjeta_bancaria.numero_tarjeta.NumeroTarjetaValido;
-import org.grupob.empapp.validation.tarjeta_bancaria.tipo_tarjeta.ExisteTipoTarjeta;
 
 @Data
 @AllArgsConstructor

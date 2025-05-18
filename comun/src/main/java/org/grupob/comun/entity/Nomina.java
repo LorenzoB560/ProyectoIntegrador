@@ -1,40 +1,54 @@
 package org.grupob.comun.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.auxiliar.Periodo;
 
 import java.math.BigDecimal;
-import java.util.*;
-
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table()
+@Table(name = "nomina")
 public class Nomina {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_nomina")
     private UUID id;
 
-    private Integer mes;
-    private Integer annio;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "fechaInicio", column = @Column(name = "fecha_inicio")),
+            @AttributeOverride(name = "fechaFin", column = @Column(name = "fecha_fin")),
+    })
+    private Periodo periodo;
     private BigDecimal totalLiquido;
 
-    @OneToMany
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_nomina_linea_id"))
+    @OneToMany(mappedBy = "nomina", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LineaNomina> lineaNominas = new HashSet<>();
+
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
+    @JoinColumn(name = "id_empleado", foreignKey = @ForeignKey(name = "FK_nomina_empleado_id"))
     private Empleado empleado;
 
-    public Nomina(Integer mes, Integer annio){
-        setMes(mes);
-        setAnnio(annio);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Nomina nomina)) return false;
+        return id != null && id.equals(nomina.id);
     }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
-

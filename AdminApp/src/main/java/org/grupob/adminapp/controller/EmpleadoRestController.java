@@ -3,10 +3,12 @@ package org.grupob.adminapp.controller;
 
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.adminapp.service.EmpleadoServiceImp;
 import org.grupob.adminapp.service.EtiquetaServiceImp;
 import org.grupob.adminapp.service.UsuarioEmpleadoServiceImp;
+import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
@@ -47,21 +49,35 @@ public class EmpleadoRestController {
 
     @GetMapping("/listado")
     public Page<EmpleadoDTO> listarEmpleados(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) String departamento,
-            @RequestParam(required = false) String comentario,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate contratadosAntesDe,
-            @RequestParam(required = false) BigDecimal salarioMinimo,
+            @Valid @ModelAttribute EmpleadoSearchDTO searchDTO,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "ename") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
 
         return empleadoService.buscarEmpleadosPaginados(
-                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
+                searchDTO,
                 page, size, sortBy, sortDir);
     }
 
+    @GetMapping("/todos-inactivos")
+    public ResponseEntity<List<EmpleadoDTO>> listarTodosEmpleadosInactivos() {
+        // Llama al servicio sin parámetros de ordenación
+        List<EmpleadoDTO> empleadosInactivos = empleadoService.devuelveTodosEmpleadosInactivos();
+        if (empleadosInactivos == null || empleadosInactivos.isEmpty()) { // Verificar null también
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(empleadosInactivos);
+    }
+
+    @GetMapping("/todos-activos")
+    public ResponseEntity<List<EmpleadoDTO>> listarTodosEmpleadosActivos() {
+        List<EmpleadoDTO> empleadosActivos = empleadoService.devuelveTodosEmpleadosActivos();
+        if (empleadosActivos == null || empleadosActivos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(empleadosActivos);
+    }
 
     @GetMapping("detalle/{id}")
     public EmpleadoDTO devuelveEmpleado(@PathVariable String id){
@@ -210,7 +226,68 @@ public class EmpleadoRestController {
                     .body("Error interno al intentar bloquear el empleado: " + e.getMessage());
         }
     }
+    @PostMapping("/{id}/desactivar") // O @PostMapping("/{id}/desactivar")
+    public ResponseEntity<?> desactivarEmpleado(@PathVariable String id) {
+        try {
+            // Lógica para encontrar y actualizar el empleado
+            UUID empleadoUuid = UUID.fromString(id);
+            Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
 
+            if (!empleado.isActivo()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El empleado ya se encuentra desactivado.");
+            }
+
+            empleado.setActivo(false);
+            // Opcional: si tienes una fecha de cese o similar, podrías establecerla aquí.
+            // empleado.getPeriodo().setFechaFin(LocalDate.now());
+            empleadoRepository.save(empleado);
+
+            return ResponseEntity.ok().body("Empleado desactivado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID proporcionado no es válido: " + id);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            // Loggear el error
+            System.err.println("Error al desactivar empleado: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al intentar desactivar el empleado: " + e.getMessage());
+        }
+    }
+
+    // Opcional: Endpoint para reactivar
+    @PostMapping("/{id}/activar")
+    public ResponseEntity<?> activarEmpleado(@PathVariable String id) {
+        try {
+            UUID empleadoUuid = UUID.fromString(id);
+            Empleado empleado = empleadoRepository.findById(empleadoUuid)
+                    .orElseThrow(() -> new EntityNotFoundException("Empleado no encontrado con ID: " + id));
+
+            if (empleado.isActivo()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El empleado ya se encuentra activo.");
+            }
+
+            empleado.setActivo(true);
+            // Opcional: si tienes una fecha de cese, podrías ponerla a null.
+            // empleado.getPeriodo().setFechaFin(null);
+            empleadoRepository.save(empleado);
+            return ResponseEntity.ok().body("Empleado activado correctamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El ID proporcionado no es válido: " + id);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error al activar empleado: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno al intentar activar el empleado: " + e.getMessage());
+        }
+    }
 //    @PutMapping("/{id}/etiquetas/{etiquetaId}")
 //    public EmpleadoDTO asignarEtiqueta(@PathVariable String id, @PathVariable String etiquetaId) {
 //        return empleadoService.asignarEtiqueta(id, etiquetaId);
