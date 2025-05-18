@@ -15,28 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Cambiar el tipo del campo
                 campo.type = tiposCampo[idCampo][tipoValidacion];
-
-                // Si cambiamos de date a text, formateamos la fecha
-                if (tiposCampo[idCampo][tipoValidacion] === 'text' &&
-                    tiposCampo[idCampo]['cliente'] === 'date' &&
-                    valorActual) {
-                    try {
-                        const date = new Date(valorActual);
-                        if (!isNaN(date.getTime())) {
-                            const day = String(date.getDate()).padStart(2, '0');
-                            const month = String(date.getMonth() + 1).padStart(2, '0');
-                            const year = date.getFullYear();
-                            campo.value = `${day}/${month}/${year}`;
-                        } else {
-                            campo.value = valorActual;
-                        }
-                    } catch (e) {
-                        campo.value = valorActual;
-                    }
-                } else {
-                    // Para otros tipos, mantener el valor tal cual
-                    campo.value = valorActual;
-                }
+                //Asignar el valor actual
+                campo.value = valorActual;
             }
         }
 
