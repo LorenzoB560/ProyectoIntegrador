@@ -208,7 +208,7 @@ function llenarTabla(datos) {
                         <td>${formatearDepartamento(emp.departamento)}</td>
                         <td>${infoJefe}</td>
                         <td>${especialidades}</td>
-                        <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
+                        <td><a href="/adminapp/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
                         <td>
                             <div> 
                                 <a id="btnEditar" href="#" class="btn btn-primary me-2" title="Editar Empleado">

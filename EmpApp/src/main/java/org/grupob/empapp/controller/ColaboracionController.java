@@ -65,7 +65,7 @@ public class ColaboracionController {
     public String mostrarListados(Model model, HttpServletRequest request) {
         UUID empleadoIdActual = getEmpleadoIdActual(request);
         if (empleadoIdActual == null) {
-            return "redirect:/empapp/login";
+            return "redirect:/login";
         }
 
         try {
