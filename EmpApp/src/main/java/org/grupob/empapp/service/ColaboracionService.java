@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface ColaboracionService {
 
+
+    public void finalizarPeriodoColaboracion(UUID idColaboracion, UUID idEmpleadoFinalizador) throws Exception;
     void enviarSolicitudColaboracion(UUID idSolicitante, UUID idReceptor)throws Exception;
     List<SolicitudColaboracionDTO> getSolicitudesRecibidas(UUID idEmpleado);
     List<SolicitudColaboracionDTO> getSolicitudesEnviadas(UUID idEmpleado);

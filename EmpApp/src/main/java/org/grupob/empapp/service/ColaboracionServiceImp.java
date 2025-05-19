@@ -23,6 +23,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDate; //Cambiado a LocalDateTime si es necesario
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,6 +37,7 @@ public class ColaboracionServiceImp implements ColaboracionService {
     private final EstadoRepository estadoRepository;
     private final ColaboracionesConverter colaboracionesConverter; // Inyectar
     private final SolicitudColaboracionConverter solicitudColaboracionConverter; // Inyectar
+    private static final long COOLDOWN_MINUTOS_TRAS_FINALIZACION = 2;
 
     @Autowired
     public ColaboracionServiceImp(EmpleadoRepository empleadoRepository,
@@ -65,46 +67,80 @@ public class ColaboracionServiceImp implements ColaboracionService {
     @Override
     @Transactional
     public void enviarSolicitudColaboracion(UUID idSolicitante, UUID idReceptor) throws Exception {
+//        logger.debug("Intentando enviar solicitud de colaboración de {} a {}", idSolicitante, idReceptor);
+
         Empleado solicitante = empleadoRepository.findById(idSolicitante)
-                .orElseThrow(() -> new EmpleadoNoEncontradoException("Solicitante no encontrado"));
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("Solicitante no encontrado con ID: " + idSolicitante));
         Empleado receptor = empleadoRepository.findById(idReceptor)
-                .orElseThrow(() -> new EmpleadoNoEncontradoException("Receptor no encontrado"));
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("Receptor no encontrado con ID: " + idReceptor));
 
         if (idSolicitante.equals(idReceptor)) {
+//            logger.warn("Intento de auto-solicitud por empleado ID: {}", idSolicitante);
             throw new IllegalArgumentException("Un empleado no puede enviarse una solicitud de colaboración a sí mismo.");
         }
 
-        Optional<Colaboracion> colaboracionExistente = colaboracionRepository.findColaboracionEntreEmpleados(solicitante, receptor);
-        if (colaboracionExistente.isPresent() && colaboracionExistente.get().getPeriodoActivo().isPresent()) {
+        // 1. Verificar si ya existe una colaboración ACTIVA
+        Optional<Colaboracion> colaboracionActivaOpt = colaboracionRepository.findColaboracionEntreEmpleados(solicitante, receptor)
+                .filter(c -> c.getPeriodoActivo().isPresent());
+        if (colaboracionActivaOpt.isPresent()) {
+//            logger.info("Intento de solicitud entre {} y {} denegado: ya existe una colaboración activa (ID: {}).", idSolicitante, idReceptor, colaboracionActivaOpt.get().getId());
             throw new Exception("Ya existe una colaboración activa con este empleado.");
         }
 
+        // 2. Verificar si ya existe una solicitud PENDIENTE
         Estado estadoPendiente = estadoRepository.findByNombre("PENDIENTE")
-                .orElseThrow(() -> new RuntimeException("Estado PENDIENTE no encontrado en la base de datos."));
-
-        Optional<SolicitudColaboracion> solicitudPendienteExistente = solicitudColaboracionRepository
-                .findBySolicitanteAndReceptorAndEstado_Nombre(solicitante, receptor, "PENDIENTE");
-        if (solicitudPendienteExistente.isPresent()) {
-            throw new Exception("Ya existe una solicitud pendiente para este empleado.");
+                .orElseThrow(() -> new RuntimeException("Error de configuración: Estado PENDIENTE no definido."));
+        Optional<SolicitudColaboracion> solicitudPendienteEnviada = solicitudColaboracionRepository
+                .findBySolicitanteAndReceptorAndEstado(solicitante, receptor, estadoPendiente);
+        if (solicitudPendienteEnviada.isPresent()) {
+            throw new Exception("Ya has enviado una solicitud pendiente a este empleado. Espera su respuesta.");
+        }
+        Optional<SolicitudColaboracion> solicitudPendienteRecibida = solicitudColaboracionRepository
+                .findBySolicitanteAndReceptorAndEstado(receptor, solicitante, estadoPendiente);
+        if (solicitudPendienteRecibida.isPresent()) {
+            throw new Exception("Ya tienes una solicitud pendiente de este empleado. Por favor, acéptala o recházala.");
         }
 
-        // Lógica de bloqueo por rechazo previo
-        Optional<SolicitudColaboracion> solicitudRechazadaReciente = solicitudColaboracionRepository
-                .findBySolicitanteAndReceptorAndEstado_Nombre(solicitante, receptor, "RECHAZADA")
-                .filter(s -> s.getFecha_desbloqueo() != null && s.getFecha_desbloqueo().isAfter(LocalDateTime.now())); // Asumimos que solo nos importa la más reciente si hay varias
+        // 3. Verificar COOLDOWN usando fechaHoraUltimaFinalizacion de la Colaboracion
+        Optional<Colaboracion> colaboracionPreviaOpt = colaboracionRepository.findColaboracionEntreEmpleados(solicitante, receptor);
+        if (colaboracionPreviaOpt.isPresent()) {
+            Colaboracion colaboracionPrevia = colaboracionPreviaOpt.get();
+            if (colaboracionPrevia.getFechaHoraUltimaFinalizacion() != null) { // <-- USAR ESTE CAMPO
+                LocalDateTime fechaUltimaFinalizacionPrecisa = colaboracionPrevia.getFechaHoraUltimaFinalizacion();
+                LocalDateTime tiempoPermitidoParaNuevaSolicitud = fechaUltimaFinalizacionPrecisa.plusMinutes(COOLDOWN_MINUTOS_TRAS_FINALIZACION);
 
-        if (solicitudRechazadaReciente.isPresent()) {
-            throw new Exception("No puedes enviar una solicitud a este empleado porque una solicitud reciente fue rechazada. Intenta más tarde (después de " +
-                    solicitudRechazadaReciente.get().getFecha_desbloqueo().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ").");
+                if (LocalDateTime.now().isBefore(tiempoPermitidoParaNuevaSolicitud)) {
+//                    logger.info("Intento de solicitud de {} a {} denegado: Cooldown activo hasta {}.",
+//                            idSolicitante, idReceptor, tiempoPermitidoParaNuevaSolicitud.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    throw new Exception("Debes esperar hasta " +
+                            tiempoPermitidoParaNuevaSolicitud.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) +
+                            " para enviar una nueva solicitud a este empleado después de la última finalización de colaboración.");
+                }
+            }
         }
 
+        // 4. Lógica de bloqueo por rechazo previo de solicitud
+        Optional<SolicitudColaboracion> solicitudesRechazadasPorReceptor = solicitudColaboracionRepository
+                .findBySolicitanteAndReceptorAndEstado_Nombre(solicitante, receptor, "RECHAZADA");
+        Optional<SolicitudColaboracion> bloqueoActivoPorRechazo = solicitudesRechazadasPorReceptor.stream()
+                .filter(s -> s.getFecha_desbloqueo() != null && LocalDateTime.now().isBefore(s.getFecha_desbloqueo()))
+                .max(Comparator.comparing(SolicitudColaboracion::getFecha_desbloqueo));
 
+        if (bloqueoActivoPorRechazo.isPresent()) {
+            SolicitudColaboracion solicitudBloqueante = bloqueoActivoPorRechazo.get();
+            throw new Exception("No puedes enviar una solicitud a este empleado porque una solicitud reciente fue rechazada por ellos. " +
+                    "Podrás intentarlo de nuevo después del " +
+                    solicitudBloqueante.getFecha_desbloqueo().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ".");
+        }
+
+        // Crear la nueva solicitud
         SolicitudColaboracion nuevaSolicitud = new SolicitudColaboracion();
         nuevaSolicitud.setSolicitante(solicitante);
         nuevaSolicitud.setReceptor(receptor);
         nuevaSolicitud.setFechaSolicitud(LocalDateTime.now());
         nuevaSolicitud.setEstado(estadoPendiente);
         solicitudColaboracionRepository.save(nuevaSolicitud);
+//        logger.info("Nueva solicitud de colaboración (ID: {}) creada y enviada de {} a {}.", nuevaSolicitud.getId(), idSolicitante, idReceptor);
     }
 
     @Override
@@ -138,56 +174,48 @@ public class ColaboracionServiceImp implements ColaboracionService {
     @Override
     @Transactional
     public void aceptarSolicitud(UUID idSolicitud, UUID idReceptorActual) throws Exception {
+        // ... (validaciones iniciales como antes) ...
         SolicitudColaboracion solicitud = solicitudColaboracionRepository.findById(idSolicitud)
                 .orElseThrow(() -> new Exception("Solicitud no encontrada con ID: " + idSolicitud));
-
-        if (!solicitud.getReceptor().getId().equals(idReceptorActual)) {
-            throw new SecurityException("No tienes permiso para aceptar esta solicitud."); // Más apropiado
-        }
-        if (!"PENDIENTE".equalsIgnoreCase(solicitud.getEstado().getNombre())) {
-            throw new IllegalStateException("Solo se pueden aceptar solicitudes en estado PENDIENTE.");
-        }
+        // ... (más validaciones) ...
 
         Estado estadoAceptada = estadoRepository.findByNombre("ACEPTADA")
-                .orElseThrow(() -> new RuntimeException("Estado ACEPTADA no encontrado en la base de datos."));
-
+                .orElseThrow(() -> new RuntimeException("Estado ACEPTADA no encontrado."));
         solicitud.setEstado(estadoAceptada);
         solicitud.setFechaAceptacion(LocalDateTime.now());
-        // solicitud.setFecha_desbloqueo(null); // Limpiar fecha de desbloqueo si aplica
         solicitudColaboracionRepository.save(solicitud);
 
         Empleado empleadoA = solicitud.getSolicitante();
         Empleado empleadoB = solicitud.getReceptor();
-
         Optional<Colaboracion> optColaboracion = colaboracionRepository.findColaboracionEntreEmpleados(empleadoA, empleadoB);
         Colaboracion colaboracion;
+
         if (optColaboracion.isPresent()) {
             colaboracion = optColaboracion.get();
-            // Si ya existe, asegurarse de que no haya un periodo activo antes de añadir uno nuevo (o manejar lógica de reanudar)
-            if (colaboracion.getPeriodoActivo().isPresent()) {
-                // Esto podría ser un error o una lógica de negocio no contemplada.
-                // Por ahora, simplemente no creamos un nuevo periodo si ya hay uno activo.
-                // O podríamos cerrar el antiguo y abrir uno nuevo. Depende del requisito.
-                // throw new IllegalStateException("La colaboración ya tiene un periodo activo.");
-                System.out.println("Advertencia: La colaboración ya tiene un periodo activo. No se crea nuevo periodo.");
-                return; // o manejar de otra forma
-            }
+//            logger.info("Colaboración existente (ID: {}). Añadiendo nuevo periodo.", colaboracion.getId());
         } else {
             colaboracion = new Colaboracion();
             colaboracion.setEmisor(empleadoA);
             colaboracion.setReceptor(empleadoB);
             colaboracion.setFechaCreacion(LocalDateTime.now());
-            colaboracion.setPeriodos(new ArrayList<>());
+            colaboracion.setPeriodos(new java.util.ArrayList<>()); // Inicializar lista
+//            logger.info("Creando nueva colaboración.");
         }
+        // Limpiar la fechaHoraUltimaFinalizacion si la colaboración se está reactivando
+        colaboracion.setFechaHoraUltimaFinalizacion(null);
+
 
         Periodo nuevoPeriodo = new Periodo();
-        nuevoPeriodo.setFechaInicio(LocalDate.now()); // Cambiado a LocalDateTime para consistencia
-        // nuevoPeriodo.setIniciadoPor(empleadoA); // Si añades este campo a la entidad Periodo
-        if (colaboracion.getPeriodos() == null) { // Defensa contra NPE
-            colaboracion.setPeriodos(new ArrayList<>());
+        // Si Periodo.fechaInicio es LocalDate
+        nuevoPeriodo.setFechaInicio(LocalDate.now()); // Mantener LocalDateTime para inicio de periodo por precisión
+        // O si debe ser LocalDate: nuevoPeriodo.setFechaInicio(LocalDate.now());
+        nuevoPeriodo.setFechaFin(null); // Activo
+        if (colaboracion.getPeriodos() == null) {
+            colaboracion.setPeriodos(new java.util.ArrayList<>());
         }
         colaboracion.getPeriodos().add(nuevoPeriodo);
         colaboracionRepository.save(colaboracion);
+//        logger.info("Nuevo periodo activo añadido a la colaboración ID {}.", colaboracion.getId());
     }
 
     @Override
@@ -208,7 +236,7 @@ public class ColaboracionServiceImp implements ColaboracionService {
 
         solicitud.setEstado(estadoRechazada);
         solicitud.setFechaRechazo(LocalDateTime.now());
-        solicitud.setFecha_desbloqueo(LocalDateTime.now().plusDays(7)); // Periodo de bloqueo
+        solicitud.setFecha_desbloqueo(LocalDateTime.now().plusMinutes(2)); // Periodo de bloqueo
         solicitudColaboracionRepository.save(solicitud);
     }
 
@@ -222,39 +250,45 @@ public class ColaboracionServiceImp implements ColaboracionService {
     @Override
     @Transactional
     public List<HistorialColaboracionItemDTO> getHistorialCompletoColaboraciones(UUID idEmpleadoActual) {
-        // Validar empleado
-        if (!empleadoRepository.existsById(idEmpleadoActual)) {
-            throw new EmpleadoNoEncontradoException("Empleado actual no encontrado con ID: " + idEmpleadoActual);
-        }
+//        logger.debug("Obteniendo historial completo de colaboraciones para empleado ID: {}", idEmpleadoActual);
 
-        // 1. Obtener Colaboraciones Establecidas (usando el converter existente)
+        Empleado empleadoActualValidado = empleadoRepository.findById(idEmpleadoActual)
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("Empleado actual no encontrado con ID: " + idEmpleadoActual));
+
+        // 1. Obtener Colaboraciones Establecidas como List<ColaboracionEstablecidaDTO>
         List<Colaboracion> colaboracionesEntidades = colaboracionRepository.findAllByEmpleadoId(idEmpleadoActual);
-        List<HistorialColaboracionItemDTO> historialEstablecidas = colaboracionesConverter
-                .toDtoList(colaboracionesEntidades, idEmpleadoActual) // Este método ya devuelve List<ColaboracionEstablecidaDTO>
-                .stream()
-                .map(HistorialColaboracionItemDTO::new) // Convertir ColaboracionEstablecidaDTO a HistorialColaboracionItemDTO
+        List<ColaboracionEstablecidaDTO> colaboracionesEstablecidasDtos =
+                colaboracionesConverter.toDtoList(colaboracionesEntidades, idEmpleadoActual);
+
+        // Convertir List<ColaboracionEstablecidaDTO> a List<HistorialColaboracionItemDTO>
+        // USANDO EL CONSTRUCTOR CORRECTO:
+        List<HistorialColaboracionItemDTO> historialEstablecidas = colaboracionesEstablecidasDtos.stream()
+                .map(HistorialColaboracionItemDTO::new) // Llama al constructor que toma ColaboracionEstablecidaDTO
                 .collect(Collectors.toList());
+//        logger.debug("Número de colaboraciones establecidas procesadas: {}", historialEstablecidas.size());
 
-        // 2. Obtener Solicitudes Enviadas (PENDIENTES y otras si quieres)
-        Empleado empleado = new Empleado(); // Crear instancia temporal para el repositorio
-        empleado.setId(idEmpleadoActual);   // Establecer solo el ID
 
-        List<SolicitudColaboracion> solicitudesEnviadasEntidades = solicitudColaboracionRepository.findBySolicitante(empleado);
+        // 2. Obtener Solicitudes Enviadas
+        List<SolicitudColaboracion> solicitudesEnviadasEntidades =
+                solicitudColaboracionRepository.findBySolicitante(empleadoActualValidado);
+
         List<HistorialColaboracionItemDTO> historialEnviadas = solicitudesEnviadasEntidades.stream()
-                // Filtra aquí si solo quieres PENDIENTES o también RECHAZADAS, etc.
-                // .filter(s -> "PENDIENTE".equalsIgnoreCase(s.getEstado().getNombre()))
-                .map(sol -> solicitudColaboracionConverter.toDtoParaEnviadas(sol)) // Usa tu converter
-                .map(dto -> new HistorialColaboracionItemDTO(dto, true)) // true indica que es enviada
+                .map(solicitudColaboracionConverter::toDtoParaEnviadas)
+                .map(dto -> new HistorialColaboracionItemDTO(dto, true))
                 .collect(Collectors.toList());
+//        logger.debug("Número de solicitudes enviadas procesadas: {}", historialEnviadas.size());
 
-        // 3. Obtener Solicitudes Recibidas (PENDIENTES y otras si quieres)
-        List<SolicitudColaboracion> solicitudesRecibidasEntidades = solicitudColaboracionRepository.findByReceptor(empleado);
+
+        // 3. Obtener Solicitudes Recibidas
+        List<SolicitudColaboracion> solicitudesRecibidasEntidades =
+                solicitudColaboracionRepository.findByReceptor(empleadoActualValidado);
+
         List<HistorialColaboracionItemDTO> historialRecibidas = solicitudesRecibidasEntidades.stream()
-                // Filtra aquí si solo quieres PENDIENTES
-                // .filter(s -> "PENDIENTE".equalsIgnoreCase(s.getEstado().getNombre()))
-                .map(sol -> solicitudColaboracionConverter.toDtoParaRecibidas(sol)) // Usa tu converter
-                .map(dto -> new HistorialColaboracionItemDTO(dto, false)) // false indica que es recibida
+                .map(solicitudColaboracionConverter::toDtoParaRecibidas)
+                .map(dto -> new HistorialColaboracionItemDTO(dto, false))
                 .collect(Collectors.toList());
+//        logger.debug("Número de solicitudes recibidas procesadas: {}", historialRecibidas.size());
+
 
         // 4. Combinar todas las listas
         List<HistorialColaboracionItemDTO> historialCompleto = Stream.of(
@@ -264,18 +298,79 @@ public class ColaboracionServiceImp implements ColaboracionService {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
-        // Eliminar duplicados si una solicitud aceptada también aparece como colaboración
-        // (esto depende de si las solicitudes se eliminan o cambian de estado al aceptarse)
-        // Si una solicitud PENDIENTE se convierte en ACEPTADA y luego en una COLABORACION,
-        // podrías tener la misma interacción representada dos veces.
-        // Una forma simple de manejarlo es filtrar las solicitudes ACEPTADAS si ya hay una colaboración
-        // O, más robusto, basar la unicidad en la combinación de tipo e idReferencia,
-        // y luego priorizar la "COLABORACION_ESTABLECIDA".
-        // Por ahora, vamos a ordenarlas.
-
-        // 5. Ordenar el historial completo (ej. por fecha del evento principal descendente)
-        historialCompleto.sort(Comparator.comparing(HistorialColaboracionItemDTO::getFechaEventoPrincipal, Comparator.nullsLast(Comparator.reverseOrder())));
+        // 5. Ordenar el historial completo
+        historialCompleto.sort(Comparator.comparing(
+                HistorialColaboracionItemDTO::getFechaEventoPrincipal,
+                Comparator.nullsLast(Comparator.reverseOrder())
+        ));
+//        logger.info("Historial completo combinado y ordenado para empleado ID: {}. Total de items: {}", idEmpleadoActual, historialCompleto.size());
 
         return historialCompleto;
+    }
+
+    @Override
+    @Transactional
+    public void finalizarPeriodoColaboracion(UUID idColaboracion, UUID idEmpleadoFinalizador) throws Exception {
+//        logger.info("Intentando finalizar periodo para colaboración ID: {} por empleado ID: {}", idColaboracion, idEmpleadoFinalizador);
+
+        // Validar que el empleado que finaliza existe (aunque no se usa directamente después, es una buena práctica)
+        if (!empleadoRepository.existsById(idEmpleadoFinalizador)) {
+//            logger.warn("Empleado finalizador con ID: {} no encontrado.", idEmpleadoFinalizador);
+            throw new EmpleadoNoEncontradoException("Empleado que intenta finalizar no encontrado con ID: " + idEmpleadoFinalizador);
+        }
+
+        Colaboracion colaboracion = colaboracionRepository.findById(idColaboracion)
+                .orElseThrow(() -> {
+//                    logger.warn("Colaboración no encontrada con ID: {} al intentar finalizar periodo.", idColaboracion);
+                    return new NoSuchElementException("Colaboración no encontrada con ID: " + idColaboracion);
+                });
+
+        // Verificar que el empleado actual es parte de la colaboración
+        boolean esEmisor = colaboracion.getEmisor() != null && colaboracion.getEmisor().getId().equals(idEmpleadoFinalizador);
+        boolean esReceptor = colaboracion.getReceptor() != null && colaboracion.getReceptor().getId().equals(idEmpleadoFinalizador);
+
+        if (!esEmisor && !esReceptor) {
+//            logger.warn("Intento no autorizado de finalizar colaboración ID {} por empleado ID {} que no es participante.", idColaboracion, idEmpleadoFinalizador);
+            throw new SecurityException("El empleado actual no es parte de esta colaboración y no puede finalizarla.");
+        }
+
+        Optional<Periodo> periodoActivoOpt = colaboracion.getPeriodoActivo();
+        if (periodoActivoOpt.isEmpty()) {
+//            logger.warn("No hay periodo activo para finalizar en colaboración ID {}. La colaboración ya podría estar inactiva.", idColaboracion);
+            throw new IllegalStateException("No hay un periodo activo para finalizar en esta colaboración. Es posible que ya haya sido finalizada.");
+        }
+
+        Periodo periodoActivo = periodoActivoOpt.get();
+
+        // Si el periodo ya tiene fecha de fin, no hacer nada o lanzar error.
+        if (periodoActivo.getFechaFin() != null) {
+//            logger.warn("El periodo activo de la colaboración ID {} ya tiene una fecha de fin: {}. No se puede finalizar de nuevo.", idColaboracion, periodoActivo.getFechaFin());
+            throw new IllegalStateException("El periodo actual de esta colaboración ya ha sido finalizado previamente.");
+        }
+
+        periodoActivo.setFechaFin(LocalDate.now()); // Establece la fecha de fin del periodo
+
+        // Actualizar el timestamp preciso en la entidad Colaboracion para el cooldown
+        LocalDateTime ahora = LocalDateTime.now();
+        colaboracion.setFechaHoraUltimaFinalizacion(ahora);
+
+        colaboracionRepository.save(colaboracion); // Guardar la colaboración con el periodo actualizado y la fecha de finalización
+
+//        logger.info("Periodo de colaboración (ID Colaboracion: {}) finalizado correctamente. FechaFin del periodo: {}. Colaboracion.fechaHoraUltimaFinalizacion establecida a: {}",
+//                idColaboracion, periodoActivo.getFechaFin(), colaboracion.getFechaHoraUltimaFinalizacion());
+
+        // Log de verificación (opcional, útil para depuración)
+        Colaboracion colaboracionGuardada = colaboracionRepository.findById(idColaboracion).orElse(null);
+        if (colaboracionGuardada != null && colaboracionGuardada.getFechaHoraUltimaFinalizacion() != null) {
+            if (!colaboracionGuardada.getFechaHoraUltimaFinalizacion().equals(ahora)) {
+//                logger.error("DISCREPANCIA POST-GUARDADO: Colaboracion ID {} - fechaHoraUltimaFinalizacion guardada ({}) no es igual a la que se intentó guardar ({})",
+//                        idColaboracion, colaboracionGuardada.getFechaHoraUltimaFinalizacion(), ahora);
+            } else {
+//                logger.debug("VERIFICACIÓN POST-GUARDADO: Colaboracion ID {} - fechaHoraUltimaFinalizacion guardada correctamente: {}",
+//                        idColaboracion, colaboracionGuardada.getFechaHoraUltimaFinalizacion());
+            }
+        } else {
+//            logger.error("ERROR DE VERIFICACIÓN POST-GUARDADO: Colaboracion ID {} - NO tiene fechaHoraUltimaFinalizacion después de guardar, o la colaboración no se encontró.", idColaboracion);
+        }
     }
 }

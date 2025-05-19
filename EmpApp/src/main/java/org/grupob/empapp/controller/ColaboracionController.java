@@ -41,7 +41,7 @@ public class ColaboracionController {
     }
 
     @GetMapping("/solicitar")
-    public String mostrarFormularioSolicitud(Model model, HttpServletRequest request) {
+    public String mostrarFormularioSolicitud(Model modelo, HttpServletRequest request) {
         UUID empleadoIdActual = getEmpleadoIdActual(request);
         if (empleadoIdActual == null) {
             return "redirect:/empapp/login";
@@ -52,17 +52,19 @@ public class ColaboracionController {
                     .stream()
                     .map(e -> new EmpleadoSimpleDTO(e.getId(), e.getNombre() + " " + e.getApellido()))
                     .collect(Collectors.toList());
-            model.addAttribute("empleados", empleadosParaSolicitar);
+            modelo.addAttribute("empleados", empleadosParaSolicitar);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Error al cargar empleados: " + e.getMessage());
-            model.addAttribute("empleados", List.of()); // Lista vacía en caso de error
+            modelo.addAttribute("errorMessage", "Error al cargar empleados: " + e.getMessage());
+            modelo.addAttribute("empleados", List.of()); // Lista vacía en caso de error
         }
         // No se necesita "idReceptor" si el envío lo maneja el RestController
+        modelo.addAttribute("dto", getEmpleadoIdActual(request));
+
         return "colaboraciones/enviar-solicitud";
     }
 
     @GetMapping("/listado")
-    public String mostrarListados(Model model, HttpServletRequest request) {
+    public String mostrarListados(Model modelo, HttpServletRequest request) {
         UUID empleadoIdActual = getEmpleadoIdActual(request);
         if (empleadoIdActual == null) {
             return "redirect:/empapp/login";
@@ -72,17 +74,18 @@ public class ColaboracionController {
             List<SolicitudColaboracionDTO> recibidas = colaboracionService.getSolicitudesRecibidas(empleadoIdActual);
             List<SolicitudColaboracionDTO> enviadas = colaboracionService.getSolicitudesEnviadas(empleadoIdActual);
 
-            model.addAttribute("solicitudesRecibidas", recibidas);
-            model.addAttribute("solicitudesEnviadas", enviadas);
+            modelo.addAttribute("solicitudesRecibidas", recibidas);
+            modelo.addAttribute("solicitudesEnviadas", enviadas);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Error al cargar listados: " + e.getMessage());
-            model.addAttribute("solicitudesRecibidas", List.of());
-            model.addAttribute("solicitudesEnviadas", List.of());
+            modelo.addAttribute("errorMessage", "Error al cargar listados: " + e.getMessage());
+            modelo.addAttribute("solicitudesRecibidas", List.of());
+            modelo.addAttribute("solicitudesEnviadas", List.of());
         }
+        modelo.addAttribute("dto", getEmpleadoIdActual(request));
         return "colaboraciones/listado-solicitudes";
     }
     @GetMapping("/historial")
-    public String mostrarPaginaHistorialColaboraciones(Model model, HttpServletRequest request) {
+    public String mostrarPaginaHistorialColaboraciones(Model modelo, HttpServletRequest request) {
 //        logger.debug("Accediendo a mostrarPaginaHistorialColaboraciones");
         UUID empleadoIdActual = getEmpleadoIdActual(request);
         if (empleadoIdActual == null) {
@@ -94,6 +97,7 @@ public class ColaboracionController {
         // El título de la página se puede manejar directamente en el HTML o pasarlo si se desea.
         // model.addAttribute("pageTitle", "Historial de Colaboraciones");
 //        logger.info("Sirviendo plantilla base para historial de colaboraciones del empleado ID: {}", empleadoIdActual);
+        modelo.addAttribute("dto", getEmpleadoIdActual(request));
         return "colaboraciones/historial-colaboraciones"; // Ruta a tu archivo Thymeleaf
     }
 }
