@@ -1,8 +1,10 @@
 package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
@@ -20,23 +22,25 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class  EmpleadoServiceImp implements EmpleadoService {
+public  class  EmpleadoServiceImp implements EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
 //    private final EtiquetaRepository etiquetaRepository;
 //    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
     private final EmpleadoConverterAdmin empleadoConverter;
+    private final EmpleadoConverterAdmin empleadoConverterAdmin;
 
     public EmpleadoServiceImp(
             EmpleadoRepository empleadoRepository,
 //            EtiquetaRepository etiquetaRepository,
 //            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverterAdmin empleadoConverter) {
+            EmpleadoConverterAdmin empleadoConverter, EmpleadoConverterAdmin empleadoConverterAdmin) {
 
         this.empleadoRepository = empleadoRepository;
 //        this.etiquetaRepository = etiquetaRepository;
 //        this.empleadoEtiquetaRepository = empleadoEtiquetaRepository;
         this.empleadoConverter = empleadoConverter;
+        this.empleadoConverterAdmin = empleadoConverterAdmin;
     }
 
     // -----------------------------------
@@ -96,13 +100,14 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     }
 
     @Override
-    public Empleado modificarEmpleado(String id, Empleado empleado) {
+    public Empleado modificarEmpleado(String id, ModificacionEmpleadoDTO modificacionEmpleadoDTO) {
+        Empleado empleado = empleadoConverterAdmin.convertirAEntidadDesdeModificacion(modificacionEmpleadoDTO);
         UUID uuid = UUID.fromString(id);
         if (empleadoRepository.existsById(uuid)) {
             empleado.setId(uuid);
             return empleadoRepository.save(empleado);
         }
-        throw new DepartamentoNoEncontradoException("El empleado no existe");
+        throw new EmpleadoNoEncontradoException("El empleado no existe");
     }
 
     // -----------------------------------
