@@ -5,7 +5,10 @@ $(document).ready(function() {
     $("#btn-Enviar").on("click", function() {
         const dto = {
             id: idEmpleado,
-            nombre: $("#nombreEmpleado").val()
+            nombre: $("#nombreEmpleado").val(),
+            apellido: $("#apellidoEmpleado").val(),
+            fechaNacimiento: $("#fechaNacimiento").val(),
+            correo: $("#email").val()
         };
 
     $.ajax({

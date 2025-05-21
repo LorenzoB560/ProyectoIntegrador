@@ -107,6 +107,7 @@ public  class  EmpleadoServiceImp implements EmpleadoService {
         UUID uuid = UUID.fromString(id);
         if (empleadoRepository.existsById(uuid)) {
             empleado.setId(uuid);
+            empleado.setActivo(true);
             return empleadoRepository.save(empleado);
         }
         throw new EmpleadoNoEncontradoException("El empleado no existe");

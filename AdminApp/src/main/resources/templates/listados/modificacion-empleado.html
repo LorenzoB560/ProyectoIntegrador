@@ -85,20 +85,20 @@
                             <div class="card-body">
                                 <table class="table table-borderless">
                                     <tr>
-                                        <th>Nombre:</th>
+                                        <th><label for="nombreEmpleado">Nombre:</label></th>
                                         <td><input type="text" id="nombreEmpleado"></td>
                                     </tr>
                                     <tr>
-                                        <th>Apellido:</th>
-                                        <td id="apellidoEmpleado"></td>
+                                        <th><label for="apellidoEmpleado">Apellido:</label></th>
+                                        <td><input type="text" id="apellidoEmpleado"></td>
                                     </tr>
                                     <tr>
-                                        <th>Fecha de Nacimiento:</th>
-                                        <td id="fechaNacimientoEmpleado"></td>
+                                        <th><label for="fechaNacimiento">Fecha de nacimiento:</label></th>
+                                        <td><input type="text" id="fechaNacimiento"></td>
                                     </tr>
                                     <tr>
-                                        <th>Email:</th>
-                                        <td id="emailEmpleado"></td>
+                                        <th><label for="email">Email:</label></th>
+                                        <td><input type="text" id="email"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -107,11 +107,15 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">Especialidades</div>
-                            <div class="card-body">
-                                <div id="especialidadesEmpleado">
-                                    <!-- Las especialidades se cargarán dinámicamente -->
-                                </div>
-                            </div>
+<!--                            <div class="card-body">-->
+<!--                                <div th:each="esp : ${listaEspecialidades}">-->
+<!--                                    <input type="checkbox" class="opcion-checkbox" th:field="*{especialidades}"-->
+<!--                                           th:value="${esp.id}"-->
+<!--                                           th:id="${'especialidad_' + esp.codigo}" />-->
+<!--                                    <label th:for="${'especialidad_' + esp.codigo}"-->
+<!--                                           th:text="#{'registro.especialidades.' + ${esp.codigo}}"></label>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>
