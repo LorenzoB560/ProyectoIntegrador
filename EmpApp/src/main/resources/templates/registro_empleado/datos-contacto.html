@@ -49,11 +49,11 @@
 </div>
 
 <div>
-    <label>
-        <input type="radio" name="tipoValidacion" value="servidor" checked> Validación en servidor
+    <label th:text="#{registro.validacionServidor}" for="validacionServidor">
+        <input type="radio" name="tipoValidacion" id="validacionServidor" value="servidor" checked>
     </label>
-    <label>
-        <input type="radio" name="tipoValidacion" value="cliente"> Validación en cliente
+    <label th:text="#{registro.validacionCliente}" for="validacionCliente">
+        <input type="radio" name="tipoValidacion" id="validacionCliente" value="cliente">
     </label>
 </div>
 

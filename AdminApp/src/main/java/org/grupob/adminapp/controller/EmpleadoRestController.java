@@ -5,6 +5,7 @@ package org.grupob.adminapp.controller;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.grupob.adminapp.dto.EmpleadoDTO;
+import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
 import org.grupob.adminapp.service.EmpleadoServiceImp;
 import org.grupob.adminapp.service.EtiquetaServiceImp;
 import org.grupob.adminapp.service.UsuarioEmpleadoServiceImp;
@@ -12,6 +13,7 @@ import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 
 
@@ -99,9 +101,18 @@ public class EmpleadoRestController {
         empleadoService.eliminaEmpleadoPorId(id);
     }
 
-    @PutMapping("modificar/{id}")
-    public Empleado modificarEmpleado(@PathVariable String id, @RequestBody Empleado empleado){
-        return empleadoService.modificarEmpleado(id, empleado);
+    @PutMapping("guardar-modificado/{id}")
+    public Empleado guardarModificadoEmpleado(@PathVariable String id, @RequestBody ModificacionEmpleadoDTO empleadoDTO){
+//        try {
+            System.err.println("hola");
+            System.err.println(empleadoDTO);
+            Empleado empleado = empleadoService.modificarEmpleado(id, empleadoDTO);
+        System.err.println(empleado);
+//            return ResponseEntity.ok(empleado);
+//        } catch (EmpleadoNoEncontradoException e){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empleado no encontrado");
+//        }
+        return empleado;
     }
 
     @PutMapping("/{id}/jefe/{jefeId}")
