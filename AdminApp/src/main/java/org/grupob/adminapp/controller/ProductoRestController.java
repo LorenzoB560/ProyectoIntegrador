@@ -5,7 +5,7 @@ import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.adminapp.dto.ProductoDTO;
 import org.grupob.comun.dto.ProductoSearchDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
-import org.grupob.adminapp.service.ProductoMasivoService;
+import org.grupob.adminapp.service.ProductoMasivoServiceImp;
 import org.grupob.adminapp.service.ProductoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,10 +28,10 @@ public class ProductoRestController {
 
     private final ProductoServiceImp productoService;
     private final CategoriaServiceImp categoriaService;
-    private final ProductoMasivoService productoMasivoService;
+    private final ProductoMasivoServiceImp productoMasivoService;
 
     @Autowired
-    public ProductoRestController(ProductoServiceImp productoService, CategoriaServiceImp categoriaService, ProductoMasivoService productoMasivoService) {
+    public ProductoRestController(ProductoServiceImp productoService, CategoriaServiceImp categoriaService, ProductoMasivoServiceImp productoMasivoService) {
         this.productoService = productoService;
         this.categoriaService = categoriaService;
         this.productoMasivoService = productoMasivoService;
@@ -117,8 +117,7 @@ public class ProductoRestController {
             productoMasivoService.cargaMasiva(inputStream);
 
             return ResponseEntity.ok()
-                    .body(Map.of("mensaje", "Carga masiva completada",
-                            "productos", archivo.getOriginalFilename()));
+                    .body(Map.of("mensaje", "Carga masiva completada"));
 
         } catch (IOException e) {
             // 4. Errores de lectura del archivo

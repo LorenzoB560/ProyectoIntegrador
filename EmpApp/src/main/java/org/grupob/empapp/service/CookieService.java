@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Data
 /*@AllArgsConstructor
@@ -152,17 +149,6 @@ public  String serializar(Map<String, Integer> usuarios) {
  * @param usuarioActual Usuario a actualizar
  * @return Nuevo valor serializado para la cookie
  */
-//public  String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
-//
-//    if (valor != null && valor.contains(usuarioActual)) {
-//        int contador = usuarios.getOrDefault(usuarioActual, 0);
-//        usuarios.put(usuarioActual, ++contador);
-//    } else {
-//        usuarios.put(usuarioActual, 1);
-//    }
-//    return serializar(usuarios);
-//}
-
     public String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
         int contador = usuarios.getOrDefault(usuarioActual, 0);
         usuarios.put(usuarioActual, ++contador);
@@ -172,12 +158,6 @@ public  String serializar(Map<String, Integer> usuarios) {
 /**
  * Crea una nueva cookie con configuración de seguridad básica
  */
-/*public static void crearCookie(HttpServletResponse response, String nombre, String valor, int duracionSegundos) {
-    Cookie cookie = new Cookie(nombre, valor);
-    cookie.setPath("/"); // Accesible en toda la aplicación
-    cookie.setMaxAge(duracionSegundos); // Duración en segundos
-    response.addCookie(cookie);
-}*/
 public void crearCookie(HttpServletResponse response, String nombre, String valor, int duracionSegundos) {
     String valorCifrado = cifrar(valor);
     Cookie cookie = new Cookie(nombre, valorCifrado);
@@ -206,20 +186,10 @@ public  void eliminarCookie(HttpServletResponse response, String nombre) {
  * @param nombre  Nombre de la cookie a buscar
  * @return Valor de la cookie o null si no existe
  */
-/*public static String obtenerValorCookie(HttpServletRequest request, String nombre) {
-    if (request.getCookies() == null) return null;
-
-    for (Cookie cookie : request.getCookies()) {
-        if (cookie.getName().equals(nombre)) {
-            return cookie.getValue();
-        }
-    }
-    return null;
-}*/
 public  String obtenerValorCookie(HttpServletRequest request, String nombre) {
     if (request.getCookies() == null) return null;
 
-    for (Cookie cookie : request.getCookies()) {
+    /*for (Cookie cookie : request.getCookies()) {
         if (cookie.getName().equals(nombre)) {
             try {
                 return descifrar(cookie.getValue());
@@ -228,7 +198,19 @@ public  String obtenerValorCookie(HttpServletRequest request, String nombre) {
             }
         }
     }
-    return null;
+    return null;*/
+
+    return Arrays.stream(request.getCookies())
+            .filter(cookie -> cookie.getName().equals(nombre))
+            .findFirst()
+            .map(cookie -> {
+                try {
+                    return descifrar(cookie.getValue());
+                } catch (Exception e) {
+                    return null; // Si no puede descifrar, devuelve null por seguridad
+                }
+            })
+            .orElse(null);
 }
 
 /**
