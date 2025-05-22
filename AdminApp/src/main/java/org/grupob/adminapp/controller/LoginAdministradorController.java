@@ -30,6 +30,7 @@ public class LoginAdministradorController {
     @GetMapping("area-personal")
     public String areaPersonal(Model modelo, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+//        String id = sesion.getId();
 
         if (adminDTO == null) {
             return "redirect:/login"; // protección ante acceso directo sin login
@@ -37,6 +38,13 @@ public class LoginAdministradorController {
 
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "redirect:/empleado/lista";
+
+//        if(id.equals(idsesion)){
+//            modelo.addAttribute("loginAdminDTO", adminDTO);
+//            return "redirect:/empleado/lista";
+//        }else{
+//            return "redirect:/login";
+//        }
     }
 
     // Endpoint para desconectar

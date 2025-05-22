@@ -22,12 +22,29 @@ public class LoginAdministradorRestController {
     }
 
 
-    @PostMapping("login")
+   /* @PostMapping("login")
     public ResponseEntity<LoginAdministradorDTO> comprobrarCredenciales(HttpSession sesion,
                                                     @RequestBody @Valid LoginAdministradorDTO loginAdminDTO) {
+
+*//*    public ResponseEntity<String> comprobrarCredenciales(HttpSession sesion,
+                                                                        @RequestBody @Valid LoginAdministradorDTO loginAdminDTO) {*//*
        LoginAdministradorDTO adminDTO = adminServicio.comprobarCredenciales(loginAdminDTO);
         sesion.setAttribute("adminLogueado", adminDTO);
-       return ResponseEntity.ok(adminDTO);
+        String idSesion = sesion.getId();
+
+         return ResponseEntity.ok(adminDTO);
+//        return ResponseEntity.ok(idSesion);
+    }*/
+
+    @PostMapping("login-des")
+    public ResponseEntity<LoginAdministradorDTO> comprobrarCredenciales(
+            HttpSession sesion,
+            @RequestBody @Valid LoginAdministradorDTO loginAdminDTO) {
+
+        LoginAdministradorDTO adminDTO = adminServicio.comprobarCredenciales(loginAdminDTO);
+        sesion.setAttribute("adminLogueado", adminDTO);
+
+        return ResponseEntity.ok(adminDTO);
     }
 
 

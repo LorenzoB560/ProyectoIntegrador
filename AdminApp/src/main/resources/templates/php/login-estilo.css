@@ -87,3 +87,18 @@ input[type="text"] {
 .button:hover {
     background: #135abe;
 }
+
+/* FOOTER */
+footer {
+    background-color: #181c20;
+    color: #b0bec5;
+    text-align: center;
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    border-top: 1px solid #b0bec5;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
