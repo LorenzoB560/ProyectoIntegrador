@@ -36,7 +36,7 @@ public class LoginAdministradorRestController {
 //        return ResponseEntity.ok(idSesion);
     }*/
 
-    @PostMapping("login-des")
+    @PostMapping("login")
     public ResponseEntity<LoginAdministradorDTO> comprobrarCredenciales(
             HttpSession sesion,
             @RequestBody @Valid LoginAdministradorDTO loginAdminDTO) {
