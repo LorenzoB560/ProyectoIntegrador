@@ -88,6 +88,16 @@
                th:value="#{registro.botonEspecialidades.seleccionar}"
                onclick="seleccionaCheckbox('especialidades');" class="boton" />
         <br><br>
+
+
+        <label for="idJefe" th:text="#{registro.seleccioneJefe}"></label>
+        <select id="idJefe" th:field="*{idJefe}">
+            <option th:each="jefe : ${listaEmpleados}"
+                    th:value="${jefe.id}"
+                    th:text="${jefe.nombre + ' ' + jefe.apellido}">
+            </option>
+        </select>
+        <div th:each="error : ${#fields.errors('idJefe')}" th:text="${error}" class="error"></div>
     </fieldset>
 
     <!-- BOTONES DEL FORMULARIO -->
