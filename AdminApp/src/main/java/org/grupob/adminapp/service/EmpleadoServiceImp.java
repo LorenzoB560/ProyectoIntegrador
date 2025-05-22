@@ -9,6 +9,8 @@ import org.grupob.adminapp.converter.EmpleadoConverter;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.repository.UsuarioEmpleadoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,10 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class  EmpleadoServiceImp implements EmpleadoService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmpleadoServiceImp.class);
+
+
 
     private final EmpleadoRepository empleadoRepository;
 //    private final EtiquetaRepository etiquetaRepository;
@@ -370,11 +376,11 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 //                .collect(Collectors.toList());
 //    }
 
-    @Scheduled(fixedRate = 480000) // Cada 8 minutos
+    @Scheduled(fixedRate = 120000) // Cada 8 minutos
     @Transactional
     @Override
     public void desbloquearEmpleadosBloqueadosAutomaticamente() {
-//        logger.info("Ejecutando tarea programada: Comprobar y desbloquear empleados cuyo tiempo de bloqueo ha expirado (usando synchronized).");
+        System.out.println("Ejecutando tarea programada: Comprobar y desbloquear empleados cuyo tiempo de bloqueo ha expirado (usando synchronized).");
         LocalDateTime ahora = LocalDateTime.now();
 
         List<UsuarioEmpleado> usuariosParaDesbloquear =
@@ -383,10 +389,8 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         if (!usuariosParaDesbloquear.isEmpty()) {
             List<String> nombresDesbloqueadosEstaVez = new ArrayList<>();
             for (UsuarioEmpleado usuario : usuariosParaDesbloquear) {
-//                logger.debug("Desbloqueando usuario: {} cuya fecha de desbloqueo ({}) ha pasado.",
-//                        usuario.getUsuario(), usuario.getFechaDesbloqueo();
-
-                usuario.setActivo(true);
+                logger.debug("Desbloqueando usuario: {} cuya fecha de desbloqueo ({}) ha pasado.",
+                        usuario.getUsuario(), usuario.getFechaDesbloqueo());
                 usuario.setIntentosSesionFallidos(0);
                 usuario.setMotivoBloqueo(null);
                 usuario.setFechaDesbloqueo(null);
@@ -402,13 +406,14 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                         nombreCompleto = "ID Empleado: " + empleadoAsociado.getId(); // Fallback si nombre y apellido son nulos/vacíos
                     }
                     nombresDesbloqueadosEstaVez.add(nombreCompleto);
-//                    logger.info("Empleado {} (Usuario: {}) desbloqueado automáticamente por expiración de fecha.",
-//                            nombreCompleto, usuario.getUsuario());
+                    logger.info("Empleado {} (Usuario: {}) desbloqueado automáticamente por expiración de fecha.",
+                            nombreCompleto, usuario.getUsuario());
+
                 } else {
                     String identificadorUsuario = "Usuario: " + usuario.getUsuario() + " (ID: " + usuario.getId() + ")";
                     nombresDesbloqueadosEstaVez.add(identificadorUsuario);
-//                    logger.warn("Usuario {} desbloqueado por expiración de fecha, pero no se encontró Empleado asociado.",
-//                            identificadorUsuario);
+                    logger.warn("Usuario {} desbloqueado por expiración de fecha, pero no se encontró Empleado asociado.",
+                            identificadorUsuario);
                 }
             }
 
@@ -416,13 +421,13 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 this.empleadosDesbloqueadosRecientemente.clear();
                 if (!nombresDesbloqueadosEstaVez.isEmpty()) {
                     this.empleadosDesbloqueadosRecientemente.addAll(nombresDesbloqueadosEstaVez);
-//                    logger.info("{} empleados/usuarios han sido desbloqueados por expiración y añadidos a la lista de notificación.",
+                    logger.info("{} empleados/usuarios han sido desbloqueados por expiración y añadidos a la lista de notificación.",
 
-//                            nombresDesbloqueadosEstaVez.size());
+                            nombresDesbloqueadosEstaVez.size());
                 }
             }
         } else {
-//            logger.info("No hay empleados con bloqueo temporal expirado para desbloquear en esta ejecución.");
+            logger.info("No hay empleados con bloqueo temporal expirado para desbloquear en esta ejecución.");
             if (!this.empleadosDesbloqueadosRecientemente.isEmpty()) {
                 synchronized (this.empleadosDesbloqueadosRecientemente) {
                     this.empleadosDesbloqueadosRecientemente.clear();
@@ -445,7 +450,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public void clearNombresEmpleadosDesbloqueadosRecientemente() {
         synchronized (this.empleadosDesbloqueadosRecientemente) {
             this.empleadosDesbloqueadosRecientemente.clear();
-//            logger.debug("Lista de empleados desbloqueados recientemente ha sido limpiada.");
+            logger.debug("Lista de empleados desbloqueados recientemente ha sido limpiada.");
         }
     }
 

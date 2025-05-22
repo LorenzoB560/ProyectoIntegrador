@@ -18,6 +18,7 @@ INSERT INTO motivo_bloqueo(motivo, minutos)
 VALUES ('Intentos fallidos', 15),
        ('Falta leve', 30),
        ('Falta media', 45),
+       ('prueba', 1),
        ('Falta grave', 60);
 
 -- Administradores
