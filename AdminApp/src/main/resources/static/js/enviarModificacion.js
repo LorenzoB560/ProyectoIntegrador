@@ -8,7 +8,6 @@ $(document).ready(function() {
             nombre: $("#nombreEmpleado").val(),
             apellido: $("#apellidoEmpleado").val(),
             fechaNacimiento: $("#fechaNacimiento").val(),
-            correo: $("#email").val()
         };
 
     $.ajax({
@@ -17,8 +16,6 @@ $(document).ready(function() {
             data: JSON.stringify(dto),
             contentType: "application/json",
             success() {
-                console.log("Se ha modificado correctamente al usuario.")
-                //Redireccion
                 window.location.href = "/empleado/lista";
             }, error: function (xhr) {
                 console.log(xhr.responseText)

@@ -47,11 +47,11 @@
             </div>
             <div>
                 <div class="d-flex align-items-center">
-                    <h1 id="nombreCompleto" class="profile-name">Nombre del Empleado</h1>
-                    <span id="estadoBadge" class="status-badge"></span>
+                    <h1 id="nombreCompleto" class="profile-name" th:text="${empleado.nombre} + ' ' + ${empleado.apellido}"></h1>
+                    <span id="estadoBadge" class="status-badge"  th:text="${empleado.activo} ? 'Activo' : 'Inactivo'"></span>
                 </div>
-                <p id="puestoEmpleado" class="profile-position">Comentarios del puesto</p>
-                <p id="departamentoEmpleado" class="text-muted mb-0">Departamento</p>
+                <p id="puestoEmpleado" class="profile-position" th:text="${empleado.comentarios}"></p>
+                <p id="departamentoEmpleado" class="text-muted mb-0" th:text="${empleado.departamento.nombre}"></p>
             </div>
         </div>
 
@@ -97,8 +97,8 @@
                                         <td><input type="text" id="fechaNacimiento"></td>
                                     </tr>
                                     <tr>
-                                        <th><label for="email">Email:</label></th>
-                                        <td><input type="text" id="email"></td>
+                                        <th><label>Email:</label></th>
+                                        <td><span th:value="${usuarioEmpleado.usuario}" th:text="${usuarioEmpleado.usuario}" id="emailEmpleado"></span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -107,20 +107,12 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">Especialidades</div>
-<!--                            <div class="card-body">-->
-<!--                                <div th:each="esp : ${listaEspecialidades}">-->
-<!--                                    <input type="checkbox" class="opcion-checkbox" th:field="*{especialidades}"-->
-<!--                                           th:value="${esp.id}"-->
-<!--                                           th:id="${'especialidad_' + esp.codigo}" />-->
-<!--                                    <label th:for="${'especialidad_' + esp.codigo}"-->
-<!--                                           th:text="#{'registro.especialidades.' + ${esp.codigo}}"></label>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="card-body">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="button" id="btn-Enviar">Enviar</button>
 
             <!-- Work Information Tab -->
             <div class="tab-pane fade" id="info-laboral" role="tabpanel">
@@ -131,24 +123,26 @@
                             <div class="card-body">
                                 <table class="table table-borderless">
                                     <tr>
-                                        <th>Departamento:</th>
-                                        <td id="departamentoDetalle"></td>
+                                        <th><label>Departamento:</label></th>
+                                        <td th:text="${empleado.departamento.nombre}">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Fecha de Contratación:</th>
-                                        <td id="fechaContratacion"></td>
+                                        <td th:text="${empleado.periodo.fechaInicio}"></td>
                                     </tr>
                                     <tr>
                                         <th>Fecha de Cese:</th>
-                                        <td id="fechaCese"></td>
+                                        <td th:text="${empleado.periodo.fechaFin != null ? empleado.periodo.fechaFin : 'No especificado'}"></td>
                                     </tr>
                                     <tr>
                                         <th>Estado:</th>
-                                        <td id="estadoEmpleado"></td>
+                                        <td th:text="${empleado.activo} ? 'Activo' : 'Inactivo'"></td>
+
                                     </tr>
                                     <tr>
                                         <th>Comentarios:</th>
-                                        <td id="comentariosEmpleado"></td>
+                                        <td th:text="${empleado.comentarios}"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -160,7 +154,9 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <div class="info-label">Jefe:</div>
-                                    <div id="jefeEmpleado" class="info-value"></div>
+                                    <div id="jefeEmpleado" class="info-value">
+                                        <span th:text="${empleado.nombreJefe}"></span>
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="info-label">Subordinados:</div>
@@ -184,15 +180,15 @@
                                 <table class="table table-borderless">
                                     <tr>
                                         <th>Salario:</th>
-                                        <td id="salarioEmpleado"></td>
+                                        <td th:text="${empleado.salario} + ' €'"></td>
                                     </tr>
                                     <tr>
                                         <th>Comisión:</th>
-                                        <td id="comisionEmpleado"></td>
+                                        <td th:text="${empleado.comision} + ' €'"></td>
                                     </tr>
                                     <tr>
                                         <th>Salario + Comisión:</th>
-                                        <td id="totalEmpleado"></td>
+                                        <td th:text="${empleado.salario} + ${empleado.comision} + ' €'"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -204,24 +200,26 @@
                             <div class="card-body">
                                 <table class="table table-borderless">
                                     <tr>
-                                        <th>Entidad Bancaria:</th>
-                                        <td id="entidadBancariaEmpleado"></td>
+                                        <th><label>Entidad Bancaria</label></th>
+                                        <td th:text="${empleado.entidadBancaria.nombre}">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>IBAN:</th>
-                                        <td><span id="ibanEmpleado" class="sensitive-data"></span></td>
+                                        <td><span th:text="${empleado.cuentaCorriente.iban}" class="sensitive-data"></span></td>
                                     </tr>
                                     <tr>
-                                        <th>Tipo de Tarjeta:</th>
-                                        <td id="tipoTarjetaEmpleado"></td>
+                                        <th><label>Tipo de tarjeta de crédito</label></th>
+                                        <td th:text="${empleado.idTipoTarjeta.tipoTarjetaCredito}">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Número de Tarjeta:</th>
-                                        <td><span id="numeroTarjetaEmpleado" class="sensitive-data"></span></td>
+                                        <td><span th:text="${empleado.tarjetaCredito.numero}" class="sensitive-data"></span></td>
                                     </tr>
                                     <tr>
                                         <th>Caducidad:</th>
-                                        <td id="caducidadTarjetaEmpleado"></td>
+                                        <td th:text="${empleado.tarjetaCredito.mesCaducidad} + '' + ${empleado.tarjetaCredito.anioCaducidad}"></td>
                                     </tr>
                                 </table>
                             </div>
@@ -236,6 +234,9 @@
             <a href="http://localhost:9090/empleado/lista" class="btn btn-secondary">
                 <i class="bi bi-arrow-left me-1"></i> Volver a la lista
             </a>
+            <button type="button" id="btn-Enviar" class="btn btn-primary">
+                <i class="bi bi-check-lg me-1"></i> Guardar Cambios
+            </button>
         </div>
     </div>
 </div>

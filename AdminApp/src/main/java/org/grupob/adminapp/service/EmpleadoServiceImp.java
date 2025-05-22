@@ -2,10 +2,12 @@ package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
-import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.*;
+import org.grupob.comun.entity.maestras.TipoTarjetaCredito;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.exception.EmpleadoNoEncontradoException;
-import org.grupob.comun.repository.EmpleadoRepository;
+import org.grupob.comun.exception.UsuarioNoEncontradoException;
+import org.grupob.comun.repository.*;
 import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
@@ -31,18 +33,28 @@ public  class  EmpleadoServiceImp implements EmpleadoService {
 //    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
     private final EmpleadoConverterAdmin empleadoConverter;
     private final EmpleadoConverterAdmin empleadoConverterAdmin;
+    private final UsuarioEmpleadoRepository usuarioEmpleadoRepository;
+    private final EspecialidadRepository especialidadRepository;
+    private final DepartamentoRepository departamentoRepository;
+    private final EntidadBancariaRepository entidadBancariaRepository;
+    private final TipoTarjetaRepository tipoTarjetaRepository;
 
     public EmpleadoServiceImp(
             EmpleadoRepository empleadoRepository,
 //            EtiquetaRepository etiquetaRepository,
 //            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverterAdmin empleadoConverter, EmpleadoConverterAdmin empleadoConverterAdmin) {
+            EmpleadoConverterAdmin empleadoConverter, EmpleadoConverterAdmin empleadoConverterAdmin, UsuarioEmpleadoRepository usuarioEmpleadoRepository, EspecialidadRepository especialidadRepository, DepartamentoRepository departamentoRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository) {
 
         this.empleadoRepository = empleadoRepository;
 //        this.etiquetaRepository = etiquetaRepository;
 //        this.empleadoEtiquetaRepository = empleadoEtiquetaRepository;
         this.empleadoConverter = empleadoConverter;
         this.empleadoConverterAdmin = empleadoConverterAdmin;
+        this.usuarioEmpleadoRepository = usuarioEmpleadoRepository;
+        this.especialidadRepository = especialidadRepository;
+        this.departamentoRepository = departamentoRepository;
+        this.entidadBancariaRepository = entidadBancariaRepository;
+        this.tipoTarjetaRepository = tipoTarjetaRepository;
     }
 
     // -----------------------------------
@@ -103,12 +115,22 @@ public  class  EmpleadoServiceImp implements EmpleadoService {
 
     @Override
     public Empleado modificarEmpleado(String id, ModificacionEmpleadoDTO modificacionEmpleadoDTO) {
-        Empleado empleado = empleadoConverterAdmin.convertirAEntidadDesdeModificacion(modificacionEmpleadoDTO);
+        Optional<Empleado> empleado = empleadoRepository.findById(UUID.fromString(id));
+//        Empleado empleado = empleadoConverterAdmin.convertirAEntidadDesdeModificacion(modificacionEmpleadoDTO);
         UUID uuid = UUID.fromString(id);
-        if (empleadoRepository.existsById(uuid)) {
-            empleado.setId(uuid);
-            empleado.setActivo(true);
-            return empleadoRepository.save(empleado);
+        Optional<UsuarioEmpleado> usuarioEmpleado = usuarioEmpleadoRepository.findById(uuid);
+        if (empleado.isPresent()) {
+            Empleado e = empleado.get();
+            e.setId(uuid);
+            e.setActivo(true);
+            usuarioEmpleado.ifPresent(e::setUsuario);
+
+            System.err.println("EMPLEADO: " + e);
+            e.setNombre(!modificacionEmpleadoDTO.getNombre().isEmpty() ? modificacionEmpleadoDTO.getNombre() : e.getNombre());
+            e.setApellido(!modificacionEmpleadoDTO.getApellido().isEmpty() ? modificacionEmpleadoDTO.getApellido() : e.getApellido());
+            e.setFechaNacimiento(modificacionEmpleadoDTO.getFechaNacimiento() != null ? modificacionEmpleadoDTO.getFechaNacimiento() : e.getFechaNacimiento());
+
+            return empleadoRepository.save(e);
         }
         throw new EmpleadoNoEncontradoException("El empleado no existe");
     }
@@ -369,6 +391,22 @@ public  class  EmpleadoServiceImp implements EmpleadoService {
 //                .collect(Collectors.toList());
 //    }
 
+    public List<Especialidad> devuelveListaEspecialidades() {
+        return especialidadRepository.findAll();
+    }
+    public List<Departamento> devolverDepartamentos(){
+        return departamentoRepository.findAll();
+    }
+    public List<EntidadBancaria> devolverEntidadesBancarias(){
+        return entidadBancariaRepository.findAll();
+    }
+    public List<TipoTarjetaCredito> devolverTipoTarjetasCredito(){
+        return tipoTarjetaRepository.findAll();
+    }
 
 
+    public UsuarioEmpleado devuelveUsuarioEmpleado(String id){
+        return usuarioEmpleadoRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Empleado no encontrado"));
+    }
 }

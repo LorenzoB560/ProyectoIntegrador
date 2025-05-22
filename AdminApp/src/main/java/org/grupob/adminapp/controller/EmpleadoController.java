@@ -53,6 +53,12 @@ public class EmpleadoController {
             return "redirect:/adminapp/login";
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
+        modelo.addAttribute("usuarioEmpleado", empleadoService.devuelveUsuarioEmpleado(id));
+        modelo.addAttribute("empleado", empleadoService.devuelveEmpleado(id));
+        modelo.addAttribute("listaEspecialidades", empleadoService.devuelveListaEspecialidades());
+        modelo.addAttribute("listaDepartamentos", empleadoService.devolverDepartamentos());
+        modelo.addAttribute("listaEntidadesBancarias", empleadoService.devolverEntidadesBancarias());
+        modelo.addAttribute("listaTipoTarjetaCreditos", empleadoService.devolverTipoTarjetasCredito());
 
         return "listados/modificacion-empleado";
     }
