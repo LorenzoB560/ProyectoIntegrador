@@ -17,9 +17,23 @@ $(document).ready(function() {
             contentType: "application/json",
             success() {
                 window.location.href = "/empleado/lista";
-            }, error: function (xhr) {
-                console.log(xhr.responseText)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error al guardar la nómina:", errorThrown);
+
+            try {
+                const errorJson = JSON.parse(jqXHR.responseText);
+
+                if (errorJson.listaErrores && Array.isArray(errorJson.listaErrores)) {
+                    const mensajePersonalizado = "Se encontraron los siguientes errores:\n- " + errorJson.listaErrores.join("\n- ");
+                    alert(mensajePersonalizado);
+                } else if (errorJson.message) {
+                    alert("Error al guardar la nómina: " + errorJson.message);
+                }
+            } catch (e) {
+                alert("Error inesperado al guardar la nómina: " + errorThrown);
             }
+        }
         });
     })
 })
