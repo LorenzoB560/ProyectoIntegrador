@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (fechaInicio) params.append('fechaInicio', fechaInicio);
             if (fechaFin) params.append('fechaFin', fechaFin);
 
-            window.location.href = '/nomina/busqueda-parametrizada?' + params.toString();
+            window.location.href = '/adminapp/nomina/busqueda-parametrizada?' + params.toString();
         });
 
         limpiarBtn.addEventListener('click', function () {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('fechaInicio').value = '';
             document.getElementById('fechaFin').value = '';
 
-            window.location.href = '/nomina/listado';
+            window.location.href = '/adminapp/nomina/listado';
         });
     }
 
