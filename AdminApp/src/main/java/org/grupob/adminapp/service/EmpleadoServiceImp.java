@@ -376,7 +376,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 //                .collect(Collectors.toList());
 //    }
 
-    @Scheduled(fixedRate = 120000) // Cada 8 minutos
+    @Scheduled(fixedRate = 120000) // Cada 2 minutos
     @Transactional
     @Override
     public void desbloquearEmpleadosBloqueadosAutomaticamente() {
