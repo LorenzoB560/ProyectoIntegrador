@@ -12,7 +12,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: "PUT",
-            url: `/empleados/guardar-modificado/${idEmpleado}`,
+            url: `/adminapp/empleados/guardar-modificado/${idEmpleado}`,
             data: JSON.stringify(dto),
             contentType: "application/json",
             success() {
