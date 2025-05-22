@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -302,5 +303,18 @@ public class EmpleadoRestController {
 //    public List<EmpleadoDTO> buscarPorEtiqueta(@PathVariable String etiquetaId) {
 //        return empleadoService.buscarPorEtiqueta(etiquetaId);
 //    }
+
+
+    @GetMapping("/desbloqueados-recientemente")
+    public ResponseEntity<Map<String, List<String>>> getEmpleadosDesbloqueadosRecientemente() {
+        List<String> nombres = empleadoService.getNombresEmpleadosDesbloqueadosRecientemente();
+        if (nombres != null && !nombres.isEmpty()) {
+            // Crear una copia antes de limpiar para asegurar que se envían los datos correctos
+            List<String> nombresParaEnviar = new ArrayList<>(nombres);
+            empleadoService.clearNombresEmpleadosDesbloqueadosRecientemente(); // Limpiar la lista después de obtenerla para no mostrar el mensaje repetidamente
+            return ResponseEntity.ok(Map.of("nombres", nombresParaEnviar));
+        }
+        return ResponseEntity.noContent().build(); // Sin contenido que reportar
+    }
 
 }
