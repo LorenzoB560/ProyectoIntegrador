@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Historial de Colaboraciones</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Tu CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!--CSS para los fragmentos    -->
+    <link rel="stylesheet" th:href="@{/css/emp/estilos-generales.css}">
+    <style>
+        /* Estilos para los cards de colaboración */
+        .colaboracion-card {
+            /* Un borde sutil para todos los cards de colaboración */
+        }
+        .colaboracion-card.bg-light { /* Cuando está activa, usamos un fondo suave */
+            border-left: 5px solid #0d6efd; /* Azul primario para activas */
+        }
+        .colaboracion-card.border-secondary { /* Cuando está inactiva */
+            border-left: 5px solid #6c757d; /* Gris secundario para inactivas */
+        }
+
+        /* Estilos para los cards de solicitud */
+        .solicitud-card {
+            border-left: 5px solid #0dcaf0; /* Color info para solicitudes generales */
+        }
+        .solicitud-card.estado-solicitud-pendiente { border-left-color: #ffc107; } /* Amarillo */
+        .solicitud-card.estado-solicitud-rechazada { border-left-color: #dc3545; } /* Rojo */
+        .solicitud-card.estado-solicitud-aceptada { border-left-color: #198754; } /* Verde */
+        .solicitud-card.estado-solicitud-cancelada_auto { border-left-color: #adb5bd; } /* Gris más claro */
+
+
+        .periodo-item {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+        .periodo-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Clases para los badges de estado (usadas por el JS) */
+        /* Colaboraciones Establecidas */
+        .badge.estado-ACTIVA { background-color: #0d6efd; color: white; }
+        .badge.estado-INACTIVA, .badge.estado-FINALIZADA { background-color: #6c757d; color: white; }
+        /* Solicitudes */
+        .badge.estado-PENDIENTE { background-color: #ffc107; color: #000; }
+        .badge.estado-ACEPTADA { background-color: #198754; color: white; }
+        .badge.estado-RECHAZADA { background-color: #dc3545; color: white; }
+        .badge.estado-CANCELADA_AUTO { background-color: #adb5bd; color: #000; } /* Para canceladas automáticamente */
+        .badge.estado-DESCONOCIDO { background-color: #f8f9fa; color: #000; border: 1px solid #ccc; }
+
+
+        /* Estilo para el spinner de carga */
+        #loadingSpinnerHistorial {
+            display: none; /* Oculto por defecto, el JS lo muestra/oculta */
+            text-align: center;
+            padding: 2rem;
+        }
+        .btn .spinner-border-sm {
+            margin-right: 0.3em;
+        }
+    </style>
+</head>
+<body th:object="${dto}">
+<div th:replace="fragmentos/emp/header :: header"></div>
+<div th:replace="fragmentos/emp/nav :: nav"></div>
+<main role="main" class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h1 class="mb-0 h2"><i class="fas fa-history me-2"></i>Historial de Colaboraciones</h1>
+        <div>
+            <a th:href="@{/empapp/colaboraciones/solicitar}" class="btn btn-primary">
+                <i class="fas fa-user-plus me-2"></i>Nueva Solicitud
+            </a>
+            <a th:href="@{/empapp/colaboraciones/listado}" class="btn btn-outline-secondary ms-2">
+                <i class="fas fa-list-alt me-2"></i>Ver Mis Solicitudes
+            </a>
+        </div>
+    </div>
+
+    <div id="mensajeAlertaHistorial" class="mb-3">
+    </div>
+
+    <div id="loadingSpinnerHistorial" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Cargando historial...</span>
+        </div>
+        <p class="mt-2 text-muted">Cargando historial de colaboraciones y solicitudes...</p>
+    </div>
+
+    <div id="historialColaboracionesContainer">
+    </div>
+
+</main>
+
+
+<script th:src="@{/js/historialColaboraciones.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

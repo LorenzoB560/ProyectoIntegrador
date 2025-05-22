@@ -3,15 +3,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const hojaEstilo = document.getElementById("estilos");
 
     // Cargar estado guardado en sessionStorage
-    const estadoGuardado = sessionStorage.getItem("cssActivo");
+    const estadoGuardado = localStorage.getItem("cssActivo");
 
-    // Determinar cuál hoja de estilo usar
-    if (estadoGuardado === "false") {
-        hojaEstilo.href = "/css/registro-empleado-sobrio.css";  // Ruta a tu CSS alternativo
-        document.querySelector('input[value="off"]').checked = true;
-    } else {
-        hojaEstilo.href = "/css/registro-empleado-estilos.css";  // Ruta a tu CSS por defecto
+    // Determinar cuál hoja de estilo usar al estar guardado en el sessionStorage
+    if (estadoGuardado === "true") {
+        hojaEstilo.href = "/css/registro-empleado-estilos.css";  // Ruta a CSS por defecto
         document.querySelector('input[value="on"]').checked = true;
+    } else {
+        hojaEstilo.href = "/css/registro-empleado-sobrio.css";  // Ruta a CSS alternativo
+        document.querySelector('input[value="off"]').checked = true;
     }
 
     // Cambiar y guardar estado al cambiar el botón
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             // Guardar el estado en sessionStorage
-            sessionStorage.setItem("cssActivo", activo);
+            localStorage.setItem("cssActivo", activo);
         });
     });
 });

@@ -5,7 +5,7 @@ import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.DepartamentoRepository;
 import org.grupob.adminapp.converter.DepartamentoConverter;
-import org.grupob.adminapp.dto.DepartamentoDTO;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

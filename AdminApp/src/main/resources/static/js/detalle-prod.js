@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detalleContenedor) detalleContenedor.style.display = 'block';
 
             // --- Información General del Producto ---
-            rellenarTexto('prod-id', data.id);
             rellenarTexto('prod-nombre-header', data.nombre || data.descripcion || 'Producto sin nombre');
             rellenarTexto('prod-descripcion', data.descripcion);
             rellenarTexto('prod-precio', formatearMoneda(data.precio));
@@ -45,28 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
             rellenarTexto('prod-fecha-fabricacion', formatearFecha(data.fechaFabricacion));
             rellenarTexto('prod-fecha-alta', formatearFecha(data.fechaAlta));
 
-            const coloresSpan = document.getElementById('prod-colores');
-            if (coloresSpan) {
-                if (data.colores && data.colores.length > 0) {
-                    coloresSpan.innerHTML = data.colores.map(color => {
-                        if (typeof color === 'string') {
-                            return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; color: ${getContrastingTextColor(color.toLowerCase())};">${color}</span>`;
-                        } else if (typeof color === 'object' && color !== null) {
-                            const bgColor = color.hex || color.codigo || 'grey';
-                            const textColor = getContrastingTextColor(bgColor);
-                            return `<span class="badge me-1" style="background-color:${bgColor}; color: ${textColor};">${color.nombre || bgColor}</span>`;
-                        }
-                        return '';
-                    }).join(' ');
-                } else {
-                    coloresSpan.textContent = 'No especificados';
-                }
-            }
 
             // --- Proveedor ---
             if (data.proveedor) {
                 rellenarTexto('prov-nombre', data.proveedor.nombre);
                 rellenarTexto('prov-id', data.proveedor.id);
+
             } else {
                 rellenarTexto('prov-nombre', 'N/A');
                 rellenarTexto('prov-id', 'N/A');
@@ -144,11 +127,7 @@ function mostrarDetallesPorTipo(tipoProducto, data) {
                     if (data.colores && Array.isArray(data.colores) && data.colores.length > 0) {
                         coloresMuebleSpan.innerHTML = data.colores.map(color => {
                             if (typeof color === 'string') {
-                                return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; color: ${getContrastingTextColor(color.toLowerCase())};">${color}</span>`;
-                            } else if (typeof color === 'object' && color !== null) {
-                                const bgColor = color.hex || color.codigo || 'grey';
-                                const textColor = getContrastingTextColor(bgColor);
-                                return `<span class="badge me-1" style="background-color:${bgColor}; color: ${textColor};">${color.nombre || bgColor}</span>`;
+                                return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; Color:black">${color}</span>`;
                             }
                             return '';
                         }).join(' ');
@@ -337,31 +316,7 @@ function generarEstrellasValoracion(valoracion) {
 
 function getContrastingTextColor(hexColor) {
     if (!hexColor) return '#000000';
-    const commonColorsToHex = {
-        black: "#000000", white: "#ffffff", red: "#ff0000", green: "#008000", blue: "#0000ff",
-        yellow: "#ffff00", cyan: "#00ffff", magenta: "#ff00ff", gray: "#808080",
-        maroon: "#800000", olive: "#808000", purple: "#800080", teal: "#008080", navy: "#000080"
-    };
-    hexColor = commonColorsToHex[hexColor.toLowerCase()] || hexColor;
 
-    const hex = hexColor.replace('#', '');
-    if (hex.length !== 3 && hex.length !== 6) return '#000000'; // Default for invalid hex
-
-    let r, g, b;
-    if (hex.length === 3) {
-        r = parseInt(hex[0] + hex[0], 16);
-        g = parseInt(hex[1] + hex[1], 16);
-        b = parseInt(hex[2] + hex[2], 16);
-    } else {
-        r = parseInt(hex.substring(0, 2), 16);
-        g = parseInt(hex.substring(2, 4), 16);
-        b = parseInt(hex.substring(4, 6), 16);
-    }
-
-    if (isNaN(r) || isNaN(g) || isNaN(b)) return '#000000'; // Default if parsing failed
-
-    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    return (yiq >= 128) ? '#000000' : '#FFFFFF';
 }
 
 function mostrarErrorDetalleProd(mensaje) {

@@ -7,31 +7,31 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import org.grupob.comun.converter.EmpleadoConverter;
 import org.grupob.comun.converter.NominaConverter;
 import org.grupob.comun.dto.*;
 import org.grupob.comun.entity.LineaNomina;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
+import org.grupob.comun.entity.maestras.Propiedad;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
+import org.grupob.comun.exception.NominaNoExistenteException;
 import org.grupob.comun.exception.NominaPasadaException;
-import org.grupob.comun.repository.ConceptoRepository;
-import org.grupob.comun.repository.EmpleadoRepository;
-import org.grupob.comun.repository.LineaNominaRepository;
-import org.grupob.comun.repository.NominaRepository;
+import org.grupob.comun.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
-import java.time.YearMonth;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,13 +43,17 @@ public class NominaServiceImp implements NominaService{
     private final EmpleadoRepository empleadoRepository;
     private final LineaNominaRepository lineaNominaRepository;
     private final ConceptoRepository conceptoRepository;
+    private final EmpleadoConverter empleadoConverter;
+    private final PropiedadRepository propiedadRepository;
 
-    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository, LineaNominaRepository lineaNominaRepository, ConceptoRepository conceptoRepository) {
+    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository, LineaNominaRepository lineaNominaRepository, ConceptoRepository conceptoRepository, EmpleadoConverter empleadoConverter, PropiedadRepository propiedadRepository) {
         this.nominaRepository = nominaRepository;
         this.nominaConverter = nominaConverter;
         this.empleadoRepository = empleadoRepository;
         this.lineaNominaRepository = lineaNominaRepository;
         this.conceptoRepository = conceptoRepository;
+        this.empleadoConverter = empleadoConverter;
+        this.propiedadRepository = propiedadRepository;
     }
     public NominaDTO devolverNominaPorId(UUID id){
         Optional<Nomina> nomina = nominaRepository.findById(id);
@@ -94,9 +98,7 @@ public class NominaServiceImp implements NominaService{
     public void eliminarConcepto(UUID idNomina, UUID idConcepto) {
         Optional<Nomina> nomina = nominaRepository.findById(idNomina);
         if (nomina.isPresent()) {
-            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
-            YearMonth mesActual = YearMonth.now();
-            if (mesNomina.isBefore(mesActual)) {
+            if (nomina.get().getPeriodo().getFechaFin().isBefore(LocalDate.now())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
             }
         }
@@ -130,23 +132,36 @@ public class NominaServiceImp implements NominaService{
 
             // Datos generales
             document.add(new Paragraph("Empleado: " + nomina.getNombre()));
-            document.add(new Paragraph("Mes: " + nomina.getMes() + " / Año: " + nomina.getAnio()));
+            document.add(new Paragraph("Periodo de inicio: " + nomina.getPeriodo().getFechaInicio()));
+            document.add(new Paragraph("Periodo de finalización: " + nomina.getPeriodo().getFechaFin()));
             document.add(Chunk.NEWLINE);
 
             // Tabla de conceptos
-            PdfPTable table = new PdfPTable(2);
+            PdfPTable table = new PdfPTable(3);
             table.setWidthPercentage(100);
             table.setSpacingBefore(10);
             table.setSpacingAfter(10);
 
             Font encabezado = new Font(Font.HELVETICA, 12, Font.BOLD);
             table.addCell(new Phrase("Concepto", encabezado));
+            table.addCell(new Phrase("Porcentaje (%)", encabezado));
             table.addCell(new Phrase("Cantidad (€)", encabezado));
 
-            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
-                table.addCell(linea.getNombreConcepto());
-                table.addCell(String.format("%.2f", linea.getCantidad()));
-            }
+//            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
+//                table.addCell(linea.getNombreConcepto());
+//                if (linea.getPorcentaje()!= null){
+//                table.addCell(String.format("%.2f", linea.getPorcentaje()));
+//                } else{
+//                    table.addCell("");
+//                }
+//                table.addCell(String.format("%.2f", linea.getCantidad()));
+//            }
+            nomina.getLineaNominas()
+                            .forEach(n -> {
+                                table.addCell(n.getNombreConcepto());
+                                table.addCell(n.getPorcentaje() != null ? String.format("%.2f", n.getPorcentaje()) : "");
+                                table.addCell(String.format("%.2f", n.getCantidad()));
+                            });
 
             document.add(table);
 
@@ -183,11 +198,8 @@ public class NominaServiceImp implements NominaService{
 
         Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradas(
                 filtro.getFiltroNombre(),
-                filtro.getFiltroMes(),
-                filtro.getFiltroAnio(),
-                filtro.getTotalLiquidoMinimo(),
-                filtro.getTotalLiquidoMaximo(),
-                filtro.getConceptosSeleccionados(),
+                filtro.getFechaInicio(),
+                filtro.getFechaFin(),
                 pageable
         );
 
@@ -198,12 +210,9 @@ public class NominaServiceImp implements NominaService{
         Pageable pageable = PageRequest.of(page, 10);
 
         Page<Nomina> paginaNominas = nominaRepository.buscarNominasFiltradasPorEmpleado(
-                filtro.getIdEmpleado(), // Nuevo parámetro para filtrar por empleado
-                filtro.getFiltroMes(),
-                filtro.getFiltroAnio(),
-                filtro.getTotalLiquidoMinimo(),
-                filtro.getTotalLiquidoMaximo(),
-                filtro.getConceptosSeleccionados(),
+                filtro.getIdEmpleado(),
+                filtro.getFechaInicio(),
+                filtro.getFechaFin(),
                 pageable
         );
 
@@ -232,19 +241,23 @@ public class NominaServiceImp implements NominaService{
         return paginaNominas.map(n -> {
             String nombreEmpleado = n.getEmpleado().getNombre() + " " + n.getEmpleado().getApellido();
 
+
+
             List<LineaNominaDTO> lineaDTOs = n.getLineaNominas().stream().map(ln ->
                     new LineaNominaDTO(
                             ln.getConcepto().getId(),
                             ln.getConcepto().getNombre(),
-                            ln.getCantidad()
+                            ln.getConcepto().getTipo(),
+                            ln.getCantidad(),
+                            ln.getPorcentaje()
                     )
             ).toList();
+            PeriodoDTO periodoDTO = new PeriodoDTO(n.getPeriodo().getFechaInicio(), n.getPeriodo().getFechaFin());
             NominaDTO nominaDTO = new NominaDTO(
                     n.getId(),
                     n.getEmpleado().getId(),
                     nombreEmpleado,
-                    n.getMes(),
-                    n.getAnio(),
+                    periodoDTO,
                     n.getTotalLiquido(),
                     lineaDTOs);
 
@@ -259,9 +272,7 @@ public class NominaServiceImp implements NominaService{
         nominaRepository.save(nomina);
     }
     public void verificarNominaPasada(NominaDTO nomina){
-        YearMonth mesNomina = YearMonth.of(nomina.getAnio(), nomina.getMes());
-        YearMonth mesActual = YearMonth.now();
-        if (!mesNomina.isAfter(mesActual)) {
+        if (nomina.getPeriodo().getFechaFin().isBefore(LocalDate.now())) {
             throw new NominaPasadaException("No se puede modificar una nómina de un mes pasado");
         }
     }
@@ -273,6 +284,7 @@ public class NominaServiceImp implements NominaService{
             linea.setConcepto(concepto);
             linea.setCantidad(lineaDTO.getCantidad());
             linea.setNomina(nomina);
+            linea.setPorcentaje(lineaDTO.getPorcentaje());
             return linea;
         }).collect(Collectors.toSet());
 
@@ -286,6 +298,7 @@ public class NominaServiceImp implements NominaService{
     }
 
     public NominaDTO actualizarLiquidoTotal(NominaDTO nominaDTO) {
+        nominaDTO.getLineaNominas().forEach(c -> System.out.println("Concepto: " + c.getIdConcepto() + ", Cantidad: " + c.getCantidad() + "Porcentaje:" + c.getPorcentaje()));
         BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
                 .filter(c -> "INGRESO".equals(obtenerTipoPorIdConcepto(c.getIdConcepto())))
                 .map(LineaNominaDTO::getCantidad)
@@ -303,9 +316,7 @@ public class NominaServiceImp implements NominaService{
 
     private void verificarNominaPasada(Optional<Nomina> nomina){
         if (nomina.isPresent()){
-            YearMonth mesNomina = YearMonth.of(nomina.get().getAnio(), nomina.get().getMes());
-            YearMonth mesActual = YearMonth.now();
-            if (mesNomina.isBefore(mesActual)) {
+            if (nomina.get().getPeriodo().getFechaFin().isBefore(LocalDate.now())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede modificar una nómina de un mes anterior");
             }
         } else {
@@ -329,5 +340,53 @@ public class NominaServiceImp implements NominaService{
 
         return null; // No hay redirección, sigue la ejecución normal
     }
+    public UUID devolverIdEmpleadoPorNomina(UUID id){
+        Optional<Nomina> nomina = nominaRepository.findById(id);
+        if (nomina.isPresent()) {
+            return nomina.get().getEmpleado().getId();
+        } else throw new NominaNoExistenteException("Esta nómina no existe");
+    }
 
+    public EmpleadoNominaDTO devolverEmpleadoPorIdNomina(UUID idNomina){
+        UUID idEmpleado = devolverIdEmpleadoPorNomina(idNomina);
+        return empleadoRepository.findById(idEmpleado)
+                .map(empleadoConverter::convierteAEmpleadoNominaDTO)
+                .orElseThrow(() -> new EmpleadoNoEncontradoException("Empleado no encontrado con id: " + idNomina));
+    }
+
+    public List<Propiedad> devolverPropiedades(){
+        return propiedadRepository.findAll();
+    }
+
+    public BigDecimal devolverCantidadBrutaAcumulada(UUID idNomina){
+        List<Nomina> listaNominas = nominaRepository.findNominasByEmpleadoId(devolverIdEmpleadoPorNomina(idNomina));
+        return listaNominas.stream()
+                // Convierto a cada nómina en una lista de sus nóminas
+                .flatMap(nomina -> nomina.getLineaNominas().stream())
+                //Busco por el tipo de concepto, en este caso si es ingreso
+                .filter(linea -> linea.getConcepto().getTipo().equalsIgnoreCase("INGRESO"))
+                .map(LineaNomina::getCantidad)
+                //Sumo todas las cantidades una vez obtenidas
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal devolverRetencionesAcumuladas(UUID idNomina){
+        List<Nomina> listaNominas = nominaRepository.findNominasByEmpleadoId(devolverIdEmpleadoPorNomina(idNomina));
+        return listaNominas.stream()
+                // Convierto a cada nómina en una lista de sus nóminas
+                .flatMap(nomina -> nomina.getLineaNominas().stream())
+                //Busco por el tipo de concepto, en este caso si es una deducción/retención
+                .filter(linea -> linea.getConcepto().getTipo().equalsIgnoreCase("DEDUCCION"))
+                .map(LineaNomina::getCantidad)
+                //Sumo todas las cantidades una vez obtenidas
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    public void asignarDatosComunesNomina(UUID id, Model model) {
+        model.addAttribute("empleadoNominaDTO", devolverEmpleadoPorIdNomina(id));
+        BigDecimal brutoTotal = devolverCantidadBrutaAcumulada(id);
+        BigDecimal retencionesTotales = devolverRetencionesAcumuladas(id);
+        model.addAttribute("brutoTotal", brutoTotal);
+        model.addAttribute("retencionesTotales", retencionesTotales);
+        model.addAttribute("sumaLiquidoTotal", brutoTotal.subtract(retencionesTotales));
+    }
 }

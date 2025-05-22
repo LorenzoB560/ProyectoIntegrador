@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Datos profesionales</title>
     <link id="estilos" rel="stylesheet" href="/css/registro-empleado-estilos.css">
-    <script src="/js/modificarCampos.js"></script>
-    <script src="/js/modificarCSS.js"></script>
-    <script src="/js/internacionalizacion.js"></script>
+    <script src="/js/registro-empleado/modificarCampos.js"></script>
+    <script src="/js/registro-empleado/modificarCSS.js"></script>
+    <script src="/js/registro-empleado/internacionalizacion.js"></script>
 </head>
 <body id="body-profesionales">
 
@@ -32,7 +32,7 @@
 
 
 <!-- Mensaje de error a nivel general -->
-<h2 th:text="*{mensajeNOK}" class="error"></h2>
+<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
 
 <label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
 <select id="seleccionarIdioma">
@@ -88,6 +88,16 @@
                th:value="#{registro.botonEspecialidades.seleccionar}"
                onclick="seleccionaCheckbox('especialidades');" class="boton" />
         <br><br>
+
+
+        <label for="idJefe" th:text="#{registro.seleccioneJefe}"></label>
+        <select id="idJefe" th:field="*{idJefe}">
+            <option th:each="jefe : ${listaEmpleados}"
+                    th:value="${jefe.id}"
+                    th:text="${jefe.nombre + ' ' + jefe.apellido}">
+            </option>
+        </select>
+        <div th:each="error : ${#fields.errors('idJefe')}" th:text="${error}" class="error"></div>
     </fieldset>
 
     <!-- BOTONES DEL FORMULARIO -->

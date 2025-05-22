@@ -7,7 +7,7 @@ import org.grupob.comun.entity.Etiqueta;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.EtiquetaRepository;
-import org.grupob.adminapp.converter.EmpleadoConverter;
+import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.adminapp.dto.EtiquetaDTO;
 import org.grupob.adminapp.service.EtiquetaService;
@@ -29,7 +29,7 @@ public class EtiquetaServiceImp implements EtiquetaService {
     private final EtiquetaRepository etiquetaRepository;
     private final EmpleadoRepository empleadoRepository;
     private final ModelMapper modelMapper; // Para mapear listas de DTOs o sub-objetos
-    private final EmpleadoConverter empleadoConverter; // Para convertir el resultado final
+    private final EmpleadoConverterAdmin empleadoConverter; // Para convertir el resultado final
 
     @PersistenceContext // Inyectar EntityManager
     private EntityManager entityManager;
@@ -37,7 +37,7 @@ public class EtiquetaServiceImp implements EtiquetaService {
     public EtiquetaServiceImp(EtiquetaRepository etiquetaRepository,
                               EmpleadoRepository empleadoRepository,
                               ModelMapper modelMapper,
-                              EmpleadoConverter empleadoConverter) {
+                              EmpleadoConverterAdmin empleadoConverter) {
         this.etiquetaRepository = etiquetaRepository;
         this.empleadoRepository = empleadoRepository;
         this.modelMapper = modelMapper;

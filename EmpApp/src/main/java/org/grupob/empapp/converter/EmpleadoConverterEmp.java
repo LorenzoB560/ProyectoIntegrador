@@ -1,17 +1,17 @@
-package org.grupob.adminapp.converter;
+package org.grupob.empapp.converter;
 
+import org.grupob.empapp.dto.AltaEmpleadoDTO;
+import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
-import org.grupob.adminapp.dto.AltaEmpleadoDTO;
-import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmpleadoConverter {
+public class EmpleadoConverterEmp {
     ModelMapper modelMapper;
 
 
-    public EmpleadoConverter(ModelMapper modelMapper) {
+    public EmpleadoConverterEmp(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
@@ -22,6 +22,8 @@ public class EmpleadoConverter {
     public EmpleadoDTO convertToDto(Empleado empleado) {
 //     Crear DTO base
         EmpleadoDTO empleadoDto = modelMapper.map(empleado, EmpleadoDTO.class);
+//        CuentaBancariaDTO cuentaBancariaDto = modelMapper.map(empleado.getCuentaCorriente(), CuentaBancariaDTO.class);
+//        empleadoDto.setCuentaCorriente();
 //        EmpleadoDTO empleadoDto = new EmpleadoDTO();
 //
 //        // Mapear propiedades bÃ¡sicas

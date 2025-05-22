@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,14 +33,14 @@ public class NominaControllerEmp {
         modelo.addAttribute("anios", nominaServiceImp.devolverAnios());
         modelo.addAttribute("listaNominas", nominaServiceImp.devolverNominas());
         modelo.addAttribute("listaConceptos", nominaServiceImp.devolverConceptos());
+        modelo.addAttribute("listaPropiedades", nominaServiceImp.devolverPropiedades());
     }
 
     @GetMapping("/listado/{id}")
     public String listarNominaEmpleado(@PathVariable UUID id,
                                        @RequestParam(defaultValue = "0") int page,
                                        Model model,
-                                       HttpSession sesion,
-                                       HttpServletRequest request) {
+                                       HttpSession sesion) {
 
 
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
@@ -72,6 +74,22 @@ public class NominaControllerEmp {
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
         NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
         nominaDTO = nominaServiceImp.actualizarLiquidoTotal(nominaDTO);
+        model.addAttribute("nominaDTO", nominaDTO);
+
+        BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "INGRESO".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+        BigDecimal totalDeducciones = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "DEDUCCION".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        model.addAttribute("totalIngresos", totalIngresos);
+        model.addAttribute("totalDeducciones", totalDeducciones);
+        nominaServiceImp.asignarDatosComunesNomina(id, model);
 
         model.addAttribute("nominaDTO", nominaDTO);
         System.err.println(nominaDTO);
@@ -79,31 +97,33 @@ public class NominaControllerEmp {
     }
 
     @GetMapping("/busqueda-parametrizada-empleado")
-    public String listarNominaEmpleadoConFitlro(
-            @RequestParam(required = false) Integer filtroMes,
-            @RequestParam(required = false) Integer filtroAnio,
-            @RequestParam(required = false) BigDecimal totalLiquidoMin,
-            @RequestParam(required = false) BigDecimal totalLiquidoMax,
-            @RequestParam(required = false) List<String> conceptosSeleccionados,
-            @RequestParam(defaultValue = "0") int page,
-            Model model,
-            HttpSession sesion
+    public String listarNominaEmpleadoConFitlro(@RequestParam(required = false) String fechaInicio,
+                                                @RequestParam(required = false) String fechaFin,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                Model model,
+                                                HttpSession sesion,
+                                                HttpServletRequest request
     ) {
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-
         if (loginUsuarioEmpleadoDTO == null) {
             return "redirect:/empapp/login";
         }
-
         model.addAttribute("usuarioDTO", loginUsuarioEmpleadoDTO);
 
         FiltroNominaEmpleadoDTO filtro = new FiltroNominaEmpleadoDTO();
-        filtro.setIdEmpleado(loginUsuarioEmpleadoDTO.getId()); // Agregar el ID del empleado al filtro
-        filtro.setFiltroMes(filtroMes);
-        filtro.setFiltroAnio(filtroAnio);
-        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
-        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
-        filtro.setConceptosSeleccionados(conceptosSeleccionados);
+        filtro.setIdEmpleado(loginUsuarioEmpleadoDTO.getId());
+        // Convertir fechas manualmente
+        try {
+            if (fechaInicio != null && !fechaInicio.isEmpty()) {
+                filtro.setFechaInicio(LocalDate.parse(fechaInicio));
+            }
+            if (fechaFin != null && !fechaFin.isEmpty()) {
+                filtro.setFechaFin(LocalDate.parse(fechaFin));
+            }
+        } catch (DateTimeParseException e) {
+            // Si hay error de formato, continuar sin fechas
+            model.addAttribute("errorFecha", "Formato de fecha incorrecto. Use YYYY-MM-DD");
+        }
 
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradasPorEmpleado(filtro, page);
 
@@ -111,26 +131,17 @@ public class NominaControllerEmp {
         model.addAttribute("totalPaginas", paginaNominas.getTotalPages());
         model.addAttribute("paginaActual", page);
         model.addAttribute("filtro", filtro);
-        
-        model.addAttribute("filtroMes", filtroMes);
-        model.addAttribute("filtroAnio", filtroAnio);
-        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
-        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
-        model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
+
+        model.addAttribute("idEmpleado", loginUsuarioEmpleadoDTO.getId());
+        model.addAttribute("fechaInicio", fechaInicio);
+        model.addAttribute("fechaFin", fechaFin);
+
         model.addAttribute("modo", "parametrizada");
 
         StringBuilder queryString = new StringBuilder();
-        if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
-        if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
-        if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
-        if (totalLiquidoMax != null) queryString.append("&totalLiquidoMax=").append(totalLiquidoMax);
-        if (conceptosSeleccionados != null) {
-            for (String concepto : conceptosSeleccionados) {
-                queryString.append("&conceptosSeleccionados=").append(concepto);
-            }
-        }
+        if (fechaInicio != null && !fechaInicio.isEmpty()) queryString.append("&fechaInicio=").append(fechaInicio);
+        if (fechaFin != null && !fechaFin.isEmpty()) queryString.append("&fechaFin=").append(fechaFin);
         model.addAttribute("queryString", queryString.toString());
-
         return "listados/listado-vista-nomina-empleado";
     }
 

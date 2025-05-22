@@ -16,6 +16,7 @@ import org.grupob.empapp.validation.edad.EdadNotBlank;
 import org.grupob.empapp.validation.especialidades.EspecialidadesMinimas;
 import org.grupob.empapp.validation.especialidades.ExisteEspecialidad;
 import org.grupob.empapp.validation.genero.ExisteGenero;
+import org.grupob.empapp.validation.jefe.ExisteJefe;
 import org.grupob.empapp.validation.pais.ExistePais;
 import org.grupob.empapp.validation.prefijo.ExistePrefijo;
 import org.grupob.empapp.validation.tarjeta_bancaria.cvc.CVCValido;
@@ -42,6 +43,7 @@ public class AltaEmpleadoDTO {
         this.paisNacimiento = "España";
         this.tipoDocumento = "DNI";
         this.prefijoTelefono = "+34";
+        this.idTipoTarjeta = 1L;
     }
 
     private UUID id;
@@ -118,6 +120,9 @@ public class AltaEmpleadoDTO {
     @EspecialidadesMinimas(groups = GrupoDatosProfesionales.class)
     private Set<Especialidad> especialidades;
 
+    @NotNull(groups = GrupoDatosProfesionales.class)
+    @ExisteJefe(groups = GrupoDatosProfesionales.class)
+    private UUID idJefe;
 
     // ** PASO 4 - DATOS ECONOMICOS **
 

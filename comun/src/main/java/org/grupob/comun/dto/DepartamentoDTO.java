@@ -1,4 +1,4 @@
-package org.grupob.adminapp.dto;
+package org.grupob.comun.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -228,20 +228,21 @@ function llenarTablaProductos(productos) {
         const nombreEscapado = productoDescripcion.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
         const accionesHtml = `
-            <div class="d-flex justify-content-end flex-nowrap">
-                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-outline-info me-1" title="Ver Detalle"><i class="bi bi-eye"></i></a>
+            <div>
+                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-primary me-2" title="Ver Detalle">
+                    <i class="bi bi-eye"></i>
+                </a>
             </div>`;
 
         // Construir la fila con la nueva celda para el proveedor
         fila.innerHTML = `
-            <td>${productoId}</td>
             <td>${productoDescripcion}</td>
-            <td class="text-end">${precioFormateado}</td>
+            <td>${precioFormateado}</td>
             <td>${nombreProveedor}</td> 
             <td>${marcaProducto}</td>
             <td>${categoriasHtml}</td>
-            <td class="text-center">${segundaManoHtml}</td>
-            <td class="text-center">${unidadesProducto}</td>
+            <td>${segundaManoHtml}</td>
+            <td>${unidadesProducto}</td>
             <td>${accionesHtml}</td>
         `;
         cuerpoTabla.appendChild(fila);

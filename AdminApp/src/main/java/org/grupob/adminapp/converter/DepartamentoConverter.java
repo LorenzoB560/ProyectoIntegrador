@@ -1,7 +1,7 @@
 package org.grupob.adminapp.converter;
 
 import org.grupob.comun.entity.Departamento;
-import org.grupob.adminapp.dto.DepartamentoDTO;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
