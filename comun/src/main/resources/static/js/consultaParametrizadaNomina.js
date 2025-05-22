@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 paginationContainer.innerHTML = "";
 
                 const baseUrl = modo === "parametrizada"
-                    ? "/nomina/busqueda-parametrizada"
-                    : "/nomina/listado";
+                    ? "/adminapp/nomina/busqueda-parametrizada"
+                    : "/adminapp/nomina/listado";
 
                 const prevPageItem = document.createElement("li");
                 prevPageItem.classList.add("page-item");

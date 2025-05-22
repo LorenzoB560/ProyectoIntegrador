@@ -211,7 +211,7 @@ function llenarTabla(datos) {
                         <td><a href="/adminapp/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary"title="Detalle Empleado"><i class="bi bi-eye"></i></a></td>
                         <td>
                             <div> 
-                                <a id="btnEditar" href="#" class="btn btn-primary me-2" title="Editar Empleado">
+                                <a id="btnEditar" href="/empleado/modificar/${emp.id}" class="btn btn-success me-2" title="Editar Empleado">
                                     <i class="bi bi-pencil me-1"></i>
                                 </a>
                                 <a href="#" class="btn btn-danger me-2 btn-eliminar-empleado-js" data-employee-id="${emp.id}" data-employee-name="${emp.nombre}" title="Desactivar Empleado">

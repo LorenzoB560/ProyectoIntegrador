@@ -4,7 +4,9 @@
 
     import jakarta.persistence.EntityNotFoundException;
     import jakarta.validation.Valid;
+    import lombok.RequiredArgsConstructor;
     import org.grupob.adminapp.dto.EmpleadoDTO;
+    import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
     import org.grupob.adminapp.service.EmpleadoServiceImp;
     import org.grupob.adminapp.service.EtiquetaServiceImp;
     import org.grupob.adminapp.service.UsuarioEmpleadoServiceImp;
@@ -18,13 +20,9 @@
     import org.slf4j.Logger;
     import org.slf4j.LoggerFactory;
     import org.springframework.data.domain.Page;
-    import org.springframework.format.annotation.DateTimeFormat;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
-
-    import java.math.BigDecimal;
-    import java.time.LocalDate;
     import java.util.ArrayList;
     import java.util.List;
     import java.util.Map;
@@ -32,20 +30,16 @@
 
     @RestController
     @RequestMapping("empleados")
+    @RequiredArgsConstructor
     public class EmpleadoRestController {
 
         private static final Logger logger = LoggerFactory.getLogger(EmpleadoRestController.class);
 
         private final EmpleadoRepository empleadoRepository;
-        private EmpleadoServiceImp empleadoService;
+        private final EmpleadoServiceImp empleadoService;
         private final EtiquetaServiceImp etiquetaService; // Inyectar EtiquetaService
         private final UsuarioEmpleadoServiceImp usuarioEmpleadoService;
-        public EmpleadoRestController(EmpleadoServiceImp empleadoService, EmpleadoRepository empleadoRepository, EtiquetaServiceImp etiquetaService, UsuarioEmpleadoServiceImp usuarioEmpleadoService) {
-            this.empleadoRepository = empleadoRepository;
-            this.empleadoService = empleadoService;
-            this.etiquetaService = etiquetaService;
-            this.usuarioEmpleadoService = usuarioEmpleadoService;
-        }
+
 
         @GetMapping("/listado1")
         public List<EmpleadoDTO> listarEmpleados() {
@@ -104,9 +98,13 @@
             empleadoService.eliminaEmpleadoPorId(id);
         }
 
-        @PutMapping("modificar/{id}")
-        public Empleado modificarEmpleado(@PathVariable String id, @RequestBody Empleado empleado){
-            return empleadoService.modificarEmpleado(id, empleado);
+        @PutMapping("guardar-modificado/{id}")
+        public Empleado guardarModificadoEmpleado(@PathVariable String id, @RequestBody ModificacionEmpleadoDTO empleadoDTO){
+            System.err.println("hola");
+            System.err.println(empleadoDTO);
+            Empleado empleado = empleadoService.modificarEmpleado(id, empleadoDTO);
+            System.err.println(empleado);
+            return empleado;
         }
 
         @PutMapping("/{id}/jefe/{jefeId}")

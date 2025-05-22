@@ -132,7 +132,6 @@
                         </thead>
                         <tbody>
                         <tr th:each="c, iterStat : *{lineaNominas}"
-                            th:if="${!c.nombreConcepto.equalsIgnoreCase('Salario base')}"
                             th:attr="data-id-concepto=${c.idConcepto}">
                             <td>
                                 <input type="hidden" th:field="*{lineaNominas[__${iterStat.index}__].idConcepto}">

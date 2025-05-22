@@ -128,18 +128,18 @@ public class NominaControllerAdmin {
                                           @RequestParam("periodo.fechaInicio") String fechaInicioStr,
                                           @RequestParam("periodo.fechaFin") String fechaFinStr) {
 
-        List<LineaNominaDTO> lineaNominaDTOS = nominaDTO.getLineaNominas();
-
-        if (lineaNominaDTOS != null && !lineaNominaDTOS.isEmpty()) {
-            LineaNominaDTO salarioBase = lineaNominaDTOS.getFirst();
-            salarioBase.setIdConcepto(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-            salarioBase.setNombreConcepto("Salario base");
-            salarioBase.setTipoConcepto("INGRESO");
-            salarioBase.setCantidad(BigDecimal.valueOf(2800.00));
-            salarioBase.setPorcentaje(null);
-        } else {
-            throw new IllegalStateException("No existen líneas de nómina en la lista.");
-        }
+//        List<LineaNominaDTO> lineaNominaDTOS = nominaDTO.getLineaNominas();
+//  
+//        if (lineaNominaDTOS != null && !lineaNominaDTOS.isEmpty()) {
+//            LineaNominaDTO salarioBase = lineaNominaDTOS.getFirst();
+//            salarioBase.setIdConcepto(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+//            salarioBase.setNombreConcepto("Salario base");
+//            salarioBase.setTipoConcepto("INGRESO");
+//            salarioBase.setCantidad(BigDecimal.valueOf(2800.00));
+//            salarioBase.setPorcentaje(null);
+//        } else {
+//            throw new IllegalStateException("No existen líneas de nómina en la lista.");
+//        }
 
         // Convertir las fechas manualmente
         try {

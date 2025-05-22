@@ -56,6 +56,7 @@ public class RegistroEmpleadoController {
         modelo.addAttribute("listaTipoTarjetas", listaTipoTarjetas);
         modelo.addAttribute("meses", altaEmpleadoServiceImp.devolverMeses());
         modelo.addAttribute("anios", altaEmpleadoServiceImp.devolverAnios());
+        modelo.addAttribute("listaEmpleados", altaEmpleadoServiceImp.devolverEmpleados());
     }
 
     @GetMapping("/datos-personales")

@@ -1,14 +1,17 @@
 package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
-import org.grupob.comun.entity.Empleado;
-import org.grupob.comun.entity.UsuarioEmpleado;
+import lombok.RequiredArgsConstructor;
+import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
+import org.grupob.comun.entity.*;
+import org.grupob.comun.entity.maestras.TipoTarjetaCredito;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
-import org.grupob.comun.repository.EmpleadoRepository;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
+import org.grupob.comun.exception.UsuarioNoEncontradoException;
+import org.grupob.comun.repository.*;
+import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
-import org.grupob.comun.repository.UsuarioEmpleadoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,32 +28,22 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class  EmpleadoServiceImp implements EmpleadoService {
+@RequiredArgsConstructor
+
+
+
+public  class  EmpleadoServiceImp implements EmpleadoService {
 
     private static final Logger logger = LoggerFactory.getLogger(EmpleadoServiceImp.class);
-
-
-
     private final EmpleadoRepository empleadoRepository;
-//    private final EtiquetaRepository etiquetaRepository;
-//    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
     private final EmpleadoConverterAdmin empleadoConverter;
-    private UsuarioEmpleadoRepository usuarioEmpleadoRepository;
+    private final UsuarioEmpleadoRepository usuarioEmpleadoRepository;
+    private final EspecialidadRepository especialidadRepository;
+    private final DepartamentoRepository departamentoRepository;
+    private final EntidadBancariaRepository entidadBancariaRepository;
+    private final TipoTarjetaRepository tipoTarjetaRepository;
+
     private final List<String> empleadosDesbloqueadosRecientemente = Collections.synchronizedList(new ArrayList<>());
-
-
-    public EmpleadoServiceImp(
-            EmpleadoRepository empleadoRepository,
-//            EtiquetaRepository etiquetaRepository,
-//            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverterAdmin empleadoConverter,UsuarioEmpleadoRepository usuarioEmpleadoRepository) {
-
-        this.empleadoRepository = empleadoRepository;
-//        this.etiquetaRepository = etiquetaRepository;
-//        this.empleadoEtiquetaRepository = empleadoEtiquetaRepository;
-        this.empleadoConverter = empleadoConverter;
-        this.usuarioEmpleadoRepository = usuarioEmpleadoRepository;
-    }
 
     // -----------------------------------
     // Métodos CRUD básicos existentes
@@ -109,13 +102,25 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     }
 
     @Override
-    public Empleado modificarEmpleado(String id, Empleado empleado) {
+    public Empleado modificarEmpleado(String id, ModificacionEmpleadoDTO modificacionEmpleadoDTO) {
+        Optional<Empleado> empleado = empleadoRepository.findById(UUID.fromString(id));
+//        Empleado empleado = empleadoConverterAdmin.convertirAEntidadDesdeModificacion(modificacionEmpleadoDTO);
         UUID uuid = UUID.fromString(id);
-        if (empleadoRepository.existsById(uuid)) {
-            empleado.setId(uuid);
-            return empleadoRepository.save(empleado);
+        Optional<UsuarioEmpleado> usuarioEmpleado = usuarioEmpleadoRepository.findById(uuid);
+        if (empleado.isPresent()) {
+            Empleado e = empleado.get();
+            e.setId(uuid);
+            e.setActivo(true);
+            usuarioEmpleado.ifPresent(e::setUsuario);
+
+            System.err.println("EMPLEADO: " + e);
+            e.setNombre(!modificacionEmpleadoDTO.getNombre().isEmpty() ? modificacionEmpleadoDTO.getNombre() : e.getNombre());
+            e.setApellido(!modificacionEmpleadoDTO.getApellido().isEmpty() ? modificacionEmpleadoDTO.getApellido() : e.getApellido());
+            e.setFechaNacimiento(modificacionEmpleadoDTO.getFechaNacimiento() != null ? modificacionEmpleadoDTO.getFechaNacimiento() : e.getFechaNacimiento());
+
+            return empleadoRepository.save(e);
         }
-        throw new DepartamentoNoEncontradoException("El empleado no existe");
+        throw new EmpleadoNoEncontradoException("El empleado no existe");
     }
 
     // -----------------------------------
@@ -194,7 +199,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 , pageable);
 
         // Convertir a DTO preservando la información de paginación
-        return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));
+        return pageEmpleados.map(empleadoConverter::convertToDto);
     }
 
     // -----------------------------------
@@ -301,79 +306,6 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 .collect(Collectors.toList());
     }
 
-    // -----------------------------------
-    // Métodos para gestión de etiquetas
-    // -----------------------------------
-
-//    @Override
-//    @Transactional
-//    public EmpleadoDTO asignarEtiqueta(String empleadoId, String etiquetaId) {
-//        UUID empUuid = UUID.fromString(empleadoId);
-//        UUID etiqUuid = UUID.fromString(etiquetaId);
-//
-//        // Verificar si la relación ya existe usando el repositorio
-//        if (empleadoEtiquetaRepository.existsByEmpleadoIdAndEtiquetaId(empUuid, etiqUuid)) {
-//            // La relación ya existe, simplemente devolver el empleado
-//            Empleado empleado = empleadoRepository.findById(empUuid)
-//                    .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-//            return convertToDto(empleado);
-//        }
-//
-//        // Cargar entidades
-//        Empleado empleado = empleadoRepository.findById(empUuid)
-//                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-//        Etiqueta etiqueta = etiquetaRepository.findById(etiqUuid)
-//                .orElseThrow(() -> new RuntimeException("Etiqueta no encontrada"));
-//
-//        // Crear la relación
-//        EmpleadoEtiquetaId id = new EmpleadoEtiquetaId(empUuid, etiqUuid);
-//        EmpleadoEtiqueta empleadoEtiqueta = new EmpleadoEtiqueta();
-//        empleadoEtiqueta.setId(id);
-//        empleadoEtiqueta.setEmpleado(empleado);
-//        empleadoEtiqueta.setEtiqueta(etiqueta);
-//        empleadoEtiqueta.setFechaAsignacion(LocalDate.now());
-//
-//        // OPCIÓN 1: Solo guardar en el repositorio sin añadir a la colección
-//        empleadoEtiquetaRepository.save(empleadoEtiqueta);
-//
-//        // Recargar el empleado para obtener la colección actualizada
-//        empleado = empleadoRepository.findById(empUuid)
-//                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-//
-//        return convertToDto(empleado);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public EmpleadoDTO quitarEtiqueta(String empleadoId, String etiquetaId) {
-//        UUID empUuid = UUID.fromString(empleadoId);
-//        UUID etiqUuid = UUID.fromString(etiquetaId);
-//
-//        // Obtener el empleado
-//        Empleado empleado = empleadoRepository.findById(empUuid)
-//                .orElseThrow(() -> new DepartamentoNoEncontradoException("Empleado no encontrado"));
-//
-//        // Eliminar la relación empleado-etiqueta
-//        empleadoEtiquetaRepository.deleteByEmpleadoIdAndEtiquetaId(empUuid, etiqUuid);
-//
-//        // Refrescar el empleado desde la base de datos
-//        empleado = empleadoRepository.findById(empUuid).orElseThrow();
-//
-//        return convertToDto(empleado);
-//    }
-//
-//    @Override
-//    public List<EmpleadoDTO> buscarPorEtiqueta(String etiquetaId) {
-//        UUID etiqUuid = UUID.fromString(etiquetaId);
-//
-//        // Buscar empleados que tengan la etiqueta especificada
-//        List<Empleado> empleados = empleadoRepository.findByEtiquetaId(etiqUuid);
-//
-//        return empleados.stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//    }
-
     @Scheduled(fixedRate = 120000) // Cada 2 minutos
     @Transactional
     @Override
@@ -452,4 +384,23 @@ public class  EmpleadoServiceImp implements EmpleadoService {
         }
     }
 
+
+    public List<Especialidad> devuelveListaEspecialidades() {
+        return especialidadRepository.findAll();
+    }
+    public List<Departamento> devolverDepartamentos(){
+        return departamentoRepository.findAll();
+    }
+    public List<EntidadBancaria> devolverEntidadesBancarias(){
+        return entidadBancariaRepository.findAll();
+    }
+    public List<TipoTarjetaCredito> devolverTipoTarjetasCredito(){
+        return tipoTarjetaRepository.findAll();
+    }
+
+
+    public UsuarioEmpleado devuelveUsuarioEmpleado(String id){
+        return usuarioEmpleadoRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Empleado no encontrado"));
+    }
 }

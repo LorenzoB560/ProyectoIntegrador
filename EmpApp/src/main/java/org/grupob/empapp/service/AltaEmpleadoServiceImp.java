@@ -7,6 +7,7 @@ import org.grupob.comun.entity.Especialidad;
 import org.grupob.comun.entity.auxiliar.CuentaBancaria;
 import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.maestras.*;
+import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.*;
 import org.grupob.empapp.converter.CuentaBancariaConverter;
 import org.grupob.empapp.converter.EmpleadoConverterEmp;
@@ -40,6 +41,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final TipoTarjetaRepository tipoTarjetaRepository;
     private final EmpleadoConverterEmp empleadoConverterEmp;
     private final CuentaBancariaConverter cuentaBancariaConverter;
+    private final EmpleadoServiceImp empleadoServiceImp;
 
 //    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository, CuentaBancariaConverter cuentaBancariaConverter) {
 //        this.generoRepository = generoRepository;
@@ -91,6 +93,9 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
                 .mapToObj(String::valueOf)
                 .collect(Collectors.toList());
     }
+    public List<Empleado> devolverEmpleados(){
+        return empleadoRepository.findAll();
+    }
 
     public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO, String id){
 
@@ -113,6 +118,20 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
         empleado.setId(UUID.fromString(id));
         System.err.println(empleado);
 //        empleado.setAceptacionTerminos(altaEmpleadoDTO.getAceptacionTerminos().equals("on"));
+
+        Empleado jefe = empleadoRepository.findById(altaEmpleadoDTO.getIdJefe())
+                .orElseThrow(() -> new DepartamentoNoEncontradoException("Jefe no encontrado"));
+
+        Empleado jefeActual = jefe.getJefe();
+        while (jefeActual != null) {
+            if (jefeActual.getId().equals(altaEmpleadoDTO.getId())) {
+                throw new RuntimeException("No se puede crear un ciclo en la jerarquía");
+            }
+            jefeActual = jefeActual.getJefe();
+        }
+
+        empleado.setJefe(jefe);
+
         empleadoRepository.save(empleado);
     }
     public boolean usuarioExiste(LoginUsuarioEmpleadoDTO sesion){
@@ -170,6 +189,8 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
                         datosAnteriores.getIdDepartamentoSeleccionado());
         datosNuevos.setEspecialidades(datosNuevos.getEspecialidades() != null ? datosNuevos.getEspecialidades() : datosAnteriores.getEspecialidades());
 
+
+        datosNuevos.setIdJefe(datosNuevos.getIdJefe() != null ? datosNuevos.getIdJefe() : datosAnteriores.getIdJefe());
         // ** DATOS ECONÓMICOS ** (Cuenta Bancaria y Tarjeta de Crédito)
         if (datosNuevos.getCuentaBancaria() == null) {
             if (datosAnteriores.getCuentaBancaria() != null) {

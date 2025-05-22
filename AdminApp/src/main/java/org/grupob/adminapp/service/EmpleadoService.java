@@ -1,13 +1,12 @@
 package org.grupob.adminapp.service;
 
 
+import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.springframework.data.domain.Page;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public interface EmpleadoService {
 
      Empleado guardarEmpleado(Empleado empleado);
 
-     Empleado modificarEmpleado(String id, Empleado empleado);
+     Empleado modificarEmpleado(String id, ModificacionEmpleadoDTO empleado);
 
      /**
       * Métodos de búsqueda parametrizada

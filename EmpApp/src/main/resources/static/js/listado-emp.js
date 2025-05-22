@@ -191,7 +191,7 @@ function llenarTabla(datos) {
                         <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary">Ver</a></td>
                         <td>
                             <div> 
-                                <a id="btnEditar" href="#" class="btn btn-primary me-2">
+                                <a id="btnEditar" href="#" class="btn btn-success me-2">
                                     <i class="bi bi-pencil me-1"></i> Editar
                                 </a>
                                 <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
