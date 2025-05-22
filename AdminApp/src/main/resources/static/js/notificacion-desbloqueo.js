@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const CHECK_INTERVAL_MS = 30000; // Verificar cada 1 minuto
 
     function verificarDesbloqueos() {
-        fetch('/empleados/desbloqueados-recientemente') // Ajusta la URL si tienes un context-path
+        fetch('/adminapp/empleados/desbloqueados-recientemente') // Ajusta la URL si tienes un context-path
             .then(response => {
                 if (response.status === 204) { // No Content
                     return null;
