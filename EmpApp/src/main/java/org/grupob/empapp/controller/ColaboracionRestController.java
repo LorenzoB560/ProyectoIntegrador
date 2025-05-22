@@ -3,27 +3,28 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
+import org.grupob.empapp.dto.ColaboracionEstablecidaDTO;
 import org.grupob.empapp.dto.EmpleadoSimpleDTO;
+import org.grupob.empapp.dto.HistorialColaboracionItemDTO;
 import org.grupob.empapp.dto.SolicitudColaboracionDTO;
 import org.grupob.empapp.service.ColaboracionService; // Cambiado a interfaz
+import org.grupob.empapp.service.ColaboracionServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/empapp/colaboraciones") // Ruta base distinta para la API
 public class ColaboracionRestController {
 
-    private final ColaboracionService colaboracionService;
+    private final ColaboracionServiceImp colaboracionService;
 
     @Autowired
-    public ColaboracionRestController(ColaboracionService colaboracionService) {
+    public ColaboracionRestController(ColaboracionServiceImp colaboracionService) {
         this.colaboracionService = colaboracionService;
     }
 
@@ -139,4 +140,52 @@ public class ColaboracionRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/historial")
+    public ResponseEntity<?> getHistorialColaboraciones(HttpServletRequest request) {
+        UUID empleadoIdActual = getEmpleadoIdActual(request);
+        if (empleadoIdActual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Usuario no autenticado."));
+        }
+
+        try {
+            List<HistorialColaboracionItemDTO> historial = colaboracionService.getHistorialCompletoColaboraciones(empleadoIdActual);
+            if (historial.isEmpty()) {
+                return ResponseEntity.ok(Collections.emptyList()); // Devolver lista vacía si no hay historial
+            }
+            return ResponseEntity.ok(historial);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al cargar el historial de colaboraciones: " + e.getMessage()));
+        }
+    }
+    @PostMapping("/{idColaboracion}/finalizar-periodo")
+    public ResponseEntity<?> finalizarPeriodo(
+            @PathVariable UUID idColaboracion,
+            HttpServletRequest request) {
+        // ... (sin cambios, ya que la lógica de quién finaliza ya no es restrictiva para reactivar)
+        UUID empleadoIdActual = getEmpleadoIdActual(request);
+        if (empleadoIdActual == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Usuario no autenticado."));
+        }
+        try {
+            colaboracionService.finalizarPeriodoColaboracion(idColaboracion, empleadoIdActual);
+            return ResponseEntity.ok(Map.of("mensaje", "Periodo de colaboración finalizado correctamente."));
+        } catch (NoSuchElementException e) {
+//            logger.warn("API: Intento de finalizar periodo de colaboración no encontrada ID {}: {}", idColaboracion, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (SecurityException e) {
+//            logger.warn("API: Intento no autorizado de finalizar periodo de colaboración ID {} por empleado ID {}: {}", idColaboracion, empleadoIdActual, e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", e.getMessage()));
+        } catch (IllegalStateException e) {
+//            logger.warn("API: Estado ilegal al intentar finalizar periodo de colaboración ID {}: {}", idColaboracion, e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+//            logger.error("API: Error al finalizar periodo de colaboración ID {}: {}", idColaboracion, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error interno al finalizar el periodo: " + e.getMessage()));
+        }
+    }
+
+
+
 }

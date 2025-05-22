@@ -287,7 +287,7 @@ function asignarEventListenersAcciones() {
 
             // Obtener nombre para confirmación
             const employeeRow = clone.closest('tr');
-            const employeeName = employeeRow?.cells[1]?.textContent || employeeId; // Celda 1 (nombre) o ID
+            const employeeName = employeeRow.cells[0].textContent || employeeId; // Celda 1 (nombre) o ID
 
             if (confirm(`¿Está seguro de desbloquear al empleado ${employeeName}?`)) {
                 // URL del endpoint (¡Asegúrate que sea la correcta! Probablemente /empleados/...)

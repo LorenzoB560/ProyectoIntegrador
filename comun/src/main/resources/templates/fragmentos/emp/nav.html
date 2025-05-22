@@ -5,11 +5,11 @@
     <li><a th:href="@{/etiquetado/masivo/{jefeId}(jefeId=*{id})}">Etiquetado Masivo</a></li>
     <li><a th:href="@{/etiquetado/eliminar/{jefeId}(jefeId=*{id})}">Eliminar Etiqueta</a></li>
     <li><a th:href="@{/empapp/colaboraciones/listado}">Colaboración</a></li>
-    <li><a th:href="@{/producto/lista}">Productos</a></li>
-
-    <li><a th:href="@{/nomina/listado/{id}(id=*{id})}">Nóminas</a></li>
-
+    <li><a th:href="@{/producto/lista}">Productos</a></li><li><a th:href="@{/nomina/listado/{id}(id=*{id})}">Nóminas</a></li>
     <li><a th:href="@{/empleado/detalle/{id}(id=*{id})}">Detalle</a></li>
+    <li><a th:href="@{/empapp/colaboraciones/solicitar}">Enviar Solicitud Colaboración</a></li>
+    <li><a th:href="@{/empapp/colaboraciones/listado}">Mis Solicitudes</a></li>
+    <li><a th:href="@{/empapp/colaboraciones/historial}">Historial Colaboraciones</a></li>
     <!-- Añade más enlaces según las funcionalidades de tu aplicación -->
     <li><a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a></li>
   </ul>

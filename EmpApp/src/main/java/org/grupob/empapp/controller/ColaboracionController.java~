@@ -68,12 +68,6 @@ public class ColaboracionController {
         LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
 
         modelo.addAttribute("dto", dto);
-        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
-        modelo.addAttribute("ultimaPagina", ultimaPagina);
-
-        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
-        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
-        modelo.addAttribute("contador", contador);
 
         return "colaboraciones/enviar-solicitud";
     }
@@ -84,7 +78,7 @@ public class ColaboracionController {
                                   HttpServletRequest request) {
         UUID empleadoIdActual = getEmpleadoIdActual(request);
         if (empleadoIdActual == null) {
-            return "redirect:/login";
+            return "redirect:/empapp/login";
         }
 
         try {
@@ -102,12 +96,6 @@ public class ColaboracionController {
         LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
 
         modelo.addAttribute("dto", dto);
-        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
-        modelo.addAttribute("ultimaPagina", ultimaPagina);
-
-        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
-        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
-        modelo.addAttribute("contador", contador);
         return "colaboraciones/listado-solicitudes";
     }
     @GetMapping("/historial")
@@ -128,12 +116,6 @@ public class ColaboracionController {
         LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
 
         modelo.addAttribute("dto", dto);
-        String ultimaPagina = cookieService.obtenerValorCookie(request, "ultimaPagina");
-        modelo.addAttribute("ultimaPagina", ultimaPagina);
-
-        String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
-        int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
-        modelo.addAttribute("contador", contador);
         return "colaboraciones/historial-colaboraciones"; // Ruta a tu archivo Thymeleaf
     }
 }

@@ -16,6 +16,24 @@ import java.util.List;
 public interface EmpleadoService {
 
      /**
+      * Tarea programada para desbloquear empleados que están marcados como bloqueados.
+      * Resetea el estado de bloqueo, intentos fallidos, fecha de bloqueo y motivo.
+      */
+     void desbloquearEmpleadosBloqueadosAutomaticamente();
+
+     /**
+      * Obtiene la lista de nombres de empleados que han sido desbloqueados recientemente.
+      * La lista se limpia después de ser consultada.
+      * @return Lista de nombres completos de empleados.
+      */
+     List<String> getNombresEmpleadosDesbloqueadosRecientemente();
+
+     /**
+      * Limpia la lista interna de empleados desbloqueados recientemente.
+      */
+     void clearNombresEmpleadosDesbloqueadosRecientemente();
+
+     /**
       * Métodos CRUD básicos
       */
      List<EmpleadoDTO> devuelveTodosEmpleados();

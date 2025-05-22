@@ -42,6 +42,9 @@ public class Colaboracion {
     @Column(name="fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @Column(name = "fecha_hora_ultima_finalizacion") // Opcional, para nombrar la columna
+    private LocalDateTime fechaHoraUltimaFinalizacion;
+
     // Método para obtener el periodo activo
     public Optional<Periodo> getPeriodoActivo() {
         return periodos.stream()

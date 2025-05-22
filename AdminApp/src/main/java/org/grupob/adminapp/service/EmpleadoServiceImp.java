@@ -1,42 +1,57 @@
 package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
-import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
+import org.grupob.comun.repository.UsuarioEmpleadoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class  EmpleadoServiceImp implements EmpleadoService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmpleadoServiceImp.class);
+
+
+
     private final EmpleadoRepository empleadoRepository;
 //    private final EtiquetaRepository etiquetaRepository;
 //    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
     private final EmpleadoConverterAdmin empleadoConverter;
+    private UsuarioEmpleadoRepository usuarioEmpleadoRepository;
+    private final List<String> empleadosDesbloqueadosRecientemente = Collections.synchronizedList(new ArrayList<>());
+
 
     public EmpleadoServiceImp(
             EmpleadoRepository empleadoRepository,
 //            EtiquetaRepository etiquetaRepository,
 //            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverterAdmin empleadoConverter) {
+            EmpleadoConverterAdmin empleadoConverter,UsuarioEmpleadoRepository usuarioEmpleadoRepository) {
 
         this.empleadoRepository = empleadoRepository;
 //        this.etiquetaRepository = etiquetaRepository;
 //        this.empleadoEtiquetaRepository = empleadoEtiquetaRepository;
         this.empleadoConverter = empleadoConverter;
+        this.usuarioEmpleadoRepository = usuarioEmpleadoRepository;
     }
 
     // -----------------------------------
@@ -181,7 +196,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 , pageable);
 
         // Convertir a DTO preservando la información de paginación
-        return pageEmpleados.map(empleadoConverter::convertToDto);
+        return pageEmpleados.map(empleado -> empleadoConverter.convertToDto(empleado));
     }
 
     // -----------------------------------
@@ -361,6 +376,82 @@ public class  EmpleadoServiceImp implements EmpleadoService {
 //                .collect(Collectors.toList());
 //    }
 
+    @Scheduled(fixedRate = 120000) // Cada 2 minutos
+    @Transactional
+    @Override
+    public void desbloquearEmpleadosBloqueadosAutomaticamente() {
+        System.out.println("Ejecutando tarea programada: Comprobar y desbloquear empleados cuyo tiempo de bloqueo ha expirado (usando synchronized).");
+        LocalDateTime ahora = LocalDateTime.now();
 
+        List<UsuarioEmpleado> usuariosParaDesbloquear =
+                usuarioEmpleadoRepository.findByActivoFalseAndFechaDesbloqueoIsNotNullAndFechaDesbloqueoLessThanEqual(ahora);
+
+        if (!usuariosParaDesbloquear.isEmpty()) {
+            List<String> nombresDesbloqueadosEstaVez = new ArrayList<>();
+            for (UsuarioEmpleado usuario : usuariosParaDesbloquear) {
+                logger.debug("Desbloqueando usuario: {} cuya fecha de desbloqueo ({}) ha pasado.",
+                        usuario.getUsuario(), usuario.getFechaDesbloqueo());
+                usuario.setIntentosSesionFallidos(0);
+                usuario.setMotivoBloqueo(null);
+                usuario.setFechaDesbloqueo(null);
+                usuarioEmpleadoRepository.save(usuario);
+
+                Empleado empleadoAsociado = empleadoRepository.findByUsuario(usuario);
+                if (empleadoAsociado != null) {
+                    // Asumiendo que Empleado tiene getNombre() y getApellido1()
+                    String nombreCompleto = (empleadoAsociado.getNombre() != null ? empleadoAsociado.getNombre() : "") +
+                            (empleadoAsociado.getApellido() != null ? " " + empleadoAsociado.getApellido() : "");
+                    nombreCompleto = nombreCompleto.trim();
+                    if (nombreCompleto.isEmpty()) {
+                        nombreCompleto = "ID Empleado: " + empleadoAsociado.getId(); // Fallback si nombre y apellido son nulos/vacíos
+                    }
+                    nombresDesbloqueadosEstaVez.add(nombreCompleto);
+                    logger.info("Empleado {} (Usuario: {}) desbloqueado automáticamente por expiración de fecha.",
+                            nombreCompleto, usuario.getUsuario());
+
+                } else {
+                    String identificadorUsuario = "Usuario: " + usuario.getUsuario() + " (ID: " + usuario.getId() + ")";
+                    nombresDesbloqueadosEstaVez.add(identificadorUsuario);
+                    logger.warn("Usuario {} desbloqueado por expiración de fecha, pero no se encontró Empleado asociado.",
+                            identificadorUsuario);
+                }
+            }
+
+            synchronized (this.empleadosDesbloqueadosRecientemente) {
+                this.empleadosDesbloqueadosRecientemente.clear();
+                if (!nombresDesbloqueadosEstaVez.isEmpty()) {
+                    this.empleadosDesbloqueadosRecientemente.addAll(nombresDesbloqueadosEstaVez);
+                    logger.info("{} empleados/usuarios han sido desbloqueados por expiración y añadidos a la lista de notificación.",
+
+                            nombresDesbloqueadosEstaVez.size());
+                }
+            }
+        } else {
+            logger.info("No hay empleados con bloqueo temporal expirado para desbloquear en esta ejecución.");
+            if (!this.empleadosDesbloqueadosRecientemente.isEmpty()) {
+                synchronized (this.empleadosDesbloqueadosRecientemente) {
+                    this.empleadosDesbloqueadosRecientemente.clear();
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<String> getNombresEmpleadosDesbloqueadosRecientemente() {
+        synchronized (this.empleadosDesbloqueadosRecientemente) {
+            if (this.empleadosDesbloqueadosRecientemente.isEmpty()) {
+                return Collections.emptyList();
+            }
+            return new ArrayList<>(this.empleadosDesbloqueadosRecientemente);
+        }
+    }
+
+    @Override
+    public void clearNombresEmpleadosDesbloqueadosRecientemente() {
+        synchronized (this.empleadosDesbloqueadosRecientemente) {
+            this.empleadosDesbloqueadosRecientemente.clear();
+            logger.debug("Lista de empleados desbloqueados recientemente ha sido limpiada.");
+        }
+    }
 
 }
