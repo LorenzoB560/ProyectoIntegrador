@@ -21,7 +21,7 @@ function cargarDetalleEmpleado() {
 
     mostrarCargando();
 
-    fetch(`http://localhost:9090/empleados/detalle/${empleadoId}`)
+    fetch(`http://localhost:8080/adminapp/empleados/detalle/${empleadoId}`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
@@ -65,7 +65,7 @@ function cargarSubordinados(idJefe) {
     const subordinadosContainer = document.getElementById('subordinadosEmpleado');
     subordinadosContainer.innerHTML = '<p class="text-muted">Cargando subordinados...</p>';
 
-    fetch(`http://localhost:9090/empleados/${idJefe}/subordinados`)
+    fetch(`http://localhost:8080/adminapp/empleados/${idJefe}/subordinados`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);

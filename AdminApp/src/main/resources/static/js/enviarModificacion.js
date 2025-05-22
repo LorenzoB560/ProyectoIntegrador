@@ -12,11 +12,11 @@ $(document).ready(function() {
 
     $.ajax({
             type: "PUT",
-            url: `/empleados/guardar-modificado/${idEmpleado}`,
+            url: `/adminapp/empleados/guardar-modificado/${idEmpleado}`,
             data: JSON.stringify(dto),
             contentType: "application/json",
             success() {
-                window.location.href = "/empleado/lista";
+                window.location.href = "/adminapp/empleado/lista";
             },
             error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error al guardar la nómina:", errorThrown);
