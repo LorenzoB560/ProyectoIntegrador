@@ -8,6 +8,7 @@ import org.grupob.comun.entity.auxiliar.CuentaBancaria;
 import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.maestras.*;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.comun.repository.*;
 import org.grupob.empapp.converter.CuentaBancariaConverter;
 import org.grupob.empapp.converter.EmpleadoConverterEmp;
@@ -42,6 +43,8 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final EmpleadoConverterEmp empleadoConverterEmp;
     private final CuentaBancariaConverter cuentaBancariaConverter;
     private final EmpleadoServiceImp empleadoServiceImp;
+    private final UsuarioRepository usuarioRepository;
+    private final UsuarioEmpleadoRepository usuarioEmpleadoRepository;
 
 //    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository, CuentaBancariaConverter cuentaBancariaConverter) {
 //        this.generoRepository = generoRepository;
@@ -132,6 +135,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
 
         empleado.setJefe(jefe);
 
+        empleado.setUsuario(usuarioEmpleadoRepository.findById(UUID.fromString(id)).orElseThrow(() -> new EmpleadoNoEncontradoException("El id del usuario no existe")));
         empleadoRepository.save(empleado);
     }
     public boolean usuarioExiste(LoginUsuarioEmpleadoDTO sesion){
