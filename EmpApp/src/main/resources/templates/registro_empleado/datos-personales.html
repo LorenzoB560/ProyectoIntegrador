@@ -25,9 +25,9 @@
     <a href="/datos-economicos" id="datos-economicos">
         <img src="/img/Paso4.png" alt="Paso 4" width="50px" height="auto">
     </a>
-<!--    <a  id="resumen">-->
+    <!--    <a  id="resumen">-->
     <img src="/img/Resumen.png" alt="Resumen" id="resumen" width="50px" height="auto">
-<!--    </a>-->
+    <!--    </a>-->
 </nav>
 
 <!-- Mensaje de error a nivel general -->
@@ -48,17 +48,16 @@
 </div>
 
 <div>
-    <label th:text="#{registro.validacionServidor}" for="validacionServidor">
-        <input type="radio" name="tipoValidacion" id="validacionServidor" value="servidor" checked>
-    </label>
-    <label th:text="#{registro.validacionCliente}" for="validacionCliente">
-        <input type="radio" name="tipoValidacion" id="validacionCliente" value="cliente">
-    </label>
+    <label th:text="#{registro.validacionServidor}" for="validacionServidor"></label>
+    <input type="radio" name="tipoValidacion" id="validacionServidor" value="servidor" checked>
+    <label th:text="#{registro.validacionCliente}" for="validacionCliente"></label>
+    <input type="radio" name="tipoValidacion" id="validacionCliente" value="cliente">
 </div>
 
 
 <!-- Formulario -->
-<form action="/guardar-datos-personales" method="POST" th:object="${datos}" enctype="multipart/form-data" id="formulario">
+<form action="/guardar-datos-personales" method="POST" th:object="${datos}" enctype="multipart/form-data"
+      id="formulario">
     <fieldset>
         <legend th:text="#{registro.datosPersonales}"></legend>
 
@@ -83,7 +82,7 @@
             <article>
                 <span class="asterisco">*</span>
                 <label th:text="#{registro.foto}"></label><br>
-                <input type="file" th:field="*{archivoFoto}" />
+                <input type="file" th:field="*{archivoFoto}"/>
                 <div th:if="${#fields.hasErrors('archivoFoto')}" th:errors="*{archivoFoto}" class="error"></div>
             </article>
             <br>
@@ -95,14 +94,18 @@
                 <span class="asterisco">*</span>
                 <label th:text="#{registro.genero}"></label><br>
                 <div th:each="genero : ${listaGeneros}">
-                    <input type="radio" th:field="*{idGeneroSeleccionado}" th:value="${genero.id}" th:id="${'genero' + genero.id}">
-                    <label th:for="${'genero' + genero.id}" th:text="#{'registro.genero.' + ${genero.genero}}"></label><br>
+                    <input type="radio" th:field="*{idGeneroSeleccionado}" th:value="${genero.id}"
+                           th:id="${'genero' + genero.id}">
+                    <label th:for="${'genero' + genero.id}"
+                           th:text="#{'registro.genero.' + ${genero.genero}}"></label><br>
                 </div>
                 <div th:each="error: ${#fields.errors('idGeneroSeleccionado')}" th:text="${error}" class="error"></div>
 
                 <!-- Botones seleccionar/deseleccionar género -->
-                <button type="button" onclick="seleccionarPrimerGenero()" th:text="#{registro.genero.seleccionar}"></button>
-                <input type="button" id="deseleccionarRadios" name="deseleccionarRadios" th:value="#{registro.deseleccionar}" onclick="deseleccionaRadios('idGeneroSeleccionado');">
+                <button type="button" onclick="seleccionarPrimerGenero()"
+                        th:text="#{registro.genero.seleccionar}"></button>
+                <input type="button" id="deseleccionarRadios" name="deseleccionarRadios"
+                       th:value="#{registro.deseleccionar}" onclick="deseleccionaRadios('idGeneroSeleccionado');">
             </article>
             <br>
         </section>
@@ -132,7 +135,8 @@
                 <span class="asterisco">*</span>
                 <label for="paisNacimiento" th:text="#{registro.paisNacimiento}"></label>
                 <select id="paisNacimiento" th:field="*{paisNacimiento}">
-                    <option th:each="pais: ${listaPaises}" th:value="${pais.pais}" th:text="#{'registro.paisNacimiento.' + ${pais.pais}}"></option>
+                    <option th:each="pais: ${listaPaises}" th:value="${pais.pais}"
+                            th:text="#{'registro.paisNacimiento.' + ${pais.pais}}"></option>
                 </select>
                 <div th:each="error: ${#fields.errors('paisNacimiento')}" th:text="${error}" class="error"></div>
             </article>
@@ -160,7 +164,7 @@
 
     </fieldset>
 </form>
-    <a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
+<a th:href="@{/empapp/desconectar}" th:text="#{areapersonal.desconectar}"></a>
 
 </body>
 </html>
