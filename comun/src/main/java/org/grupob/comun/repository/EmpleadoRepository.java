@@ -2,6 +2,7 @@ package org.grupob.comun.repository;
 
 import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.UsuarioEmpleado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,8 @@ import java.util.UUID;
 public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
     // Buscar empleado por nombre (método de la nueva entidad)
     Empleado getEmpleadoByNombre(String nombre);
+
+//    Empleado findByUsuario(UsuarioEmpleado usuarioEmpleado);
 
     // Método existente adaptado a la nueva entidad
     Optional<Empleado> findEmpleadoByNombre(String nombre);
@@ -63,6 +66,8 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
 
     // Buscar por rango salarial
     List<Empleado> findBySalarioBetween(BigDecimal minSalario, BigDecimal maxSalario);
+
+    Empleado findByUsuario(UsuarioEmpleado usuario);
     // Encontrar empleados por etiqueta
 // @Query("SELECT e FROM Empleado e JOIN e.empleadoEtiquetas ee WHERE ee.etiqueta.id = :etiquetaId")
 // List<Empleado> findByEtiquetaId(@Param("etiquetaId") UUID etiquetaId);
