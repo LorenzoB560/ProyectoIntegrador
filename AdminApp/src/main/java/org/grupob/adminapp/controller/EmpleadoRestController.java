@@ -14,6 +14,7 @@
     import org.grupob.comun.entity.Empleado;
     import org.grupob.comun.entity.UsuarioEmpleado;
     import org.grupob.comun.exception.DepartamentoNoEncontradoException;
+    import org.grupob.comun.exception.EmpleadoNoEncontradoException;
     import org.grupob.comun.repository.EmpleadoRepository;
 
 
@@ -99,12 +100,17 @@
         }
 
         @PutMapping("guardar-modificado/{id}")
-        public Empleado guardarModificadoEmpleado(@PathVariable String id, @RequestBody ModificacionEmpleadoDTO empleadoDTO){
-            System.err.println("hola");
-            System.err.println(empleadoDTO);
-            Empleado empleado = empleadoService.modificarEmpleado(id, empleadoDTO);
-            System.err.println(empleado);
-            return empleado;
+        public ResponseEntity<?> guardarModificadoEmpleado(@PathVariable String id, @RequestBody ModificacionEmpleadoDTO empleadoDTO) {
+            try {
+                Empleado empleado = empleadoService.modificarEmpleado(id, empleadoDTO);
+
+                return ResponseEntity.ok(empleado);
+            } catch (EmpleadoNoEncontradoException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empleado no encontrado: " + e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno: " + e.getMessage());
+            }
         }
 
         @PutMapping("/{id}/jefe/{jefeId}")
