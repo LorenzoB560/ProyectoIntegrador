@@ -8,20 +8,16 @@ import org.grupob.comun.entity.Etiqueta;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.EtiquetaRepository;
-import org.grupob.empapp.converter.EmpleadoConverter;
+import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.dto.EtiquetaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.data.domain.Sort;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import java.time.LocalDateTime;
+
 import java.util.*;
 
 class EtiquetaServiceImpTest {
@@ -36,7 +32,7 @@ class EtiquetaServiceImpTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private EmpleadoConverter empleadoConverter;
+    private EmpleadoConverterEmp empleadoConverter;
 
     @InjectMocks
     private EtiquetaServiceImp service;

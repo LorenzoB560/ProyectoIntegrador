@@ -3,12 +3,12 @@ package org.grupob.adminapp.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.entity.Administrador;
 import org.grupob.comun.exception.CredencialesInvalidasException;
 import org.grupob.comun.exception.UsuarioNoEncontradoException;
 import org.grupob.adminapp.converter.AdministradorConverter;
-import org.grupob.adminapp.dto.LoginAdministradorDTO;
-import org.grupob.adminapp.repository.AdministradorRepository;
+import org.grupob.comun.repository.AdministradorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
