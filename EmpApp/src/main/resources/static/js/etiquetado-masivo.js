@@ -1,11 +1,3 @@
-// Variable global 'jefeId' se espera que esté definida en el HTML
-// mediante Thymeleaf:
-/*
-<script th:inline="javascript">
-    const jefeId = / *[[${jefeId}]]* / 'default-jefe-id'; // Asegúrate que esto exista en tu HTML
-</script>
-*/
-
 document.addEventListener('DOMContentLoaded', () => {
     // Validar que jefeId existe y no es el valor por defecto
     if (typeof jefeId === 'undefined' || !jefeId || jefeId === 'default-jefe-id') {
@@ -44,7 +36,7 @@ function cargarSubordinados() {
     selectEmpleados.innerHTML = '<option disabled>Cargando...</option>';
 
     // URL correcta para obtener subordinados
-    fetch(`/empleados/${jefeId}/subordinados`) // Asegúrate que EmpleadoRestController tenga esta ruta
+    fetch(`/empleados/${jefeId}/subordinados`)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(text => { throw new Error(`Error ${response.status}: ${text || response.statusText}`) });
@@ -171,9 +163,6 @@ function ordenarSelect(selectElement) {
 }
 
 
-// ------------- NUEVA VERSIÓN DE enviarEtiquetadoMasivo -------------
-// Esta función ahora llama al endpoint PUT individual repetidamente.
-// ¡¡¡ ADVERTENCIA: ESTO ES INEFICIENTE PARA MUCHAS ASIGNACIONES !!!
 async function enviarEtiquetadoMasivo() {
     const empleadosSeleccionados = Array.from(document.getElementById('empleadosSeleccionados').options).map(opt => opt.value);
     const etiquetasSeleccionadas = Array.from(document.getElementById('etiquetasSeleccionadas').options).map(opt => opt.value);
@@ -212,8 +201,6 @@ async function enviarEtiquetadoMasivo() {
             const promesa = fetch(url, {
                 method: 'PUT',
                 headers: {
-                    // 'Content-Type': 'application/json', // No es estrictamente necesario para PUT sin body
-                    // Añadir CSRF token si es necesario
                 }
             })
                 .then(response => {
@@ -259,7 +246,6 @@ async function enviarEtiquetadoMasivo() {
     }
     // No se resetea el formulario automáticamente, el usuario puede querer reintentar fallos.
 }
-// --------------------------------------------------------------------
 
 
 // Función para mostrar mensajes de feedback

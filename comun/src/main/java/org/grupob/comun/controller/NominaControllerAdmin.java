@@ -2,10 +2,7 @@ package org.grupob.comun.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.grupob.comun.dto.FiltroNominaDTO;
-import org.grupob.comun.dto.LoginAdministradorDTO;
-import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.comun.dto.NominaDTO;
+import org.grupob.comun.dto.*;
 import org.grupob.comun.exception.NominaPasadaException;
 import org.grupob.comun.service.NominaServiceImp;
 import org.springframework.data.domain.Page;
@@ -15,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
 @Controller
@@ -34,6 +33,7 @@ public class NominaControllerAdmin {
         modelo.addAttribute("anios", nominaServiceImp.devolverAnios());
         modelo.addAttribute("listaNominas", nominaServiceImp.devolverNominas());
         modelo.addAttribute("listaConceptos", nominaServiceImp.devolverConceptos());
+        modelo.addAttribute("listaPropiedades", nominaServiceImp.devolverPropiedades());
     }
 
     //TODO AÑADIR TABLA MAESTRA MESES, PARA MOSTRARLO EN LA NÓMINA
@@ -42,7 +42,7 @@ public class NominaControllerAdmin {
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
+        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO);
         if (redireccion != null) {
             return redireccion;
         }
@@ -63,18 +63,32 @@ public class NominaControllerAdmin {
     public String vistaDetalleNominaAdmin(@PathVariable UUID id, Model model, HttpSession sesion, HttpServletRequest request) {
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+        if (adminDTO == null){
+            return "redirect:/adminapp/login";
         }
 
         model.addAttribute("adminDTO", adminDTO);
         //Obtengo el DTO de la nómina según el ID en el servicio, y se lo paso a la vista
         NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
         nominaDTO = nominaServiceImp.actualizarLiquidoTotal(nominaDTO);
-
         model.addAttribute("nominaDTO", nominaDTO);
+
+        BigDecimal totalIngresos = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "INGRESO".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+        BigDecimal totalDeducciones = nominaDTO.getLineaNominas().stream()
+                .filter(c -> "DEDUCCION".equals(c.getTipoConcepto()))
+                .map(LineaNominaDTO::getCantidad)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        model.addAttribute("totalIngresos", totalIngresos);
+        model.addAttribute("totalDeducciones", totalDeducciones);
+        nominaServiceImp.asignarDatosComunesNomina(id, model);
+
+
         System.err.println(nominaDTO);
         return "listados/detalle-vista-nomina-admin";
     }
@@ -84,13 +98,14 @@ public class NominaControllerAdmin {
 
 
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+
+        if (adminDTO == null) {
+            return "redirect:/adminapp/login";
         }
 
         model.addAttribute("adminDTO", adminDTO);
+        nominaServiceImp.asignarDatosComunesNomina(id, model);
+
         try {
             NominaDTO nominaDTO = nominaServiceImp.devolverNominaPorId(id);
 
@@ -106,8 +121,33 @@ public class NominaControllerAdmin {
         }
     }
 
+
     @PostMapping("/guardar-datos-modificados")
-    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO, Model model) {
+    public String guardarDatosModificados(@ModelAttribute NominaDTO nominaDTO,
+                                          @RequestParam("periodo.fechaInicio") String fechaInicioStr,
+                                          @RequestParam("periodo.fechaFin") String fechaFinStr) {
+
+        // Convertir las fechas manualmente
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yy");
+            LocalDate fechaInicio = LocalDate.parse(fechaInicioStr, formatter);
+            LocalDate fechaFin = LocalDate.parse(fechaFinStr, formatter);
+
+            if (nominaDTO.getPeriodo() == null) {
+                // Crear un nuevo objeto periodo si es null
+                PeriodoDTO periodoDTO = new PeriodoDTO();
+                periodoDTO.setFechaInicio(fechaInicio);
+                periodoDTO.setFechaFin(fechaFin);
+                nominaDTO.setPeriodo(periodoDTO);
+            } else {
+                nominaDTO.getPeriodo().setFechaInicio(fechaInicio);
+                nominaDTO.getPeriodo().setFechaFin(fechaFin);
+            }
+        } catch (Exception e) {
+            // Manejar errores de formato de fecha
+            e.printStackTrace();
+            // Redirigir a una página de error o volver al formulario con mensaje de error
+        }
 
         System.out.println(nominaDTO);
         nominaServiceImp.modificarNomina(nominaDTO);
@@ -118,33 +158,34 @@ public class NominaControllerAdmin {
     @GetMapping("/busqueda-parametrizada")
     public String listarNominasConFiltros(
             @RequestParam(required = false) String filtroNombre,
-            @RequestParam(required = false) Integer filtroMes,
-            @RequestParam(required = false) Integer filtroAnio,
-            @RequestParam(required = false) BigDecimal totalLiquidoMin,
-            @RequestParam(required = false) BigDecimal totalLiquidoMax,
-            @RequestParam(required = false) List<String> conceptosSeleccionados,
+            @RequestParam(required = false) String fechaInicio,
+            @RequestParam(required = false) String fechaFin,
             @RequestParam(defaultValue = "0") int page,
             Model model,
             HttpSession sesion,
             HttpServletRequest request
     ) {
-
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
-        LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO = (LoginUsuarioEmpleadoDTO) sesion.getAttribute("usuarioLogeado");
-        String redireccion = nominaServiceImp.gestionarAccesoYRedireccion(adminDTO, loginUsuarioEmpleadoDTO, sesion, model, request);
-        if (redireccion != null) {
-            return redireccion;
+        if (adminDTO == null){
+            return "redirect:/adminapp/login";
         }
-
         model.addAttribute("adminDTO", adminDTO);
 
         FiltroNominaDTO filtro = new FiltroNominaDTO();
         filtro.setFiltroNombre(filtroNombre);
-        filtro.setFiltroMes(filtroMes);
-        filtro.setFiltroAnio(filtroAnio);
-        filtro.setTotalLiquidoMinimo(totalLiquidoMin);
-        filtro.setTotalLiquidoMaximo(totalLiquidoMax);
-        filtro.setConceptosSeleccionados(conceptosSeleccionados);
+
+        // Convertir fechas manualmente
+        try {
+            if (fechaInicio != null && !fechaInicio.isEmpty()) {
+                filtro.setFechaInicio(LocalDate.parse(fechaInicio));
+            }
+            if (fechaFin != null && !fechaFin.isEmpty()) {
+                filtro.setFechaFin(LocalDate.parse(fechaFin));
+            }
+        } catch (DateTimeParseException e) {
+            // Si hay error de formato, continuar sin fechas
+            model.addAttribute("errorFecha", "Formato de fecha incorrecto. Use YYYY-MM-DD");
+        }
 
         Page<NominaDTO> paginaNominas = nominaServiceImp.obtenerNominasFiltradas(filtro, page);
 
@@ -154,29 +195,16 @@ public class NominaControllerAdmin {
         model.addAttribute("filtro", filtro);
 
         model.addAttribute("filtroNombre", filtroNombre);
-        model.addAttribute("filtroMes", filtroMes);
-        model.addAttribute("filtroAnio", filtroAnio);
-        model.addAttribute("filtroLiquidoMinimo", totalLiquidoMin);
-        model.addAttribute("filtroLiquidoMaximo", totalLiquidoMax);
-        model.addAttribute("conceptosSeleccionados", conceptosSeleccionados);
+        model.addAttribute("fechaInicio", fechaInicio);
+        model.addAttribute("fechaFin", fechaFin);
 
-        // NUEVO
         model.addAttribute("modo", "parametrizada");
 
         StringBuilder queryString = new StringBuilder();
         if (filtroNombre != null && !filtroNombre.isBlank()) queryString.append("&filtroNombre=").append(filtroNombre);
-        if (filtroMes != null) queryString.append("&filtroMes=").append(filtroMes);
-        if (filtroAnio != null) queryString.append("&filtroAnio=").append(filtroAnio);
-        if (totalLiquidoMin != null) queryString.append("&totalLiquidoMin=").append(totalLiquidoMin);
-        if (totalLiquidoMax != null) queryString.append("&totalLiquidoMax=").append(totalLiquidoMax);
-        if (conceptosSeleccionados != null) {
-            for (String concepto : conceptosSeleccionados) {
-                queryString.append("&conceptosSeleccionados=").append(concepto);
-            }
-        }
+        if (fechaInicio != null && !fechaInicio.isEmpty()) queryString.append("&fechaInicio=").append(fechaInicio);
+        if (fechaFin != null && !fechaFin.isEmpty()) queryString.append("&fechaFin=").append(fechaFin);
         model.addAttribute("queryString", queryString.toString());
-
         return "listados/listado-vista-nomina";
     }
-
 }

@@ -6,15 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault(); // Evita el envío normal del formulario
 
         const archivo = archivoInput.files[0];
-       /* if (!archivo) {
-            mostrarMensaje("Por favor selecciona un archivo.", "error");
-            return;
-        }*/
+
 
         const formData = new FormData();
         formData.append("archivo", archivo);
 
-        fetch("/productos/carga-masiva", {
+        fetch("/adminapp/productos/carga-masiva", {
             method: "POST",
             body: formData
         })

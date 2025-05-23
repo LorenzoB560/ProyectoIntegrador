@@ -21,14 +21,12 @@ import java.util.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "PK_empleado", columnNames = "id"),
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
-//        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
 @SecondaryTable(
         name = "informacion_economica",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "id_empleado", referencedColumnName = "id"))
 public class Empleado extends Persona {
 
-//    private String dni;
 
     private String prefijoTelefono;
     private String numTelefono;
@@ -55,8 +53,6 @@ public class Empleado extends Persona {
 
     private boolean activo;
 
-    //@DondeEstoy-DondeVoy
-    //Many empleados pertenecen a One Departamento
     @ManyToOne
     @JoinColumn(name = "id_departamento", foreignKey = @ForeignKey(name = "FK_departamento_empleado_id"))
     private Departamento departamento;
@@ -94,7 +90,7 @@ public class Empleado extends Persona {
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_tarjeta", foreignKey = @ForeignKey(name = "FK_empleado_tipo_tarjeta_id"), table = "informacion_economica")
-    private TipoTarjetaCredito tipoTarjetaCredito;
+    private TipoTarjetaCredito idTipoTarjeta;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Nomina> listaNominas;
@@ -107,6 +103,15 @@ public class Empleado extends Persona {
             @AttributeOverride(name = "CVC", column = @Column(name = "CVC", table = "informacion_economica"))
     })
     private TarjetaCredito tarjetaCredito;
+
+    @OneToMany(mappedBy = "solicitante")
+    private List<SolicitudColaboracion> solicitudesEnviadas;
+
+    @OneToMany(mappedBy = "receptor")
+    private List<SolicitudColaboracion> solicitudesRecibidas;
+
+    @ManyToMany
+    private List<Colaboracion> colaboraciones;
 
     @Override
     public boolean equals(Object o) {
@@ -139,12 +144,6 @@ public class Empleado extends Persona {
     private byte[] foto; // Para almacenar la imagen en la base de datos
 
     private String aceptacionTerminos;
-
-    //    @Column(name = "fecha_eliminacion")
-//    private LocalDate fechaEliminacion;
-//
-//    @Column(name = "fecha_insercion")
-//    private LocalDate fechaInsercion;
 @Override
 public String toString() {
     // Incluir SOLO campos simples o IDs de relaciones

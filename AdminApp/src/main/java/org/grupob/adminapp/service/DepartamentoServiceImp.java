@@ -1,11 +1,12 @@
 package org.grupob.adminapp.service;
 
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.Departamento;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.DepartamentoRepository;
 import org.grupob.adminapp.converter.DepartamentoConverter;
-import org.grupob.adminapp.dto.DepartamentoDTO;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,26 +14,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class DepartamentoServiceImp implements DepartamentoService {
 
-//    private DepartamentoRepository departamentoRepository;
     private final DepartamentoRepository departamentoRepository;
     private final DepartamentoConverter departamentoConverter;
 
-    public DepartamentoServiceImp(DepartamentoRepository departamentoRepository, DepartamentoConverter departamentoConverter) {
-        this.departamentoRepository = departamentoRepository;
-//        this.departamentoRepository = departamentoRepository;
-        this.departamentoConverter = departamentoConverter;
-
-    }
     public List<DepartamentoDTO> devuelveTodosDepartamentos(){
         List<Departamento> listadepartamentos = departamentoRepository.findAll();
-        List<DepartamentoDTO> listadepartamentosDTO =
-            listadepartamentos
-                .stream()
-                .map(departamento -> departamentoConverter.convertToDto(departamento))
-                .toList();
-        return listadepartamentosDTO;
+        return listadepartamentos
+            .stream()
+            .map(departamentoConverter::convertToDto)
+            .toList();
     }
 
 
@@ -74,19 +67,5 @@ public class DepartamentoServiceImp implements DepartamentoService {
         }
         throw new DepartamentoNoEncontradoException("El departamento no existe");
     }
-
-    //    private Post convertToEntity(PostDto postDto) throws ParseException {
-//        Post post = modelMapper.map(postDto, Post.class);
-//        post.setSubmissionDate(postDto.getSubmissionDateConverted(
-//                userService.getCurrentUser().getPreference().getTimezone()));
-//
-//        if (postDto.getId() != null) {
-//            Post oldPost = postService.getPostById(postDto.getId());
-//            post.setRedditID(oldPost.getRedditID());
-//            post.setSent(oldPost.isSent());
-//        }
-//        return post;
-//    }
-
 
 }

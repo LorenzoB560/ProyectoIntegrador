@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"> <!-- Asegúrate de tener el namespace de Thymeleaf si lo usas -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eliminación Masiva de Productos</title> <!-- Título actualizado -->
 
-  <!-- Reutilizamos los mismos estilos CSS que en la carga masiva -->
   <link rel="stylesheet" th:href="@{/css/carga-estilos.css}">
   <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
 
 </head>
-<!-- Asumiendo que necesitas el objeto DTO para los fragmentos, mantenemos th:object -->
 <body th:object="${loginAdminDTO}">
 
 <!-- Fragmentos comunes -->
@@ -34,7 +32,6 @@
       <button type="submit" id="buttonDelete">Eliminar Productos</button>
     </form>
 
-    <!-- Div para mostrar mensajes de éxito o error (referenciado en JS si es necesario) -->
     <div id="mensaje" class="mensaje"></div>
   </div>
 </div>

@@ -1,16 +1,15 @@
-package org.grupob.empapp.converter; // O org.grupob.adminapp.converter.maestras
+package org.grupob.empapp.converter;
 
 import org.grupob.empapp.dto.ProveedorDTO;
 import org.grupob.comun.entity.maestras.Proveedor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-@Component // Para que Spring lo detecte y puedas inyectarlo
+@Component
 public class ProveedorConverter {
 
     private final ModelMapper modelMapper;
 
-    // Inyecta ModelMapper (asegúrate de que esté configurado como Bean en algún sitio)
     public ProveedorConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }

@@ -2,6 +2,7 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.service.CookieService;
 import org.springframework.stereotype.Controller;
@@ -13,14 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("empleado")
+@RequiredArgsConstructor
 public class EmpleadoController {
 
-
     private final CookieService cookieService;
-
-    public EmpleadoController(CookieService cookieService) {
-        this.cookieService = cookieService;
-    }
 
     @GetMapping("lista")
     public String listadovista() {

@@ -2,12 +2,12 @@ package org.grupob.comun.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +28,20 @@ public class ControladorExcepciones {
 
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<InformacionExcepcion> manejaDateTimeParseException(DateTimeParseException ex) {
+        InformacionExcepcion info = new InformacionExcepcion();
+        info.setTimestamp(LocalDateTime.now());
+        info.setStatus(HttpStatus.BAD_REQUEST.value());
+        String mensaje = "El formato de la fecha que has introducido no es válido";
+        info.setMessage(mensaje);
 
+        List<String> listaErrores = new ArrayList<>();
+        listaErrores.add(mensaje);
+        info.setListaErrores(listaErrores);
+
+        return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(UsuarioYaExisteException.class)
     public ResponseEntity<InformacionExcepcion> manejaUsuarioYaExisteException(UsuarioYaExisteException ex) {
         InformacionExcepcion info = new InformacionExcepcion();
@@ -84,9 +97,9 @@ public class ControladorExcepciones {
     }
 
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public String manejaHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-        InformacionExcepcion info = new InformacionExcepcion();
-        return "redirect:/empapp/login";
-    }
+//    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+//    public String manejaHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+//        InformacionExcepcion info = new InformacionExcepcion();
+//        return "redirect:/empapp/login";
+//    }
 }

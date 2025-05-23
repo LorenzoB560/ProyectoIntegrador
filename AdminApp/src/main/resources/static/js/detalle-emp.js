@@ -22,7 +22,7 @@ function cargarDetalleEmpleado() {
 
     mostrarCargando();
 
-    fetch(`http://localhost:9090/empleados/detalle/${empleadoId}`)
+    fetch(`/adminapp/empleados/detalle/${empleadoId}`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
@@ -70,7 +70,6 @@ function mostrarDatosEmpleado(empleado) {
     }
 
     // Información personal
-    document.getElementById('idEmpleado').textContent = empleado.id;
     document.getElementById('nombreEmpleado').textContent = empleado.nombre || 'No especificado';
 
     const apellidos = [empleado.apellido]
@@ -79,7 +78,7 @@ function mostrarDatosEmpleado(empleado) {
     document.getElementById('apellidoEmpleado').textContent = apellidos || 'No especificado';
 
     document.getElementById('fechaNacimientoEmpleado').textContent = formatearFecha(empleado.fechaNacimiento);
-    document.getElementById('emailEmpleado').textContent = empleado.correo || 'No especificado';
+    document.getElementById('emailEmpleado').textContent = empleado.usuario?.usuario || 'No especificado';
 
     // Información laboral
     document.getElementById('departamentoDetalle').innerHTML = formatearDepartamento(empleado.departamento);
@@ -95,7 +94,7 @@ function mostrarDatosEmpleado(empleado) {
     const jefeElement = document.getElementById('jefeEmpleado');
     if (empleado.nombreJefe) {
         jefeElement.innerHTML = `
-                    <a href="/empleado/detalle/${empleado.idJefe}" class="text-decoration-none">
+                    <a href="/adminapp/empleado/detalle/${empleado.idJefe}" class="text-decoration-none">
                         ${empleado.nombreJefe}
                     </a>`;
     } else {
@@ -140,7 +139,7 @@ function mostrarDatosEmpleado(empleado) {
         empleado.cuentaCorriente?.iban || 'No especificado';
 
     document.getElementById('tipoTarjetaEmpleado').textContent =
-        empleado.tipoTarjetaCredito?.tipoTarjetaCredito || 'No especificado';
+        empleado.idTipoTarjeta?.tipoTarjetaCredito || 'No especificado';
 
     document.getElementById('numeroTarjetaEmpleado').textContent =
         empleado.tarjetaCredito?.numero || 'No especificado';
@@ -149,36 +148,8 @@ function mostrarDatosEmpleado(empleado) {
         `${empleado.tarjetaCredito.mesCaducidad}/${empleado.tarjetaCredito.anioCaducidad}` :
         'No especificado';
     document.getElementById('caducidadTarjetaEmpleado').textContent = caducidad;
-
-    // Actualizar enlace de edición
-    // document.getElementById('btnEditar').href = `/empleado/editar/${empleado.id}`;
 }
 
-// Función para mostrar el diálogo de confirmación al eliminar
-// function mostrarConfirmacionEliminar() {
-//     if (confirm('¿Está seguro de que desea eliminar este empleado? Esta acción no se puede deshacer.')) {
-//         eliminarEmpleado();
-//     }
-// }
-
-// Función para eliminar el empleado
-// function eliminarEmpleado() {
-//     fetch(`/empleado/${empleadoId}`, {
-//         method: 'DELETE',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         }
-//     })
-//         .then(respuesta => {
-//             if (!respuesta.ok) {
-//                 throw new Error('Error al eliminar el empleado');
-//             }
-//             window.location.href = '/empleados/listado';
-//         })
-//         .catch(err => {
-//             alert(`Error al eliminar el empleado: ${err.message}`);
-//         });
-// }
 
 // Funciones auxiliares
 function obtenerNombreCompleto(empleado) {
@@ -204,7 +175,7 @@ function formatearMoneda(cantidad) {
 function formatearDepartamento(departamento) {
     if (!departamento) return 'No especificado';
     return `
-                <a href="/departamento/detalle/${departamento.id}" class="text-decoration-none">
+                <a href="/adminapp/departamento/detalle/${departamento.id}" class="text-decoration-none">
                     ${departamento.nombre}
                 </a>
                 <div class="text-muted small">
@@ -241,7 +212,7 @@ function cargarSubordinados(idJefe) {
     const subordinadosContainer = document.getElementById('subordinadosEmpleado');
     subordinadosContainer.innerHTML = '<p class="text-muted">Cargando subordinados...</p>';
 
-    fetch(`http://localhost:9090/empleados/${idJefe}/subordinados`)
+    fetch(`/adminapp/empleados/${idJefe}/subordinados`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
@@ -278,7 +249,7 @@ function mostrarSubordinados(subordinados, container) {
 
         item.innerHTML = `
             <div>
-                <a href="/empleado/detalle/${subordinado.id}" class="text-decoration-none">
+                <a href="/adminapp/empleado/detalle/${subordinado.id}" class="text-decoration-none">
                     ${nombreCompleto}
                 </a>
                 <small class="d-block text-muted">${subordinado.departamento?.nombre || 'Sin departamento'}</small>

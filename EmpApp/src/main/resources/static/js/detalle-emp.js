@@ -1,4 +1,3 @@
-
 // Variables globales
 let empleadoData = null;
 const urlParams = new URLSearchParams(window.location.search);
@@ -22,7 +21,7 @@ function cargarDetalleEmpleado() {
 
     mostrarCargando();
 
-    fetch(`http://localhost:8080/empleados/detalle/${empleadoId}`)
+    fetch(`/empleados/detalle/${empleadoId}`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
@@ -70,7 +69,6 @@ function mostrarDatosEmpleado(empleado) {
     }
 
     // Información personal
-    document.getElementById('idEmpleado').textContent = empleado.id;
     document.getElementById('nombreEmpleado').textContent = empleado.nombre || 'No especificado';
 
     const apellidos = [empleado.apellido]
@@ -79,7 +77,7 @@ function mostrarDatosEmpleado(empleado) {
     document.getElementById('apellidoEmpleado').textContent = apellidos || 'No especificado';
 
     document.getElementById('fechaNacimientoEmpleado').textContent = formatearFecha(empleado.fechaNacimiento);
-    document.getElementById('emailEmpleado').textContent = empleado.correo || 'No especificado';
+    document.getElementById('emailEmpleado').textContent = empleado.usuario?.usuario || 'No especificado';
 
     // Información laboral
     document.getElementById('departamentoDetalle').innerHTML = formatearDepartamento(empleado.departamento);
@@ -104,10 +102,6 @@ function mostrarDatosEmpleado(empleado) {
 
     // Cargar subordinados dinámicamente
     cargarSubordinados(empleado.id);
-
-    // Información de subordinados (requeriría otra petición AJAX)
-    // document.getElementById('subordinadosEmpleado').innerHTML =
-    //     '<p class="fst-italic text-muted">Información no disponible</p>';
 
     // Especialidades
     const especialidadesContainer = document.getElementById('especialidadesEmpleado');
@@ -140,7 +134,7 @@ function mostrarDatosEmpleado(empleado) {
         empleado.cuentaCorriente?.iban || 'No especificado';
 
     document.getElementById('tipoTarjetaEmpleado').textContent =
-        empleado.tipoTarjetaCredito?.tipoTarjetaCredito || 'No especificado';
+        empleado.idTipoTarjeta?.tipoTarjetaCredito || 'No especificado';
 
     document.getElementById('numeroTarjetaEmpleado').textContent =
         empleado.tarjetaCredito?.numero || 'No especificado';
@@ -150,35 +144,8 @@ function mostrarDatosEmpleado(empleado) {
         'No especificado';
     document.getElementById('caducidadTarjetaEmpleado').textContent = caducidad;
 
-    // Actualizar enlace de edición
-    // document.getElementById('btnEditar').href = `/empleado/editar/${empleado.id}`;
 }
 
-// Función para mostrar el diálogo de confirmación al eliminar
-// function mostrarConfirmacionEliminar() {
-//     if (confirm('¿Está seguro de que desea eliminar este empleado? Esta acción no se puede deshacer.')) {
-//         eliminarEmpleado();
-//     }
-// }
-
-// Función para eliminar el empleado
-// function eliminarEmpleado() {
-//     fetch(`/empleado/${empleadoId}`, {
-//         method: 'DELETE',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         }
-//     })
-//         .then(respuesta => {
-//             if (!respuesta.ok) {
-//                 throw new Error('Error al eliminar el empleado');
-//             }
-//             window.location.href = '/empleados/listado';
-//         })
-//         .catch(err => {
-//             alert(`Error al eliminar el empleado: ${err.message}`);
-//         });
-// }
 
 // Funciones auxiliares
 function obtenerNombreCompleto(empleado) {
@@ -236,12 +203,11 @@ function mostrarError(mensaje) {
     detalleEmpleado.style.display = 'none';
 }
 
-// Añadir esta nueva función al archivo
 function cargarSubordinados(idJefe) {
     const subordinadosContainer = document.getElementById('subordinadosEmpleado');
     subordinadosContainer.innerHTML = '<p class="text-muted">Cargando subordinados...</p>';
 
-    fetch(`http://localhost:8080/empleados/${idJefe}/subordinados`)
+    fetch(`/empleados/${idJefe}/subordinados`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);

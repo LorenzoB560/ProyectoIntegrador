@@ -1,10 +1,10 @@
 package org.grupob.adminapp.controller;
 
 
-import org.grupob.adminapp.dto.DepartamentoDTO;
+import lombok.RequiredArgsConstructor;
+import org.grupob.comun.dto.DepartamentoDTO;
 import org.grupob.adminapp.service.DepartamentoServiceImp;
 import org.grupob.comun.entity.Departamento;
-import org.grupob.comun.repository.DepartamentoRepository;
 
 
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("departamentos")
+@RequiredArgsConstructor
 public class DepartamentoRestController {
 
-    private final DepartamentoRepository departamentoRepository;
-    private DepartamentoServiceImp departamentoService;
 
-    public DepartamentoRestController(DepartamentoServiceImp departamentoService, DepartamentoRepository departamentoRepository) {
-        this.departamentoService = departamentoService;
-        this.departamentoRepository = departamentoRepository;
-    }
+    private final DepartamentoServiceImp departamentoService;
 
     @GetMapping("listado")
     public List<DepartamentoDTO>devuelveTodosDepartamentos(){

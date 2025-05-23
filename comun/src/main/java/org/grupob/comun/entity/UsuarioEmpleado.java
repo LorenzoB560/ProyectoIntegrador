@@ -3,12 +3,14 @@ package org.grupob.comun.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,10 +20,7 @@ import java.time.LocalDateTime;
         @UniqueConstraint(name = "UQ_usuario_empleado", columnNames = "id_empleado")})
 public class UsuarioEmpleado extends Usuario {
 
-//    @OneToOne
-//    @JoinColumn(name = "id_empleado", unique = true,
-//            foreignKey = @ForeignKey(name = "FK_usuario_empleado_id"))
-//    private Empleado empleado;
+
 
     @Column(name = "ultima_conexion")
     private LocalDateTime ultimaConexion;

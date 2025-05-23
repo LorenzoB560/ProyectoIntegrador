@@ -1,5 +1,3 @@
-// funciones-admin-login.js
-
 // Mostrar u ocultar la contraseña
 function mostrarOcultarClave() {
     // Obtener los elementos de los campos de contraseña
@@ -13,6 +11,7 @@ function mostrarOcultarClave() {
     }
 }
 
+
 $(document).ready(function () {
     // Recuperar contraseña (solo para pruebas, en producción solo por email)
     $("#recordarContraseña").click(function (event) {
@@ -25,6 +24,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
+            // url: `${contextPath}/devuelve-clave`,
             url: "/adminapp/devuelve-clave",
             type: "GET",
             data: { correo: correo },

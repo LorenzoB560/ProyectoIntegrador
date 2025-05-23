@@ -24,8 +24,6 @@ public interface ProductoRepository extends JpaRepository<Producto, UUID> {
     boolean existsByDescripcionAndProveedorNombre(String descripcion, String nombreProveedor);
     Optional<Producto> findByDescripcionAndProveedorNombre(String descripcion, String nombreProveedor);
 
-//    @Query("SELECT p FROM Producto p WHERE TYPE(p) = :clase")
-//    <T extends Producto> List<T> findByType(@Param("clase") Class<T> clase);
 
     // 1.1. Obtener los IDs de los productos asociados a una categoría
     @Query("SELECT p.id FROM Producto p JOIN p.categoria c WHERE c.id = :categoriaId")

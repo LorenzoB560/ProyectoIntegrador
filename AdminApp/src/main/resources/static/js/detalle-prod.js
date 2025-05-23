@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (errorDiv) errorDiv.style.display = 'none';
     if (detalleContenedor) detalleContenedor.style.display = 'none';
 
-    const url = `/productos/detalle/${productoId}`;
+    const url = `/adminapp/productos/detalle/${productoId}`;
 
     fetch(url)
         .then(response => {
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (detalleContenedor) detalleContenedor.style.display = 'block';
 
             // --- Información General del Producto ---
-            rellenarTexto('prod-id', data.id);
             rellenarTexto('prod-nombre-header', data.nombre || data.descripcion || 'Producto sin nombre');
             rellenarTexto('prod-descripcion', data.descripcion);
             rellenarTexto('prod-precio', formatearMoneda(data.precio));
@@ -45,28 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
             rellenarTexto('prod-fecha-fabricacion', formatearFecha(data.fechaFabricacion));
             rellenarTexto('prod-fecha-alta', formatearFecha(data.fechaAlta));
 
-            const coloresSpan = document.getElementById('prod-colores');
-            if (coloresSpan) {
-                if (data.colores && data.colores.length > 0) {
-                    coloresSpan.innerHTML = data.colores.map(color => {
-                        if (typeof color === 'string') {
-                            return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; color: ${getContrastingTextColor(color.toLowerCase())};">${color}</span>`;
-                        } else if (typeof color === 'object' && color !== null) {
-                            const bgColor = color.hex || color.codigo || 'grey';
-                            const textColor = getContrastingTextColor(bgColor);
-                            return `<span class="badge me-1" style="background-color:${bgColor}; color: ${textColor};">${color.nombre || bgColor}</span>`;
-                        }
-                        return '';
-                    }).join(' ');
-                } else {
-                    coloresSpan.textContent = 'No especificados';
-                }
-            }
 
             // --- Proveedor ---
             if (data.proveedor) {
                 rellenarTexto('prov-nombre', data.proveedor.nombre);
                 rellenarTexto('prov-id', data.proveedor.id);
+
             } else {
                 rellenarTexto('prov-nombre', 'N/A');
                 rellenarTexto('prov-id', 'N/A');
@@ -144,20 +127,13 @@ function mostrarDetallesPorTipo(tipoProducto, data) {
                     if (data.colores && Array.isArray(data.colores) && data.colores.length > 0) {
                         coloresMuebleSpan.innerHTML = data.colores.map(color => {
                             if (typeof color === 'string') {
-                                return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; color: ${getContrastingTextColor(color.toLowerCase())};">${color}</span>`;
-                            } else if (typeof color === 'object' && color !== null) {
-                                const bgColor = color.hex || color.codigo || 'grey';
-                                const textColor = getContrastingTextColor(bgColor);
-                                return `<span class="badge me-1" style="background-color:${bgColor}; color: ${textColor};">${color.nombre || bgColor}</span>`;
+                                return `<span class="badge me-1" style="background-color:${color.toLowerCase()}; Color:black">${color}</span>`;
                             }
                             return '';
                         }).join(' ');
                         infoMuebleMostrada = true;
                     } else {
                         coloresMuebleSpan.textContent = 'No especificados';
-                        // Si quieres considerar "No especificados" como información mostrada, pon infoMuebleMostrada = true;
-                        // Si no, y no hay colores, no se marcará como mostrado y el bloque podría no aparecer si nada más se rellena.
-                        // Para el JSON de ejemplo que tiene colores: [], esto mostrará "No especificados".
                     }
                 }
 
@@ -233,11 +209,6 @@ function mostrarDetallesPorTipo(tipoProducto, data) {
                     }
                 }
                 // --- FIN AJUSTE PARA TALLAS ---
-
-                // Para 'ropa-composicion', asumiendo que tu JSON de ROPA podría tener un campo como 'composicionTextil' o similar.
-                // Si el JSON de ejemplo ("Abrigo de invierno") no tiene 'composicionTextil' explícitamente,
-                // puedes usar el campo 'material' que sí está presente, o añadir 'composicionTextil' a tu DTO/JSON.
-                // Aquí usaré 'data.material' como fallback si 'data.composicionTextil' no existe.
                 const composicion = data.composicionTextil || data.material; // Usar 'material' si 'composicionTextil' no está.
                 if (rellenarTexto('ropa-composicion', composicion) !== 'N/A') {
                     infoRopaMostrada = true; // Se mostró información de composición/material
@@ -260,10 +231,6 @@ function mostrarDetallesPorTipo(tipoProducto, data) {
     }
 }
 
-// ... (El resto de tus funciones auxiliares: rellenarTexto, capitalizarPrimeraLetra, formatearMoneda, etc., deben permanecer igual) ...
-
-// Asegúrate que la función rellenarTexto devuelva el valor que se asignó o 'N/A'
-// para que la comprobación if (rellenarTexto(...) !== 'N/A') funcione si la usas.
 function rellenarTexto(idElemento, valor) {
     const elemento = document.getElementById(idElemento);
     const valorAMostrar = (valor !== null && valor !== undefined && valor !== '') ? String(valor) : 'N/A';
@@ -280,10 +247,6 @@ function capitalizarPrimeraLetra(string) {
     string = String(string).toLowerCase();
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-
-// --- Funciones auxiliares (formatearMoneda, formatearFecha, generarEstrellasValoracion, getContrastingTextColor, mostrarErrorDetalleProd) ---
-// (Mantener las que te proporcioné en la respuesta anterior, ya que son útiles aquí también)
 
 function formatearMoneda(cantidad) {
     if (cantidad === undefined || cantidad === null || isNaN(cantidad)) return 'N/A';
@@ -337,31 +300,7 @@ function generarEstrellasValoracion(valoracion) {
 
 function getContrastingTextColor(hexColor) {
     if (!hexColor) return '#000000';
-    const commonColorsToHex = {
-        black: "#000000", white: "#ffffff", red: "#ff0000", green: "#008000", blue: "#0000ff",
-        yellow: "#ffff00", cyan: "#00ffff", magenta: "#ff00ff", gray: "#808080",
-        maroon: "#800000", olive: "#808000", purple: "#800080", teal: "#008080", navy: "#000080"
-    };
-    hexColor = commonColorsToHex[hexColor.toLowerCase()] || hexColor;
 
-    const hex = hexColor.replace('#', '');
-    if (hex.length !== 3 && hex.length !== 6) return '#000000'; // Default for invalid hex
-
-    let r, g, b;
-    if (hex.length === 3) {
-        r = parseInt(hex[0] + hex[0], 16);
-        g = parseInt(hex[1] + hex[1], 16);
-        b = parseInt(hex[2] + hex[2], 16);
-    } else {
-        r = parseInt(hex.substring(0, 2), 16);
-        g = parseInt(hex.substring(2, 4), 16);
-        b = parseInt(hex.substring(4, 6), 16);
-    }
-
-    if (isNaN(r) || isNaN(g) || isNaN(b)) return '#000000'; // Default if parsing failed
-
-    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    return (yiq >= 128) ? '#000000' : '#FFFFFF';
 }
 
 function mostrarErrorDetalleProd(mensaje) {

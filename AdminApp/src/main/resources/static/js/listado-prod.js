@@ -1,5 +1,3 @@
-// static/js/listado-prod.js
-
 // --- Variables Globales ---
 let paginaActualProd = 0;
 const tamañoPaginaProd = 10; // Tamaño de página por defecto
@@ -9,8 +7,7 @@ let totalPaginasProd = 0;
 let totalElementosProd = 0;
 
 // --- URL del Endpoint API ---
-// ¡¡¡AJUSTA ESTA URL!!! Debe apuntar a tu @GetMapping("/listado") que devuelve JSON Page<ProductoDTO>
-const API_PRODUCTOS_URL = '/productos/listado'; // O '/empapp/productos/listado' o la ruta REST correcta
+const API_PRODUCTOS_URL = '/adminapp/productos/listado';
 
 // --- Event Listeners y Setup Inicial ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -55,9 +52,6 @@ function cambiarOrdenacionProductos(nuevoOrdenarPor) {
 function actualizarBotonActivoProductos() {
     document.querySelectorAll('.btn-sort').forEach(btn => btn.classList.remove('active'));
     let btnActivoId = '';
-    // Mapear el 'sortBy' usado en JS/API al ID del botón correspondiente
-    // Asegúrate de que el valor de ordenarPorProd (ej. 'precioBase', 'categoriaPrincipal')
-    // coincida con lo que se usa en el backend o se mapea correctamente.
     switch (ordenarPorProd.toLowerCase()) {
         case 'descripcion':
             btnActivoId = 'ordenarPorDescripcionProd';
@@ -68,17 +62,10 @@ function actualizarBotonActivoProductos() {
         case 'preciobase': // O 'precio', según lo que uses
             btnActivoId = 'ordenarPorPrecioProd';
             break;
-        // ELIMINA O COMENTA EL SIGUIENTE CASO:
-        // case 'proveedor.nombre':
-        //     btnActivoId = 'ordenarPorProveedorProd';
-        //     break;
         default:
-            // Si ordenarPorProd tiene un valor que ya no corresponde a un botón activo,
-            // podrías deseleccionar todos o seleccionar uno por defecto.
             // Por ejemplo, si el default es descripción:
             if (!btnActivoId && ordenarPorProd !== "descripcion") {
-                // No hacer nada o default a descripción si es necesario
-            } else if (!btnActivoId) { // Si no hay match y es el default inicial
+            } else if (!btnActivoId) {
                 document.getElementById('ordenarPorDescripcionProd')?.classList.add('active');
             }
             break;
@@ -203,10 +190,8 @@ function llenarTablaProductos(productos) {
         // Preparar datos del ProductoDTO
         const productoId = prod.id || 'N/A';
         const productoDescripcion = prod.descripcion || 'N/A';
-        const precioFormateado = formatearMonedaProd(prod.precio); // Asumiendo que ya tienes esta función
+        const precioFormateado = formatearMonedaProd(prod.precio);
 
-        // Obtener nombre del proveedor (NUEVO)
-        // Se accede a través de prod.proveedor (que es ProveedorDTO) y luego a su campo .nombre
         const nombreProveedor = (prod.proveedor && prod.proveedor.nombre) ? prod.proveedor.nombre : 'N/A';
 
         const marcaProducto = prod.marca || 'N/A';
@@ -215,7 +200,6 @@ function llenarTablaProductos(productos) {
         if (prod.categoria && Array.isArray(prod.categoria) && prod.categoria.length > 0) {
             categoriasHtml = prod.categoria.map(cat => `<span class="badge bg-info text-dark me-1">${cat.nombre || ''}</span>`).join(' ');
         } else if (prod.categoria && typeof prod.categoria === 'object' && !Array.isArray(prod.categoria) && Object.keys(prod.categoria).length > 0) {
-            // Manejo por si 'categoria' es un solo objeto en lugar de un array (aunque el DTO lo define como Set)
             categoriasHtml = `<span class="badge bg-info text-dark me-1">${prod.categoria.nombre || ''}</span>`;
         }
 
@@ -229,8 +213,10 @@ function llenarTablaProductos(productos) {
         const nombreParaConfirm = productoDescripcion.replace(/["`]/g, ''); // Quitar comillas dobles y backticks para confirm
         const nombreParaAttr = productoDescripcion.replace(/"/g, '&quot;'); // Escapar comillas dobles para atributo HTML
         const accionesHtml = `
-            <div class="d-flex justify-content-end flex-nowrap">
-                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-outline-info me-1" title="Ver Detalle"><i class="bi bi-eye"></i></a>
+            <div>
+                <a href="${urlBaseAcciones}/detalle/${productoId}" class="btn btn-sm btn-primary me-2" title="Ver Detalle">
+                    <i class="bi bi-eye"></i>
+                </a>
                 <a  href="#" class="btn btn-danger me-2 btn-eliminar-prod-js" 
                         data-product-id="${productoId}" 
                         data-product-name="${nombreParaAttr}" 
@@ -241,14 +227,13 @@ function llenarTablaProductos(productos) {
 
         // Construir la fila con la nueva celda para el proveedor
         fila.innerHTML = `
-            <td>${productoId}</td>
             <td>${productoDescripcion}</td>
-            <td class="text-end">${precioFormateado}</td>
+            <td>${precioFormateado}</td>
             <td>${nombreProveedor}</td> 
             <td>${marcaProducto}</td>
             <td>${categoriasHtml}</td>
-            <td class="text-center">${segundaManoHtml}</td>
-            <td class="text-center">${unidadesProducto}</td>
+            <td>${segundaManoHtml}</td>
+            <td>${unidadesProducto}</td>
             <td>${accionesHtml}</td>
         `;
         cuerpoTabla.appendChild(fila);
@@ -265,8 +250,6 @@ function crearControlesPaginacionProductos() {
     const ul = document.createElement('ul');
     ul.className = 'pagination pagination-sm justify-content-center';
 
-    // Lógica para añadir botones << < ... números ... > >>
-    // (Usando la lógica mejorada de la versión anterior del JS de productos)
     const maxBotones = 5;
     let inicio = Math.max(0, paginaActualProd - Math.floor(maxBotones / 2));
     let fin = Math.min(totalPaginasProd - 1, inicio + maxBotones - 1);
@@ -366,12 +349,8 @@ function asignarEventListenersAccionesProd() {
             if (confirm(`¿Está seguro de eliminar el producto "${decodedProductName}" (ID: ${productId})? Esta acción no se puede deshacer.`)) {
 
                 // --- 2. Llamada al Endpoint DELETE ---
-                // Asegúrate que la URL base es correcta para el endpoint REST en AdminApp
-                const url = `/productos/eliminar/${productId}`;
-                const headers = {
-                    // Añadir cabecera CSRF aquí si la estás usando en AdminApp con Spring Security
-                    // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.content || 'TOKEN_CSRF_FALLBACK'
-                };
+                const url = `/adminapp/productos/eliminar/${productId}`;
+
 
                 // Deshabilitar botón y mostrar carga (opcional)
                 clone.disabled = true;
@@ -379,8 +358,7 @@ function asignarEventListenersAccionesProd() {
                 clone.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
                 fetch(url, {
-                    method: 'DELETE',
-                    headers: headers
+                    method: 'DELETE'
                 })
                     .then(response => {
                         if (response.ok || response.status === 204) { // 200 OK o 204 No Content son éxito para DELETE
@@ -403,13 +381,46 @@ function asignarEventListenersAccionesProd() {
                     })
                     .then(() => {
                         // --- 3. Acciones en caso de ÉXITO ---
-                        console.log(`Producto ${productId} eliminado.`);
-                        // Usar el nombre decodificado en la alerta de éxito
+                        console.log(`Producto ${productId} eliminado del servidor.`);
                         alert(`Producto "${decodedProductName}" eliminado correctamente.`);
-                        // Recargar la tabla para reflejar el cambio
-                        // Considerar si ir a la misma página es correcto si se eliminó el último ítem de esa página
-                        // Una lógica más avanzada podría verificar si la página actual queda vacía y retroceder.
-                        obtenerProductos(paginaActualProd);
+
+                        // --- INICIO: Eliminación dinámica del DOM ---
+                        const filaParaEliminar = clone.closest('tr'); // 'clone' es el botón de eliminar que se presionó
+                        if (filaParaEliminar) {
+                            filaParaEliminar.remove();
+                            totalElementosProd--; // Decrementar el contador total de productos
+
+                            // Actualizar el texto del contador de resultados
+                            const elementosEnPaginaActual = document.getElementById('cuerpoTablaProd').rows.length;
+                            document.getElementById('contadorResultadosProd').textContent =
+                                `Mostrando ${elementosEnPaginaActual} de ${totalElementosProd} productos - Página ${paginaActualProd + 1} de ${totalPaginasProd || 1}`;
+
+                            // Si la tabla queda vacía en la página actual
+                            if (elementosEnPaginaActual === 0) {
+                                if (totalElementosProd > 0 && paginaActualProd > 0) {
+                                    obtenerProductos(paginaActualProd - 1);
+                                } else if (totalElementosProd === 0) {
+                                    // No quedan productos en ninguna página
+                                    document.getElementById('tablaProductos').style.display = 'none';
+                                    document.getElementById('mensajeTablaVaciaProd').style.display = 'block';
+                                    document.getElementById('paginacionProd').innerHTML = ''; // Limpiar paginación
+                                    totalPaginasProd = 0;
+                                    document.getElementById('contadorResultadosProd').textContent = "No hay productos para mostrar.";
+                                } else {
+                                    obtenerProductos(0);
+                                }
+                            } else {
+                                const nuevoTotalPaginas = Math.ceil(totalElementosProd / tamañoPaginaProd);
+                                if (nuevoTotalPaginas !== totalPaginasProd) {
+                                    totalPaginasProd = nuevoTotalPaginas;
+                                    crearControlesPaginacionProductos();
+                                }
+                            }
+                        } else {
+                            // Si no se encontró la fila, por si acaso, recargar.
+                            obtenerProductos(paginaActualProd);
+                        }
+                        // --- FIN: Eliminación dinámica del DOM ---
                     })
                     .catch(error => {
                         // --- 4. Acciones en caso de ERROR ---
@@ -417,11 +428,6 @@ function asignarEventListenersAccionesProd() {
                         alert(`Error al eliminar producto: ${error.message}`);
                     })
                     .finally(() => {
-                        // Rehabilitar el botón SIEMPRE (en caso de éxito o error)
-                        // Puede que no se encuentre el botón si la tabla se recargó completamente antes de rehabilitarlo.
-                        // Si obtenerProductos() es muy rápido, este código podría ejecutarse después de que el botón original ya no exista.
-                        // Es más seguro rehabilitar solo en el .catch si la recarga solo ocurre en .then()
-                        // Vamos a rehabilitar solo en caso de error para evitar problemas con la recarga
                         if (!clone.disabled) return; // Ya rehabilitado o no existe
                         try {
                             clone.disabled = false;

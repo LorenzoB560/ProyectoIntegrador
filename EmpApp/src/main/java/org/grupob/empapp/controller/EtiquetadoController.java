@@ -1,6 +1,7 @@
 package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.service.CookieService;
 import org.grupob.empapp.service.EmpleadoServiceImp; // Necesario para validar que el jefe existe
@@ -17,14 +18,11 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/etiquetado") // Ruta base para las vistas de etiquetado
+@RequiredArgsConstructor
 public class EtiquetadoController {
 
     private final EmpleadoServiceImp empleadoService; // Inyectamos EmpleadoService para validar al jefe
     private final CookieService cookieService;
-    public EtiquetadoController(EmpleadoServiceImp empleadoService, CookieService cookieService) {
-        this.empleadoService = empleadoService;
-        this.cookieService = cookieService;
-    }
 
     /**
      * Muestra la vista de etiquetado masivo para un jefe específico.
@@ -37,10 +35,6 @@ public class EtiquetadoController {
                                           Model model,
                                           @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                           HttpServletRequest request) {
-        // --- Validación Opcional ---
-        // Es buena práctica validar que el jefe existe antes de mostrar la página.
-        // También, en una aplicación real, verificarías si el usuario logueado
-        // tiene permiso para etiquetar como este jefe.
         try {
             // Intenta convertir a UUID y busca al empleado para asegurar que existe
             UUID.fromString(jefeId);
@@ -78,19 +72,8 @@ public class EtiquetadoController {
             e.printStackTrace();
             return "error"; // O una vista de error genérica
         }
-        // --- Fin Validación Opcional ---
-
-        // Si no haces validación aquí (confiando en que el servicio lo hará después),
-        // simplemente pasarías el ID y devolverías la vista:
-        // model.addAttribute("jefeId", jefeId);
-        // return "etiquetado/etiquetado-masivo";
     }
 
-    // Aquí podrías añadir más métodos @GetMapping para otras vistas relacionadas
-    // con el etiquetado si las necesitas (ej. etiquetado simple, eliminar etiquetas).
-    // @GetMapping("/simple/{jefeId}")
-    // public String mostrarEtiquetadoSimple(...) { ... }
-    // --- NUEVO MÉTODO ---
     @GetMapping("/limitado/{jefeId}")
     public String mostrarNuevoEtiquetado(@PathVariable String jefeId,
                                          Model model,

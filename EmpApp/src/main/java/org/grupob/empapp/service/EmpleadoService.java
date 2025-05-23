@@ -58,8 +58,4 @@ public interface EmpleadoService {
      EmpleadoDTO quitarJefe(String empleadoId);
      List<EmpleadoDTO> listarSubordinados(String jefeId);
 
-     // Métodos de gestión de etiquetas
-//     EmpleadoDTO asignarEtiqueta(String empleadoId, String etiquetaId);
-//     EmpleadoDTO quitarEtiqueta(String empleadoId, String etiquetaId);
-//     List<EmpleadoDTO> buscarPorEtiqueta(String etiquetaId);
 }

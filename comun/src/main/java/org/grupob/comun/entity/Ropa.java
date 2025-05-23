@@ -4,13 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.grupob.comun.entity.auxiliar.Dimension;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.entity.maestras.Talla;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data

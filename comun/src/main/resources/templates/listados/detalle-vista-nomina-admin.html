@@ -6,11 +6,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/descargarPDF.js"></script>
-    <script src="/js/eliminarConcepto.js"></script>
+    <script src="/adminapp/js/descargarPDF.js"></script>
+    <script src="/adminapp/js/eliminarConcepto.js"></script>
     <link rel="stylesheet" th:href="@{/css/admin/estilos-generales.css}">
     <style>
-        label{
+        label {
             font-weight: bold;
         }
     </style>
@@ -44,45 +44,135 @@
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h5 class="card-title">Información de la Nómina</h5>
-            <div class="row mb-2">
-<!--                <div class="col-md-6"><strong>ID:</strong> <span th:text="${nominaDTO.id}"></span></div>-->
-                <div class="col-md-6"><strong>Empleado:</strong> <span th:text="${nominaDTO.nombre}"></span></div>
+            <h4 class="card-title text-center mb-4">Información de la Nómina</h4>
+
+            <div class="mb-3">
+                <strong>Periodo:</strong>
+                <span class="text-muted"
+                      th:text="${nominaDTO.periodo.fechaInicio} + ' - ' + ${nominaDTO.periodo.fechaFin}"></span>
             </div>
-            <div class="row mb-2">
-                <div class="col-md-6"><strong>Mes:</strong> <span th:text="${nominaDTO.mes}"></span></div>
-                <div class="col-md-6"><strong>Año:</strong> <span th:text="${nominaDTO.anio}"></span></div>
+
+            <hr>
+
+            <h5 class="mt-3"><strong>Información de la Empresa</strong></h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Empresa:</strong>
+                    <span class="text-muted" th:text="${listaPropiedades.get(0).valor}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>CIF de la empresa:</strong>
+                    <span class="text-muted" th:text="${listaPropiedades.get(1).valor}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Dirección de la empresa:</strong>
+                    <span class="text-muted" th:text="${listaPropiedades.get(2).valor}"></span>
+                </div>
+            </div>
+
+            <hr>
+
+            <h5 class="mt-4">Información del Empleado</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Empleado:</strong>
+                    <span class="text-muted" th:text="${nominaDTO.nombre}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Documento:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.numDocumento}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Dirección:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.getDireccion().tipoVia} + ' ' +
+                    ${empleadoNominaDTO.getDireccion().via} + ' ' +
+                    ${empleadoNominaDTO.getDireccion().numero}"></span>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-6"><strong>Total líquido:</strong>
-                    <span th:text="${#numbers.formatDecimal(nominaDTO.totalLiquido, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
+                <div class="col-md-4">
+                    <strong>Fecha de alta:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.periodoContratacion.fechaInicio}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Departamento:</strong>
+                    <span class="text-muted" th:text="${empleadoNominaDTO.departamento.nombre}"></span>
+                </div>
+            </div>
+
+
+            <hr>
+
+            <h5 class="mt-3">Cantidades Acumuladas</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Cantidad bruta acumulada:</strong>
+                    <span class="text-muted" th:text="${brutoTotal}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Retenciones acumuladas:</strong>
+                    <span class="text-muted" th:text="${retencionesTotales}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Liquidez acumulada hasta este mes:</strong>
+                    <span class="text-muted" th:text="${sumaLiquidoTotal}"></span>
                 </div>
             </div>
         </div>
     </div>
 
+
     <div class="card shadow-sm">
         <div class="card-body">
-            <h5 class="card-title">Conceptos</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center"
-                    th:each="c : ${nominaDTO.lineaNominas}"
-                    th:attr="data-id-concepto=${c.idConcepto}">
-                    <div>
-                        <label th:text="${c.nombreConcepto}"></label>
-                        <span th:text="${#numbers.formatDecimal(c.cantidad, 1, 'COMMA', 2, 'POINT')} + ' €'">0,00 €</span>
-                    </div>
-                    <button class="btn btn-sm btn-danger btn-eliminar"
-                            th:data-id-nomina="${nominaDTO.id}"
-                            th:data-id-concepto="${c.idConcepto}">
-                        Eliminar
-                    </button>
-                </li>
+            <h5 class="card-title">Líneas de nómina</h5>
 
-            </ul>
+            <div class="table-responsive mt-3">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Porcentaje</th>
+                        <th>Ingreso</th>
+                        <th>Retención</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${nominaDTO.lineaNominas}">
+                        <td th:text="${c.nombreConcepto}"></td>
+                        <td th:text="${c.porcentaje != null ? c.porcentaje + '%' : ''}"></td>
+                        <td th:text="${c.tipoConcepto.equals('INGRESO') ? c.cantidad + ' €' : ''}"></td>
+                        <td th:text="${c.tipoConcepto.equals('DEDUCCION') ? c.cantidad + ' €' : ''}"></td>
+                        <td>
+                            <div th:if="${!c.nombreConcepto.equalsIgnoreCase('Salario Base')}">
+                                <button class="btn btn-sm btn-danger btn-eliminar"
+                                        th:data-id-nomina="${nominaDTO.id}"
+                                        th:data-id-concepto="${c.idConcepto}">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr class="table-secondary font-weight-bold">
+                        <td>Total</td>
+                        <td></td>
+                        <td th:text="${totalIngresos}"></td>
+                        <td th:text="${totalDeducciones} + ' €'"></td>
+                        <td></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="text-end mt-3">
+                <strong>Total líquido:</strong>
+                <span class="fw-bold text-success"
+                      th:text="${nominaDTO.totalLiquido} + ' €'"></span>
+            </div>
         </div>
     </div>
-
 </div>
 <div th:replace="fragmentos/footer :: footer"></div>
 </body>

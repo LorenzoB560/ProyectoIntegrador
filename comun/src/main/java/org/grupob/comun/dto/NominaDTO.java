@@ -16,8 +16,7 @@ public class NominaDTO {
     private UUID id;
     private UUID idEmpleado;
     private String nombre;
-    private int mes;
-    private int anio;
+    private PeriodoDTO periodo;
     private BigDecimal totalLiquido;
     private List<LineaNominaDTO> lineaNominas;
 }

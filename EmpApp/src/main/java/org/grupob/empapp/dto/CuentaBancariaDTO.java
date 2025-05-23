@@ -19,7 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @CodigoEntidadCorrecto(groups = GrupoDatosEconomicos.class)
 @CodigoPaisEntidadCorrecto(groups = GrupoDatosEconomicos.class)
-//@IbanCodigoPaisValido(groups = GrupoDatosEconomicos.class)
 public class CuentaBancariaDTO {
 
     @NotNull(groups = GrupoDatosEconomicos.class)
@@ -51,10 +50,6 @@ public class CuentaBancariaDTO {
     @Pattern(regexp = "\\d{10}", message = "{numeroCuenta.message}", groups = GrupoDatosEconomicos.class)
     private String numeroCuenta;
 
-
-    //    public static CuentaBancariaDTO of(String iban) {
-//        return new CuentaBancariaDTO(iban);
-//    }º
     public String getIban() {
         if (codigoPais == null || digitosControl == null || codigoEntidadBancaria == null
                 || sucursal == null || numeroCuenta == null) {

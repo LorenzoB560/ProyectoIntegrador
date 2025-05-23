@@ -4,39 +4,46 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.entity.maestras.Propiedad;
+import org.grupob.comun.repository.PropiedadRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Data
-/*@AllArgsConstructor
-@NoArgsConstructor*/
 @Service
 public class CookieService {
 
-    @Value("${app.cookie.secret}")
-    private  String claveSecreta;
+    private final PropiedadRepository propiedadRepository;
+
+    private String claveSecreta;
 
     private  SecretKeySpec secretKeySpec;
 
-    @PostConstruct
-    private void init() {
-        // Inicializa la clave después de inyectar la propiedad
-        secretKeySpec = new SecretKeySpec(claveSecreta.getBytes(), "AES");
-    }
 
+    public SecretKeySpec getSecretKey() {
+        if (secretKeySpec == null) {
+            //Si está null, obtengo la contraseña desde la base de datos, y la asigno.
+            String claveSecreta = propiedadRepository.findById(4L)
+                    .map(Propiedad::getValor)
+                    .orElseThrow(() -> new RuntimeException("Clave no encontrada"));
+            // le asigno a secretKeySpec los bytes de la clave secreta y su algoritmo.
+            secretKeySpec = new SecretKeySpec(claveSecreta.getBytes(), "AES");
+        }
+        return secretKeySpec;
+    }
     private  String cifrar(String valorClaro) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey());
             byte[] cifrado = cipher.doFinal(valorClaro.getBytes());
             return Base64.getEncoder().encodeToString(cifrado);
         } catch (Exception e) {
@@ -47,7 +54,7 @@ public class CookieService {
     private  String descifrar(String valorCifrado) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            cipher.init(Cipher.DECRYPT_MODE, getSecretKey());
             byte[] descifrado = cipher.doFinal(Base64.getDecoder().decode(valorCifrado));
             return new String(descifrado);
         } catch (Exception e) {
@@ -124,17 +131,6 @@ public  String serializar(Map<String, Integer> usuarios) {
  * @param usuarioActual Usuario a actualizar
  * @return Nuevo valor serializado para la cookie
  */
-//public  String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
-//
-//    if (valor != null && valor.contains(usuarioActual)) {
-//        int contador = usuarios.getOrDefault(usuarioActual, 0);
-//        usuarios.put(usuarioActual, ++contador);
-//    } else {
-//        usuarios.put(usuarioActual, 1);
-//    }
-//    return serializar(usuarios);
-//}
-
     public String actualizar(Map<String, Integer> usuarios, String valor, String usuarioActual) {
         int contador = usuarios.getOrDefault(usuarioActual, 0);
         usuarios.put(usuarioActual, ++contador);
@@ -144,12 +140,6 @@ public  String serializar(Map<String, Integer> usuarios) {
 /**
  * Crea una nueva cookie con configuración de seguridad básica
  */
-/*public static void crearCookie(HttpServletResponse response, String nombre, String valor, int duracionSegundos) {
-    Cookie cookie = new Cookie(nombre, valor);
-    cookie.setPath("/"); // Accesible en toda la aplicación
-    cookie.setMaxAge(duracionSegundos); // Duración en segundos
-    response.addCookie(cookie);
-}*/
 public void crearCookie(HttpServletResponse response, String nombre, String valor, int duracionSegundos) {
     String valorCifrado = cifrar(valor);
     Cookie cookie = new Cookie(nombre, valorCifrado);
@@ -178,20 +168,10 @@ public  void eliminarCookie(HttpServletResponse response, String nombre) {
  * @param nombre  Nombre de la cookie a buscar
  * @return Valor de la cookie o null si no existe
  */
-/*public static String obtenerValorCookie(HttpServletRequest request, String nombre) {
-    if (request.getCookies() == null) return null;
-
-    for (Cookie cookie : request.getCookies()) {
-        if (cookie.getName().equals(nombre)) {
-            return cookie.getValue();
-        }
-    }
-    return null;
-}*/
 public  String obtenerValorCookie(HttpServletRequest request, String nombre) {
     if (request.getCookies() == null) return null;
 
-    for (Cookie cookie : request.getCookies()) {
+    /*for (Cookie cookie : request.getCookies()) {
         if (cookie.getName().equals(nombre)) {
             try {
                 return descifrar(cookie.getValue());
@@ -200,7 +180,19 @@ public  String obtenerValorCookie(HttpServletRequest request, String nombre) {
             }
         }
     }
-    return null;
+    return null;*/
+
+    return Arrays.stream(request.getCookies())
+            .filter(cookie -> cookie.getName().equals(nombre))
+            .findFirst()
+            .map(cookie -> {
+                try {
+                    return descifrar(cookie.getValue());
+                } catch (Exception e) {
+                    return null; // Si no puede descifrar, devuelve null por seguridad
+                }
+            })
+            .orElse(null);
 }
 
 /**

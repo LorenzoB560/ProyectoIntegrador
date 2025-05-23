@@ -1,6 +1,7 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.dto.ProveedorDTO;
@@ -17,23 +18,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/adminapp")
+@RequiredArgsConstructor
 public class ProductoController {
 
     private final ProveedorServiceImp proveedorService;
     private final CategoriaServiceImp categoriaService;
 
-    @Autowired // Inyección por constructor recomendada
-    public ProductoController(ProveedorServiceImp proveedorService, CategoriaServiceImp categoriaService) {
-        this.proveedorService = proveedorService;
-        this.categoriaService = categoriaService;
-    }
-
     @GetMapping("/carga-masiva")
     public String cargarMasivaProductos(Model modelo, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+            return "redirect:/login"; // protección ante acceso directo sin login
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
 
@@ -45,7 +40,7 @@ public class ProductoController {
     public String eliminacionMasivaProductos(Model modelo, HttpSession sesion) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // protección ante acceso directo sin login
+            return "redirect:/login"; // protección ante acceso directo sin login
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "producto/eliminacion-masiva";
@@ -55,9 +50,9 @@ public class ProductoController {
     public String vistaDetalleProducto(@PathVariable UUID id, Model model, HttpSession session) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login"; // Redirige si no está logueado
+            return "redirect:/login"; // Redirige si no está logueado
         }
-//        // Aquí no cargamos datos, solo devolvemos la vista. El JS cargará los datos.
+        // Aquí no cargamos datos, solo devolvemos la vista. El JS cargará los datos.
         model.addAttribute("loginAdminDTO", adminDTO); // Para el layout
         model.addAttribute("productoId", id); // Pasamos el ID para que JS lo use
 
@@ -68,11 +63,10 @@ public class ProductoController {
     public String vistaListaProductos(Model model, HttpSession session) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
 
         model.addAttribute("loginAdminDTO", adminDTO);
-//        model.addAttribute("dto", loginEmpDTO); // Para compatibilidad con header
         try {
             // Obtener lista de proveedores DTO usando el servicio
             List<ProveedorDTO> proveedores = proveedorService.findAll();
@@ -85,9 +79,7 @@ public class ProductoController {
         } catch (Exception e) {
             // Manejo básico de errores: log y quizás mensaje al usuario
             System.err.println("Error al cargar datos para filtros: " + e.getMessage());
-            // Podrías añadir un atributo al modelo para mostrar un error en la vista si falla la carga
             model.addAttribute("errorCargaFiltros", "No se pudieron cargar los filtros de proveedor o categoría.");
-            // Opcionalmente, inicializa las listas como vacías para evitar errores en Thymeleaf
             model.addAttribute("listaProveedores", List.of());
             model.addAttribute("listaCategorias", List.of());
         }

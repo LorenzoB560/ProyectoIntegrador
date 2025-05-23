@@ -2,6 +2,7 @@ package org.grupob.comun.repository;
 
 import org.grupob.comun.dto.EmpleadoSearchDTO;
 import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.UsuarioEmpleado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,6 @@ import java.util.UUID;
 
 @Repository
 public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
-    // Buscar empleado por nombre (método de la nueva entidad)
     Empleado getEmpleadoByNombre(String nombre);
 
     // Método existente adaptado a la nueva entidad
@@ -30,13 +30,13 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
             "(:#{#searchParams.comentario} IS NULL OR LOWER(e.comentarios) LIKE LOWER(CONCAT('%', :#{#searchParams.comentario}, '%'))) AND " +
             "(:#{#searchParams.contratadosAntesDe} IS NULL OR e.periodo.fechaInicio < :#{#searchParams.contratadosAntesDe}) AND " +
             "(:#{#searchParams.salarioMinimo} IS NULL OR e.salario >= :#{#searchParams.salarioMinimo}) AND " +
-            "(:#{#searchParams.salarioMaximo} IS NULL OR e.salario <= :#{#searchParams.salarioMaximo})")
+            "(:#{#searchParams.salarioMaximo} IS NULL OR e.salario <= :#{#searchParams.salarioMaximo}) AND " +
+            "e.activo = true")
     Page<Empleado> buscarEmpleadosAvanzadoPaginado(
             @Param("searchParams") EmpleadoSearchDTO searchParams,
             Pageable pageable);
 
-    // Métodos de búsqueda individuales - adaptados a la nueva estructura
-    List<Empleado> findByNombreContainingIgnoreCase(String nombre);
+    List<Empleado> findByActivoFalse();
 
     @Query("SELECT e FROM Empleado e JOIN e.departamento d WHERE LOWER(d.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     List<Empleado> findByDepartamentoNombreContaining(@Param("nombre") String nombre);
@@ -63,7 +63,6 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, UUID> {
 
     // Buscar por rango salarial
     List<Empleado> findBySalarioBetween(BigDecimal minSalario, BigDecimal maxSalario);
-    // Encontrar empleados por etiqueta
-// @Query("SELECT e FROM Empleado e JOIN e.empleadoEtiquetas ee WHERE ee.etiqueta.id = :etiquetaId")
-// List<Empleado> findByEtiquetaId(@Param("etiquetaId") UUID etiquetaId);
+
+    Empleado findByUsuario(UsuarioEmpleado usuario);
 }

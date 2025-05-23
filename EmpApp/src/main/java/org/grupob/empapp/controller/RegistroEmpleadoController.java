@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/empapp")
 public class RegistroEmpleadoController {
 
     private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;
@@ -56,6 +55,7 @@ public class RegistroEmpleadoController {
         modelo.addAttribute("listaTipoTarjetas", listaTipoTarjetas);
         modelo.addAttribute("meses", altaEmpleadoServiceImp.devolverMeses());
         modelo.addAttribute("anios", altaEmpleadoServiceImp.devolverAnios());
+        modelo.addAttribute("listaEmpleados", altaEmpleadoServiceImp.devolverEmpleados());
     }
 
     @GetMapping("/datos-personales")
@@ -333,6 +333,8 @@ public class RegistroEmpleadoController {
         if (datosAnteriores != null) {
             altaEmpleadoServiceImp.actualizarDatos(datosFormulario, datosAnteriores);
         }
+        System.out.println("ID tipo tarjeta: " + datosFormulario.getIdTipoTarjeta());
+
 
         // Si hay errores, volver a la misma página
         if (bindingResult.hasErrors()) {

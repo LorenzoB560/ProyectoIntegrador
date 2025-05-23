@@ -23,4 +23,9 @@ public class LoginAdministradorDTO {
     private String clave;
 
     private Integer numeroAccesos;
+
+    public LoginAdministradorDTO(String usuario, String clave) {
+        this.usuario = usuario;
+        this.clave = clave;
+    }
 }

@@ -1,6 +1,6 @@
 package org.grupob.empapp.service;
 
-import org.grupob.empapp.converter.EmpleadoConverter;
+import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.empapp.dto.EtiquetaDTO;
 import org.grupob.comun.entity.Empleado;
@@ -27,13 +27,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional // Aplica transacción por defecto a todos los métodos públicos
+@Transactional
 public class EtiquetaServiceImp implements EtiquetaService {
 
     private final EtiquetaRepository etiquetaRepository;
     private final EmpleadoRepository empleadoRepository;
     private final ModelMapper modelMapper; // Para mapear listas de DTOs o sub-objetos
-    private final EmpleadoConverter empleadoConverter; // Para convertir el resultado final
+    private final EmpleadoConverterEmp empleadoConverterEmp; // Para convertir el resultado final
 
     @PersistenceContext // Inyectar EntityManager
     private EntityManager entityManager;
@@ -41,11 +41,11 @@ public class EtiquetaServiceImp implements EtiquetaService {
     public EtiquetaServiceImp(EtiquetaRepository etiquetaRepository,
                               EmpleadoRepository empleadoRepository,
                               ModelMapper modelMapper,
-                              EmpleadoConverter empleadoConverter) {
+                              EmpleadoConverterEmp empleadoConverterEmp) {
         this.etiquetaRepository = etiquetaRepository;
         this.empleadoRepository = empleadoRepository;
         this.modelMapper = modelMapper;
-        this.empleadoConverter = empleadoConverter;
+        this.empleadoConverterEmp = empleadoConverterEmp;
     }
 
     @Override
@@ -147,7 +147,7 @@ public class EtiquetaServiceImp implements EtiquetaService {
 
         System.out.println(">>> [DEBUG AsignarInd] Fin del método (antes de commit/rollback).");
         // 5. Convertir y devolver (usa el converter manual seguro)
-        return empleadoConverter.convertToDto(empleado);
+        return empleadoConverterEmp.convertToDto(empleado);
     }
 
 
@@ -227,7 +227,7 @@ public class EtiquetaServiceImp implements EtiquetaService {
 
         System.out.println(">>> [DEBUG EliminarInd] Fin del método (antes de commit/rollback).");
         // Se devuelve el DTO del empleado (potencialmente sin la etiqueta si se guardó bien)
-        return empleadoConverter.convertToDto(empleado);
+        return empleadoConverterEmp.convertToDto(empleado);
     }
 
 
@@ -251,7 +251,7 @@ public class EtiquetaServiceImp implements EtiquetaService {
 
         // Convertir a DTOs
         return empleados.stream()
-                .map(empleadoConverter::convertToDto)
+                .map(empleadoConverterEmp::convertToDto)
                 .collect(Collectors.toList());
     }
 

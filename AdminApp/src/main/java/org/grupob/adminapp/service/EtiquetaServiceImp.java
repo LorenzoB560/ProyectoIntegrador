@@ -2,12 +2,13 @@ package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Etiqueta;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.EtiquetaRepository;
-import org.grupob.adminapp.converter.EmpleadoConverter;
+import org.grupob.adminapp.converter.EmpleadoConverterAdmin;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.adminapp.dto.EtiquetaDTO;
 import org.grupob.adminapp.service.EtiquetaService;
@@ -24,25 +25,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional // Aplica transacción por defecto a todos los métodos públicos
+@RequiredArgsConstructor
 public class EtiquetaServiceImp implements EtiquetaService {
 
     private final EtiquetaRepository etiquetaRepository;
     private final EmpleadoRepository empleadoRepository;
-    private final ModelMapper modelMapper; // Para mapear listas de DTOs o sub-objetos
-    private final EmpleadoConverter empleadoConverter; // Para convertir el resultado final
+    private final ModelMapper modelMapper;
+    private final EmpleadoConverterAdmin empleadoConverter;
 
     @PersistenceContext // Inyectar EntityManager
     private EntityManager entityManager;
 
-    public EtiquetaServiceImp(EtiquetaRepository etiquetaRepository,
-                              EmpleadoRepository empleadoRepository,
-                              ModelMapper modelMapper,
-                              EmpleadoConverter empleadoConverter) {
-        this.etiquetaRepository = etiquetaRepository;
-        this.empleadoRepository = empleadoRepository;
-        this.modelMapper = modelMapper;
-        this.empleadoConverter = empleadoConverter;
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -157,11 +150,9 @@ public class EtiquetaServiceImp implements EtiquetaService {
         if (empleado.getJefe() == null) {
             throw new IllegalArgumentException("El empleado no tiene jefe asignado.");
         }
-        // Hibernate.initialize(empleado.getJefe()); // Si fuera LAZY
         if (!empleado.getJefe().getId().equals(jefeUuid)) {
             throw new IllegalArgumentException("El empleado no es subordinado del jefe especificado.");
         }
-        // Opcional: if(!etiqueta.getCreador().getId().equals(jefeUuid)) { ... }
 
         // Eliminar de ambos lados
         System.out.println(">>> [DEBUG EliminarInd] Modificando colecciones...");
@@ -218,13 +209,4 @@ public class EtiquetaServiceImp implements EtiquetaService {
                 .map(empleadoConverter::convertToDto)
                 .collect(Collectors.toList());
     }
-
-    // El método asignarEtiquetasMasivo se puede dejar comentado o eliminar si no se usa
-    /*
-    @Override
-    @Transactional
-    public void asignarEtiquetasMasivo(String jefeId, List<String> empleadoIds, List<String> etiquetaIds) {
-        // ... Implementación anterior si decides mantenerla ...
-    }
-    */
 }

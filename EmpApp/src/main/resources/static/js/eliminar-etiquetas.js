@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`/etiquetas/eliminar/empleado/${empleadoId}/etiqueta/${etiquetaId}?jefeId=${jefeId}`, {
                     method: 'DELETE',
                     headers: {
-                        // Añadir CSRF si es necesario
                     }
                 });
                 if (!response.ok) {

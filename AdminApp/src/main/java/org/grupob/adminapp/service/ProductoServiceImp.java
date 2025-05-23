@@ -2,6 +2,7 @@ package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.adminapp.converter.ProductoConverter;
@@ -21,18 +22,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ProductoServiceImp implements ProductoService {
-
-
 
     private final ProductoRepository productoRepository;
     private final ProductoConverter productoConverter;
-
-    @Autowired
-    public ProductoServiceImp(ProductoRepository productoRepository, ProductoConverter productoConverter) {
-        this.productoRepository = productoRepository;
-        this.productoConverter = productoConverter;
-    }
 
     @Override
     public ProductoDTO devuelveProducto(UUID id) {
@@ -43,10 +37,9 @@ public class ProductoServiceImp implements ProductoService {
     @Override
     public List<ProductoDTO> listarProductos() { // Cambiado a ResponseEntity<List<ProductoDTO> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
-        List<ProductoDTO> dtos = productos.stream()
+        return productos.stream()
                 .map(productoConverter::entityToDTO)
                 .toList();
-        return dtos;
     }
 
     @Override
@@ -67,10 +60,6 @@ public class ProductoServiceImp implements ProductoService {
             case "precio":
                 sortProperty = "p.precio";
                 break;
-            // ELIMINA O COMENTA EL SIGUIENTE CASO:
-            // case "proveedor.nombre":
-            //     sortProperty = "prov.nombre";
-            //     break;
             default:
                 List<String> camposDirectosPermitidos = Arrays.asList("id", "marca", "segundaMano", "unidades", "fechaFabricacion", "fechaAlta", "valoracion");
                 if (camposDirectosPermitidos.contains(sortBy)) {
@@ -104,7 +93,5 @@ public class ProductoServiceImp implements ProductoService {
             // aunque es raro con @Transactional. Lo relanzamos como not found.
             throw new EntityNotFoundException("Producto no encontrado con ID: " + id + " (posiblemente eliminado por otro proceso)");
         }
-        // Nota: Si tienes relaciones (ej: Producto en Pedidos), puede que necesites
-        // manejar `DataIntegrityViolationException` o configurar el borrado en cascada (con cuidado).
     }
 }

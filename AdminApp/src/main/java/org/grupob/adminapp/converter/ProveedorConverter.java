@@ -1,16 +1,15 @@
-package org.grupob.adminapp.converter; // O org.grupob.adminapp.converter.maestras
+package org.grupob.adminapp.converter;
 
-import org.grupob.adminapp.dto.ProveedorDTO; // Importa tu ProveedorDTO de AdminApp
-import org.grupob.comun.entity.maestras.Proveedor;    // Importa tu entidad Proveedor de comun
+import org.grupob.adminapp.dto.ProveedorDTO;
+import org.grupob.comun.entity.maestras.Proveedor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-@Component // Para que Spring lo detecte y puedas inyectarlo
+@Component
 public class ProveedorConverter {
 
     private final ModelMapper modelMapper;
 
-    // Inyecta ModelMapper (asegúrate de que esté configurado como Bean en algún sitio)
     public ProveedorConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }

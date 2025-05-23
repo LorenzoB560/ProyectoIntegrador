@@ -19,7 +19,7 @@ public class Periodo {
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
-    protected Periodo(){}
+    public Periodo(){}
 
     private Periodo(LocalDate fechaInicio, LocalDate fechaFin){
         this.fechaInicio=fechaInicio;

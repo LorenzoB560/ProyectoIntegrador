@@ -51,7 +51,7 @@ function obtenerEmpleados(pagina) {
     paginaActual = pagina;
 
     // Construir URL con todos los parámetros
-    let url = new URL('http://localhost:8080/empleados/listado');
+    let url = new URL('/empleados/listado');
 
     // Parámetros de filtro
     if (nombre) url.searchParams.append('nombre', nombre);
@@ -191,7 +191,7 @@ function llenarTabla(datos) {
                         <td><a href="/empleado/detalle/${emp.id}" class="btn btn-sm btn-primary">Ver</a></td>
                         <td>
                             <div> 
-                                <a id="btnEditar" href="#" class="btn btn-primary me-2">
+                                <a id="btnEditar" href="#" class="btn btn-success me-2">
                                     <i class="bi bi-pencil me-1"></i> Editar
                                 </a>
                                 <a id="btnEliminar" href="#" class="btn btn-danger me-2"> <i class="bi bi-trash me-1"></i> Eliminar
@@ -240,8 +240,7 @@ function formatearDepartamento(departamento) {
     if (!departamento) return 'N/A';
     return `
                 <div>
-                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a><br>
-                    Código: ${departamento.codigo || '-'}, ${departamento.localidad || '-'}
+                    <a href="/departamento/detalle/${departamento.id}" class="employee-link">${departamento.nombre || '-'}</a>
                 </div>
             `;
 }

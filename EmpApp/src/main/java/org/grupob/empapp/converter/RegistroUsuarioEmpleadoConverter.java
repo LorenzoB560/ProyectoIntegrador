@@ -17,7 +17,4 @@ public class RegistroUsuarioEmpleadoConverter {
         return modelMapper.map(usuario, UsuarioEmpleado.class);
     }
 
-    /*public UsuarioEmpleado convertirAEntidad(LoginUsuarioEmpleadoDTO dto) {
-        return modelMapper.map(dto, UsuarioEmpleado.class);
-    }*/
 }

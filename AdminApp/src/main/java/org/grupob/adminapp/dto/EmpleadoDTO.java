@@ -3,7 +3,12 @@ package org.grupob.adminapp.dto; // O el paquete que prefieras para tus DTOs
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.grupob.comun.dto.DepartamentoDTO;
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.adminapp.dto.auxiliar.GeneroDTO;
+import org.grupob.comun.dto.PeriodoDTO;
+
+// Importa otros DTOs necesarios (EspecialidadDto, DepartamentoDto, etc.)
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,30 +27,27 @@ public class EmpleadoDTO {
     private String apellido;
     private GeneroDTO genero;
     private LocalDate fechaNacimiento;
-    // ... otros campos de Persona que necesites ...
     private String correo;
 
     // Campos propios de Empleado
     private String comentarios;
-    private Set<EspecialidadDTO> especialidades; // Asume que tienes un EspecialidadDto
-    private UUID idJefe; // O un EmpleadoSimpleDto para evitar recursión
-    private String nombreJefe; // Podrías necesitar mapeo customizado
+    private Set<EspecialidadDTO> especialidades;
+    private UUID idJefe;
+    private String nombreJefe;
     private PeriodoDTO periodo;
     private boolean activo;
-    private DepartamentoDTO departamento; // Asume que tienes un DepartamentoDto
-    private LoginUsuarioEmpleadoDTO usuario; // Asume que tienes un UsuarioEmpleadoDto
+    private DepartamentoDTO departamento;
+    private LoginUsuarioEmpleadoDTO usuario;
 
     // Campos de informacion_economica
     private BigDecimal salario;
     private BigDecimal comision;
+
     private CuentaBancariaDTO cuentaCorriente;
-    private EntidadBancariaDTO entidadBancaria; // Asume que tienes un EntidadBancariaDto
-    private TipoTarjetaCreditoDTO tipoTarjetaCredito; // Asume que tienes un TipoTarjetaCreditoDto
+    private EntidadBancariaDTO entidadBancaria;
+    private TipoTarjetaCreditoDTO idTipoTarjeta;
     private TarjetaCreditoDTO tarjetaCredito;
 
-    // La foto (byte[]) podría no ser ideal para un DTO estándar.
-    // Podrías omitirla, devolver un booleano indicando si existe, o una URL para descargarla.
-    // private byte[] foto;
     private boolean tieneFoto;
 
     private Set<EtiquetaDTO> etiquetas = new HashSet<>();

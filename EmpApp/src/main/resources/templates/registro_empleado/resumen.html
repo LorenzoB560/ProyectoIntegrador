@@ -7,8 +7,8 @@
     <title>Resumen</title>
     <link id="estilos" rel="stylesheet" href="/css/registro-empleado-estilos.css">
     <script src="/js/mensajeAlertas.js"></script>
-    <script src="/js/modificarCSS.js"></script>
-    <script src="/js/internacionalizacion.js"></script>
+    <script src="/js/registro-empleado/modificarCSS.js"></script>
+    <script src="/js/registro-empleado/internacionalizacion.js"></script>
 </head>
 
 <body id="body-resumen">
@@ -35,7 +35,7 @@
 </nav>
 
 <!-- Mensaje de error a nivel general -->
-<h2 th:text="*{mensajeNOK}" class="error"></h2>
+<!--<h2 th:text="*{mensajeNOK}" class="error"></h2>-->
 
 <label for="seleccionarIdioma" th:text="#{registro.idioma.seleccionar}"></label>
 <select id="seleccionarIdioma">
@@ -112,6 +112,10 @@
             <span th:text="${esp.nombre + ', '}"></span>
             </span>
             </p>
+            <p>
+                <strong th:text="#{registro.jefe}"></strong>:
+                <span th:text="${datos.idJefe}"></span></p>
+
         </div>
     </fieldset>
 

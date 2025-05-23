@@ -29,7 +29,7 @@ public class EmpleadoController {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
 
         if(adminDTO==null){
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "listados/listado-vista-emp";
@@ -39,16 +39,34 @@ public class EmpleadoController {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
 
         if(adminDTO==null){
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         modelo.addAttribute("loginAdminDTO", adminDTO);
         return "listados/detalle-vista-emp";
     }
+    @GetMapping("/modificar/{id}")
+    public String modificarEmpleado(@PathVariable String id, Model modelo, HttpSession sesion){
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+
+        if(adminDTO==null){
+            return "redirect:/adminapp/login";
+        }
+        modelo.addAttribute("loginAdminDTO", adminDTO);
+        modelo.addAttribute("usuarioEmpleado", empleadoService.devuelveUsuarioEmpleado(id));
+        modelo.addAttribute("empleado", empleadoService.devuelveEmpleado(id));
+        modelo.addAttribute("listaEspecialidades", empleadoService.devuelveListaEspecialidades());
+        modelo.addAttribute("listaDepartamentos", empleadoService.devolverDepartamentos());
+        modelo.addAttribute("listaEntidadesBancarias", empleadoService.devolverEntidadesBancarias());
+        modelo.addAttribute("listaTipoTarjetaCreditos", empleadoService.devolverTipoTarjetasCredito());
+
+        return "listados/modificacion-empleado";
+    }
+
     @GetMapping("/{id}/bloquear/motivos")
     public String mostrarFormularioBloqueo(@PathVariable String id, Model model, HttpSession session) {
         LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) session.getAttribute("adminLogueado");
         if (adminDTO == null) {
-            return "redirect:/adminapp/login";
+            return "redirect:/login";
         }
         try {
             EmpleadoDTO empleado = empleadoService.devuelveEmpleado(id);
@@ -63,4 +81,24 @@ public class EmpleadoController {
         }
     }
 
+    @GetMapping("/reactivacion-masiva")
+    public String vistaReactivacionMasiva(Model model, HttpSession sesion) {
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("loginAdminDTO", adminDTO);
+        // No cargamos los empleados aquí, se hará vía AJAX para mejor rendimiento si son muchos
+        return "listados/reactivacion-empleados"; // Nuevo template HTML
+    }
+    @GetMapping("/desactivacion-masiva")
+    public String vistadesactivacionMasiva(Model model, HttpSession sesion) {
+        LoginAdministradorDTO adminDTO = (LoginAdministradorDTO) sesion.getAttribute("adminLogueado");
+        if (adminDTO == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("loginAdminDTO", adminDTO);
+        // No cargamos los empleados aquí, se hará vía AJAX para mejor rendimiento si son muchos
+        return "listados/desactivacion-empleados";
+    }
 }

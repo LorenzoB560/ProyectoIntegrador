@@ -2,6 +2,7 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.CategoriaDTO;
 import org.grupob.empapp.dto.ProveedorDTO;
@@ -21,19 +22,12 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/producto")
+@RequiredArgsConstructor
 public class ProductoController {
 
     private final ProveedorServiceImp proveedorService;
     private final CategoriaServiceImp categoriaService;
     private final CookieService cookieService;
-
-    @Autowired // Inyección por constructor recomendada
-    public ProductoController(ProveedorServiceImp proveedorService, CategoriaServiceImp categoriaService, CookieService cookieService) {
-        this.proveedorService = proveedorService;
-        this.categoriaService = categoriaService;
-        this.cookieService = cookieService;
-    }
-
 
     @GetMapping("/detalle/{id}")
     public String vistaDetalleProducto(@PathVariable UUID id, Model model, HttpServletRequest request,
