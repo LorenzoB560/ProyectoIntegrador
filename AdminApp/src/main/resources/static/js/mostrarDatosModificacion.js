@@ -65,7 +65,7 @@ function cargarSubordinados(idJefe) {
     const subordinadosContainer = document.getElementById('subordinadosEmpleado');
     subordinadosContainer.innerHTML = '<p class="text-muted">Cargando subordinados...</p>';
 
-    fetch(`http://localhost:8080/adminapp/empleados/${idJefe}/subordinados`)
+    fetch(`/adminapp/empleados/${idJefe}/subordinados`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
