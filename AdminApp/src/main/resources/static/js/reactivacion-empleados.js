@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         btnReactivarSeleccionados.disabled = true;
 
         // Llamada al endpoint que devuelve una LISTA, SIN parámetros de ordenación
-        const url = new URL('http://localhost:8080/adminapp/empleados/todos-inactivos');
+        const url = new URL('/adminapp/empleados/todos-inactivos');
         // YA NO SE AÑADEN sortBy NI sortDir
         // url.searchParams.append('sortBy', 'apellido');
         // url.searchParams.append('sortDir', 'asc');

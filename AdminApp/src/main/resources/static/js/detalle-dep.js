@@ -16,7 +16,7 @@ function cargarDetalleDepartamento() {
 
     mostrarCargando();
 
-    fetch(`http://localhost:8080/adminapp/departamentos/detalle/${departamentoId}`)
+    fetch(`/adminapp/departamentos/detalle/${departamentoId}`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);

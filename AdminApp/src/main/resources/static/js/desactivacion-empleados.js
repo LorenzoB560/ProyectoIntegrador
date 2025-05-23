@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         noHayActivosDiv.style.display = 'none';
         btnDesactivarSeleccionados.disabled = true;
 
-        const url = new URL('http://localhost:8080/adminapp/empleados/todos-activos'); // ENDPOINT PARA ACTIVOS
+        const url = new URL('/adminapp/empleados/todos-activos'); // ENDPOINT PARA ACTIVOS
         // Opcional: parámetros de orden si los implementaste en el backend
         // url.searchParams.append('sortBy', 'apellido');
         // url.searchParams.append('sortDir', 'asc');

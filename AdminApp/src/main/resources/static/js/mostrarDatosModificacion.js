@@ -21,7 +21,7 @@ function cargarDetalleEmpleado() {
 
     mostrarCargando();
 
-    fetch(`http://localhost:8080/adminapp/empleados/detalle/${empleadoId}`)
+    fetch(`/adminapp/empleados/detalle/${empleadoId}`)
         .then(respuesta => {
             if (!respuesta.ok) {
                 throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
