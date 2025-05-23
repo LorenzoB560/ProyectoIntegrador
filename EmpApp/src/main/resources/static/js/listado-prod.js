@@ -1,5 +1,3 @@
-// static/js/listado-prod.js
-
 // --- Variables Globales ---
 let paginaActualProd = 0;
 const tamañoPaginaProd = 10; // Tamaño de página por defecto
@@ -9,8 +7,7 @@ let totalPaginasProd = 0;
 let totalElementosProd = 0;
 
 // --- URL del Endpoint API ---
-// ¡¡¡AJUSTA ESTA URL!!! Debe apuntar a tu @GetMapping("/listado") que devuelve JSON Page<ProductoDTO>
-const API_PRODUCTOS_URL = '/productos/listado'; // O '/empapp/productos/listado' o la ruta REST correcta
+const API_PRODUCTOS_URL = '/productos/listado';
 
 // --- Event Listeners y Setup Inicial ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -55,9 +52,6 @@ function cambiarOrdenacionProductos(nuevoOrdenarPor) {
 function actualizarBotonActivoProductos() {
     document.querySelectorAll('.btn-sort').forEach(btn => btn.classList.remove('active'));
     let btnActivoId = '';
-    // Mapear el 'sortBy' usado en JS/API al ID del botón correspondiente
-    // Asegúrate de que el valor de ordenarPorProd (ej. 'precioBase', 'categoriaPrincipal')
-    // coincida con lo que se usa en el backend o se mapea correctamente.
     switch (ordenarPorProd.toLowerCase()) {
         case 'descripcion':
             btnActivoId = 'ordenarPorDescripcionProd';
@@ -69,13 +63,7 @@ function actualizarBotonActivoProductos() {
             btnActivoId = 'ordenarPorPrecioProd';
             break;
         // ELIMINA O COMENTA EL SIGUIENTE CASO:
-        // case 'proveedor.nombre':
-        //     btnActivoId = 'ordenarPorProveedorProd';
-        //     break;
         default:
-            // Si ordenarPorProd tiene un valor que ya no corresponde a un botón activo,
-            // podrías deseleccionar todos o seleccionar uno por defecto.
-            // Por ejemplo, si el default es descripción:
             if (!btnActivoId && ordenarPorProd !== "descripcion") {
                 // No hacer nada o default a descripción si es necesario
             } else if (!btnActivoId) { // Si no hay match y es el default inicial
@@ -258,8 +246,6 @@ function crearControlesPaginacionProductos() {
     const ul = document.createElement('ul');
     ul.className = 'pagination pagination-sm justify-content-center';
 
-    // Lógica para añadir botones << < ... números ... > >>
-    // (Usando la lógica mejorada de la versión anterior del JS de productos)
     const maxBotones = 5;
     let inicio = Math.max(0, paginaActualProd - Math.floor(maxBotones / 2));
     let fin = Math.min(totalPaginasProd - 1, inicio + maxBotones - 1);

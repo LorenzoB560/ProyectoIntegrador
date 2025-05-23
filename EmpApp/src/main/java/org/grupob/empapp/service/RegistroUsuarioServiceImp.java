@@ -49,11 +49,4 @@ public class RegistroUsuarioServiceImp implements RegistroUsuarioService{
                     }
                 });
     }
-//    public void guardarEmpleado(AltaEmpleadoDTO altaEmpleadoDTO){
-//        Empleado empleado = empleadoConverter.convertirAEntidad(altaEmpleadoDTO);
-//        empleado.setGenero(generoRepository.findById(altaEmpleadoDTO.getIdGeneroSeleccionado()).orElseThrow());
-//        System.err.println(empleado);
-//        empleadoRepository.save(empleado);
-//    }
-    //public Empleado
 }

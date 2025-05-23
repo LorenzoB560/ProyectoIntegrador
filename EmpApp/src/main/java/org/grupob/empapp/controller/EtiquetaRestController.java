@@ -25,10 +25,8 @@ public class EtiquetaRestController {
         this.etiquetaService = etiquetaService;
     }
 
-    // --- Endpoints para listar etiquetas (sin cambios) ---
     @GetMapping("/jefe/{jefeId}")
     public ResponseEntity<List<EtiquetaDTO>> listarEtiquetasPorJefe(@PathVariable String jefeId) {
-        // ... (código existente) ...
         try {
             UUID.fromString(jefeId);
             List<EtiquetaDTO> etiquetas = etiquetaService.listarEtiquetasPorJefe(jefeId);
@@ -43,7 +41,6 @@ public class EtiquetaRestController {
 
     @GetMapping("/todas")
     public ResponseEntity<List<EtiquetaDTO>> listarTodasEtiquetasGlobales() {
-        // ... (código existente) ...
         try {
             List<EtiquetaDTO> etiquetas = etiquetaService.listarTodasEtiquetasGlobales();
             return ResponseEntity.ok(etiquetas);
@@ -53,11 +50,6 @@ public class EtiquetaRestController {
         }
     }
 
-    // --- Endpoint para ASIGNAR una etiqueta a un empleado ---
-    // Usamos PUT porque estamos actualizando el estado del empleado (sus etiquetas)
-    // La ruta podría ser /api/empleados/{empleadoId}/etiquetas/{etiquetaId} y estar en EmpleadoRestController,
-    // o /api/etiquetas/asignar/empleado/{empleadoId}/etiqueta/{etiquetaId} para mantenerlo aquí.
-    // Vamos a usar la segunda opción para mantener la lógica de asignación aquí.
     @PutMapping("/asignar/empleado/{empleadoId}/etiqueta/{etiquetaId}")
     public ResponseEntity<EmpleadoDTO> asignarEtiqueta(
             @PathVariable String empleadoId,
@@ -121,8 +113,6 @@ public class EtiquetaRestController {
             @RequestParam(defaultValue = "") String prefijo) {
         try {
             UUID jefeUuid = UUID.fromString(jefeId);
-            // Asumiendo que tienes un método en el servicio que llama al repositorio:
-            // findByCreadorIdAndNombreStartingWithIgnoreCaseOrderByNombreAsc
             List<EtiquetaDTO> sugerencias = etiquetaService.buscarEtiquetasPorPrefijo(jefeUuid, prefijo);
             return ResponseEntity.ok(sugerencias);
         } catch (IllegalArgumentException e) {

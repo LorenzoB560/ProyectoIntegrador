@@ -256,8 +256,6 @@
                 }
 
                 empleado.setActivo(false);
-                // Opcional: si tienes una fecha de cese o similar, podrías establecerla aquí.
-                // empleado.getPeriodo().setFechaFin(LocalDate.now());
                 empleadoRepository.save(empleado);
 
                 return ResponseEntity.ok().body("Empleado desactivado correctamente.");
@@ -275,7 +273,6 @@
             }
         }
 
-        // Opcional: Endpoint para reactivar
         @PostMapping("/{id}/activar")
         public ResponseEntity<?> activarEmpleado(@PathVariable String id) {
             try {
@@ -289,8 +286,6 @@
                 }
 
                 empleado.setActivo(true);
-                // Opcional: si tienes una fecha de cese, podrías ponerla a null.
-                // empleado.getPeriodo().setFechaFin(null);
                 empleadoRepository.save(empleado);
                 return ResponseEntity.ok().body("Empleado activado correctamente.");
             } catch (IllegalArgumentException e) {
@@ -304,22 +299,6 @@
                         .body("Error interno al intentar activar el empleado: " + e.getMessage());
             }
         }
-    //    @PutMapping("/{id}/etiquetas/{etiquetaId}")
-    //    public EmpleadoDTO asignarEtiqueta(@PathVariable String id, @PathVariable String etiquetaId) {
-    //        return empleadoService.asignarEtiqueta(id, etiquetaId);
-    //    }
-    //
-    //    @DeleteMapping("/{id}/etiquetas/{etiquetaId}")
-    //    public EmpleadoDTO quitarEtiqueta(@PathVariable String id, @PathVariable String etiquetaId) {
-    //        return empleadoService.quitarEtiqueta(id, etiquetaId);
-    //    }
-    //
-    //    @GetMapping("/etiquetas/{etiquetaId}")
-    //    public List<EmpleadoDTO> buscarPorEtiqueta(@PathVariable String etiquetaId) {
-    //        return empleadoService.buscarPorEtiqueta(etiquetaId);
-    //    }
-
-
         @GetMapping("/desbloqueados-recientemente")
         public ResponseEntity<Map<String, List<String>>> getNotificacionDesbloqueos() {
             logger.info("Accediendo a endpoint /empleados/desbloqueados-recientemente");

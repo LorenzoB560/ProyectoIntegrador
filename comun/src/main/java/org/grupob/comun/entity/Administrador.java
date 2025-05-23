@@ -7,7 +7,6 @@ import org.grupob.comun.entity.auxiliar.jerarquia.Usuario;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "UQ_administrador_usuario", columnNames = "usuario")

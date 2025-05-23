@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('formEnviarSolicitud');
     const mensajeAlertaDiv = document.getElementById('mensajeAlerta');
@@ -39,8 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
             body: new URLSearchParams(formData),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                // Si tuvieras CSRF:
-                // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').getAttribute('content')
             }
         })
             .then(async response => {

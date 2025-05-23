@@ -53,6 +53,5 @@ public class ProductoSearchDTO {
      */
     private BigDecimal precioMax;
 
-    // Podrías añadir otros como 'nombre', 'marca', etc., si los necesitas
 
 }

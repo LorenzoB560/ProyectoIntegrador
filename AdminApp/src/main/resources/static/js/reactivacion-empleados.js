@@ -52,11 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         noHayInactivosDiv.style.display = 'none';
         btnReactivarSeleccionados.disabled = true;
 
-        // Llamada al endpoint que devuelve una LISTA, SIN parámetros de ordenación
         const url = new URL('http://localhost:9090/empleados/todos-inactivos');
-        // YA NO SE AÑADEN sortBy NI sortDir
-        // url.searchParams.append('sortBy', 'apellido');
-        // url.searchParams.append('sortDir', 'asc');
 
         fetch(url)
             .then(response => {
@@ -98,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // renderizarTabla se mantiene igual (ya la tienes de la respuesta anterior)
     function renderizarTabla(empleados) {
         cuerpoTabla.innerHTML = '';
         if (!empleados || empleados.length === 0) {
@@ -136,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
         actualizarContadorSeleccionados();
     }
 
-    // formatearFecha se mantiene igual
     function formatearFecha(textoFecha) {
         if (!textoFecha) return 'N/A';
         try {
@@ -148,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Listeners para seleccionar/deseleccionar todos se mantienen igual
     btnSeleccionarTodos.addEventListener('click', () => {
         document.querySelectorAll('.empleado-checkbox').forEach(cb => cb.checked = true);
         checkboxGeneral.checked = true;
@@ -175,9 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // La lógica de reactivación masiva (btnReactivarSeleccionados.addEventListener) se mantiene igual,
-    // ya que sigue llamando al endpoint individual /empleados/{id}/activar para cada seleccionado.
-    // (La copio aquí para que tengas el archivo JS completo y funcional)
     btnReactivarSeleccionados.addEventListener('click', async function() {
         const checkboxesSeleccionados = Array.from(document.querySelectorAll('.empleado-checkbox:checked'));
         const idsParaReactivar = checkboxesSeleccionados.map(cb => cb.value);
@@ -206,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const nombreEmpleado = empleadoData ? `${empleadoData.nombre || ''} ${empleadoData.apellido || ''}`.trim() : `ID ${id}`;
 
             const promesa = fetch(`/empleados/${id}/activar`, { // Endpoint individual
-                method: 'POST', // O PATCH, según tu endpoint
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     // CSRF token

@@ -1,6 +1,7 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.adminapp.dto.ProveedorDTO;
@@ -18,16 +19,11 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/adminapp")
+@RequiredArgsConstructor
 public class ProductoController {
 
     private final ProveedorServiceImp proveedorService;
     private final CategoriaServiceImp categoriaService;
-
-    @Autowired // Inyección por constructor recomendada
-    public ProductoController(ProveedorServiceImp proveedorService, CategoriaServiceImp categoriaService) {
-        this.proveedorService = proveedorService;
-        this.categoriaService = categoriaService;
-    }
 
     @GetMapping("/carga-masiva")
     public String cargarMasivaProductos(Model modelo, HttpSession sesion) {
@@ -72,7 +68,6 @@ public class ProductoController {
         }
 
         model.addAttribute("loginAdminDTO", adminDTO);
-//        model.addAttribute("dto", loginEmpDTO); // Para compatibilidad con header
         try {
             // Obtener lista de proveedores DTO usando el servicio
             List<ProveedorDTO> proveedores = proveedorService.findAll();
@@ -85,9 +80,7 @@ public class ProductoController {
         } catch (Exception e) {
             // Manejo básico de errores: log y quizás mensaje al usuario
             System.err.println("Error al cargar datos para filtros: " + e.getMessage());
-            // Podrías añadir un atributo al modelo para mostrar un error en la vista si falla la carga
             model.addAttribute("errorCargaFiltros", "No se pudieron cargar los filtros de proveedor o categoría.");
-            // Opcionalmente, inicializa las listas como vacías para evitar errores en Thymeleaf
             model.addAttribute("listaProveedores", List.of());
             model.addAttribute("listaCategorias", List.of());
         }

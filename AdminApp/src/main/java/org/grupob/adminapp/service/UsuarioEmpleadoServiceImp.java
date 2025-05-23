@@ -2,6 +2,7 @@ package org.grupob.adminapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.UsuarioEmpleado;
 import org.grupob.comun.entity.maestras.MotivoBloqueo;
@@ -15,13 +16,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioEmpleadoServiceImp implements UsuarioEmpleadoService {
-    @Autowired
-    private UsuarioEmpleadoRepository usuarioEmpleadoRepository;
-    @Autowired
-    private EmpleadoRepository empleadoRepository; // Para buscar por ID de empleado
-    @Autowired
-    private MotivoBloqueoRepository motivoBloqueoRepository;
+
+    private final UsuarioEmpleadoRepository usuarioEmpleadoRepository;
+    private final EmpleadoRepository empleadoRepository; // Para buscar por ID de empleado
+    private final MotivoBloqueoRepository motivoBloqueoRepository;
 
     @Transactional
     public void bloquearEmpleado(String empleadoId, Long motivoId) {
@@ -40,10 +40,6 @@ public class UsuarioEmpleadoServiceImp implements UsuarioEmpleadoService {
         usuario.setActivo(false); // Marcar como inactivo al bloquear
         usuario.setFechaDesbloqueo(LocalDateTime.now().plusMinutes(motivo.getMinutos())); // Limpiar fecha de desbloqueo al establecer un nuevo bloqueo
 
-        // Calcular y establecer fechaDesbloqueo si el motivo tiene duración
-        // if (motivo.getMinutos() != null && motivo.getMinutos() > 0) {
-        //     usuario.setFechaDesbloqueo(LocalDateTime.now().plusMinutes(motivo.getMinutos()));
-        // }
 
         usuarioEmpleadoRepository.save(usuario);
     }

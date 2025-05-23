@@ -1,4 +1,3 @@
-// eliminacion-masiva.js
 $(document).ready(function() {
     const API_CATEGORIAS = 'http://localhost:9090/productos/categorias';
     const API_ELIMINAR = 'http://localhost:9090/productos/borrado-masivo';

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("departamento")
 public class DepartamentoController {
+
     @GetMapping("lista1")
     public String listadovista(){
         return "departamentos/listado-vista";

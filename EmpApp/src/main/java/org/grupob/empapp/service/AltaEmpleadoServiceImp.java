@@ -10,7 +10,6 @@ import org.grupob.comun.entity.maestras.*;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
 import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.comun.repository.*;
-import org.grupob.empapp.converter.CuentaBancariaConverter;
 import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.comun.entity.Empleado;
@@ -41,24 +40,7 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
     private final EntidadBancariaRepository entidadBancariaRepository;
     private final TipoTarjetaRepository tipoTarjetaRepository;
     private final EmpleadoConverterEmp empleadoConverterEmp;
-    private final CuentaBancariaConverter cuentaBancariaConverter;
-    private final EmpleadoServiceImp empleadoServiceImp;
-    private final UsuarioRepository usuarioRepository;
     private final UsuarioEmpleadoRepository usuarioEmpleadoRepository;
-
-//    public AltaEmpleadoServiceImp(GeneroRepository generoRepository, EmpleadoRepository empleadoRepository, PaisRepository paisRepository, TipoViaRepository tipoViaRepository, EmpleadoConverter empleadoConverter, DepartamentoRepository departamentoRepository, TipoDocumentoRepository tipoDocumentoRepository, TipoDocumentoRepository tipoDocumentoRepository1, EspecialidadRepository especialidadRepository, EntidadBancariaRepository entidadBancariaRepository, TipoTarjetaRepository tipoTarjetaRepository, CuentaBancariaConverter cuentaBancariaConverter) {
-//        this.generoRepository = generoRepository;
-//        this.empleadoRepository = empleadoRepository;
-//        this.paisRepository = paisRepository;
-//        this.tipoViaRepository = tipoViaRepository;
-//        this.empleadoConverter = empleadoConverter;
-//        this.departamentoRepository = departamentoRepository;
-//        this.tipoDocumentoRepository = tipoDocumentoRepository1;
-//        this.especialidadRepository = especialidadRepository;
-//        this.entidadBancariaRepository = entidadBancariaRepository;
-//        this.tipoTarjetaRepository = tipoTarjetaRepository;
-//        this.cuentaBancariaConverter = cuentaBancariaConverter;
-//    }
 
     public List<Genero> devolverGeneros() {
         return generoRepository.findAll();
@@ -134,7 +116,6 @@ public class AltaEmpleadoServiceImp implements AltaEmpleadoService {
         }
 
         empleado.setJefe(jefe);
-
         empleado.setUsuario(usuarioEmpleadoRepository.findById(UUID.fromString(id)).orElseThrow(() -> new EmpleadoNoEncontradoException("El id del usuario no existe")));
         empleadoRepository.save(empleado);
     }

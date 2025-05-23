@@ -2,6 +2,7 @@ package org.grupob.empapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.grupob.comun.repository.ProductoRepository;
 import org.grupob.empapp.converter.ProductoConverter;
@@ -21,18 +22,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ProductoServiceImp implements ProductoService {
-
-
 
     private final ProductoRepository productoRepository;
     private final ProductoConverter productoConverter;
-
-    @Autowired
-    public ProductoServiceImp(ProductoRepository productoRepository, ProductoConverter productoConverter) {
-        this.productoRepository = productoRepository;
-        this.productoConverter = productoConverter;
-    }
 
     @Override
     public ProductoDTO devuelveProducto(UUID id) {
@@ -41,7 +35,7 @@ public class ProductoServiceImp implements ProductoService {
         return productoConverter.entityToDTO(producto);
     }
     @Override
-    public List<ProductoDTO> listarProductos() { // Cambiado a ResponseEntity<List<ProductoDTO> listarProductos() {
+    public List<ProductoDTO> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
         List<ProductoDTO> dtos = productos.stream()
                 .map(productoConverter::entityToDTO)
@@ -67,10 +61,6 @@ public class ProductoServiceImp implements ProductoService {
             case "precio":
                 sortProperty = "p.precio";
                 break;
-            // ELIMINA O COMENTA EL SIGUIENTE CASO:
-            // case "proveedor.nombre":
-            //     sortProperty = "prov.nombre";
-            //     break;
             default:
                 List<String> camposDirectosPermitidos = Arrays.asList("id", "marca", "segundaMano", "unidades", "fechaFabricacion", "fechaAlta", "valoracion");
                 if (camposDirectosPermitidos.contains(sortBy)) {

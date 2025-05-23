@@ -326,13 +326,6 @@ function asignarEventListenersAcciones() {
                         // --- ÉXITO ---
                         console.log('Empleado desbloqueado con éxito');
                         alert('Empleado desbloqueado.');
-                        // Cambiar botón visualmente (opcional)
-                        // clone.outerHTML = '<a id="btnBloquear" href="/empleado/${emp.id}/bloquear/motivos" class="btn btn-primary me-2" title="bloquear Empleado">\n' +
-                        //     '                                <i class="bi bi-lock-fill me-1"></i> \n' +
-                        //     '                                </a>';
-                        // clone.classList.remove('btn-success');
-                        // clone.classList.add('btn-secondary', 'disabled'); // Ya está 'disabled' por la clase
-                        // // NO RECARGAR: //
                         obtenerEmpleados(paginaActual);
                     })
                     .catch(error => {
@@ -365,11 +358,7 @@ function asignarEventListenersAcciones() {
 
             if (confirm(`¿Está seguro de que desea desactivar al empleado ${employeeName}? Esta acción cambiará su estado a inactivo.`)) {
                 // URL del endpoint para desactivar
-                const url = `/empleados/${employeeId}/desactivar`; // Ajusta si usaste PostMapping o el servicio
-
-                // --- Cabeceras (si usas CSRF, necesitarías el token) ---
-
-
+                const url = `/empleados/${employeeId}/desactivar`;
                 // Deshabilitar botón temporalmente y mostrar spinner
                 clone.classList.add('disabled');
                 const originalIconHTML = clone.innerHTML; // Guardar el ícono original
@@ -377,11 +366,11 @@ function asignarEventListenersAcciones() {
 
 
                 fetch(url, {
-                    method: 'POST', // o 'POST' si así lo definiste en el backend
+                    method: 'POST',
                 })
                     .then(response => {
                         if (response.ok) {
-                            return response.text().then(text => text || "Empleado desactivado con éxito"); // O response.json() si devuelve un DTO
+                            return response.text().then(text => text || "Empleado desactivado con éxito");
                         } else {
                             // Intentar leer el cuerpo del error para un mensaje más específico
                             return response.text().then(text => {
@@ -393,24 +382,9 @@ function asignarEventListenersAcciones() {
                     .then(successMessage => {
                         // --- ÉXITO ---
                         console.log(successMessage);
-                        alert(successMessage); // O un mensaje más amigable: `Empleado ${employeeName} desactivado correctamente.`
+                        alert(successMessage);
 
-                        // Actualizar la UI:
-                        // 1. Recargar los datos de la página actual para reflejar el cambio.
-                        //    Esto es lo más simple si tu vista por defecto ya filtra por activos.
                         obtenerEmpleados(paginaActual);
-
-                        // Alternativa: Si no quieres recargar toda la tabla, puedes intentar
-                        // modificar la fila directamente o eliminarla si el filtro actual es "solo activos".
-                        // Por ejemplo, si estás mostrando "Solo Activos", la fila desaparecerá.
-                        // const filaEmpleado = clone.closest('tr');
-                        // if (filaEmpleado && document.getElementById('filtroActivo').value === "true") {
-                        //     filaEmpleado.remove();
-                        //     // Actualizar contador de resultados si es necesario
-                        // } else if (filaEmpleado) {
-                        //     // Cambiar visualmente el estado en la fila (más complejo)
-                        //     // Por ejemplo, podrías añadir un badge "Inactivo"
-                        // }
                     })
                     .catch(error => {
                         // --- ERROR ---

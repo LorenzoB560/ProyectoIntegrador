@@ -22,24 +22,19 @@
     <!-- Breadcrumb navigation -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-<!--            <li class="breadcrumb-item"><a href="http://localhost:8080/empleado/lista">Empleados</a></li>-->
-<!--            <li class="breadcrumb-item active" aria-current="page">Detalle de Empleado</li>-->
         </ol>
     </nav>
 
-    <!-- Loading indicator -->
     <div id="cargando" class="loading-spinner">
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Cargando...</span>
         </div>
     </div>
 
-    <!-- Error message -->
     <div id="error" class="alert alert-danger" style="display: none;"></div>
 
-    <!-- Employee detail content -->
+
     <div id="detalleEmpleado" style="display: none;">
-        <!-- Profile header -->
         <div class="profile-header">
             <div id="fotoEmpleado" class="profile-photo default-photo">
                 <i class="bi bi-person"></i>
@@ -54,28 +49,28 @@
             </div>
         </div>
 
-        <!-- Main navigation tabs -->
         <ul class="nav nav-pills mb-4" id="empleadoTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="info-personal-tab" data-bs-toggle="tab" data-bs-target="#info-personal" type="button" role="tab">
+                <button class="nav-link active" id="info-personal-tab" data-bs-toggle="tab"
+                        data-bs-target="#info-personal" type="button" role="tab">
                     <i class="bi bi-person-vcard me-1"></i> Información Personal
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="info-laboral-tab" data-bs-toggle="tab" data-bs-target="#info-laboral" type="button" role="tab">
+                <button class="nav-link" id="info-laboral-tab" data-bs-toggle="tab" data-bs-target="#info-laboral"
+                        type="button" role="tab">
                     <i class="bi bi-briefcase me-1"></i> Información Laboral
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="info-financiera-tab" data-bs-toggle="tab" data-bs-target="#info-financiera" type="button" role="tab">
+                <button class="nav-link" id="info-financiera-tab" data-bs-toggle="tab" data-bs-target="#info-financiera"
+                        type="button" role="tab">
                     <i class="bi bi-cash-coin me-1"></i> Información Financiera
                 </button>
             </li>
         </ul>
 
-        <!-- Tab content -->
         <div class="tab-content" id="empleadoTabsContent">
-            <!-- Personal Information Tab -->
             <div class="tab-pane fade show active" id="info-personal" role="tabpanel">
                 <div class="row">
                     <div class="col-md-6">
@@ -83,10 +78,6 @@
                             <div class="card-header">Datos Personales</div>
                             <div class="card-body">
                                 <table class="table table-borderless">
-<!--                                    <tr>-->
-<!--                                        <th>ID:</th>-->
-<!--                                        <td id="idEmpleado"></td>-->
-<!--                                    </tr>-->
                                     <tr>
                                         <th>Nombre:</th>
                                         <td id="nombreEmpleado"></td>
@@ -120,7 +111,6 @@
                 </div>
             </div>
 
-            <!-- Work Information Tab -->
             <div class="tab-pane fade" id="info-laboral" role="tabpanel">
                 <div class="row">
                     <div class="col-md-6">
@@ -172,7 +162,6 @@
                 </div>
             </div>
 
-            <!-- Financial Information Tab -->
             <div class="tab-pane fade" id="info-financiera" role="tabpanel">
                 <div class="row">
                     <div class="col-md-6">
@@ -231,7 +220,7 @@
     </div>
 </div>
 <div th:replace="fragmentos/footer :: footer"></div>
-<script  th:src="@{/js/detalle-emp.js}"></script>
+<script th:src="@{/js/detalle-emp.js}"></script>
 <!-- Bootstrap JS (para tabs y componentes interactivos) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

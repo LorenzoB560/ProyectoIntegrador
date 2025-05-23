@@ -148,36 +148,8 @@ function mostrarDatosEmpleado(empleado) {
         `${empleado.tarjetaCredito.mesCaducidad}/${empleado.tarjetaCredito.anioCaducidad}` :
         'No especificado';
     document.getElementById('caducidadTarjetaEmpleado').textContent = caducidad;
-
-    // Actualizar enlace de edición
-    // document.getElementById('btnEditar').href = `/empleado/editar/${empleado.id}`;
 }
 
-// Función para mostrar el diálogo de confirmación al eliminar
-// function mostrarConfirmacionEliminar() {
-//     if (confirm('¿Está seguro de que desea eliminar este empleado? Esta acción no se puede deshacer.')) {
-//         eliminarEmpleado();
-//     }
-// }
-
-// Función para eliminar el empleado
-// function eliminarEmpleado() {
-//     fetch(`/empleado/${empleadoId}`, {
-//         method: 'DELETE',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         }
-//     })
-//         .then(respuesta => {
-//             if (!respuesta.ok) {
-//                 throw new Error('Error al eliminar el empleado');
-//             }
-//             window.location.href = '/empleados/listado';
-//         })
-//         .catch(err => {
-//             alert(`Error al eliminar el empleado: ${err.message}`);
-//         });
-// }
 
 // Funciones auxiliares
 function obtenerNombreCompleto(empleado) {

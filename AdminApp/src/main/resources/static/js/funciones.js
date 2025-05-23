@@ -1,5 +1,3 @@
-// funciones-admin-login.js
-
 // Mostrar u ocultar la contraseña
 function mostrarOcultarClave() {
     // Obtener los elementos de los campos de contraseña

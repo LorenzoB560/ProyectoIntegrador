@@ -2,7 +2,6 @@ package org.grupob.adminapp.converter;
 
 import org.grupob.adminapp.dto.*;
 import org.grupob.adminapp.dto.DimensionDTO;
-import org.grupob.adminapp.dto.TallaDTO;
 import org.grupob.comun.entity.*; // Importa Libro, Electronico, Ropa, Mueble, Producto, Categoria, Proveedor, Talla
 import org.grupob.comun.entity.auxiliar.Dimension; // Importa entidad Dimension
 import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
@@ -17,12 +16,9 @@ import java.util.stream.Collectors;
 public class ProductoConverter {
 
     private final ModelMapper modelMapper;
-    // Converters auxiliares para relaciones
     private final CategoriaConverter categoriaConverter;
     private final ProveedorConverter proveedorConverter;
     private final TallaConverter tallaConverter;
-    // Podrías necesitar un DimensionConverter si Dimension fuera una entidad separada
-    // private final DimensionConverter dimensionConverter;
 
     @Autowired
     public ProductoConverter(ModelMapper modelMapper, CategoriaConverter cc,
@@ -31,7 +27,6 @@ public class ProductoConverter {
         this.categoriaConverter = cc;
         this.proveedorConverter = pc;
         this.tallaConverter = tc;
-        // this.dimensionConverter = dc;
     }
 
     // --- Método Principal de Conversión (Usando ModelMapper para Subclases) ---
@@ -58,10 +53,6 @@ public class ProductoConverter {
             // (porque Dimension es Embeddable y DimensionDTO es una clase separada)
             if (electronico.getDimension() != null && dtoResultante instanceof ElectronicoDTO electronicoDto) {
                 electronicoDto.setDimension(mapDimensionManual(electronico.getDimension()));
-                // O si tienes un converter específico:
-                // electronicoDto.setDimension(dimensionConverter.entityToDto(electronico.getDimension()));
-                // O si ModelMapper está configurado para mapearlo:
-                // (no se necesita código extra aquí si modelMapper.map ya lo hizo)
             }
 
         } else if (producto instanceof Ropa ropa) {
@@ -98,7 +89,7 @@ public class ProductoConverter {
             }
 
             // Mapear Categorías
-            if (!CollectionUtils.isEmpty(producto.getCategoria())) { // Usa el nombre del campo en tu entidad Producto
+            if (!CollectionUtils.isEmpty(producto.getCategoria())) {
                 dtoResultante.setCategoria(producto.getCategoria().stream()
                         .map(categoriaConverter::convertirADTO)
                         .collect(Collectors.toSet()));

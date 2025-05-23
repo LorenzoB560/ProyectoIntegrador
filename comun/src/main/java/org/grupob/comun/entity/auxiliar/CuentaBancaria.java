@@ -2,7 +2,6 @@ package org.grupob.comun.entity.auxiliar;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.grupob.comun.entity.EntidadBancaria;
 
 @Getter
 @Setter

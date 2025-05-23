@@ -1,5 +1,6 @@
 package org.grupob.empapp.converter;
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.empapp.dto.*;
 import org.grupob.empapp.dto.DimensionDTO;
 import org.grupob.empapp.dto.TallaDTO;
@@ -14,25 +15,14 @@ import org.springframework.util.CollectionUtils;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class ProductoConverter {
 
     private final ModelMapper modelMapper;
-    // Converters auxiliares para relaciones
     private final CategoriaConverter categoriaConverter;
     private final ProveedorConverter proveedorConverter;
     private final TallaConverter tallaConverter;
-    // Podrías necesitar un DimensionConverter si Dimension fuera una entidad separada
-    // private final DimensionConverter dimensionConverter;
 
-    @Autowired
-    public ProductoConverter(ModelMapper modelMapper, CategoriaConverter cc,
-                             ProveedorConverter pc, TallaConverter tc /*, DimensionConverter dc */) {
-        this.modelMapper = modelMapper;
-        this.categoriaConverter = cc;
-        this.proveedorConverter = pc;
-        this.tallaConverter = tc;
-        // this.dimensionConverter = dc;
-    }
 
     // --- Método Principal de Conversión (Usando ModelMapper para Subclases) ---
     public ProductoDTO entityToDTO(Producto producto) {

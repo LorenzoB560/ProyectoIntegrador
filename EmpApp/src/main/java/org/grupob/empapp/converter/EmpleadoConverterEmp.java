@@ -21,8 +21,7 @@ public class EmpleadoConverterEmp {
 
     public EmpleadoDTO convertToDto(Empleado empleado) {
 //     Crear DTO base
-        EmpleadoDTO empleadoDto = modelMapper.map(empleado, EmpleadoDTO.class);
-//        CuentaBancariaDTO cuentaBancariaDto = modelMapper.map(empleado.getCuentaCorriente(), CuentaBancariaDTO.class);
+        //        CuentaBancariaDTO cuentaBancariaDto = modelMapper.map(empleado.getCuentaCorriente(), CuentaBancariaDTO.class);
 //        empleadoDto.setCuentaCorriente();
 //        EmpleadoDTO empleadoDto = new EmpleadoDTO();
 //
@@ -77,6 +76,6 @@ public class EmpleadoConverterEmp {
 //            empleadoDto.setEtiquetas(new HashSet<>());
 //        }
 
-        return empleadoDto;
+        return modelMapper.map(empleado, EmpleadoDTO.class);
     }
 }

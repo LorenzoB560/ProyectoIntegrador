@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const empleadoData = todosLosEmpleadosCargados.find(emp => emp.id === id);
             const nombreEmpleado = empleadoData ? `${empleadoData.nombre || ''} ${empleadoData.apellido || ''}`.trim() : `ID ${id}`;
 
-            const promesa = fetch(`/empleados/${id}/desactivar`, { // ENDPOINT PARA DESACTIVAR
-                method: 'POST', // O PATCH, según tu endpoint
+            const promesa = fetch(`/adminapp/empleados/${id}/desactivar`, { // ENDPOINT PARA DESACTIVAR
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     // CSRF token si es necesario

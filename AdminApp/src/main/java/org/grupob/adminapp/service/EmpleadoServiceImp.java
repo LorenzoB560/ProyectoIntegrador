@@ -136,15 +136,6 @@ public  class  EmpleadoServiceImp implements EmpleadoService {
     }
 
 
-//    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
-//
-//        Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
-//                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
-//                0, Integer.MAX_VALUE, "ename", "asc");
-//
-//        return page.getContent();
-//    }
-
     @Override
     public List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento) {
         List<Empleado> empleados = empleadoRepository.findByDepartamentoNombreContaining(departamento);

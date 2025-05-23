@@ -1,11 +1,12 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.dto.CategoriaDTO;
 import org.grupob.adminapp.dto.ProductoDTO;
 import org.grupob.comun.dto.ProductoSearchDTO;
 import org.grupob.adminapp.service.CategoriaServiceImp;
-import org.grupob.adminapp.service.ProductoMasivoService;
+import org.grupob.adminapp.service.ProductoMasivoServiceImp;
 import org.grupob.adminapp.service.ProductoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,18 +25,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/productos") // Ruta base para API REST (plural)
+@RequiredArgsConstructor
 public class ProductoRestController {
 
     private final ProductoServiceImp productoService;
     private final CategoriaServiceImp categoriaService;
-    private final ProductoMasivoService productoMasivoService;
+    private final ProductoMasivoServiceImp productoMasivoService;
 
-    @Autowired
-    public ProductoRestController(ProductoServiceImp productoService, CategoriaServiceImp categoriaService, ProductoMasivoService productoMasivoService) {
-        this.productoService = productoService;
-        this.categoriaService = categoriaService;
-        this.productoMasivoService = productoMasivoService;
-    }
     @GetMapping("/listado1")
     public ResponseEntity<List<ProductoDTO>> listarProductos() {
         return ResponseEntity.ok(productoService.listarProductos());
@@ -49,7 +45,6 @@ public class ProductoRestController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            // Considera añadir logging aquí
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al obtener detalles del producto.");
         }
@@ -79,7 +74,6 @@ public class ProductoRestController {
     }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable UUID id) {
-        // Aquí podrías añadir @PreAuthorize("hasRole('ADMIN')") si usas Spring Security
         try {
             productoService.eliminarProducto(id);
             // Éxito: Devolver 204 No Content (estándar para DELETE exitoso)
@@ -117,8 +111,7 @@ public class ProductoRestController {
             productoMasivoService.cargaMasiva(inputStream);
 
             return ResponseEntity.ok()
-                    .body(Map.of("mensaje", "Carga masiva completada",
-                            "productos", archivo.getOriginalFilename()));
+                    .body(Map.of("mensaje", "Carga masiva completada"));
 
         } catch (IOException e) {
             // 4. Errores de lectura del archivo

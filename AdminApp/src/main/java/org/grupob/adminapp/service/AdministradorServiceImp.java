@@ -1,5 +1,6 @@
 package org.grupob.adminapp.service;
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.converter.AdministradorConverter;
 import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.entity.Administrador;
@@ -11,14 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AdministradorServiceImp implements AdministradorService {
     private final AdministradorRepository adminRepo;
     private final AdministradorConverter adminConverter;
-
-    public AdministradorServiceImp(AdministradorRepository adminRepo, AdministradorConverter adminConverter) {
-        this.adminRepo = adminRepo;
-        this.adminConverter = adminConverter;
-    }
 
     public Administrador devuelveAdministradorPorUsuario(String usuario) {
         Optional<Administrador> adminOpt = adminRepo.findAdministradorByUsuario(usuario);

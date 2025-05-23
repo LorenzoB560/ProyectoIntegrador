@@ -21,14 +21,12 @@ import java.util.*;
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "PK_empleado", columnNames = "id"),
         @UniqueConstraint(name = "UQ_empleado_id_usuario", columnNames = "id_usuario"),
-//        @UniqueConstraint(name = "UQ_empleado_dni", columnNames = "dni")
 })
 @SecondaryTable(
         name = "informacion_economica",
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "id_empleado", referencedColumnName = "id"))
 public class Empleado extends Persona {
 
-//    private String dni;
 
     private String prefijoTelefono;
     private String numTelefono;
@@ -55,8 +53,6 @@ public class Empleado extends Persona {
 
     private boolean activo;
 
-    //@DondeEstoy-DondeVoy
-    //Many empleados pertenecen a One Departamento
     @ManyToOne
     @JoinColumn(name = "id_departamento", foreignKey = @ForeignKey(name = "FK_departamento_empleado_id"))
     private Departamento departamento;
@@ -148,12 +144,6 @@ public class Empleado extends Persona {
     private byte[] foto; // Para almacenar la imagen en la base de datos
 
     private String aceptacionTerminos;
-
-    //    @Column(name = "fecha_eliminacion")
-//    private LocalDate fechaEliminacion;
-//
-//    @Column(name = "fecha_insercion")
-//    private LocalDate fechaInsercion;
 @Override
 public String toString() {
     // Incluir SOLO campos simples o IDs de relaciones

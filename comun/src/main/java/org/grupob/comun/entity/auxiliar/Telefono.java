@@ -1,7 +1,6 @@
 package org.grupob.comun.entity.auxiliar;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
 import lombok.Data;
 
 @Data

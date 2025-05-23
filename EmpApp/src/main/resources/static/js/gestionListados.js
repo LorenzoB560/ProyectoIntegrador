@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.mensaje) {
                         mostrarMensajeGlobal(data.mensaje, 'success');
                         // Opcional: Actualizar la fila o recargar la lista dinámicamente
-                        // Por simplicidad, podrías simplemente eliminar la fila de la solicitud procesada:
                         const filaParaEliminar = form.closest('tr');
                         if (filaParaEliminar) {
                             filaParaEliminar.style.opacity = '0';

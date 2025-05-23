@@ -1,6 +1,5 @@
 package org.grupob.comun.repository;
 
-import jakarta.validation.constraints.NotBlank;
 import org.grupob.comun.entity.EntidadBancaria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

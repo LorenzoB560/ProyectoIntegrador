@@ -47,25 +47,13 @@ public class ProductoDTO {
     @NotNull(message = "El proveedor no puede ser nulo") // Asumiendo que es obligatorio como en PDF
     private ProveedorDTO proveedor; // Coincide con la entidad. Asegúrate que ProveedorDTO exista
 
-    // Fecha de alta es opcional en la entidad (sin @Column(nullable=false)),
-    // pero podría generarse automáticamente en el backend (@CreationTimestamp)
-    // por lo que quizás no sea necesaria en el DTO de entrada, pero sí de salida.
+
     private LocalDate fechaAlta; // Coincide con la entidad
 
     @Min(value = 0, message = "La valoración no puede ser negativa")
     private Integer valoracion; // Coincide con la entidad (nullable, default 0 en PDF?)
 
-    // --- CAMPOS DE SUBCLASES (Añadir aquí) ---
-    // Añade aquí los campos específicos que vayan a tener los DTOs de subclases
-    // si decides usar un DTO base común y luego extenderlo, O si decides
-    // poner todos los campos posibles aquí y dejarlos null si no aplican.
-    // Ejemplo si pones todos aquí:
-    // private String autor;
-    // private String editorial;
-    // etc...
 
-    // --- Constructor Simplificado (Ejemplo) ---
-    // Puedes añadir constructores específicos si los necesitas.
     public ProductoDTO(UUID id, String descripcion, BigDecimal precio, ProveedorDTO proveedor, Set<CategoriaDTO> categoria, Integer unidades) {
         this.id = id;
         this.descripcion = descripcion;
