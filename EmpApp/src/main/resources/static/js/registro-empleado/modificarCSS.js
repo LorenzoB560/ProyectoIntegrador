@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const botones = document.querySelectorAll('input[name="modificarCSS"]');
     const hojaEstilo = document.getElementById("estilos");
 
-    // Cargar estado guardado en sessionStorage
+    // Cargar estado guardado en localStorage
     const estadoGuardado = localStorage.getItem("cssActivo");
 
     // Determinar cuál hoja de estilo usar al estar guardado en el sessionStorage

@@ -1,0 +1,65 @@
+#version: '3.8'
+
+services:
+  # Servicio de MySQL
+  mysql:
+    image: vladerk/mysql-prinb:1.0  # Imagen personalizada subida a Docker Hub
+    container_name: contiene-mysql
+    networks:
+      red-prin:
+        ipv4_address: 172.28.0.2  # IP 2 en la red
+    environment:
+      MYSQL_ROOT_PASSWORD: admin  # Contraseña para root
+      MYSQL_DATABASE: integradora  # Base de datos inicial
+    ports:
+      - "3306:3306"  # Puerto de MySQL expuesto al host
+    healthcheck:
+      test: ["CMD", "mysql", "-u", "root", "-padmin", "--execute", "SHOW DATABASES;"]  # Verifica si MySQL responde
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  # Servicio de Tomcat
+  tomcat:
+    image: vladerk/tomcat-prinb:1.0  # Imagen personalizada subida a Docker Hub
+    container_name: contiene-tomcat
+    networks:
+      red-prin:
+        ipv4_address: 172.28.0.3  # IP 3 en la red
+    ports:
+      - "8080:8080"  # Puerto HTTP de Tomcat
+    depends_on:
+      mysql:
+        condition: service_healthy  # Espera a que MySQL esté listo
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/adminapp/login || exit 1"]  # Comprueba si la app responde
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 40s  # Espera inicial para dar tiempo al despliegue
+
+  # Servicio de Apache
+  apache:
+    image: vladerk/apache-prinb:1.0  # Imagen personalizada subida a Docker Hub
+    container_name: contiene-apache
+    networks:
+      red-prin:
+        ipv4_address: 172.28.0.4  # IP 4 en la red
+    ports:
+      - "80:80"  # Puerto HTTP
+    depends_on:
+      mysql:
+        condition: service_healthy
+      tomcat:
+        condition: service_healthy
+    volumes:
+      - ./apache/conf:/usr/local/apache2/conf  # Configuración personalizada de Apache
+      - ./apache/fuentes:/var/www/html         # Archivos HTML/PHP/etc. de la web
+
+# Configuración de la red personalizada
+networks:
+  red-prin:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24  # Rango de IPs para la red

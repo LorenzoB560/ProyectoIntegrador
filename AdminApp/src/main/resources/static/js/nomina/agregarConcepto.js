@@ -1,11 +1,13 @@
+// Función para agregar un nuevo concepto a la lista de conceptos
 function agregarConcepto() {
     const container = document.getElementById("conceptos-container");
     const div = document.createElement("div");
     div.className = "concepto-item";
 
-    // Clonar las opciones de conceptos disponibles (excluyendo el Salario base)
+    // Se obtienen las opciones de conceptos disponibles desde el DOM (excluyendo el salario base)
     const conceptoOptions = document.getElementById("conceptos-restantes").innerHTML;
 
+    // Se crea la estructura del concepto en HTML, incluyendo el selector, porcentaje y cantidad
     div.innerHTML = `
         <div class="row mb-3">
             <div class="col-md-3">
@@ -29,38 +31,39 @@ function agregarConcepto() {
         </div>
     `;
 
+    // Se agrega el nuevo concepto al contenedor principal
     container.appendChild(div);
 
-    // Configura los campos basados en el tipo de concepto seleccionado cuando se seleccione uno
+    // Se agrega un listener para actualizar los campos cuando se seleccione un concepto
     const selectElement = div.querySelector("select");
     selectElement.addEventListener("change", function() {
         actualizarCamposPorTipo(this);
     });
 }
 
-// Función para actualizar los campos según el tipo de concepto
+// Función que ajusta los campos según el tipo de concepto seleccionado
 function actualizarCamposPorTipo(selectElement) {
     const div = selectElement.closest(".concepto-item");
     const tipoConcepto = selectElement.options[selectElement.selectedIndex].dataset.tipo;
     const porcentajeInput = div.querySelector("input[name='porcentaje']");
     const cantidadInput = div.querySelector("input[name='cantidad']");
 
-    // Restablecer valores y estados
+    // Se restablecen los valores y se habilitan los campos de porcentaje y cantidad
     cantidadInput.value = "";
     porcentajeInput.value = "";
     cantidadInput.disabled = false;
     porcentajeInput.disabled = false;
 
     if (tipoConcepto === "INGRESO") {
-        // Para ingresos: cantidad editable, porcentaje bloqueado
+        // Para ingresos, la cantidad es editable pero el porcentaje está bloqueado
         porcentajeInput.disabled = true;
         porcentajeInput.value = "0";
     } else if (tipoConcepto === "DEDUCCION") {
-        // Para deducciones: ambos campos editables
+        // Para deducciones, se permite modificar ambos campos
         const porcentajeDefault = selectElement.options[selectElement.selectedIndex].dataset.porcentaje;
         if (porcentajeDefault) {
             porcentajeInput.value = porcentajeDefault;
-            // Calcular la cantidad basada en el salario base
+            // Se calcula la cantidad correspondiente al porcentaje indicado
             calcularCantidadDesdeProcentaje(porcentajeInput);
         }
     }
@@ -68,7 +71,7 @@ function actualizarCamposPorTipo(selectElement) {
     actualizarTotal();
 }
 
-// Función para actualizar el porcentaje cuando cambia la cantidad (solo para DEDUCCIONES)
+// Función que recalcula el porcentaje en función de la cantidad introducida (para deducciones)
 function actualizarPorcentajeSiNecesario(cantidadInput) {
     const div = cantidadInput.closest(".concepto-item");
     const selectElement = div.querySelector("select");
@@ -76,25 +79,29 @@ function actualizarPorcentajeSiNecesario(cantidadInput) {
     const porcentajeInput = div.querySelector("input[name='porcentaje']");
 
     if (tipoConcepto === "DEDUCCION") {
-        // Obtener el salario base
         const salarioBase = obtenerSalarioBase();
         if (salarioBase > 0 && cantidadInput.value) {
+            // Convierte la cantidad introducida a número flotante
             const cantidad = parseFloat(cantidadInput.value.replace(',', '.'));
+
+            // Calcula el porcentaje en base al salario base
             const porcentaje = (cantidad / salarioBase) * 100;
+
+            // Redondea el porcentaje a 2 decimales
             porcentajeInput.value = porcentaje.toFixed(2);
         }
     }
 
-    actualizarTotal();
+    actualizarTotal(); // Actualiza el cálculo global
 }
 
-// Función para actualizar la cantidad cuando cambia el porcentaje (solo para DEDUCCIONES)
+// Función que recalcula la cantidad en función del porcentaje introducido (para deducciones)
 function actualizarCantidadSiNecesario(porcentajeInput) {
     calcularCantidadDesdeProcentaje(porcentajeInput);
     actualizarTotal();
 }
 
-// Función para calcular la cantidad a partir del porcentaje
+// Función que calcula la cantidad basándose en el porcentaje introducido
 function calcularCantidadDesdeProcentaje(porcentajeInput) {
     const div = porcentajeInput.closest(".concepto-item");
     const selectElement = div.querySelector("select");
@@ -102,17 +109,21 @@ function calcularCantidadDesdeProcentaje(porcentajeInput) {
     const cantidadInput = div.querySelector("input[name='cantidad']");
 
     if (tipoConcepto === "DEDUCCION") {
-        // Obtener el salario base
         const salarioBase = obtenerSalarioBase();
         if (salarioBase > 0 && porcentajeInput.value) {
+            // Convierte el porcentaje introducido a número flotante
             const porcentaje = parseFloat(porcentajeInput.value.replace(',', '.'));
+
+            // Calcula la cantidad en euros según el porcentaje indicado
             const cantidad = (porcentaje / 100) * salarioBase;
+
+            // Redondea la cantidad a 2 decimales
             cantidadInput.value = cantidad.toFixed(2);
         }
     }
 }
 
-// Función para obtener el salario base actual
+// Función que obtiene el salario base desde el DOM
 function obtenerSalarioBase() {
     const salarioBaseDiv = document.querySelector("#salario-base-container");
     if (salarioBaseDiv) {
@@ -122,14 +133,15 @@ function obtenerSalarioBase() {
     return 0;
 }
 
-// Función para inicializar el salario base al cargar la página
+// Función que inicializa el salario base al cargar la página
 function inicializarSalarioBase() {
     const container = document.getElementById("salario-base-container");
 
-    // Obtener el ID y el valor del salario base desde los datos del servidor
+    // Se obtienen los datos del salario base desde el servidor
     const salarioBaseId = container.dataset.salarioBaseId;
     const salarioBaseValor = parseFloat(container.dataset.salarioBaseValor) || 1184.00;
 
+    // Se establece la estructura HTML del salario base (no puede eliminarse ni modificarse el porcentaje)
     container.innerHTML = `
         <div class="row mb-3">
             <div class="col-md-3">
@@ -143,13 +155,9 @@ function inicializarSalarioBase() {
                 <label>Porcentaje (%):</label>
                 <input type="text" name="porcentaje" class="form-control" value="0" disabled>
             </div>
-            
             <div class="col-md-3">
                 <label>Cantidad (€):</label>
                 <input type="text" name="cantidad" class="form-control" value="${salarioBaseValor.toFixed(2)}" oninput="actualizarTotal()">
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-                <!-- No hay botón de eliminar para salario base -->
             </div>
         </div>
     `;
