@@ -2,9 +2,10 @@ package org.grupob.adminapp.service;
 
 
 import org.grupob.adminapp.dto.ModificacionEmpleadoDTO;
-import org.grupob.comun.entity.Empleado;
+import org.grupob.comun.entity.*;
 import org.grupob.adminapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.EmpleadoSearchDTO;
+import org.grupob.comun.entity.maestras.TipoTarjetaCredito;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public interface EmpleadoService {
      /**
       * Obtiene la lista de nombres de empleados que han sido desbloqueados recientemente.
       * La lista se limpia después de ser consultada.
+      *
       * @return Lista de nombres completos de empleados.
       */
      List<String> getNombresEmpleadosDesbloqueadosRecientemente();
@@ -60,6 +62,7 @@ public interface EmpleadoService {
      List<EmpleadoDTO> buscarEmpleadosPorComentario(String Comentario);
 
      EmpleadoDTO desactivarEmpleado(String id);
+
      EmpleadoDTO activarEmpleado(String id);
 
      /**
@@ -76,13 +79,17 @@ public interface EmpleadoService {
      List<EmpleadoDTO> devuelveTodosEmpleadosInactivos();
 
      List<EmpleadoDTO> devuelveTodosEmpleadosActivos();
+
      // Métodos de gestión de jefes
      EmpleadoDTO asignarJefe(String empleadoId, String jefeId);
+
      EmpleadoDTO quitarJefe(String empleadoId);
+
      List<EmpleadoDTO> listarSubordinados(String jefeId);
 
-     // Métodos de gestión de etiquetas
-//     EmpleadoDTO asignarEtiqueta(String empleadoId, String etiquetaId);
-//     EmpleadoDTO quitarEtiqueta(String empleadoId, String etiquetaId);
-//     List<EmpleadoDTO> buscarPorEtiqueta(String etiquetaId);
+     List<Especialidad> devuelveListaEspecialidades();
+     List<Departamento> devolverDepartamentos();
+     List<EntidadBancaria> devolverEntidadesBancarias();
+     List<TipoTarjetaCredito> devolverTipoTarjetasCredito();
+     UsuarioEmpleado devuelveUsuarioEmpleado(String id);
 }

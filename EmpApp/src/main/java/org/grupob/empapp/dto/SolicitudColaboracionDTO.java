@@ -1,4 +1,4 @@
-package org.grupob.empapp.dto; // o el paquete DTO correspondiente en EmpApp
+package org.grupob.empapp.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

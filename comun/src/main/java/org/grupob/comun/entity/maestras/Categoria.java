@@ -19,8 +19,4 @@ public class Categoria {
     private Long id;
 
     private String nombre;
-
-    // Si se quiere la relación bidireccional:
-    // @OneToMany(mappedBy = "categoria")
-    // private List<Producto> productos;
 }

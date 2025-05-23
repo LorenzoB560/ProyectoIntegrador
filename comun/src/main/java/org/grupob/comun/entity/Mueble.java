@@ -9,9 +9,7 @@ import org.grupob.comun.entity.auxiliar.jerarquia.Producto;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

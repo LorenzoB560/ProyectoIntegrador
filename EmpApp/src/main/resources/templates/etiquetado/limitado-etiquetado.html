@@ -12,11 +12,11 @@
             border: 1px solid #ccc;
             max-height: 150px;
             overflow-y: auto;
-            position: absolute; /* Para que aparezca sobre otros elementos si es necesario */
+            position: absolute;
             background-color: white;
-            z-index: 1000; /* Para que esté por encima */
-            width: calc(100% - 2rem); /* Ajusta según el padding del contenedor */
-            list-style-type: none; /* Quita los puntos de la lista */
+            z-index: 1000;
+            width: calc(100% - 2rem);
+            list-style-type: none;
             padding: 0;
             margin: 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -87,9 +87,6 @@
         document.getElementById('errorEmpleados').style.display = 'none';
         document.getElementById('errorEtiqueta').style.display = 'none';
         document.getElementById('feedback').style.display = 'none';
-        // Si usas la función genérica vaciarCampos de modificarCampos.js, asegúrate
-        // que el form tenga id="formulario" o ajusta la llamada:
-        // vaciarCampos('formNuevoEtiquetado'); // Asumiendo que vaciarCampos acepta un id
     }
 </script>
 </body>

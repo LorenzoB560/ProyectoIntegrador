@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class TipoTarjetaCredito {
 
     @Id
-//    @Column(name = "id_tipo_tarjeta")
     private Long id;
 
     @Column(name = "tipo_tarjeta")

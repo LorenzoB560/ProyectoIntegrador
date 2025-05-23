@@ -1,4 +1,3 @@
-// eliminacion-masiva.js
 $(document).ready(function() {
     const API_CATEGORIAS = '/adminapp/productos/categorias';
     const API_ELIMINAR = '/adminapp/productos/borrado-masivo';

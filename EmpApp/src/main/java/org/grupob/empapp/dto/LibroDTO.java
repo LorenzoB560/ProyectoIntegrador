@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true) // Incluye campos de ProductoDTO
-@ToString(callSuper = true)      // Incluye campos de ProductoDTO
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 public class LibroDTO extends ProductoDTO{
 

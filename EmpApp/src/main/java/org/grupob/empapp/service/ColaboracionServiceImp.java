@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.entity.Colaboracion;
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.SolicitudColaboracion;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class ColaboracionServiceImp implements ColaboracionService {
 
     private final EmpleadoRepository empleadoRepository;
@@ -39,20 +41,6 @@ public class ColaboracionServiceImp implements ColaboracionService {
     private final SolicitudColaboracionConverter solicitudColaboracionConverter; // Inyectar
     private static final long COOLDOWN_MINUTOS_TRAS_FINALIZACION = 2;
 
-    @Autowired
-    public ColaboracionServiceImp(EmpleadoRepository empleadoRepository,
-                                  SolicitudColaboracionRepository solicitudColaboracionRepository,
-                                  ColaboracionRepository colaboracionRepository,
-                                  EstadoRepository estadoRepository,
-                                  ColaboracionesConverter colaboracionesConverter, // Añadir
-                                  SolicitudColaboracionConverter solicitudColaboracionConverter) { // Añadir
-        this.empleadoRepository = empleadoRepository;
-        this.solicitudColaboracionRepository = solicitudColaboracionRepository;
-        this.colaboracionRepository = colaboracionRepository;
-        this.estadoRepository = estadoRepository;
-        this.colaboracionesConverter = colaboracionesConverter; // Asignar
-        this.solicitudColaboracionConverter = solicitudColaboracionConverter; // Asignar
-    }
 
     @Override
     public List<ColaboracionEstablecidaDTO> getColaboracionesEstablecidas(UUID idEmpleadoActual) {

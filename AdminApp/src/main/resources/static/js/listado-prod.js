@@ -1,5 +1,3 @@
-// static/js/listado-prod.js
-
 // --- Variables Globales ---
 let paginaActualProd = 0;
 const tamañoPaginaProd = 10; // Tamaño de página por defecto
@@ -9,8 +7,7 @@ let totalPaginasProd = 0;
 let totalElementosProd = 0;
 
 // --- URL del Endpoint API ---
-// ¡¡¡AJUSTA ESTA URL!!! Debe apuntar a tu @GetMapping("/listado") que devuelve JSON Page<ProductoDTO>
-const API_PRODUCTOS_URL = '/adminapp/productos/listado'; // O '/empapp/productos/listado' o la ruta REST correcta
+const API_PRODUCTOS_URL = '/adminapp/productos/listado';
 
 // --- Event Listeners y Setup Inicial ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -55,9 +52,6 @@ function cambiarOrdenacionProductos(nuevoOrdenarPor) {
 function actualizarBotonActivoProductos() {
     document.querySelectorAll('.btn-sort').forEach(btn => btn.classList.remove('active'));
     let btnActivoId = '';
-    // Mapear el 'sortBy' usado en JS/API al ID del botón correspondiente
-    // Asegúrate de que el valor de ordenarPorProd (ej. 'precioBase', 'categoriaPrincipal')
-    // coincida con lo que se usa en el backend o se mapea correctamente.
     switch (ordenarPorProd.toLowerCase()) {
         case 'descripcion':
             btnActivoId = 'ordenarPorDescripcionProd';
@@ -69,12 +63,9 @@ function actualizarBotonActivoProductos() {
             btnActivoId = 'ordenarPorPrecioProd';
             break;
         default:
-            // Si ordenarPorProd tiene un valor que ya no corresponde a un botón activo,
-            // podrías deseleccionar todos o seleccionar uno por defecto.
             // Por ejemplo, si el default es descripción:
             if (!btnActivoId && ordenarPorProd !== "descripcion") {
-                // No hacer nada o default a descripción si es necesario
-            } else if (!btnActivoId) { // Si no hay match y es el default inicial
+            } else if (!btnActivoId) {
                 document.getElementById('ordenarPorDescripcionProd')?.classList.add('active');
             }
             break;
@@ -199,10 +190,8 @@ function llenarTablaProductos(productos) {
         // Preparar datos del ProductoDTO
         const productoId = prod.id || 'N/A';
         const productoDescripcion = prod.descripcion || 'N/A';
-        const precioFormateado = formatearMonedaProd(prod.precio); // Asumiendo que ya tienes esta función
+        const precioFormateado = formatearMonedaProd(prod.precio);
 
-        // Obtener nombre del proveedor (NUEVO)
-        // Se accede a través de prod.proveedor (que es ProveedorDTO) y luego a su campo .nombre
         const nombreProveedor = (prod.proveedor && prod.proveedor.nombre) ? prod.proveedor.nombre : 'N/A';
 
         const marcaProducto = prod.marca || 'N/A';
@@ -211,7 +200,6 @@ function llenarTablaProductos(productos) {
         if (prod.categoria && Array.isArray(prod.categoria) && prod.categoria.length > 0) {
             categoriasHtml = prod.categoria.map(cat => `<span class="badge bg-info text-dark me-1">${cat.nombre || ''}</span>`).join(' ');
         } else if (prod.categoria && typeof prod.categoria === 'object' && !Array.isArray(prod.categoria) && Object.keys(prod.categoria).length > 0) {
-            // Manejo por si 'categoria' es un solo objeto en lugar de un array (aunque el DTO lo define como Set)
             categoriasHtml = `<span class="badge bg-info text-dark me-1">${prod.categoria.nombre || ''}</span>`;
         }
 
@@ -262,8 +250,6 @@ function crearControlesPaginacionProductos() {
     const ul = document.createElement('ul');
     ul.className = 'pagination pagination-sm justify-content-center';
 
-    // Lógica para añadir botones << < ... números ... > >>
-    // (Usando la lógica mejorada de la versión anterior del JS de productos)
     const maxBotones = 5;
     let inicio = Math.max(0, paginaActualProd - Math.floor(maxBotones / 2));
     let fin = Math.min(totalPaginasProd - 1, inicio + maxBotones - 1);
@@ -363,7 +349,6 @@ function asignarEventListenersAccionesProd() {
             if (confirm(`¿Está seguro de eliminar el producto "${decodedProductName}" (ID: ${productId})? Esta acción no se puede deshacer.`)) {
 
                 // --- 2. Llamada al Endpoint DELETE ---
-                // Asegúrate que la URL base es correcta para el endpoint REST en AdminApp
                 const url = `/adminapp/productos/eliminar/${productId}`;
 
 
@@ -406,21 +391,14 @@ function asignarEventListenersAccionesProd() {
                             totalElementosProd--; // Decrementar el contador total de productos
 
                             // Actualizar el texto del contador de resultados
-                            // (Esto es una simplificación, necesitarías recalcular numberOfElements en la página actual)
                             const elementosEnPaginaActual = document.getElementById('cuerpoTablaProd').rows.length;
                             document.getElementById('contadorResultadosProd').textContent =
                                 `Mostrando ${elementosEnPaginaActual} de ${totalElementosProd} productos - Página ${paginaActualProd + 1} de ${totalPaginasProd || 1}`;
 
                             // Si la tabla queda vacía en la página actual
                             if (elementosEnPaginaActual === 0) {
-                                // Si hay más páginas en total, y esta no era la primera página, podrías ir a la anterior
                                 if (totalElementosProd > 0 && paginaActualProd > 0) {
-                                    // Opción 1: Recargar la página anterior (más simple si la lógica de paginación es compleja)
                                     obtenerProductos(paginaActualProd - 1);
-                                    // Opción 2: O intentar una lógica más compleja para no recargar todo,
-                                    // pero esto implicaría recalcular totalPaginasProd y regenerar la paginación si es necesario.
-                                    // Por simplicidad, recargar la página actual (o anterior si se prefiere) suele ser un buen compromiso.
-                                    // obtenerProductos(Math.max(0, paginaActualProd -1)); // Recarga la anterior o la 0 si la actual era 0
                                 } else if (totalElementosProd === 0) {
                                     // No quedan productos en ninguna página
                                     document.getElementById('tablaProductos').style.display = 'none';
@@ -429,18 +407,9 @@ function asignarEventListenersAccionesProd() {
                                     totalPaginasProd = 0;
                                     document.getElementById('contadorResultadosProd').textContent = "No hay productos para mostrar.";
                                 } else {
-                                    // Quedan productos, pero esta página se vació y era la primera.
-                                    // Esto podría pasar si borras todos los elementos de la primera página y hay más páginas.
-                                    // En este caso, obtenerProductos(0) recargaría la "nueva" primera página.
                                     obtenerProductos(0);
                                 }
                             } else {
-                                // Si aún quedan filas, solo actualizamos contadores, pero la paginación podría necesitar re-evaluación
-                                // si el número total de páginas cambia. Para evitar complejidad, podrías omitir
-                                // la regeneración de la paginación aquí si el cambio de `totalPaginasProd` es mínimo
-                                // o aceptar que la paginación se corregirá en la próxima recarga completa (ej. cambio de página o filtro).
-                                // Una solución más robusta requeriría recalcular totalPaginasProd y llamar a crearControlesPaginacionProductos()
-                                // si totalPaginasProd ha cambiado.
                                 const nuevoTotalPaginas = Math.ceil(totalElementosProd / tamañoPaginaProd);
                                 if (nuevoTotalPaginas !== totalPaginasProd) {
                                     totalPaginasProd = nuevoTotalPaginas;
@@ -452,9 +421,6 @@ function asignarEventListenersAccionesProd() {
                             obtenerProductos(paginaActualProd);
                         }
                         // --- FIN: Eliminación dinámica del DOM ---
-
-                        // YA NO SERÍA NECESARIO SI LA ELIMINACIÓN DEL DOM FUNCIONA BIEN Y MANEJA LOS CASOS BORDE
-                        // obtenerProductos(paginaActualProd);
                     })
                     .catch(error => {
                         // --- 4. Acciones en caso de ERROR ---
@@ -462,11 +428,6 @@ function asignarEventListenersAccionesProd() {
                         alert(`Error al eliminar producto: ${error.message}`);
                     })
                     .finally(() => {
-                        // Rehabilitar el botón SIEMPRE (en caso de éxito o error)
-                        // Puede que no se encuentre el botón si la tabla se recargó completamente antes de rehabilitarlo.
-                        // Si obtenerProductos() es muy rápido, este código podría ejecutarse después de que el botón original ya no exista.
-                        // Es más seguro rehabilitar solo en el .catch si la recarga solo ocurre en .then()
-                        // Vamos a rehabilitar solo en caso de error para evitar problemas con la recarga
                         if (!clone.disabled) return; // Ya rehabilitado o no existe
                         try {
                             clone.disabled = false;

@@ -29,9 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-
-
-
 public  class  EmpleadoServiceImp implements EmpleadoService {
 
     private static final Logger logger = LoggerFactory.getLogger(EmpleadoServiceImp.class);
@@ -136,15 +133,6 @@ public  class  EmpleadoServiceImp implements EmpleadoService {
         return page.getContent();
     }
 
-
-//    public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
-//
-//        Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
-//                nombre, departamento, comentario, contratadosAntesDe, salarioMinimo,
-//                0, Integer.MAX_VALUE, "ename", "asc");
-//
-//        return page.getContent();
-//    }
 
     @Override
     public List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento) {

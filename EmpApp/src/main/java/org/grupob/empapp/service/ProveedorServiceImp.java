@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.empapp.converter.ProveedorConverter;
 import org.grupob.empapp.dto.ProveedorDTO;
 import org.grupob.comun.entity.maestras.Proveedor;
@@ -10,16 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProveedorServiceImp implements ProveedorService {
 
     private final ProveedorRepository proveedorRepository;
     private final ProveedorConverter proveedorConverter;
-
-    // Inyección por constructor
-    public ProveedorServiceImp(ProveedorRepository proveedorRepository, ProveedorConverter proveedorConverter) {
-        this.proveedorRepository = proveedorRepository;
-        this.proveedorConverter = proveedorConverter;
-    }
 
     @Override
     public List<ProveedorDTO> findAll() {

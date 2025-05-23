@@ -1,14 +1,12 @@
 package org.grupob.adminapp.controller;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.dto.AltaNominaDTO;
-import org.grupob.adminapp.service.AltaNominaService;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
 import org.grupob.comun.dto.LoginAdministradorDTO;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.maestras.Concepto;
-import org.grupob.comun.repository.EmpleadoRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +17,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/nomina")
+@RequiredArgsConstructor
 public class AltaNominaController {
 
     private final AltaNominaServiceImp altaNominaServiceImp;
-
-    public AltaNominaController(AltaNominaServiceImp altaNominaServiceImp) {
-        this.altaNominaServiceImp = altaNominaServiceImp;
-    }
-
 
     @ModelAttribute
     public void cargaModelo(Model modelo) {

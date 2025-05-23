@@ -24,17 +24,10 @@ public class Departamento {
     private String nombre;
     private String codigo;
 
-//    @Column(name = "presupuesto_anual")
-//    private BigDecimal presupuesto;
 
     private String localidad;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_jefe", foreignKey = @ForeignKey(name = "FK_empelado_departamento_id"))
-//    private Empleado jefe;
-
     public Departamento(String nombre, String codigo) {
-//        id = UUID.randomUUID().to;
         this.nombre = nombre;
         this.codigo = codigo;
     }
@@ -43,8 +36,6 @@ public class Departamento {
     @OneToMany(mappedBy = "departamento") //como se llama el atributo que se relaciona con la otra tabla
     private Set<Empleado> listaEmpleados;
 
-    //CLASE
-//    private LocalDateTime fechaAltaBaseDatos;
     @Override
     public boolean equals(Object o) {
         // 1. Comparación de identidad rápida

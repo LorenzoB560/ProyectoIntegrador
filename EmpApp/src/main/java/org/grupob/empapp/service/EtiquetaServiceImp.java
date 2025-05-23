@@ -27,7 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional // Aplica transacción por defecto a todos los métodos públicos
+@Transactional
 public class EtiquetaServiceImp implements EtiquetaService {
 
     private final EtiquetaRepository etiquetaRepository;

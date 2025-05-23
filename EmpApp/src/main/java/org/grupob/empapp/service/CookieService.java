@@ -19,14 +19,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.*;
 
 @Data
-/*@AllArgsConstructor
-@NoArgsConstructor*/
 @Service
 public class CookieService {
 
     private final PropiedadRepository propiedadRepository;
 
-//    @Value("${app.cookie.secret}")
     private String claveSecreta;
 
     private  SecretKeySpec secretKeySpec;
@@ -43,21 +40,6 @@ public class CookieService {
         }
         return secretKeySpec;
     }
-//    @PostConstruct
-//    @Transactional
-//    void init() {
-//        // Inicializa la clave después de inyectar la propiedad
-//        claveSecreta = devuelveClaveCifrada();
-//        secretKeySpec = new SecretKeySpec(claveSecreta.getBytes(), "AES");
-//    }
-//    private String devuelveClaveCifrada(){
-//        System.out.println(propiedadRepository.findAll());
-//        Optional<Propiedad> propiedad = propiedadRepository.findById(4L);
-//        if (propiedad.isPresent()) {
-//            return propiedad.get().getValor();
-//        } else throw new RuntimeException("Clave no encontrada");
-//    }
-
     private  String cifrar(String valorClaro) {
         try {
             Cipher cipher = Cipher.getInstance("AES");

@@ -1,10 +1,9 @@
-package org.grupob.empapp.converter; // Asegúrate que el paquete es correcto
+package org.grupob.empapp.converter;
 
 import org.grupob.comun.entity.Colaboracion;
 import org.grupob.comun.entity.Empleado;
-import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.empapp.dto.ColaboracionEstablecidaDTO;
-import org.grupob.empapp.dto.PeriodoDTO; // Usando tu PeriodoDTO
+import org.grupob.empapp.dto.PeriodoDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,10 +15,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class ColaboracionesConverter { // Renombrado de tu ejemplo
+public class ColaboracionesConverter {
 
     private final ModelMapper modelMapper;
-    private final PeriodoConverter periodoConverter; // Inyectar para convertir periodos
+    private final PeriodoConverter periodoConverter;
 
     @Autowired
     public ColaboracionesConverter(ModelMapper modelMapper, PeriodoConverter periodoConverter) {

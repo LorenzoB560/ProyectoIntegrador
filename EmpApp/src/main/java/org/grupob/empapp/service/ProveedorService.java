@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ProveedorService {
     List<ProveedorDTO> findAll(); // Método para obtener todos los proveedores
-    // Puedes añadir otros métodos si los necesitas
+
 }

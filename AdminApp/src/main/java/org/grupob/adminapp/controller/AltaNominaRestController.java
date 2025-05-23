@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.dto.AltaNominaDTO;
 import org.grupob.adminapp.service.AltaNominaServiceImp;
-import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.entity.Nomina;
 import org.grupob.comun.entity.maestras.Concepto;
-import org.grupob.comun.repository.EmpleadoRepository;
 import org.grupob.comun.repository.NominaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,6 @@ import java.util.Optional;
 
 
 @RestController
-//@RequestMapping("/adminapp")
 @RequiredArgsConstructor
 public class AltaNominaRestController {
 

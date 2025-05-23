@@ -4,9 +4,8 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.converter.EmpleadoConverter;
 import org.grupob.comun.converter.NominaConverter;
 import org.grupob.comun.dto.*;
@@ -24,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
@@ -36,6 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
+@RequiredArgsConstructor
 public class NominaServiceImp implements NominaService{
 
     private final NominaRepository nominaRepository;
@@ -46,20 +45,9 @@ public class NominaServiceImp implements NominaService{
     private final EmpleadoConverter empleadoConverter;
     private final PropiedadRepository propiedadRepository;
 
-    public NominaServiceImp(NominaRepository nominaRepository, NominaConverter nominaConverter, EmpleadoRepository empleadoRepository, LineaNominaRepository lineaNominaRepository, ConceptoRepository conceptoRepository, EmpleadoConverter empleadoConverter, PropiedadRepository propiedadRepository) {
-        this.nominaRepository = nominaRepository;
-        this.nominaConverter = nominaConverter;
-        this.empleadoRepository = empleadoRepository;
-        this.lineaNominaRepository = lineaNominaRepository;
-        this.conceptoRepository = conceptoRepository;
-        this.empleadoConverter = empleadoConverter;
-        this.propiedadRepository = propiedadRepository;
-    }
     public NominaDTO devolverNominaPorId(UUID id){
         Optional<Nomina> nomina = nominaRepository.findById(id);
         if (nomina.isPresent()) {
-            //            Optional<Empleado> empleado = empleadoRepository.findById(nominaDTO.getIdEmpleado());
-//            empleado.ifPresent(value -> nominaDTO.setNombre(value.getNombre() + " " + value.getApellido()));
             return nominaConverter.convierteANominaDTO(nomina.get());
         } else{
             throw new EntityNotFoundException("La nómina seleccionada no existe");
@@ -68,25 +56,14 @@ public class NominaServiceImp implements NominaService{
 
     public List<NominaDTO> devolverNominas(){
         List<Nomina> nominas = nominaRepository.findAll();
-        List<NominaDTO> nominasDTO = nominas.stream()
+        return nominas.stream()
                 .map(nominaConverter::convierteANominaDTO)
                 .toList();
-
-
-//        nominasDTO = nominasDTO.stream()
-//                .peek(nomina -> {
-//                    Optional<Empleado> empleado = empleadoRepository.findById(nomina.getIdEmpleado());
-//                    empleado.ifPresent(value -> nomina.setNombre(value.getNombre() + " " + value.getApellido()));
-//                }).toList();
-
-        System.out.println(nominasDTO);
-        return nominasDTO;
     }
     @Transactional
     public void eliminarNomina(UUID idNomina){
         Optional<Nomina> nomina = nominaRepository.findById(idNomina);
         if (nomina.isPresent()) {
-            //Verificar que la nómina no sea pasada
             verificarNominaPasada(nomina);
             nominaRepository.delete(nomina.get());
         } else {
@@ -146,6 +123,8 @@ public class NominaServiceImp implements NominaService{
             table.addCell(new Phrase("Concepto", encabezado));
             table.addCell(new Phrase("Porcentaje (%)", encabezado));
             table.addCell(new Phrase("Cantidad (€)", encabezado));
+
+            //Misma realización con un for, en vez de stream
 
 //            for (LineaNominaDTO linea : nomina.getLineaNominas()) {
 //                table.addCell(linea.getNombreConcepto());
@@ -324,21 +303,12 @@ public class NominaServiceImp implements NominaService{
         }
     }
 
-    public String gestionarAccesoYRedireccion(LoginAdministradorDTO adminDTO, LoginUsuarioEmpleadoDTO loginUsuarioEmpleadoDTO, HttpSession sesion, Model model, HttpServletRequest request) {
-//        int serverPort = request.getLocalPort();
-//        boolean esAdminApp = (serverPort == 9090);
-//        boolean esEmpApp = (serverPort == 8080);
+    public String gestionarAccesoYRedireccion(LoginAdministradorDTO adminDTO) {
 
         // Redirección adecuada según el módulo de origen
         if (adminDTO == null) {
             return "redirect:/login";
         }
-//        } else if (esEmpApp && loginUsuarioEmpleadoDTO == null) {
-//            return "redirect:/empapp/login";
-//        } else if (esEmpApp) {
-//            return "redirect:/empapp/nomina/listado/" + loginUsuarioEmpleadoDTO.getId();
-//        }
-
         return null; // No hay redirección, sigue la ejecución normal
     }
     public UUID devolverIdEmpleadoPorNomina(UUID id){

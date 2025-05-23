@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/empapp")
 public class RegistroEmpleadoController {
 
     private final AltaEmpleadoServiceImp altaEmpleadoServiceImp;

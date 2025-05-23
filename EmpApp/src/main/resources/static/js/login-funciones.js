@@ -73,7 +73,7 @@ $(document).ready(function() {
 
             $.ajax({
                 url: "/empapp/devuelve-clave", // Endpoint que expone la contraseña
-                type: "GET",                     // Método HTTP
+                type: "GET",
                 data: { usuario: usuario },        // Parámetro que se envía al backend
                 success: function(clave) {
                     // Función que se ejecuta si la petición se completa correctamente

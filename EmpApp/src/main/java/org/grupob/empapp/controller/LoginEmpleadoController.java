@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.exception.*;
 import org.grupob.empapp.dto.EmpleadoDTO;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
@@ -27,19 +28,13 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("empapp")
+@RequiredArgsConstructor
 public class LoginEmpleadoController {
 
     private final Logger logger = LoggerFactory.getLogger(LoginEmpleadoController.class);
     private final UsuarioEmpleadoServiceImp usuarioService;
     private final CookieService cookieService;
     private final EmpleadoServiceImp empleadoServiceImp;
-
-    public LoginEmpleadoController(UsuarioEmpleadoServiceImp usuarioService,
-                                   CookieService cookieService, EmpleadoServiceImp empleadoServiceImp) {
-        this.usuarioService = usuarioService;
-        this.cookieService = cookieService;
-        this.empleadoServiceImp = empleadoServiceImp;
-    }
 
     @GetMapping("/login")
     public String mostrarLogin(Model modelo, HttpServletRequest request,

@@ -15,21 +15,6 @@ public class LoginUsuarioEmpleadoConverter {
     }
 
     public LoginUsuarioEmpleadoDTO convertirADTO(UsuarioEmpleado usuarioEmp) {
-        LoginUsuarioEmpleadoDTO usuarioEmpDTO = modelMapper.map(usuarioEmp, LoginUsuarioEmpleadoDTO.class);
-
-      /*  // Datos adicionales que no se mapean automáticamente
-        if (usuarioEmp.getMotivoBloqueo() != null) {
-            usuarioEmpDTO.setBloqueado(true);
-            usuarioEmpDTO.setMotivoBloqueo(usuarioEmp.getMotivoBloqueo().getMotivo());
-        } else {
-            usuarioEmpDTO.setBloqueado(false);
-        }*/
-
-        return usuarioEmpDTO;
+        return modelMapper.map(usuarioEmp, LoginUsuarioEmpleadoDTO.class);
     }
-
-    //NO es necesario para la funcionalidad del login
-    /*public UsuarioEmpleado convertirAEntidad(LoginUsuarioEmpleadoDTO dto) {
-        return modelMapper.map(dto, UsuarioEmpleado.class);
-    }*/
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validator;
+import lombok.RequiredArgsConstructor;
 import org.grupob.adminapp.converter.*;
 import org.grupob.adminapp.dto.masiva.*;
 import org.grupob.comun.entity.*;
@@ -26,6 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductoMasivoServiceImp {
 
     private final LibroConverter libroConverter;
@@ -41,33 +43,6 @@ public class ProductoMasivoServiceImp {
     private final CategoriaRepository categoriaRepository;
     private final ProveedorRepository proveedorRepository;
     private final Validator validator;
-
-    public ProductoMasivoServiceImp(
-            LibroConverter libroConverter,
-            ElectronicoConverter electronicoConverter,
-            RopaConverter ropaConverter,
-            MuebleConverter muebleConverter,
-            ProductoRepository productoRepository,
-            LibroRepository libroRepository,
-            ElectronicoRepository electronicoRepository,
-            RopaRepository ropaRepository,
-            MuebleRepository muebleRepository,
-            CategoriaRepository categoriaRepository,
-            ProveedorRepository proveedorRepository,
-            Validator validator) {
-        this.libroConverter = libroConverter;
-        this.electronicoConverter = electronicoConverter;
-        this.ropaConverter = ropaConverter;
-        this.muebleConverter = muebleConverter;
-        this.productoRepository = productoRepository;
-        this.libroRepository = libroRepository;
-        this.electronicoRepository = electronicoRepository;
-        this.ropaRepository = ropaRepository;
-        this.muebleRepository = muebleRepository;
-        this.categoriaRepository = categoriaRepository;
-        this.proveedorRepository = proveedorRepository;
-        this.validator = validator;
-    }
 
     @Transactional(rollbackFor = Exception.class)
     public void cargaMasiva(InputStream jsonInput) throws CargaMasivaException {

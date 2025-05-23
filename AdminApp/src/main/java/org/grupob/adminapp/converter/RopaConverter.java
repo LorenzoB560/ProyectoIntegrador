@@ -2,7 +2,6 @@ package org.grupob.adminapp.converter;
 
 
 import org.grupob.adminapp.dto.masiva.RopaCargaDTO;
-import org.grupob.comun.entity.Mueble;
 import org.grupob.comun.entity.Ropa;
 import org.grupob.comun.entity.maestras.Talla;
 import org.grupob.comun.repository.maestras.TallaRepository;

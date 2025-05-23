@@ -3,11 +3,9 @@ package org.grupob.empapp.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
-import org.grupob.empapp.dto.ColaboracionEstablecidaDTO;
 import org.grupob.empapp.dto.EmpleadoSimpleDTO;
 import org.grupob.empapp.dto.HistorialColaboracionItemDTO;
 import org.grupob.empapp.dto.SolicitudColaboracionDTO;
-import org.grupob.empapp.service.ColaboracionService; // Cambiado a interfaz
 import org.grupob.empapp.service.ColaboracionServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,9 +37,6 @@ public class ColaboracionRestController {
         return null;
     }
 
-    // Endpoint para obtener la lista de empleados a los que se puede solicitar colaboración
-    // Este podría seguir en el ColaboracionController si solo se usa para la carga inicial de la vista.
-    // O aquí si se piensa recargar dinámicamente.
     @GetMapping("/empleados-para-solicitar")
     public ResponseEntity<?> getEmpleadosParaSolicitar(HttpServletRequest request) {
         UUID empleadoIdActual = getEmpleadoIdActual(request);

@@ -23,13 +23,6 @@ public class LoginUsuarioEmpleadoDTO {
     @EmailValidado(groups = GrupoUsuario.class)
     private String usuario;
 
-   /* @NotBlank(groups = GrupoClave.class)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[.,;:¿?¡!(){}])[A-Za-z\\d.,;:¿?¡!(){}]{8,12}$",
-            message = """
-                    Introduzca una contraseña válida. Debe tener una longitud de entre 8 y 12 caracteres.\s
-                     - Debe contener, al menos, una letra mayúscula, una minúscula, un número y un\s
-                    signo de puntuación.""",
-            groups = GrupoClave.class)*/
     private String clave;
 
     private Integer numeroAccesos;

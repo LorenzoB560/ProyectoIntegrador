@@ -1,30 +1,25 @@
 package org.grupob.comun.entity.auxiliar.jerarquia;
 
 import jakarta.persistence.*;
-// import lombok.Data; // Quitar @Data
 import lombok.AllArgsConstructor;
-import lombok.Getter; // Añadir
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter; // Añadir
+import lombok.Setter;
 import org.grupob.comun.entity.auxiliar.DireccionPostal;
 import org.grupob.comun.entity.maestras.Genero;
-import org.hibernate.annotations.JdbcTypeCode; // Añadir
-import org.hibernate.type.SqlTypes; // Añadir
 
 import java.time.LocalDate;
-import java.util.Objects; // Añadir
+import java.util.Objects;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter // Añadir
-@Setter // Añadir
+@Getter
+@Setter
 @MappedSuperclass
-public  class Persona { // Hacer abstract
+public class Persona {
 
-    @Id // <<<=== AÑADIDO
-//    @GeneratedValue(strategy = GenerationType.UUID) // <<<=== AÑADIDO
-//    @JdbcTypeCode(SqlTypes.BINARY) // <<<=== AÑADIDO
+    @Id
     protected UUID id;
 
     private String nombre;
@@ -37,13 +32,12 @@ public  class Persona { // Hacer abstract
     private Integer edad;
     private String paisNacimiento;
 
-    @ManyToOne(fetch = FetchType.LAZY) // <<<=== Recomendado LAZY
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "FK_persona_genero_id"))
     private Genero genero;
 
     @Embedded
     @AttributeOverrides({
-            // ... Asegúrate que los 'name' coincidan con los campos de DireccionPostal
             @AttributeOverride(name = "tipoVia", column = @Column(name = "tipo_via")),
             @AttributeOverride(name = "via", column = @Column(name = "via")),
             @AttributeOverride(name = "numero", column = @Column(name = "numero")),
@@ -57,7 +51,6 @@ public  class Persona { // Hacer abstract
     })
     private DireccionPostal direccion;
 
-    // --- Implementación Manual Recomendada ---
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

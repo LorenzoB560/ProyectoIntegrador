@@ -1,5 +1,6 @@
 package org.grupob.empapp.service;
 
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.exception.EmpleadoNoEncontradoException;
 import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.EmpleadoDTO;
@@ -20,24 +21,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class  EmpleadoServiceImp implements EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
-//    private final EtiquetaRepository etiquetaRepository;
-//    private final EmpleadoEtiquetaRepository empleadoEtiquetaRepository;
     private final EmpleadoConverterEmp empleadoConverterEmp;
-
-    public EmpleadoServiceImp(
-            EmpleadoRepository empleadoRepository,
-//            EtiquetaRepository etiquetaRepository,
-//            EmpleadoEtiquetaRepository empleadoEtiquetaRepository,
-            EmpleadoConverterEmp empleadoConverterEmp) {
-
-        this.empleadoRepository = empleadoRepository;
-//        this.etiquetaRepository = etiquetaRepository;
-//        this.empleadoEtiquetaRepository = empleadoEtiquetaRepository;
-        this.empleadoConverterEmp = empleadoConverterEmp;
-    }
 
     // -----------------------------------
     // Métodos CRUD básicos existentes
@@ -102,16 +90,6 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     // -----------------------------------
 
 
-//    public List<EmpleadoDTO> buscarEmpleados(EmpleadoSearchDTO searchParams) {
-//        return buscarEmpleadosAvanzado(
-//                searchParams.getNombre(),
-//                searchParams.getDepartamento(),
-//                searchParams.getComentario(),
-//                searchParams.getContratadosAntesDe(),
-//                searchParams.getSalarioMinimo()
-//        );
-//    }
-
     @Override
     public List<EmpleadoDTO> buscarEmpleadosAvanzado(EmpleadoSearchDTO searchParams) {
         Page<EmpleadoDTO> page = buscarEmpleadosPaginados(
@@ -124,7 +102,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> buscarEmpleadosPorDepartamento(String departamento) {
         List<Empleado> empleados = empleadoRepository.findByDepartamentoNombreContaining(departamento);
         return empleados.stream()
-                .map(empleado -> empleadoConverterEmp.convertToDto(empleado))
+                .map(empleadoConverterEmp::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -132,7 +110,7 @@ public class  EmpleadoServiceImp implements EmpleadoService {
     public List<EmpleadoDTO> buscarEmpleadosPorComentario(String Comentario) {
         List<Empleado> empleados = empleadoRepository.findByComentariosContainingIgnoreCase(Comentario);
         return empleados.stream()
-                .map(empleado -> empleadoConverterEmp.convertToDto(empleado))
+                .map(empleadoConverterEmp::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -237,80 +215,5 @@ public class  EmpleadoServiceImp implements EmpleadoService {
                 .map(empleado -> empleadoConverterEmp.convertToDto(empleado))
                 .collect(Collectors.toList());
     }
-
-    // -----------------------------------
-    // Métodos para gestión de etiquetas
-    // -----------------------------------
-
-//    @Override
-//    @Transactional
-//    public EmpleadoDTO asignarEtiqueta(String empleadoId, String etiquetaId) {
-//        UUID empUuid = UUID.fromString(empleadoId);
-//        UUID etiqUuid = UUID.fromString(etiquetaId);
-//
-//        // Verificar si la relación ya existe usando el repositorio
-//        if (empleadoEtiquetaRepository.existsByEmpleadoIdAndEtiquetaId(empUuid, etiqUuid)) {
-//            // La relación ya existe, simplemente devolver el empleado
-//            Empleado empleado = empleadoRepository.findById(empUuid)
-//                    .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-//            return convertToDto(empleado);
-//        }
-//
-//        // Cargar entidades
-//        Empleado empleado = empleadoRepository.findById(empUuid)
-//                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-//        Etiqueta etiqueta = etiquetaRepository.findById(etiqUuid)
-//                .orElseThrow(() -> new RuntimeException("Etiqueta no encontrada"));
-//
-//        // Crear la relación
-//        EmpleadoEtiquetaId id = new EmpleadoEtiquetaId(empUuid, etiqUuid);
-//        EmpleadoEtiqueta empleadoEtiqueta = new EmpleadoEtiqueta();
-//        empleadoEtiqueta.setId(id);
-//        empleadoEtiqueta.setEmpleado(empleado);
-//        empleadoEtiqueta.setEtiqueta(etiqueta);
-//        empleadoEtiqueta.setFechaAsignacion(LocalDate.now());
-//
-//        // OPCIÓN 1: Solo guardar en el repositorio sin añadir a la colección
-//        empleadoEtiquetaRepository.save(empleadoEtiqueta);
-//
-//        // Recargar el empleado para obtener la colección actualizada
-//        empleado = empleadoRepository.findById(empUuid)
-//                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
-//
-//        return convertToDto(empleado);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public EmpleadoDTO quitarEtiqueta(String empleadoId, String etiquetaId) {
-//        UUID empUuid = UUID.fromString(empleadoId);
-//        UUID etiqUuid = UUID.fromString(etiquetaId);
-//
-//        // Obtener el empleado
-//        Empleado empleado = empleadoRepository.findById(empUuid)
-//                .orElseThrow(() -> new DepartamentoNoEncontradoException("Empleado no encontrado"));
-//
-//        // Eliminar la relación empleado-etiqueta
-//        empleadoEtiquetaRepository.deleteByEmpleadoIdAndEtiquetaId(empUuid, etiqUuid);
-//
-//        // Refrescar el empleado desde la base de datos
-//        empleado = empleadoRepository.findById(empUuid).orElseThrow();
-//
-//        return convertToDto(empleado);
-//    }
-//
-//    @Override
-//    public List<EmpleadoDTO> buscarPorEtiqueta(String etiquetaId) {
-//        UUID etiqUuid = UUID.fromString(etiquetaId);
-//
-//        // Buscar empleados que tengan la etiqueta especificada
-//        List<Empleado> empleados = empleadoRepository.findByEtiquetaId(etiqUuid);
-//
-//        return empleados.stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//    }
-
-
 
 }

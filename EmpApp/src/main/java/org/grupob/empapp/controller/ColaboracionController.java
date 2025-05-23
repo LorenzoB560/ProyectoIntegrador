@@ -2,6 +2,7 @@ package org.grupob.empapp.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.empapp.dto.EmpleadoSimpleDTO;
 import org.grupob.empapp.dto.SolicitudColaboracionDTO;
@@ -21,18 +22,11 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/empapp/colaboraciones")
+@RequiredArgsConstructor
 public class ColaboracionController {
 
     private final ColaboracionService colaboracionService;
     private final CookieService cookieService;
-    // private final EmpleadoService empleadoService; // No es necesario aquí si solo cargas desde ColaboracionService
-
-    @Autowired
-    public ColaboracionController(ColaboracionService colaboracionService, CookieService cookieService) {
-        this.cookieService = cookieService;
-        this.colaboracionService = colaboracionService;
-
-    }
 
     private UUID getEmpleadoIdActual(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -114,17 +108,11 @@ public class ColaboracionController {
     public String mostrarPaginaHistorialColaboraciones(Model modelo,
                                                        @CookieValue(name = "usuario", required = false) String usuariosCookie,
                                                        HttpServletRequest request) {
-//        logger.debug("Accediendo a mostrarPaginaHistorialColaboraciones");
         UUID empleadoIdActual = getEmpleadoIdActual(request);
         if (empleadoIdActual == null) {
-//            logger.warn("Usuario no autenticado intentando acceder a /empapp/colaboraciones/historial. Redirigiendo a login.");
             return "redirect:/empapp/login"; // Redirigir si no hay usuario en sesión
         }
 
-        // Ya no se cargan los datos aquí. Solo se sirve la plantilla.
-        // El título de la página se puede manejar directamente en el HTML o pasarlo si se desea.
-        // model.addAttribute("pageTitle", "Historial de Colaboraciones");
-//        logger.info("Sirviendo plantilla base para historial de colaboraciones del empleado ID: {}", empleadoIdActual);
         LoginUsuarioEmpleadoDTO dto = (LoginUsuarioEmpleadoDTO) request.getSession().getAttribute("usuarioLogeado");
 
         modelo.addAttribute("dto", dto);
@@ -134,6 +122,6 @@ public class ColaboracionController {
         String ultimoUsuario = (String) request.getSession().getAttribute("ultimoUsuario");
         int contador = cookieService.obtenerInicios(usuariosCookie, ultimoUsuario);
         modelo.addAttribute("contador", contador);
-        return "colaboraciones/historial-colaboraciones"; // Ruta a tu archivo Thymeleaf
+        return "colaboraciones/historial-colaboraciones";
     }
 }

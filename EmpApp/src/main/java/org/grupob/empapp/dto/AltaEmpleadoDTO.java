@@ -32,7 +32,6 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
 @EdadCoincideConFechaNacimiento(groups = GrupoDatosPersonales.class)
 @DocumentoValido(groups = GrupoDatosContacto.class)
 @CVCValido(groups = GrupoDatosEconomicos.class)

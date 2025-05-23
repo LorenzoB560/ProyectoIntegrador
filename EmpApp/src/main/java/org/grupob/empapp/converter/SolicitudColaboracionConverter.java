@@ -14,8 +14,6 @@ public class SolicitudColaboracionConverter {
     @Autowired
     public SolicitudColaboracionConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        // Configuraciones específicas de ModelMapper para SolicitudColaboracion -> SolicitudColaboracionDTO si son necesarias
-        // Por ejemplo, si los nombres de los campos son diferentes y ModelMapper no los infiere.
     }
 
     public SolicitudColaboracionDTO toDto(SolicitudColaboracion solicitud) {

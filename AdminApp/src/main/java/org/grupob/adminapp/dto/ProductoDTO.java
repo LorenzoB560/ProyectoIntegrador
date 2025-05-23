@@ -36,7 +36,7 @@ public class ProductoDTO {
     private Boolean segundaMano; // Coincide con la entidad (opcional)
 
     @NotNull(message = "Las unidades no pueden ser nulas")
-    @Min(value = 0, message = "Las unidades no pueden ser negativas") // Permite 0 unidades? Ajustar si no.
+    @Min(value = 0, message = "Las unidades no pueden ser negativas")
     private Integer unidades; // Coincide con la entidad
 
     // Fecha de fabricación es opcional en la entidad (sin @Column(nullable=false))
@@ -52,15 +52,6 @@ public class ProductoDTO {
 
     @Min(value = 0, message = "La valoración no puede ser negativa")
     private Integer valoracion; // Coincide con la entidad (nullable, default 0 en PDF?)
-
-    // --- CAMPOS DE SUBCLASES (Añadir aquí) ---
-    // Añade aquí los campos específicos que vayan a tener los DTOs de subclases
-    // si decides usar un DTO base común y luego extenderlo, O si decides
-    // poner todos los campos posibles aquí y dejarlos null si no aplican.
-    // Ejemplo si pones todos aquí:
-    // private String autor;
-    // private String editorial;
-    // etc...
 
     // --- Constructor Simplificado (Ejemplo) ---
     // Puedes añadir constructores específicos si los necesitas.

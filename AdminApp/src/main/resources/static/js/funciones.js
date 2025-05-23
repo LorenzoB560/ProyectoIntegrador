@@ -1,11 +1,3 @@
-// funciones-admin-login.js
-/*
-const ADMIN_WAR= "/admin"
-const url = new URL(ADMIN_WAR, window.location.origin);
-
-const contextPath = '/' + window.location.pathname.split('/')[1];
-*/
-
 // Mostrar u ocultar la contraseña
 function mostrarOcultarClave() {
     // Obtener los elementos de los campos de contraseña
