@@ -21,7 +21,7 @@ services:
 
   # Servicio de Tomcat
   tomcat:
-    image: vladerk/tomcat-prinb:1.0  # Imagen personalizada subida a Docker Hub
+    image: vladerk/tomcat-prinb:1.1  # Imagen personalizada subida a Docker Hub
     container_name: contiene-tomcat
     networks:
       red-prin:
