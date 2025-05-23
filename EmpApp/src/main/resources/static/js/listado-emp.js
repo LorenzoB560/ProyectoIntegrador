@@ -51,7 +51,7 @@ function obtenerEmpleados(pagina) {
     paginaActual = pagina;
 
     // Construir URL con todos los parámetros
-    let url = new URL('http://localhost:8080/empleados/listado');
+    let url = new URL('/empleados/listado');
 
     // Parámetros de filtro
     if (nombre) url.searchParams.append('nombre', nombre);
