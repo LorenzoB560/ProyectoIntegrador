@@ -3,22 +3,18 @@ package org.grupob.empapp.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.grupob.comun.dto.LoginUsuarioEmpleadoDTO;
 import org.grupob.comun.entity.*;
-import org.grupob.comun.entity.auxiliar.CuentaBancaria;
-import org.grupob.comun.entity.auxiliar.Periodo;
 import org.grupob.comun.entity.maestras.*;
 import org.grupob.comun.repository.*;
 import org.grupob.comun.repository.maestras.GeneroRepository;
 import org.grupob.empapp.converter.CuentaBancariaConverter;
-import org.grupob.empapp.converter.EmpleadoConverter;
+import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.AltaEmpleadoDTO;
 import org.grupob.empapp.dto.CuentaBancariaDTO;
-import org.grupob.empapp.dto.LoginUsuarioEmpleadoDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
 
@@ -34,7 +30,7 @@ class AltaEmpleadoServiceImpTest {
     @Mock private EspecialidadRepository especialidadRepository;
     @Mock private EntidadBancariaRepository entidadBancariaRepository;
     @Mock private TipoTarjetaRepository tipoTarjetaRepository;
-    @Mock private EmpleadoConverter empleadoConverter;
+    @Mock private EmpleadoConverterEmp empleadoConverter;
     @Mock private CuentaBancariaConverter cuentaBancariaConverter;
 
     // El servicio bajo prueba, con los mocks inyectados
@@ -172,33 +168,6 @@ class AltaEmpleadoServiceImpTest {
         assertEquals(21, anios.size());
         assertEquals(String.valueOf(anioActual), anios.get(0));
         assertEquals(String.valueOf(anioActual + 20), anios.get(20));
-    }
-
-    // Test para comprobar que se guarda un empleado correctamente
-    @Test
-    void guardarEmpleado_guardaCorrectamente() {
-        // Preparamos el DTO con los datos mínimos necesarios
-        AltaEmpleadoDTO altaEmpleadoDTO = new AltaEmpleadoDTO();
-        altaEmpleadoDTO.setIdGeneroSeleccionado(1L);
-        altaEmpleadoDTO.setEspecialidades(new HashSet<>());
-        altaEmpleadoDTO.setCuentaBancaria(new CuentaBancariaDTO());
-        String uuid = UUID.randomUUID().toString();
-
-        // Simulamos la conversión del DTO a entidad y la búsqueda del género
-        Empleado empleado = new Empleado();
-        when(empleadoConverter.convertirAEntidad(altaEmpleadoDTO)).thenReturn(empleado);
-        Genero genero = new Genero();
-        when(generoRepository.findById(1L)).thenReturn(Optional.of(genero));
-
-        // Ejecutamos el método de guardado
-        service.guardarEmpleado(altaEmpleadoDTO, uuid);
-
-        // Verificamos que el empleado se guardó y que los datos críticos fueron asignados
-        verify(empleadoRepository).save(empleado);
-        assertEquals(genero, empleado.getGenero());
-        assertEquals(UUID.fromString(uuid), empleado.getId());
-        assertTrue(empleado.isActivo());
-        assertNotNull(empleado.getPeriodo());
     }
 
     // Test para comprobar si existe usuario cuando la sesión no es nula

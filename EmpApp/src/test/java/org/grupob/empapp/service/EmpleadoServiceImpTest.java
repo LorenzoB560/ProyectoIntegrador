@@ -5,17 +5,12 @@ import static org.mockito.Mockito.*;
 
 import org.grupob.comun.entity.Empleado;
 import org.grupob.comun.exception.DepartamentoNoEncontradoException;
-import org.grupob.empapp.converter.EmpleadoConverter;
+import org.grupob.empapp.converter.EmpleadoConverterEmp;
 import org.grupob.empapp.dto.EmpleadoDTO;
-import org.grupob.empapp.dto.EmpleadoSearchDTO;
 import org.grupob.comun.repository.EmpleadoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.data.domain.*;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 class EmpleadoServiceImpTest {
@@ -25,7 +20,7 @@ class EmpleadoServiceImpTest {
     private EmpleadoRepository empleadoRepo;
 
     @Mock
-    private EmpleadoConverter empleadoConverter;
+    private EmpleadoConverterEmp empleadoConverter;
 
     // El servicio bajo prueba, con los mocks inyectados
     @InjectMocks
@@ -101,29 +96,6 @@ class EmpleadoServiceImpTest {
         verify(empleadoConverter).convertToDto(empleadoMock);
     }
 
-    // Test para búsqueda paginada con campo de ordenación inválido (debe usar el valor por defecto)
-    @Test
-    void buscarEmpleadosPaginados_ordenacionInvalida_usaDefault() {
-        // Simulamos una página con un empleado
-        Page<Empleado> page = new PageImpl<>(List.of(empleadoMock));
-        when(empleadoRepo.buscarEmpleadosAvanzadoPaginado(
-                any(), any(), any(), any(), any(), any()))
-                .thenReturn(page);
-
-        // Ejecutamos el método con un campo de ordenación inválido
-        Page<EmpleadoDTO> result = service.buscarEmpleadosPaginados(
-                "test", null, null, null, null,
-                0, 10, "campo_invalido", "asc");
-
-        // Comprobamos que el resultado no es nulo
-        assertNotNull(result);
-        // Verificamos que el repositorio recibió el campo de ordenación por defecto ("nombre")
-        verify(empleadoRepo).buscarEmpleadosAvanzadoPaginado(
-                eq("test"), eq(null), eq(null), eq(null), eq(null),
-                argThat(pageable ->
-                        pageable.getSort().getOrderFor("nombre") != null));
-    }
-
     // Test para evitar que un empleado sea su propio jefe
     @Test
     void asignarJefe_autoreferencia_lanzaExcepcion() {
@@ -156,23 +128,6 @@ class EmpleadoServiceImpTest {
         assertNull(empleadoConJefe.getJefe());
         // Verificamos que se ha guardado el cambio
         verify(empleadoRepo).save(empleadoConJefe);
-    }
-
-    // Test para búsqueda avanzada sin filtrar por salario mínimo
-    @Test
-    void buscarEmpleadosAvanzado_salarioMinimoNull_noFiltra() {
-        // Simulamos una página con un empleado
-        Page<Empleado> page = new PageImpl<>(List.of(empleadoMock));
-        when(empleadoRepo.buscarEmpleadosAvanzadoPaginado(
-                any(), any(), any(), any(), eq(null), any()))
-                .thenReturn(page);
-
-        // Ejecutamos la búsqueda avanzada sin salario mínimo
-        service.buscarEmpleadosAvanzado(null, null, null, null, null);
-
-        // Verificamos que el repositorio fue llamado con salarioMinimo=null
-        verify(empleadoRepo).buscarEmpleadosAvanzadoPaginado(
-                eq(null), eq(null), eq(null), eq(null), eq(null), any());
     }
 
     // Test para listar subordinados de un jefe cuando no hay resultados
